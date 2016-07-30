@@ -26,7 +26,7 @@ public class Home{
             ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
             ve.init();
             /*  next, get the Template  */
-            Template t = ve.getTemplate( "templates/web/index.html" );
+            Template t = ve.getTemplate( "templates/web/index.html" , "UTF-8");
             /*  create a context and add data */
             VelocityContext context = new VelocityContext();
             context.put("var", "World");
