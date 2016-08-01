@@ -18,10 +18,13 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
  */
 public class Home {
 
-    public Home() {
+    public String output;
+    public String input;
+
+    public Home(String input) {
+        this.input = input;
     }
 
-    public String output;
     public void setHome() {
             VelocityEngine ve = new VelocityEngine();
             ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
@@ -30,9 +33,9 @@ public class Home {
             /*  next, get the Template  */
             Template t = ve.getTemplate( "templates/Modern/corpo.html" , "UTF-8");
             VelocityContext context = new VelocityContext();
-            
-            context.put("conteudo", "estatisticas.html");
-            
+            if(input == null){
+                context.put("conteudo", "estatisticas.html");
+            }
             StringWriter writer = new StringWriter();
             t.merge( context, writer );
             output = writer.toString();        
