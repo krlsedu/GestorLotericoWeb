@@ -4,12 +4,11 @@
  * and open the template in the editor.
  */
 package com.cth.gestorlotericoweb;
+
 import java.io.StringWriter;
-import java.util.Properties;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
@@ -17,31 +16,25 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
  *
  * @author CarlosEduardo
  */
-public class Home{
+public class Home {
+
+    public Home() {
+    }
+
     public String output;
     public void setHome() {
-        try{
             VelocityEngine ve = new VelocityEngine();
             ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
             ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
             ve.init();
             /*  next, get the Template  */
-            Template t = ve.getTemplate( "templates/web/index.html" , "UTF-8");
-            /*  create a context and add data */
+            Template t = ve.getTemplate( "templates/Modern/corpo.html" , "UTF-8");
             VelocityContext context = new VelocityContext();
-            context.put("var", "World");
-            //context.put("path",ve.getProperty(output));
-            /* now render the template into a StringWriter */
+            
+            context.put("conteudo", "estatisticas.html");
+            
             StringWriter writer = new StringWriter();
             t.merge( context, writer );
-            /* show the World */
-            output = writer.toString();
-        
-        }catch(ResourceNotFoundException e){
-            output =e.getMessage();
-        }
-        //JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/web/index.html");
-        //JtwigModel model = JtwigModel.newModel().with("var", "World");
-                
-    }
+            output = writer.toString();        
+    }    
 }

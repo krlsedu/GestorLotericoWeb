@@ -1,7 +1,7 @@
-<%@page import="com.cth.gestorlotericoweb.Home"%>
+<%@page import="com.cth.gestorlotericoweb.Login"%>
 
 <%
-     Home h = new Home();
-     h.setHome();
-     out.println(h.output);
+    Login h = new Login();
+    h.setLogin();
+    out.println(h.output);
 %>
