@@ -21,18 +21,40 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!-- //js -->
 <link href= "templates/web/css/login_style.css" rel="stylesheet" type="text/css" media="all" />
 <link href='//fonts.googleapis.com/css?family=Questrial' rel='stylesheet' type='text/css'>
+
+<script>
+    $(document).ready(function(){
+       $('#login').click(function()
+       {   
+          var user=$('#userId').val();
+          var pwd=$('#pswId').val();
+          $.ajax(
+                  {
+               type: "POST",
+               url:"auth",
+               data:{"user":user,"password":pwd},
+               success: function (data) {
+                  alert(data.trim())
+                  if(data.trim()=='True'){                    
+                    $(location).attr('href','app');
+                  }else{
+                      alert('Fail....');
+                  }
+               }
+             });
+           });
+         });
+   </script>
 </head>
 <body>
 	<div class="main">
 		<h1>$var</h1>
 		<div class="div_principal">
 			<div class="div_login">
-					<form action="app" method="post">
-						<input type="text" name="Name" placeholder="Seu Usuário de acesso" >
-						<input placeholder="Senha" name="Password" type="password" required="">
-						<input type="submit" value="Entrar">
+                                            <input id="userId" type="text" name="Name" placeholder="Seu Usuário de acesso" required>
+                                            <input id="pswId" placeholder="Senha" name="Password" type="password" required >
+                                            <input id="login" type="submit" value="Entrar" onclick="">
 						<div class="clear"> </div>
-					</form>
 					<div class="w3ls_forgot">
 						<a href="#">Esqueceu sua senha</a>
 						<a href="#">Cadastre-se...</a>

@@ -6,6 +6,7 @@
 package com.cth.gestorlotericoweb;
 
 import java.io.StringWriter;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -20,9 +21,11 @@ public class Home {
 
     public String output;
     public String input;
+    HttpServletRequest request;
 
-    public Home(String input) {
-        this.input = input;
+    public Home(HttpServletRequest request) {
+        this.input = request.getParameter("it");
+        this.request = request;
     }
 
     public void setHome() {
@@ -30,7 +33,6 @@ public class Home {
             ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
             ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
             ve.init();
-            /*  next, get the Template  */
             Template templatePrinc = ve.getTemplate( "templates/Modern/corpo.html" , "UTF-8");
             VelocityContext contextPrinc = new VelocityContext();
             if(input == null){
