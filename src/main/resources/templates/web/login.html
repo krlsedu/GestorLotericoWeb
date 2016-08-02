@@ -24,26 +24,25 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 <script>
     $(document).ready(function(){
-       $('#login').click(function()
-       {   
-          var user=$('#userId').val();
-          var pwd=$('#pswId').val();
-          $.ajax(
-                  {
-               type: "POST",
-               url:"auth",
-               data:{"user":user,"password":pwd},
-               success: function (data) {
-                  alert(data.trim())
-                  if(data.trim()=='True'){                    
-                    $(location).attr('href','app');
-                  }else{
-                      alert('Fail....');
-                  }
-               }
-             });
-           });
-         });
+        $('#login').click(function()
+        {   
+            var user=$('#userId').val();
+            var pwd=$('#pswId').val();
+            $.ajax(
+                {
+                    type: "POST",
+                    url:"auth",
+                    data:{"user":user,"password":pwd},
+                    success: function (data) {
+                        if(data.trim()=='True'){                    
+                            $(location).attr('href','app');
+                        }else{
+                           alert('Fail....');
+                        }
+                    }
+                });
+        });
+    });
    </script>
 </head>
 <body>
