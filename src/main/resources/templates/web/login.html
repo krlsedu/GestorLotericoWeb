@@ -34,8 +34,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     url:  "auth",
                     data:{"user":user,"password":pwd},
                     success: function (data) {
-                        if(data.trim()=='True'){                    
-                            $(location).attr('href','app');
+                        if(data.trim()!='False'){                    
+                            $(location).attr('href',data.trim());
                         }else{
                            alert('Fail....');
                         }

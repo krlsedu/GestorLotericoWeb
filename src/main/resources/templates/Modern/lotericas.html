@@ -3,17 +3,20 @@
     <h3>Dados da Lotérica</h3>
     <div class="tab-content">
         <div class="tab-pane active" id="horizontal-form">
-            <form class="form-horizontal" action="#">                                
+            <form class="form-horizontal" action="grava">                                
                 <div class="form-group mb-n">
                     <label for="smallinput" class="col-sm-2 control-label label-input-sm">Código</label>
                     <div class="col-sm-3">
-                        <input type="text" class="form-control1 input-lg" id="codigo" placeholder="Código da Lotérica na Caixa" name="codigo" required>
+                        <input type="text" class="form-control1 input-lg" id="codigo" placeholder="Código da Lotérica na Caixa" name="codigo_caixa" value="$codcaixa" required>                        
                     </div>
+                        <span class="input-group-btn">
+                            <button class="btn btn-buscar" type="button"><i class="fa fa-search"></i></button>
+                        </span>
                 </div>
                 <div class="form-group mb-n">
                     <label for="largeinput" class="col-sm-2 control-label label-input-lg">Nome</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control1 input-lg" id="nome" placeholder="Nome da Lotérica" name="nome" required>
+                        <input type="text" class="form-control1 input-lg" id="nome" placeholder="Nome da Lotérica" name="nome" value="$nome" required>
                     </div>
                 </div>
                 <div class="panel-footer">
@@ -24,7 +27,8 @@
                         </div>
                     </div>
                 </div>
-                <input type="hidden" name="tipo" value="loterica" />
+                <input type="hidden" name="it" value="lotericas" />                
+                <input type="hidden" name="id" value="$idbd" />
             </form>
         </div>
     </div>	

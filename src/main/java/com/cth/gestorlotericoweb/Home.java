@@ -5,8 +5,17 @@
  */
 package com.cth.gestorlotericoweb;
 
+import com.cth.gestorlotericoweb.dados.Loterica;
+import com.cth.gestorlotericoweb.parametros.Parametros;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -21,10 +30,12 @@ public class Home {
 
     public String output;
     public String input;
+    public String id;
     HttpServletRequest request;
 
     public Home(HttpServletRequest request) {
         this.input = request.getParameter("it");
+        this.id = request.getParameter("id");
         this.request = request;
     }
 
@@ -50,6 +61,16 @@ public class Home {
                             templateConteudo = ve.getTemplate( "templates/Modern/lotericas.html" , "UTF-8");
                             contextConteudo = new VelocityContext();
                             writerConteudo = new StringWriter();
+                            if(id !=null){
+                                Loterica loterica = new Loterica(Integer.valueOf(id));
+                                contextConteudo.put("idbd", loterica.getId()); 
+                                contextConteudo.put("codcaixa", loterica.getCodigoCaixa());
+                                contextConteudo.put("nome", loterica.getNome());                                 
+                            }else{
+                                contextConteudo.put("idbd", "0");    
+                                contextConteudo.put("codcaixa", "");
+                                contextConteudo.put("nome", "");                                   
+                            }
                             templateConteudo.merge( contextConteudo, writerConteudo );
                             contextPrinc.put("conteudo", writerConteudo.toString());
                         break;
@@ -71,6 +92,28 @@ public class Home {
             }
             StringWriter writer = new StringWriter();
             templatePrinc.merge( contextPrinc, writer );
-            output = writer.toString();        
+            Date date = new Date();
+            Long tempoSessao = (date.getTime() - request.getSession(false).getLastAccessedTime())/1000;
+            String pgAnt;
+            if(request.getSession(false).getAttribute("url")==null){
+                pgAnt = "index.jsp";
+            }else{
+                pgAnt = request.getSession(false).getAttribute("url").toString();
+            }
+            String pgAtu ;
+            if(request.getParameterMap().keySet().size()>0){
+                pgAtu = request.getRequestURL().toString()+"?";
+                List l = new ArrayList();
+                for(Object ob:request.getParameterMap().keySet()){
+                    l.add(ob.toString()+"="+StringUtils.join(request.getParameterValues(ob.toString()), ','));
+                }
+                pgAtu += StringUtils.join(l,"&");
+                
+            }else{
+                pgAtu = request.getRequestURL().toString();
+            }
+            Parametros.gravaSessao(request, pgAnt, pgAtu, tempoSessao);
+            request.getSession(false).setAttribute("url", pgAtu);
+            output = writer.toString();
     }    
 }

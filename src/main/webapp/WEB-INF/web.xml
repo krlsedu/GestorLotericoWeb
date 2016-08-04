@@ -51,26 +51,33 @@
         <url-pattern>*.do</url-pattern>
     </servlet-mapping>
     <session-config>
-        <session-timeout>
-            30
-        </session-timeout>
+        <session-timeout>1</session-timeout>
     </session-config>
+    
     <servlet>
         <servlet-name>App</servlet-name>
         <jsp-file>/home.jsp</jsp-file>
-    </servlet>    
+    </servlet>
     <servlet>
         <servlet-name>Auth</servlet-name>
         <jsp-file>/Auth.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>Grava</servlet-name>
+        <jsp-file>/grava.jsp</jsp-file>
     </servlet>
     
     <servlet-mapping>
         <servlet-name>App</servlet-name>
         <url-pattern>/app</url-pattern>
-    </servlet-mapping>    
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Auth</servlet-name>
         <url-pattern>/auth</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Grava</servlet-name>
+        <url-pattern>/grava</url-pattern>
     </servlet-mapping>
     
     <error-page>
@@ -80,8 +87,4 @@
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
-    <error-page>
-        <exception-type>java.lang.Exception</exception-type>
-        <location>/error.jsp</location>
-    </error-page>
 </web-app>

@@ -6,6 +6,7 @@
 package com.cth.gestorlotericoweb;
 
 import com.cth.gestorlotericoweb.banco.Conexao;
+import com.cth.gestorlotericoweb.dados.Usuario;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,29 +26,24 @@ public class Auth {
         this.request = request;
     }
     public void auth(){
-        try {
-            Conexao c = Parametros.getConexao();
-            PreparedStatement ps = c.getPst("SELECT count(*)\n" +
-                    "FROM \n" +
-                    "	public.users\n" +
-                    "where \n" +
-                    "	usuario = ? and\n" +
-                    "	senha = ?",false);       
-            ps.setString(1, request.getParameter("user"));
-            ps.setString(2, request.getParameter("password"));
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                if(rs.getInt(1)>0){
-                    output = "True";
-                }else{
-                    output = "False";                    
-                }
+        Usuario usuario = new Usuario(request.getParameter("user"), request.getParameter("password"));
+        if(usuario.getIdUsuario()>0){
+            Parametros.setIdUsuario(usuario.getIdUsuario());
+            Parametros.setIdEntidade(2);
+            if(usuario.getQtdEntidades()==1){
+                output = "app";
             }else{
-                output = "False";                      
+                if (usuario.getQtdEntidades()!=0) {
+                    output = "entidades";                    
+                }else{
+                    output = "entidades";                                   
+                }
             }
-        } catch (SQLException ex) {
-            output= ex.getMessage();
-            //throw new RuntimeException(ex.getMessage(), ex.getCause());
+            Parametros.gravaLogin(request.getParameter("user"), request.getRemoteAddr(), request.getRemoteHost(), "S");            
+        }else{
+            output = "False";                      
+            Parametros.gravaLogin(request.getParameter("user"), request.getRemoteAddr(), request.getRemoteHost(), "N");
+            request.getSession(false).invalidate();            
         }
     }
 }
