@@ -17,30 +17,52 @@ function CriaRequest() {
      else 
          return request; 
  }  
-  function consultaDados(id,coluna,tabela){
-    var xmlreq = CriaRequest(); 
-    var abrir = "consulta?id="+id+"&coluna="+coluna+"&tabela="+tabela;
-    xmlreq.open("GET",abrir, true); 
-    
-    xmlreq.onreadystatechange = function(){ 
-        if (xmlreq.readyState == 4) { 
-            if (xmlreq.status == 200) {
-                var xmlString = xmlreq.responseText;
-                var parser = new DOMParser();
-                var htmlDoc = parser.parseFromString(xmlString, "text/html");
-                document.getElementById("tab_dados").innerHTML = htmlDoc;
-            }else{ 
-                alert("Erro: " + xmlreq.statusText); 
-            } 
-        } 
-    }; 
-    xmlreq.send(null);     
+
+
+function consultaDadosBusca(tabela){
+    var id = document.getElementById("dados_busca").value;
+    var sel = document.getElementById("selector1");
+    var coluna = sel.options[sel.selectedIndex].value;
+    $.ajax(
+        {
+            type: "POST",
+            url:  "consulta",
+            data:{"id":id,"coluna":coluna,"tabela":tabela,"tipo":"busca"},
+            success: function (data) {     
+                document.getElementById("tab_dados").innerHTML = data;
+            }            
+        }
+    );
 }
- 
+function setaIdEBusca(id,tabela){
+    document.getElementById("id").value = id;
+    buscaDadosN(tabela);s
+}
+function buscaDadosN(tabela){
+    var id = document.getElementById("id").value;
+    $.ajax(
+        {
+            type: "POST",
+            url:  "consulta",
+            data:{"id":id,"tabela":tabela,"tipo":"dados"},
+            success: function (data) {     
+                var parser = new DOMParser();
+                var htmlDoc = parser.parseFromString(data, "text/html");
+                var ncols = htmlDoc.getElementById("num_cols").value;
+                for (i=1;i<ncols;i++){
+                    var nomeCol = htmlDoc.getElementById(i).value;
+                    var valr = htmlDoc.getElementById(nomeCol).value;
+                    document.getElementById(nomeCol).value = valr;
+                }
+            }            
+        }
+    );
+}
+
  function buscaDados(id,coluna,tabela){
     var xmlreq = CriaRequest(); 
     var abrir = "consulta?id="+id+"&coluna="+coluna+"&tabela="+tabela;
-    xmlreq.open("GET",abrir, true); 
+    xmlreq.open("GET",abrir, true);
     
     xmlreq.onreadystatechange = function(){ 
         if (xmlreq.readyState == 4) { 

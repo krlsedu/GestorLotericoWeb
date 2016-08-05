@@ -4,6 +4,7 @@
 <%@ page import="java.io.*,java.util.*" %>
 <%
     HttpSession sessionAt = request.getSession(false);
+    request.setCharacterEncoding("UTF-8");
     if(sessionAt != null && !sessionAt.isNew()){
         Home h = new Home(request);
         h.setHome();

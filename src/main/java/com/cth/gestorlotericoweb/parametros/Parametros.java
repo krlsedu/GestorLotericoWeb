@@ -6,6 +6,7 @@
 package com.cth.gestorlotericoweb.parametros;
 
 import com.cth.gestorlotericoweb.banco.Conexao;
+import com.cth.gestorlotericoweb.dados.ColunasTabelas;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;

@@ -57,22 +57,9 @@ public class Home {
                 VelocityContext contextConteudo;
                 StringWriter writerConteudo;
                 switch(input){
-                    case "lotericas":                            
-                            templateConteudo = ve.getTemplate( "templates/Modern/lotericas.html" , "UTF-8");
-                            contextConteudo = new VelocityContext();
-                            writerConteudo = new StringWriter();
-                            if(id !=null){
-                                Loterica loterica = new Loterica(Integer.valueOf(id));
-                                contextConteudo.put("idbd", loterica.getId()); 
-                                contextConteudo.put("codcaixa", loterica.getCodigoCaixa());
-                                contextConteudo.put("nome", loterica.getNome());                                 
-                            }else{
-                                contextConteudo.put("idbd", "0");    
-                                contextConteudo.put("codcaixa", "");
-                                contextConteudo.put("nome", "");                                   
-                            }
-                            templateConteudo.merge( contextConteudo, writerConteudo );
-                            contextPrinc.put("conteudo", writerConteudo.toString());
+                    case "lotericas":          
+                            Loterica loterica = new Loterica();
+                            contextPrinc = loterica.getHtmlLoterica(contextPrinc, ve, id);
                         break;
                     case "terminais":                            
                             templateConteudo = ve.getTemplate( "templates/Modern/terminais.html" , "UTF-8");

@@ -5,6 +5,13 @@
 --%>
 <%@page import="com.cth.gestorlotericoweb.Consulta"%>
 <%
-    Consulta c = new Consulta(request);
-    out.println(c.output);
+    request.setCharacterEncoding("UTF-8");
+    response.setCharacterEncoding("UTF-8");
+    HttpSession sessionAt = request.getSession(false);
+    if(sessionAt != null && !sessionAt.isNew()) {
+        Consulta c = new Consulta(request);
+        out.println(c.output);        
+    } else {
+        response.sendRedirect("/index.jsp");
+    }
 %>
