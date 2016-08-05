@@ -137,7 +137,6 @@ input[type="submit"],.w3ls_forgot a,.copyright p a{
 	color:#212121 !important;
 }
 .close,.close1,.close2,.close3,.close4 {
-    background: url('../images/close.png') no-repeat 0px 0px;
     cursor: pointer;
     height: 10px;
     position: absolute;

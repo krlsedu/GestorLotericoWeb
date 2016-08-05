@@ -66,6 +66,10 @@
         <servlet-name>Grava</servlet-name>
         <jsp-file>/grava.jsp</jsp-file>
     </servlet>
+    <servlet>
+        <servlet-name>Consulta</servlet-name>
+        <jsp-file>/consulta.jsp</jsp-file>
+    </servlet>
     
     <servlet-mapping>
         <servlet-name>App</servlet-name>
@@ -78,6 +82,10 @@
     <servlet-mapping>
         <servlet-name>Grava</servlet-name>
         <url-pattern>/grava</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Consulta</servlet-name>
+        <url-pattern>/consulta</url-pattern>
     </servlet-mapping>
     
     <error-page>

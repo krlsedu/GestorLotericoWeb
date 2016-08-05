@@ -1,0 +1,100 @@
+.botao-buscar {
+  color: #ffffff;
+  font-size: 17px;
+  background: #ed9a15;
+  padding: 5px 5px 5px 5px;
+  text-decoration: none;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;  
+  -moz-border-radius: 8;
+  -webkit-border-radius: 8;
+  -moz-border-radius-bottomleft: 0;
+  -moz-border-top-left-radius: 0;
+  -webkit-border-bottom-left-radius: 0;
+  -webkit-border-top-left-radius: 0;
+}
+
+.botao-buscar:hover {
+  background: #ffb13d;
+  text-decoration: none;
+}
+
+.i_botao_buscar{
+    width: 100%;
+    text-align: center;
+}
+
+.seta_esquerda {
+	position: relative;
+	background: #EF9C00;
+}
+.seta_esquerda:after {
+	right: 100%;
+	top: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-color: rgba(239, 156, 0, 0);
+	border-right-color: #EF9C00;
+	border-width: 10px;
+	margin-top: -10px;
+}
+
+.popup_c{    
+	display: none;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-left: -400px;
+	margin-top: -200px;
+	width: 900px;
+	height: 412px;
+	background-color: #FFF;
+	opacity: 0.98; 
+        z-index: 1000;
+}
+
+fechar_popup {
+    cursor: pointer;
+    height: 10px;
+    position: absolute;
+    -webkit-transition: color 0.2s ease-in-out;
+    -moz-transition: color 0.2s ease-in-out;
+    -o-transition: color 0.2s ease-in-out;
+    transition: color 0.2s ease-in-out;
+    width: 14px;
+    height: 14px;        
+    z-index: 1100;
+
+}
+.bar_fechar{
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+}
+.botao-fechar {
+  color: #ffffff;
+  font-size: 10px;
+  background: #ed9a15;
+  text-decoration: none;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.botao-fechar:hover {
+  background: #ffb13d;
+  text-decoration: none;
+}
+.i_botao_fechar{
+    content: 'x';
+    width: 100%;
+    text-align: center;
+}

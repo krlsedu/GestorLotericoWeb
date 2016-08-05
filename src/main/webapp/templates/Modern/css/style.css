@@ -916,10 +916,6 @@ canvas#doughnut, canvas#line, canvas#polarArea, #bar, #pie, #radar{
   background:#E74225 !important;
 }
 
-.btn-buscar:hover{
-  border-color:#EF9C00 !important;
-  background:#EF9C00 !important;
-}
 .control2{
   height:200px;
 }
@@ -1494,18 +1490,6 @@ div.checker input {
   border-color: #ef553a;
   background: #ef553a;
   padding:8.5px 12px;
-}
-
-.badge-success, .bg-green, .bootstrap-switch-success, .btn-buscar {
-  border-color: #ef9c00;
-  background: #ef9c00;
-  padding:8.5px 12px;
-}
-
-.btn-buscar:hover, .btn-buscar:focus, .btn-buscar:active, .btn-buscar.active, .open .dropdown-toggle.btn-buscar {
-  color: #fff;
-  background-color:rgb(255, 109, 0);
-  border-color:rgb(255, 109, 0);
 }
 
 .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .open .dropdown-toggle.btn-success {
@@ -2606,10 +2590,6 @@ button.btn.btn-lg, button.btn{
 button.btn.btn-success {
   padding:9px 12px;
 }
-button.btn.btn-buscar {
-  padding:9px 12px;
-}
-
 button.btn.btn-inverse {
   padding:9px 12px;
 }
