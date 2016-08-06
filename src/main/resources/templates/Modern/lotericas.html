@@ -3,12 +3,11 @@
     <h3>Dados da Lotérica</h3>
     <div class="tab-content">
         <div class="tab-pane active" id="horizontal-form">
-            <form class="form-horizontal" action="grava">                                
+            <form class="form-horizontal" action="#" id="form_dados">                                
                 <div class="form-group mb-n">
                     <label for="smallinput" class="col-sm-2 control-label label-input-sm">Código</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control1 input-lg" id="codigo" placeholder="Código da Lotérica na Caixa" name="codigo_caixa" value="$codcaixa" required>                                                
-                        
+                        <input type="text" class="form-control1 input-lg" id="codigo_caixa" placeholder="Código da Lotérica na Caixa" name="codigo_caixa" value="$codcaixa" required>                                                                        
                     </div>
                     <div class="botao-buscar">
                         <i class="i_botao_buscar fa fa-search" onclick="document.getElementById('popup').style.display='block';"></i>
@@ -22,9 +21,15 @@
                 </div>
                 <div class="panel-footer">
                     <div class="row">
-                        <div class="col-sm-3 col-sm-offset-9">
-                            <button type="submit" class="btn btn-primary">Gravar</button>
-                            <div class="btn btn-default">Limpar</div>
+                        <div class="col-sm-1 col-sm-offset-9">
+                            <div class="btn btn-primary" onclick="gravaDados()">Gravar</div>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="reset" class="btn botao-deletar" onclick="deletarDados()">Excluir</button>
+                        </div>
+                        
+                        <div class="col-sm-1">
+                            <button type="reset" class="btn btn-default" onclick="limpa()">Limpar</button>
                         </div>
                     </div>
                 </div>

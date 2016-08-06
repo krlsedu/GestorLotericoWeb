@@ -68,7 +68,7 @@ public class ColunasTabelas {
         mTabColsSelBusca.put("lotericas", "id,codigo_caixa,nome");
     }
     private void carregaTabColsDados(){
-        mTabColsSelDados.put("lotericas", "id,codigo_caixa,nome");
+        mTabColsSelDados.put("lotericas", "codigo_caixa,nome");
     }
     public String getTabela(String tabela){
         return mTabelas.get(tabela);

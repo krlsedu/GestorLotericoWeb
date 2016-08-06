@@ -34,10 +34,12 @@ function consultaDadosBusca(tabela){
         }
     );
 }
-function setaIdEBusca(id,tabela){
+
+function setaIdEBusca(id){
     document.getElementById("id").value = id;
-    buscaDadosN(tabela);s
+    buscaDadosN(document.getElementById("it").value);
 }
+
 function buscaDadosN(tabela){
     var id = document.getElementById("id").value;
     $.ajax(
@@ -49,41 +51,52 @@ function buscaDadosN(tabela){
                 var parser = new DOMParser();
                 var htmlDoc = parser.parseFromString(data, "text/html");
                 var ncols = htmlDoc.getElementById("num_cols").value;
-                for (i=1;i<ncols;i++){
-                    var nomeCol = htmlDoc.getElementById(i).value;
-                    var valr = htmlDoc.getElementById(nomeCol).value;
+                for (i=1;i<=ncols;i++){
+                    var nomeCol = htmlDoc.getElementById("nome_coluna_"+i).value;
+                    var valr = htmlDoc.getElementById("busca_col_"+nomeCol).value;
                     document.getElementById(nomeCol).value = valr;
                 }
+                fechaPopUp();
             }            
         }
     );
 }
 
- function buscaDados(id,coluna,tabela){
-    var xmlreq = CriaRequest(); 
-    var abrir = "consulta?id="+id+"&coluna="+coluna+"&tabela="+tabela;
-    xmlreq.open("GET",abrir, true);
-    
-    xmlreq.onreadystatechange = function(){ 
-        if (xmlreq.readyState == 4) { 
-            if (xmlreq.status == 200) {
-                var xmlString = xmlreq.responseText;
-                var parser = new DOMParser();
-                var htmlDoc = parser.parseFromString(xmlString, "text/html");
-                var ncols = htmlDoc.getElementById("num_cols").value;
-                for (i=1;i<ncols;i++){
-                    var nomeCol = htmlDoc.getElementById(i).value;
-                    var patern = document.getElementById(nomeCol).title;
-                    var valr = htmlDoc.getElementById(nomeCol).value;
-                    var temp = formataOnLoad(patern,valr);
-                    document.getElementById(nomeCol).value = temp;
-                    document.getElementById(nomeCol).alt = temp;
-                }                
-            }else{ 
-                alert("Erro: " + xmlreq.statusText); 
-            } 
-        } 
-    }; 
-    xmlreq.send(null);     
+function gravaDados(){
+    $.ajax(
+        {
+            type: "POST",
+            url:  "grava",
+            data: $("#form_dados").serialize(),
+            success: function (data) {    
+                setaIdEBusca(data.trim());
+                alert("Gravado com Sucesso!");
+            }         
+        }
+    );
 }
 
+function deletarDados(){
+        var id = document.getElementById("id").value;
+    $.ajax(
+        {
+            type: "POST",
+            url:  "grava",
+            data:{"id":id,"tipo":"rm","tabela":document.getElementById("it").value},
+            success: function (data) {  
+                alert("Excluído com Sucesso!");
+                limpa();
+            }
+        }
+    );
+}
+
+function fechaPopUp(){    
+    document.getElementById('popup').style.display='none';
+    document.getElementById('dados_busca').value = '';
+    document.getElementById("tab_dados").innerHTML='';
+}
+
+function limpa(){    
+    document.getElementById('id').value='0';
+}

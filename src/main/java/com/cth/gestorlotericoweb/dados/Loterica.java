@@ -83,7 +83,7 @@ public class Loterica {
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("UPDATE public.lotericas\n" +
                     "   SET  codigo_caixa=?, nome=?\n" +
-                    " WHERE id=? and id_loterica = ? ", false);
+                    " WHERE id=? and id_entidade = ? ", false);
             ps.setString(1, codigoCaixa);
             ps.setString(2, nome);
             id = Integer.valueOf(idL);

@@ -34,7 +34,7 @@ public class Consulta {
 
     public Consulta(HttpServletRequest request) {
         this.request = request;
-        switch(request.getParameter("coluna")){
+        switch(request.getParameter("tipo")){
             case "busca":
                 geraTabelaPopUp();
                 break;
@@ -51,11 +51,21 @@ public class Consulta {
         ColunasTabelas colunasTabelas = new ColunasTabelas();
         String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
         if(tabela !=null){
-            String sql = "select "+colunasTabelas.getTabColsDados(tabela)+" from "+tabela+" where id_entidade = ? and id = ?";
+            String sql = "select "+colunasTabelas.getTabColsDados(tabela)+" from "+tabela+" where id_entidade = ? and id = ? ";
             try {
                 PreparedStatement ps = Parametros.getConexao().getPst(sql, false);
                 ps.setInt(1, Parametros.idEntidade);
-                ps.setInt(2, 0);
+                ps.setInt(2, Integer.valueOf(request.getParameter("id")));
+                ResultSet rs = ps.executeQuery();
+                List<String> lInputs = new ArrayList<>();
+                if (rs.next()) {
+                    lInputs.add("<input type=\"text\" id=\"num_cols\" value=\""+rs.getMetaData().getColumnCount()+"\" readonly>");
+                    for(int i = 1; i<=rs.getMetaData().getColumnCount();i++){    
+                        lInputs.add("<input type=\"text\" id=\"nome_coluna_"+i+"\" value=\""+rs.getMetaData().getColumnName(i)+"\" readonly>");
+                        lInputs.add("<input type=\"text\" id=\"busca_col_"+rs.getMetaData().getColumnName(i)+"\" value=\""+rs.getString(i)+"\" readonly>");
+                    }
+                }
+                output = StringUtils.join(lInputs, "\n");
             } catch (SQLException ex) {
                 throw new RuntimeException(ex.getMessage(), ex);
             }
@@ -67,7 +77,7 @@ public class Consulta {
         String coluna = colunasTabelas.getColuna(request.getParameter("coluna"));
         String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
         if(coluna!=null && tabela !=null){
-            String sql = "select "+colunasTabelas.getTabColsBusca(tabela)+" from "+tabela+" where id_entidade = ? and "+coluna+" like ?";
+            String sql = "select "+colunasTabelas.getTabColsBusca(tabela)+" from "+tabela+" where id_entidade = ? and lower("+coluna+") like lower(?) order by "+coluna;
             try {
                 PreparedStatement ps = Parametros.getConexao().getPst(sql, false);
                 ps.setInt(1, Parametros.idEntidade);
@@ -83,11 +93,11 @@ public class Consulta {
                             if(rs.isFirst()){
                                 lCols.add("<th>"+colunasTabelas.getDescricao(rs.getMetaData().getColumnName(i))+"</th>");
                             }
-                            lVals.add("<th>"+rs.getString(i)+"</th>");
+                            lVals.add("<th onclick=\"setaIdEBusca('"+rs.getString("id")+"')\">"+rs.getString(i)+"</th>");
                         }
-                        lLinhas.add("<tr>"+StringUtils.join(lVals, ' ')+"</tr>");
+                        lLinhas.add("<tr >"+StringUtils.join(lVals, ' ')+"</tr>");
                     }
-                    output = "<thead>"+StringUtils.join(lCols, ' ')+"</thead><tbody>"+StringUtils.join(lLinhas, ' ')+"</tbody>";   
+                    output="<thead>"+StringUtils.join(lCols, ' ')+"</thead><tbody>"+StringUtils.join(lLinhas, ' ')+"</tbody>";  
                 }else{
                     output = ps.toString();
                 }
