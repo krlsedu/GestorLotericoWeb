@@ -7,6 +7,7 @@ package com.cth.gestorlotericoweb;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import java.io.StringWriter;
 import java.sql.SQLException;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -20,9 +21,9 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
  */
 public class Login{
     public String output;
-    public void setLogin(){
+    public void setLogin(HttpServletRequest request){
         
-        Parametros.initDb();
+        Parametros.initDb(request);
         
         try{
             VelocityEngine ve = new VelocityEngine();
@@ -42,7 +43,7 @@ public class Login{
             output = writer.toString();
         
         }catch(ResourceNotFoundException e){
-            output =e.getMessage();
+            throw new LogError(e.getMessage(), e,request);
         }
         //JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/web/index.html");
         //JtwigModel model = JtwigModel.newModel().with("var", "World");

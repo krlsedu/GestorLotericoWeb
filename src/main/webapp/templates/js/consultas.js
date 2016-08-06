@@ -30,7 +30,10 @@ function consultaDadosBusca(tabela){
             data:{"id":id,"coluna":coluna,"tabela":tabela,"tipo":"busca"},
             success: function (data) {     
                 document.getElementById("tab_dados").innerHTML = data;
-            }            
+            }, 
+            error: function (jXHR, textStatus, errorThrown) {
+                alert("Desculpe ocorreu um erro! :(");
+            }             
         }
     );
 }
@@ -57,6 +60,27 @@ function buscaDadosN(tabela){
                     document.getElementById(nomeCol).value = valr;
                 }
                 fechaPopUp();
+            }, 
+            error: function (jXHR, textStatus, errorThrown) {
+                alert("Desculpe ocorreu um erro! :(");
+            }             
+        }
+    );
+}
+
+function btnsPercorrer(btn){
+    var id = document.getElementById("id").value;
+    var tabela = document.getElementById("it").value;
+    $.ajax(
+        {
+            type: "POST",
+            url:  "consulta",
+            data:{"id":id,"tabela":tabela,"tipo":"id","btn":btn},
+            success: function (data) {   
+                setaIdEBusca(data.trim());
+            }, 
+            error: function (jXHR, textStatus, errorThrown) {
+                alert("Desculpe ocorreu um erro! :(");
             }            
         }
     );
@@ -75,7 +99,7 @@ $("document").ready(function () {
                     alert("Gravado com Sucesso!");
                 }, 
                 error: function (jXHR, textStatus, errorThrown) {
-                    alert(errorThrown);
+                    alert("Desculpe ocorreu um erro! :(");
                 }
             }); 
         });
@@ -92,7 +116,10 @@ function deletarDados(){
             success: function (data) {  
                 alert("Excluído com Sucesso!");
                 limpa();
-            }
+            }, 
+            error: function (jXHR, textStatus, errorThrown) {
+                alert("Desculpe ocorreu um erro! :(");
+            } 
         }
     );
 }

@@ -36,15 +36,15 @@ public class Grava {
     
     private void deleta(){
         try {                    
-            ColunasTabelas colunasTabelas = new ColunasTabelas();
+            ColunasTabelas colunasTabelas = new ColunasTabelas(request);
             String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
             if(tabela !=null){
-                PreparedStatement ps = Parametros.getConexao().getPst("delete from "+tabela+" where id = ?", Boolean.FALSE);     
+                PreparedStatement ps = Parametros.getConexao(request).getPst("delete from "+tabela+" where id = ?", Boolean.FALSE);     
                 ps.setInt(1, Integer.valueOf(request.getParameter("id")));
                 ps.execute();
             }            
         } catch (SQLException ex) {
-            throw new RuntimeException(ex.getMessage(), ex);
+            throw new LogError(ex.getMessage(), ex,request);
         }
     }
     
@@ -52,7 +52,7 @@ public class Grava {
         String input = request.getParameter("it");
         switch(input){
             case "lotericas":     
-                Loterica loterica = new Loterica(request.getParameter("codigo_caixa"), request.getParameter("nome"));
+                Loterica loterica = new Loterica(request.getParameter("codigo_caixa"), request.getParameter("nome"),request);
                 if("0".equals(request.getParameter("id"))){
                     loterica.insere();
                 }else{

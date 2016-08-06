@@ -20,8 +20,7 @@ import org.apache.velocity.app.VelocityEngine;
 public class Cadastros {
     List<String> lOpts = new ArrayList<>();
     public Cadastros() {
-    }
-    
+    }   
     
     public StringWriter getSWPopup(VelocityEngine ve,String tipo){
         Template templatePopup;

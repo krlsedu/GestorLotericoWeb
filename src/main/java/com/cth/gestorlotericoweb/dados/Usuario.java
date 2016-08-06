@@ -5,6 +5,7 @@
  */
 package com.cth.gestorlotericoweb.dados;
 
+import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -22,18 +24,22 @@ public class Usuario {
     public Integer idUsuario;
     public String usuario;
     public List<Integer> lEntidadesUsuario;
+    final HttpServletRequest request;
 
-    public Usuario() {
+    public Usuario(HttpServletRequest request) {
+        this.request = request;
     }
 
-    public Usuario(String usuario,String senha) {
+    public Usuario(String usuario,String senha,HttpServletRequest request) {
         this.usuario = usuario;
         lEntidadesUsuario = new ArrayList<>();
+        this.request = request;
         autentica(senha);
     }
 
-    public Usuario(Integer idUsuario) {
+    public Usuario(Integer idUsuario,HttpServletRequest request) {
         this.idUsuario = idUsuario;
+        this.request = request;
     }
     
     
@@ -60,7 +66,7 @@ public class Usuario {
             }   
                 
         } catch (SQLException ex) {
-            throw new RuntimeException(ex.getMessage(), ex);
+            throw new LogError(ex.getMessage(), ex,request);
         }        
     }
 
@@ -82,7 +88,7 @@ public class Usuario {
                 lEntidadesUsuario.add(rs.getInt(1));
             }
         } catch (SQLException ex) {
-            throw new RuntimeException(ex.getMessage(), ex);
+            throw new LogError(ex.getMessage(), ex, request);
         }
     }
     

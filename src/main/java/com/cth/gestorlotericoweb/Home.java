@@ -19,6 +19,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.exception.MethodInvocationException;
+import org.apache.velocity.exception.ParseErrorException;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
@@ -40,6 +43,7 @@ public class Home {
     }
 
     public void setHome() {
+        try{
             VelocityEngine ve = new VelocityEngine();
             ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
             ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
@@ -58,7 +62,7 @@ public class Home {
                 StringWriter writerConteudo;
                 switch(input){
                     case "lotericas":          
-                            Loterica loterica = new Loterica();
+                            Loterica loterica = new Loterica(request);
                             contextPrinc = loterica.getHtmlLoterica(contextPrinc, ve, id);
                         break;
                     case "terminais":                            
@@ -78,29 +82,11 @@ public class Home {
                 }
             }
             StringWriter writer = new StringWriter();
-            templatePrinc.merge( contextPrinc, writer );
-            Date date = new Date();
-            Long tempoSessao = (date.getTime() - request.getSession(false).getLastAccessedTime())/1000;
-            String pgAnt;
-            if(request.getSession(false).getAttribute("url")==null){
-                pgAnt = "index.jsp";
-            }else{
-                pgAnt = request.getSession(false).getAttribute("url").toString();
-            }
-            String pgAtu ;
-            if(request.getParameterMap().keySet().size()>0){
-                pgAtu = request.getRequestURL().toString()+"?";
-                List l = new ArrayList();
-                for(Object ob:request.getParameterMap().keySet()){
-                    l.add(ob.toString()+"="+StringUtils.join(request.getParameterValues(ob.toString()), ','));
-                }
-                pgAtu += StringUtils.join(l,"&");
-                
-            }else{
-                pgAtu = request.getRequestURL().toString();
-            }
-            Parametros.gravaSessao(request, pgAnt, pgAtu, tempoSessao);
-            request.getSession(false).setAttribute("url", pgAtu);
+            templatePrinc.merge( contextPrinc, writer );  
+            Parametros.gravaLogSessao(request);
             output = writer.toString();
+        }catch(ResourceNotFoundException|MethodInvocationException|ParseErrorException ex){
+            throw new LogError(ex.getMessage(), ex, request);
+        }
     }    
 }

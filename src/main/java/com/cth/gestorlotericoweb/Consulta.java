@@ -34,12 +34,15 @@ public class Consulta {
 
     public Consulta(HttpServletRequest request) {
         this.request = request;
-        switch(request.getParameter("tipo")){
+        switch(request.getParameter("tipo").trim()){
             case "busca":
                 geraTabelaPopUp();
                 break;
             case "dados":
                 geraTabelaDados();
+                break;                
+            case "id":
+                getId();
                 break;
             default:
                 output ="definir o tipo de busca";
@@ -47,13 +50,60 @@ public class Consulta {
         }
     }
     
+    private void getId(){
+        ColunasTabelas colunasTabelas = new ColunasTabelas(request);
+        String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
+        if(tabela !=null){
+            String btn = request.getParameter("btn");            
+            String id = request.getParameter("id");
+            String col;
+            String order;
+            switch(btn){
+                case "i":
+                    col = "";
+                    order = "asc";
+                    break;
+                case "a":
+                    col = " and id < "+id;
+                    order = "desc";
+                    break;                
+                case "p":
+                    col = " and id > "+id;
+                    order = "asc";
+                    break;                  
+                case "f":
+                    col = "";
+                    order = "desc";
+                    break;
+                default:
+                    col = "";
+                    order = "";
+                    break;
+            }
+            String sql = "select id from "+tabela+" where id_entidade = ? "+col+" order by id "+order+" Limit 1";
+            try {
+                PreparedStatement ps = Parametros.getConexao(request).getPst(sql, false);
+                ps.setInt(1, Parametros.idEntidade);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    output = rs.getString(1);
+                }else{
+                    output = id;
+                }
+            } catch (SQLException ex) {
+                output = ex.getMessage();
+                throw new LogError(ex.getMessage(), ex,request);
+            }
+        }
+    }
+    
     private void geraTabelaDados(){        
-        ColunasTabelas colunasTabelas = new ColunasTabelas();
+        ColunasTabelas colunasTabelas = new ColunasTabelas(request);
         String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
         if(tabela !=null){
             String sql = "select "+colunasTabelas.getTabColsDados(tabela)+" from "+tabela+" where id_entidade = ? and id = ? ";
             try {
-                PreparedStatement ps = Parametros.getConexao().getPst(sql, false);
+                PreparedStatement ps = Parametros.getConexao(request).getPst(sql, false);
                 ps.setInt(1, Parametros.idEntidade);
                 ps.setInt(2, Integer.valueOf(request.getParameter("id")));
                 ResultSet rs = ps.executeQuery();
@@ -67,19 +117,19 @@ public class Consulta {
                 }
                 output = StringUtils.join(lInputs, "\n");
             } catch (SQLException ex) {
-                throw new RuntimeException(ex.getMessage(), ex);
+                throw new LogError(ex.getMessage(), ex,request);
             }
         }
     }
     
     private void geraTabelaPopUp(){
-        ColunasTabelas colunasTabelas = new ColunasTabelas();
+        ColunasTabelas colunasTabelas = new ColunasTabelas(request);
         String coluna = colunasTabelas.getColuna(request.getParameter("coluna"));
         String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
         if(coluna!=null && tabela !=null){
             String sql = "select "+colunasTabelas.getTabColsBusca(tabela)+" from "+tabela+" where id_entidade = ? and lower("+coluna+") like lower(?) order by "+coluna;
             try {
-                PreparedStatement ps = Parametros.getConexao().getPst(sql, false);
+                PreparedStatement ps = Parametros.getConexao(request).getPst(sql, false);
                 ps.setInt(1, Parametros.idEntidade);
                 ps.setString(2, "%"+request.getParameter("id")+"%");
                 ResultSet rs = ps.executeQuery();
@@ -102,7 +152,7 @@ public class Consulta {
                     output = ps.toString();
                 }
             } catch (SQLException ex) {
-                throw new RuntimeException(ex.getMessage(), ex);
+                throw new LogError(ex.getMessage(), ex,request);
             }
         }else{
             output = "coluna==null || tabela ==null"+request.getParameter("coluna")+request.getParameter("tabela")+coluna+tabela;

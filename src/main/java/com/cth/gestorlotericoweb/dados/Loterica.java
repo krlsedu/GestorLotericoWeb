@@ -5,6 +5,7 @@
  */
 package com.cth.gestorlotericoweb.dados;
 
+import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.banco.Conexao;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import java.io.StringWriter;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -28,17 +30,21 @@ public class Loterica extends Cadastros{
     String codigoCaixa;
     String nome;
     Integer id;
+    final HttpServletRequest request;
 
-    public Loterica(String codigoCaixa, String nome) {
+    public Loterica(String codigoCaixa, String nome,HttpServletRequest request) {
         this.codigoCaixa = codigoCaixa;
         this.nome = nome;
+        this.request = request;
     }
 
-    public Loterica() {
+    public Loterica(HttpServletRequest request) {
+        this.request = request;
     }
     
-    public Loterica(Integer id) {
+    public Loterica(Integer id,HttpServletRequest request) {
         this.id = id;
+        this.request = request;
         getDados();
     }
     private void getDados(){
@@ -57,7 +63,7 @@ public class Loterica extends Cadastros{
                 id = 0;
             }
         } catch (SQLException ex) {
-            throw new RuntimeException(ex.getMessage(), ex);
+            throw new LogError(ex.getMessage(), ex,request);
         }
     }
     
@@ -75,7 +81,7 @@ public class Loterica extends Cadastros{
                 id = rs.getInt(1);
             }
         } catch (SQLException ex) {
-            throw new RuntimeException(ex.getMessage(), ex);
+            throw new LogError(ex.getMessage(), ex,request);
         }
     }
     
@@ -91,7 +97,7 @@ public class Loterica extends Cadastros{
             ps.setInt(4, Parametros.idEntidade);
             ps.execute();
         } catch (SQLException ex) {
-            throw new RuntimeException(ex.getMessage(), ex);
+            throw new LogError(ex.getMessage(), ex,request);
         }
     }
 
@@ -123,7 +129,7 @@ public class Loterica extends Cadastros{
         contextConteudo = new VelocityContext();
         writerConteudo = new StringWriter();
         if(idS !=null){
-            Loterica loterica = new Loterica(Integer.valueOf(idS));
+            Loterica loterica = new Loterica(Integer.valueOf(idS),request);
             contextConteudo.put("idbd", loterica.getId()); 
             contextConteudo.put("codcaixa", loterica.getCodigoCaixa());
             contextConteudo.put("nome", loterica.getNome());              

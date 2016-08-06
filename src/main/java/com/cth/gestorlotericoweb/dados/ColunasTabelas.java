@@ -5,6 +5,7 @@
  */
 package com.cth.gestorlotericoweb.dados;
 
+import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -23,13 +25,15 @@ public class ColunasTabelas {
     public Map<String,String> mTabelas;
     public Map<String,String> mTabColsSelBusca;
     public Map<String,String> mTabColsSelDados;
+    final HttpServletRequest request;
     
-    public ColunasTabelas(){
+    public ColunasTabelas(HttpServletRequest request){
         mDescri = new HashMap<>();
         mCol = new HashMap<>();
         mTabelas = new HashMap<>();
         mTabColsSelBusca = new HashMap<>();
         mTabColsSelDados = new HashMap<>();
+        this.request = request;
         setColTab();
         carregaTabelas();
         carregaTabColsBusca();
@@ -43,7 +47,7 @@ public class ColunasTabelas {
                 putMs(rs.getString(2), rs.getString(3));
             }
         } catch (SQLException ex) {
-            throw new RuntimeException(ex.getMessage(), ex);
+            throw new LogError(ex.getMessage(), ex,request);
         }
     }
     

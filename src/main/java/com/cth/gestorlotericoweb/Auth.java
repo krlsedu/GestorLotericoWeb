@@ -26,7 +26,7 @@ public class Auth {
         this.request = request;
     }
     public void auth(){
-        Usuario usuario = new Usuario(request.getParameter("user"), request.getParameter("password"));
+        Usuario usuario = new Usuario(request.getParameter("user"), request.getParameter("password"),request);
         if(usuario.getIdUsuario()>0){
             Parametros.setIdUsuario(usuario.getIdUsuario());
             Parametros.setIdEntidade(2);
@@ -39,10 +39,10 @@ public class Auth {
                     output = "entidades";                                   
                 }
             }
-            Parametros.gravaLogin(request.getParameter("user"), request.getRemoteAddr(), request.getRemoteHost(), "S");            
+            Parametros.gravaLogin(request.getParameter("user"), request.getRemoteAddr(), request.getRemoteHost(), "S",request);            
         }else{
             output = "False";                      
-            Parametros.gravaLogin(request.getParameter("user"), request.getRemoteAddr(), request.getRemoteHost(), "N");
+            Parametros.gravaLogin(request.getParameter("user"), request.getRemoteAddr(), request.getRemoteHost(), "N",request);
             request.getSession(false).invalidate();            
         }
     }
