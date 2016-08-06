@@ -1,0 +1,24 @@
+.botao-buscar:hover {
+  background: #ffb13d;
+  text-decoration: none;
+}
+
+.botao-deletar:hover {
+  background: #fff;
+  text-decoration: none;
+}
+
+.botao-ep:hover {
+  background: #ffb13d;
+  text-decoration: none;
+}
+
+.botao-es:hover {
+  background: #ffb13d;
+  text-decoration: none;
+}
+
+.botao-fechar:hover {
+  background: #ffb13d;
+  text-decoration: none;
+}

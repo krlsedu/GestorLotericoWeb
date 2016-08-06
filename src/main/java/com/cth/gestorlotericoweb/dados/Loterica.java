@@ -24,7 +24,7 @@ import org.apache.velocity.app.VelocityEngine;
  *
  * @author CarlosEduardo
  */
-public class Loterica {
+public class Loterica extends Cadastros{
     String codigoCaixa;
     String nome;
     Integer id;
@@ -107,8 +107,8 @@ public class Loterica {
         return nome;
     }
     
-    private List<String> getOpcoesFiltro(){
-        List<String> lOpts = new ArrayList<>();
+    private List<String> setOpcoesFiltro(){
+        lOpts = new ArrayList<>();
         lOpts.add("<option>Código na Caixa</option>");
         lOpts.add("<option>Nome</option>");
         return lOpts;
@@ -126,29 +126,18 @@ public class Loterica {
             Loterica loterica = new Loterica(Integer.valueOf(idS));
             contextConteudo.put("idbd", loterica.getId()); 
             contextConteudo.put("codcaixa", loterica.getCodigoCaixa());
-            contextConteudo.put("nome", loterica.getNome());                                 
+            contextConteudo.put("nome", loterica.getNome());              
+            contextConteudo.put("btns_percorrer",getSWBotoesPercorrer(ve).toString());                   
         }else{
             contextConteudo.put("idbd", "0");    
             contextConteudo.put("codcaixa", "");
-            contextConteudo.put("nome", "");                                   
+            contextConteudo.put("nome", ""); 
+            contextConteudo.put("btns_percorrer",getSWBotoesPercorrer(ve).toString());
         }
-        
+        setOpcoesFiltro();
         templateConteudo.merge( contextConteudo, writerConteudo );
         contextPrinc.put("conteudo", writerConteudo.toString());
-        contextPrinc.put("popup", getSWPopup(ve).toString());
+        contextPrinc.put("popup", getSWPopup(ve,"lotericas").toString());
         return contextPrinc;
-    }
-    
-    private StringWriter getSWPopup(VelocityEngine ve){
-        Template templatePopup;
-        VelocityContext contextPopup;
-        StringWriter writerPopup;
-        templatePopup = ve.getTemplate( "templates/Modern/popup.html" , "UTF-8");
-        contextPopup = new VelocityContext();
-        writerPopup = new StringWriter();
-        contextPopup.put("tabela", "lotericas");
-        contextPopup.put("opt", StringUtils.join(getOpcoesFiltro(), '\n'));
-        templatePopup.merge(contextPopup, writerPopup);
-        return writerPopup;
     }
 }

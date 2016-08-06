@@ -62,22 +62,28 @@ function buscaDadosN(tabela){
     );
 }
 
-function gravaDados(){
-    $.ajax(
-        {
-            type: "POST",
-            url:  "grava",
-            data: $("#form_dados").serialize(),
-            success: function (data) {    
-                setaIdEBusca(data.trim());
-                alert("Gravado com Sucesso!");
-            }         
-        }
-    );
-}
+$("document").ready(function () {
+    $("#botao-gravar").click(function () {
+        $('#form_dados').submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url:  "grava",
+                data: $("#form_dados").serialize(),
+                success: function (data) {    
+                    setaIdEBusca(data.trim());
+                    alert("Gravado com Sucesso!");
+                }, 
+                error: function (jXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            }); 
+        });
+    });     
+});
 
 function deletarDados(){
-        var id = document.getElementById("id").value;
+    var id = document.getElementById("id").value;
     $.ajax(
         {
             type: "POST",
