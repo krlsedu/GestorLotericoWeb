@@ -6,13 +6,15 @@
 package com.cth.gestorlotericoweb;
 
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
  * @author CarlosEduardo
  */
-public class LogError extends RuntimeException{
+public class LogError{
     public LogError(String message, Throwable cause,HttpServletRequest request) {
-        super(message, cause);
+        Erros erros = new  Erros(request, message, StringUtils.join(cause.getStackTrace(),';'));
+        throw new RuntimeException(message, cause);
     }    
 }

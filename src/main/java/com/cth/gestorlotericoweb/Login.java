@@ -43,7 +43,7 @@ public class Login{
             output = writer.toString();
         
         }catch(ResourceNotFoundException e){
-            throw new LogError(e.getMessage(), e,request);
+            new LogError(e.getMessage(), e,request);
         }
         //JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/web/index.html");
         //JtwigModel model = JtwigModel.newModel().with("var", "World");

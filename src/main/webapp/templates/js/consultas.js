@@ -18,8 +18,45 @@ function CriaRequest() {
          return request; 
  }  
 
+function ativaPopUp(tipo,colunaBuscar){
+    if(tipo === 'id'){
+        var tabela = document.getElementById("it").value;
+        buscaOpcoesCBPopUp(tabela);
+    }else{
+        buscaOpcoesCBPopUp(tipo);       
+    }  
+    document.getElementById("tipo_busca").value = tipo;
+    document.getElementById("col_buscar").value = colunaBuscar;
+    document.getElementById('popup').style.display='block';  
+}
 
-function consultaDadosBusca(tabela){
+function buscaOpcoesCBPopUp(tabela){
+    $.ajax(
+        {
+            type: "POST",
+            url:  "consulta",
+            data:{"tipo":"opt","tabela":tabela},
+            success: function (data) {     
+                document.getElementById("selector1").innerHTML = data;
+            }, 
+            error: function (jXHR, textStatus, errorThrown) {
+                alert("Desculpe ocorreu um erro! :(");
+            }             
+        }
+    );
+}
+function consultaDadosBusca(){
+    var tipo = document.getElementById("tipo_busca").value;
+    var colunaBuscar = document.getElementById("col_buscar").value;
+    if(tipo === 'id'){
+        var tabela = document.getElementById("it").value;
+        consultaDadosBuscaId(tabela);
+    }else{
+        consultaDadosFk(tipo,colunaBuscar);       
+    } 
+}
+        
+function consultaDadosBuscaId(tabela){    
     var id = document.getElementById("dados_busca").value;
     var sel = document.getElementById("selector1");
     var coluna = sel.options[sel.selectedIndex].value;
@@ -28,6 +65,25 @@ function consultaDadosBusca(tabela){
             type: "POST",
             url:  "consulta",
             data:{"id":id,"coluna":coluna,"tabela":tabela,"tipo":"busca"},
+            success: function (data) {   
+                document.getElementById("tab_dados").innerHTML = data;
+            }, 
+            error: function (jXHR, textStatus, errorThrown) {
+                alert("Desculpe ocorreu um erro! :(");
+            }             
+        }
+    );
+}
+
+function consultaDadosFk(tabela,colunaBuscar){
+    var id = document.getElementById("dados_busca").value;
+    var sel = document.getElementById("selector1");
+    var coluna = sel.options[sel.selectedIndex].value;
+    $.ajax(
+        {
+            type: "POST",
+            url:  "consulta",
+            data:{"id":id,"coluna":coluna,"tabela":tabela,"tipo":"busca","coluna_buscar":colunaBuscar},
             success: function (data) {     
                 document.getElementById("tab_dados").innerHTML = data;
             }, 
@@ -99,7 +155,7 @@ $("document").ready(function () {
                     alert("Gravado com Sucesso!");
                 }, 
                 error: function (jXHR, textStatus, errorThrown) {
-                    alert("Desculpe ocorreu um erro! :(");
+                    alert("Desculpe ocorreu um erro! :("+textStatus);
                 }
             }); 
         });
@@ -122,6 +178,11 @@ function deletarDados(){
             } 
         }
     );
+}
+
+function setaIdFk(id,campo){
+    document.getElementById(campo).value = id;
+    fechaPopUp();
 }
 
 function fechaPopUp(){    

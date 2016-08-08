@@ -6,7 +6,7 @@
                     <input type="text" class="form-control1 input-lg" id="dados_busca" placeholder="Sua Busca" name="sua_busca" required>                                                
                 </div>
                 <div class="col-sm-2">
-                    <div class="botao-buscar" onclick="consultaDadosBusca('$tabela')">
+                    <div class="botao-buscar" id="botao_buscar_popup" onclick="consultaDadosBusca()">
                         <i class="i_botao_buscar fa fa-search"></i>
                     </div>
                 </div>
@@ -20,10 +20,11 @@
                 </div>
             </div>
             <div class="scrollbar" id="style-2">
-                
-                
                 <table class="table" id="tab_dados">
                 </table>
             </div>
+            
+            <input type="hidden" id="tipo_busca" name="tipo_busca" value="" />                
+            <input type="hidden" id="col_buscar" name="col_buscar" value="" />
 	</div>			
     </div>

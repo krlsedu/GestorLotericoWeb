@@ -13,8 +13,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 
@@ -36,7 +34,7 @@ public class Consulta {
         this.request = request;
         switch(request.getParameter("tipo").trim()){
             case "busca":
-                geraTabelaPopUp();
+                geraTabelaPopUp(request.getParameter("coluna_buscar"));
                 break;
             case "dados":
                 geraTabelaDados();
@@ -44,9 +42,20 @@ public class Consulta {
             case "id":
                 getId();
                 break;
+            case "opt":
+                getOpt();
+                break;
             default:
                 output ="definir o tipo de busca";
                 break;
+        }
+    }
+    
+    private void getOpt(){        
+        ColunasTabelas colunasTabelas = new ColunasTabelas(request);
+        String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
+        if(tabela !=null){
+            output = colunasTabelas.getOpts(tabela);
         }
     }
     
@@ -92,7 +101,7 @@ public class Consulta {
                 }
             } catch (SQLException ex) {
                 output = ex.getMessage();
-                throw new LogError(ex.getMessage(), ex,request);
+                new LogError(ex.getMessage(), ex,request);
             }
         }
     }
@@ -117,12 +126,12 @@ public class Consulta {
                 }
                 output = StringUtils.join(lInputs, "\n");
             } catch (SQLException ex) {
-                throw new LogError(ex.getMessage(), ex,request);
+                new LogError(ex.getMessage(), ex,request);
             }
         }
     }
     
-    private void geraTabelaPopUp(){
+    private void geraTabelaPopUp(String colunaBuscar){
         ColunasTabelas colunasTabelas = new ColunasTabelas(request);
         String coluna = colunasTabelas.getColuna(request.getParameter("coluna"));
         String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
@@ -143,7 +152,15 @@ public class Consulta {
                             if(rs.isFirst()){
                                 lCols.add("<th>"+colunasTabelas.getDescricao(rs.getMetaData().getColumnName(i))+"</th>");
                             }
-                            lVals.add("<th onclick=\"setaIdEBusca('"+rs.getString("id")+"')\">"+rs.getString(i)+"</th>");
+                            if(colunaBuscar == null){
+                                lVals.add("<th onclick=\"setaIdEBusca('"+rs.getString("id")+"')\">"+rs.getString(i)+"</th>");
+                            }else{
+                                if(colunaBuscar.equals("id")){
+                                    lVals.add("<th onclick=\"setaIdEBusca('"+rs.getString("id")+"')\">"+rs.getString(i)+"</th>");
+                                }else{
+                                    lVals.add("<th onclick=\"setaIdFk('"+rs.getString("id")+"','"+colunaBuscar+"')\">"+rs.getString(i)+"</th>");
+                                }
+                            }
                         }
                         lLinhas.add("<tr >"+StringUtils.join(lVals, ' ')+"</tr>");
                     }
@@ -152,7 +169,7 @@ public class Consulta {
                     output = ps.toString();
                 }
             } catch (SQLException ex) {
-                throw new LogError(ex.getMessage(), ex,request);
+                new LogError(ex.getMessage(), ex,request);
             }
         }else{
             output = "coluna==null || tabela ==null"+request.getParameter("coluna")+request.getParameter("tabela")+coluna+tabela;

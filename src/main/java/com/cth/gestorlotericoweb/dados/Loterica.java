@@ -63,7 +63,7 @@ public class Loterica extends Cadastros{
                 id = 0;
             }
         } catch (SQLException ex) {
-            throw new LogError(ex.getMessage(), ex,request);
+            new LogError(ex.getMessage(), ex,request);
         }
     }
     
@@ -81,7 +81,7 @@ public class Loterica extends Cadastros{
                 id = rs.getInt(1);
             }
         } catch (SQLException ex) {
-            throw new LogError(ex.getMessage(), ex,request);
+            new LogError(ex.getMessage(), ex,request);
         }
     }
     
@@ -97,7 +97,7 @@ public class Loterica extends Cadastros{
             ps.setInt(4, Parametros.idEntidade);
             ps.execute();
         } catch (SQLException ex) {
-            throw new LogError(ex.getMessage(), ex,request);
+            new LogError(ex.getMessage(), ex,request);
         }
     }
 
@@ -114,9 +114,8 @@ public class Loterica extends Cadastros{
     }
     
     private List<String> setOpcoesFiltro(){
-        lOpts = new ArrayList<>();
-        lOpts.add("<option>Código na Caixa</option>");
-        lOpts.add("<option>Nome</option>");
+        ColunasTabelas colunasTabelas = new ColunasTabelas(request);
+        lOpts = colunasTabelas.getlOpts("lotericas");
         return lOpts;
     }
     

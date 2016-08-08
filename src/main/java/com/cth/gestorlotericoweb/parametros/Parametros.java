@@ -30,7 +30,7 @@ public class Parametros {
         try {
             conexao = new Conexao();
         } catch (ClassNotFoundException | SQLException ex) {
-            throw new LogError(ex.getMessage(), ex.getCause(), request);
+            new LogError(ex.getMessage(), ex.getCause(), request);
         }
     }
 
@@ -54,14 +54,14 @@ public class Parametros {
             }
             String pgAtu ;
             if(request.getParameterMap().keySet().size()>0){
-                /*pgAtu = request.getRequestURL().toString()+"?";
+                pgAtu = request.getRequestURL().toString()+"?";
                 List l = new ArrayList();
                 for(Object ob:request.getParameterMap().keySet()){
                     l.add(ob.toString()+"="+StringUtils.join(request.getParameterValues(ob.toString()), ','));
                 }
                 
-                pgAtu += StringUtils.join(l,"&");*/
-                pgAtu = String.valueOf(request.getRequestURL().append('?').append(request.getQueryString()));
+                pgAtu += StringUtils.join(l,"&");
+                //pgAtu = String.valueOf(request.getRequestURL().append('?').append(request.getQueryString()));
                 
             }else{
                 pgAtu = request.getRequestURL().toString();
@@ -97,7 +97,7 @@ public class Parametros {
             ps.setLong(8, tempoSessao);
             ps.execute();
         } catch (SQLException ex) {
-            throw new LogError(ex.getMessage(), ex,request);
+            new LogError(ex.getMessage(), ex,request);
         }
     }
     
@@ -112,7 +112,7 @@ public class Parametros {
             ps.setString(4, sucesso);
             ps.execute();
         } catch (SQLException ex) {
-            throw new LogError(ex.getMessage(), ex,request);
+            new LogError(ex.getMessage(), ex,request);
         }
     }
 }

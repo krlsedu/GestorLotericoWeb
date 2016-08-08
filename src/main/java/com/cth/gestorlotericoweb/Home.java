@@ -6,16 +6,10 @@
 package com.cth.gestorlotericoweb;
 
 import com.cth.gestorlotericoweb.dados.Loterica;
+import com.cth.gestorlotericoweb.dados.Terminal;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -65,12 +59,9 @@ public class Home {
                             Loterica loterica = new Loterica(request);
                             contextPrinc = loterica.getHtmlLoterica(contextPrinc, ve, id);
                         break;
-                    case "terminais":                            
-                            templateConteudo = ve.getTemplate( "templates/Modern/terminais.html" , "UTF-8");
-                            contextConteudo = new VelocityContext();
-                            writerConteudo = new StringWriter();
-                            templateConteudo.merge( contextConteudo, writerConteudo );
-                            contextPrinc.put("conteudo", writerConteudo.toString());
+                    case "terminais":      
+                            Terminal terminal = new Terminal(request);
+                            contextPrinc = terminal.getHtmlTerminal(contextPrinc, ve, id);
                         break;
                     default:
                             templateConteudo = ve.getTemplate( "templates/Modern/estatisticas.html" , "UTF-8");
@@ -86,7 +77,7 @@ public class Home {
             Parametros.gravaLogSessao(request);
             output = writer.toString();
         }catch(ResourceNotFoundException|MethodInvocationException|ParseErrorException ex){
-            throw new LogError(ex.getMessage(), ex, request);
+            new LogError(ex.getMessage(), ex, request);
         }
     }    
 }

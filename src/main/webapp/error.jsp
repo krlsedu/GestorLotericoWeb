@@ -1,8 +1,7 @@
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page isErrorPage="true" %>
-<%
-    request.getSession(false).invalidate();  
-%>
+
 <html>
 <head>
 <title>Show Error Page</title>
@@ -27,7 +26,7 @@
 <td>
 <c:forEach var="trace" 
          items="${pageContext.exception.stackTrace}">
-<p>${trace}</p>
+        <p>${trace}</p>
 </c:forEach>
 </td>
 </tr>

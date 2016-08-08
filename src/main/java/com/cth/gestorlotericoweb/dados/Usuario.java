@@ -66,7 +66,7 @@ public class Usuario {
             }   
                 
         } catch (SQLException ex) {
-            throw new LogError(ex.getMessage(), ex,request);
+            new LogError(ex.getMessage(), ex,request);
         }        
     }
 
@@ -88,7 +88,7 @@ public class Usuario {
                 lEntidadesUsuario.add(rs.getInt(1));
             }
         } catch (SQLException ex) {
-            throw new LogError(ex.getMessage(), ex, request);
+            new LogError(ex.getMessage(), ex, request);
         }
     }
     

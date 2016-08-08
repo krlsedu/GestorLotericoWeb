@@ -7,6 +7,7 @@ package com.cth.gestorlotericoweb;
 
 import com.cth.gestorlotericoweb.dados.ColunasTabelas;
 import com.cth.gestorlotericoweb.dados.Loterica;
+import com.cth.gestorlotericoweb.dados.Terminal;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import java.io.StringWriter;
 import java.sql.PreparedStatement;
@@ -44,7 +45,7 @@ public class Grava {
                 ps.execute();
             }            
         } catch (SQLException ex) {
-            throw new LogError(ex.getMessage(), ex,request);
+            new LogError(ex.getMessage(), ex,request);
         }
     }
     
@@ -60,7 +61,14 @@ public class Grava {
                 }
                 id = loterica.getId();
                 break;
-            case "terminais":                            
+            case "terminais":       
+                Terminal terminal = new Terminal(request.getParameter("codigo_caixa"), Integer.valueOf(request.getParameter("id_loterica")), request.getParameter("nome"), request.getParameter("marca"), request.getParameter("modelo"), request.getParameter("observacoes"), request);
+                if("0".equals(request.getParameter("id"))){
+                    terminal.insere();
+                }else{
+                    terminal.altera(request.getParameter("id"));
+                }
+                id = terminal.getId();
                 break;
             default:
                 break;
