@@ -5,7 +5,7 @@
 -- Dumped from database version 9.5.3
 -- Dumped by pg_dump version 9.5.3
 
--- Started on 2016-08-06 10:56:00
+-- Started on 2016-08-08 17:24:09
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -24,7 +24,7 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 2187 (class 0 OID 0)
+-- TOC entry 2211 (class 0 OID 0)
 -- Dependencies: 1
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
@@ -41,7 +41,7 @@ CREATE EXTENSION IF NOT EXISTS chkpass WITH SCHEMA public;
 
 
 --
--- TOC entry 2188 (class 0 OID 0)
+-- TOC entry 2212 (class 0 OID 0)
 -- Dependencies: 2
 -- Name: EXTENSION chkpass; Type: COMMENT; Schema: -; Owner: 
 --
@@ -114,6 +114,43 @@ CREATE TABLE entidades (
 ALTER TABLE entidades OWNER TO postgres;
 
 --
+-- TOC entry 198 (class 1259 OID 16686)
+-- Name: seq_erros; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE seq_erros
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE seq_erros OWNER TO postgres;
+
+--
+-- TOC entry 199 (class 1259 OID 16688)
+-- Name: erros; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE erros (
+    id bigint DEFAULT nextval('seq_erros'::regclass) NOT NULL,
+    id_usuario bigint NOT NULL,
+    id_entidade bigint NOT NULL,
+    id_sessao character(200) NOT NULL,
+    ip character(200) NOT NULL,
+    nome_maquina character(200) NOT NULL,
+    pg_anterior text,
+    pg_atual text,
+    data_erro timestamp without time zone DEFAULT now() NOT NULL,
+    erro text,
+    stacktrace text
+);
+
+
+ALTER TABLE erros OWNER TO postgres;
+
+--
 -- TOC entry 187 (class 1259 OID 16474)
 -- Name: login_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
@@ -176,6 +213,21 @@ CREATE TABLE lotericas (
 ALTER TABLE lotericas OWNER TO postgres;
 
 --
+-- TOC entry 196 (class 1259 OID 16649)
+-- Name: seq_terminais; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE seq_terminais
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE seq_terminais OWNER TO postgres;
+
+--
 -- TOC entry 185 (class 1259 OID 16427)
 -- Name: seq_users; Type: SEQUENCE; Schema: public; Owner: postgres
 --
@@ -234,11 +286,31 @@ CREATE TABLE sessoes (
     nome_maquina character(200) NOT NULL,
     pg_anterior text,
     pg_atual text,
-    tempo_sessao smallint DEFAULT 0 NOT NULL
+    tempo_sessao smallint DEFAULT 0 NOT NULL,
+    data_acesso timestamp without time zone DEFAULT now() NOT NULL
 );
 
 
 ALTER TABLE sessoes OWNER TO postgres;
+
+--
+-- TOC entry 197 (class 1259 OID 16665)
+-- Name: terminais; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE terminais (
+    id bigint DEFAULT nextval('seq_terminais'::regclass) NOT NULL,
+    codigo_caixa character varying(200) NOT NULL,
+    nome character varying(200) NOT NULL,
+    marca character varying(200),
+    modelo character varying(200),
+    observacoes text,
+    id_loterica bigint NOT NULL,
+    id_entidade bigint NOT NULL
+);
+
+
+ALTER TABLE terminais OWNER TO postgres;
 
 --
 -- TOC entry 186 (class 1259 OID 16462)
@@ -274,7 +346,7 @@ CREATE TABLE usuarios_entidades (
 ALTER TABLE usuarios_entidades OWNER TO postgres;
 
 --
--- TOC entry 2062 (class 2606 OID 16628)
+-- TOC entry 2080 (class 2606 OID 16628)
 -- Name: cols_descri_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -283,7 +355,7 @@ ALTER TABLE ONLY cols_descri
 
 
 --
--- TOC entry 2046 (class 2606 OID 16523)
+-- TOC entry 2064 (class 2606 OID 16523)
 -- Name: entidades_nome_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -292,7 +364,7 @@ ALTER TABLE ONLY entidades
 
 
 --
--- TOC entry 2048 (class 2606 OID 16414)
+-- TOC entry 2066 (class 2606 OID 16414)
 -- Name: entidades_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -301,7 +373,16 @@ ALTER TABLE ONLY entidades
 
 
 --
--- TOC entry 2054 (class 2606 OID 16483)
+-- TOC entry 2084 (class 2606 OID 16697)
+-- Name: erros_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY erros
+    ADD CONSTRAINT erros_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2072 (class 2606 OID 16483)
 -- Name: logins_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -310,7 +391,7 @@ ALTER TABLE ONLY logins
 
 
 --
--- TOC entry 2058 (class 2606 OID 16521)
+-- TOC entry 2076 (class 2606 OID 16521)
 -- Name: lotericas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -319,7 +400,7 @@ ALTER TABLE ONLY lotericas
 
 
 --
--- TOC entry 2056 (class 2606 OID 16509)
+-- TOC entry 2074 (class 2606 OID 16509)
 -- Name: sessoes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -328,7 +409,16 @@ ALTER TABLE ONLY sessoes
 
 
 --
--- TOC entry 2050 (class 2606 OID 16471)
+-- TOC entry 2082 (class 2606 OID 16673)
+-- Name: terminais_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY terminais
+    ADD CONSTRAINT terminais_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2068 (class 2606 OID 16471)
 -- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -337,7 +427,7 @@ ALTER TABLE ONLY usuarios
 
 
 --
--- TOC entry 2052 (class 2606 OID 16473)
+-- TOC entry 2070 (class 2606 OID 16473)
 -- Name: users_usuario_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -346,7 +436,7 @@ ALTER TABLE ONLY usuarios
 
 
 --
--- TOC entry 2060 (class 2606 OID 16594)
+-- TOC entry 2078 (class 2606 OID 16594)
 -- Name: usuarios_entidades_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -355,7 +445,7 @@ ALTER TABLE ONLY usuarios_entidades
 
 
 --
--- TOC entry 2063 (class 2606 OID 16559)
+-- TOC entry 2085 (class 2606 OID 16559)
 -- Name: lotericas_i_entidades_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -364,7 +454,25 @@ ALTER TABLE ONLY lotericas
 
 
 --
--- TOC entry 2064 (class 2606 OID 16595)
+-- TOC entry 2089 (class 2606 OID 16679)
+-- Name: terminais_id_entidade_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY terminais
+    ADD CONSTRAINT terminais_id_entidade_fkey FOREIGN KEY (id_entidade) REFERENCES entidades(id);
+
+
+--
+-- TOC entry 2088 (class 2606 OID 16674)
+-- Name: terminais_id_loterica_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY terminais
+    ADD CONSTRAINT terminais_id_loterica_fkey FOREIGN KEY (id_loterica) REFERENCES lotericas(id);
+
+
+--
+-- TOC entry 2086 (class 2606 OID 16595)
 -- Name: usuarios_entidades_i_entidades_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -373,7 +481,7 @@ ALTER TABLE ONLY usuarios_entidades
 
 
 --
--- TOC entry 2065 (class 2606 OID 16600)
+-- TOC entry 2087 (class 2606 OID 16600)
 -- Name: usuarios_entidades_i_usuarios_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -382,7 +490,7 @@ ALTER TABLE ONLY usuarios_entidades
 
 
 --
--- TOC entry 2186 (class 0 OID 0)
+-- TOC entry 2210 (class 0 OID 0)
 -- Dependencies: 7
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
@@ -393,7 +501,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2016-08-06 10:56:04
+-- Completed on 2016-08-08 17:24:10
 
 --
 -- PostgreSQL database dump complete
