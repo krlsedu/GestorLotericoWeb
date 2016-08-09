@@ -1,7 +1,9 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page isErrorPage="true" %>
-
+<%
+    request.getSession(false).invalidate();
+%>
 <html>
 <head>
 <title>Show Error Page</title>

@@ -155,7 +155,7 @@ $("document").ready(function () {
                     alert("Gravado com Sucesso!");
                 }, 
                 error: function (jXHR, textStatus, errorThrown) {
-                    alert("Desculpe ocorreu um erro! :("+textStatus);
+                    alert("Desculpe ocorreu um erro! :(");
                 }
             }); 
         });

@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 
@@ -73,15 +71,18 @@ public class ColunasTabelas {
     private void carregaTabelas(){
         mTabelas.put("lotericas", "lotericas");
         mTabelas.put("terminais", "terminais");
+        mTabelas.put("funcionarios", "funcionarios");
     }
     
     private void carregaTabColsBusca(){
         mTabColsSelBusca.put("lotericas", "id,codigo_caixa,nome");
         mTabColsSelBusca.put("terminais", "id,codigo_caixa, id_loterica, nome, marca, modelo");
+        mTabColsSelBusca.put("funcionarios", "id, codigo_caixa, nome, cpf");
     }
     private void carregaTabColsDados(){
         mTabColsSelDados.put("lotericas", "codigo_caixa,nome");
         mTabColsSelDados.put("terminais", "codigo_caixa, nome, marca, modelo, observacoes, id_loterica");
+        mTabColsSelDados.put("funcionarios", "codigo_caixa, nome, cpf, tipo_func, observacoes");
     }
     private void carregaTabOpts(){
         List<String> lOpts = new ArrayList<>();
@@ -95,6 +96,12 @@ public class ColunasTabelas {
         lOpts.add("<option>Modelo</option>");
         lOpts.add("<option>Nome</option>");
         mTabOpts.put("terminais", lOpts);
+        lOpts = new ArrayList<>();
+        lOpts.add("<option>Código na Caixa</option>");
+        lOpts.add("<option>CPF</option>");
+        lOpts.add("<option>Nome</option>");
+        lOpts.add("<option>Tipo Funcionário</option>");
+        mTabOpts.put("funcionarios", lOpts);
     }
     
     public String getOpts(String tabela){

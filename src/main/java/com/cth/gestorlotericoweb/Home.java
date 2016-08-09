@@ -5,6 +5,8 @@
  */
 package com.cth.gestorlotericoweb;
 
+import com.cth.gestorlotericoweb.dados.Estatisticas;
+import com.cth.gestorlotericoweb.dados.Funcionario;
 import com.cth.gestorlotericoweb.dados.Loterica;
 import com.cth.gestorlotericoweb.dados.Terminal;
 import com.cth.gestorlotericoweb.parametros.Parametros;
@@ -44,16 +46,10 @@ public class Home {
             ve.init();
             Template templatePrinc = ve.getTemplate( "templates/Modern/corpo.html" , "UTF-8");
             VelocityContext contextPrinc = new VelocityContext();
-            if(input == null){
-                Template tConteudo = ve.getTemplate( "templates/Modern/estatisticas.html" , "UTF-8");
-                VelocityContext contextConteudo = new VelocityContext();
-                StringWriter writerConteudo = new StringWriter();
-                tConteudo.merge( contextConteudo, writerConteudo );
-                contextPrinc.put("conteudo", writerConteudo.toString());
+            if(input == null){                
+                Estatisticas estatisticas = new Estatisticas();
+                contextPrinc = estatisticas.getHtmlTerminal(contextPrinc, ve, id);
             }else{
-                Template templateConteudo;
-                VelocityContext contextConteudo;
-                StringWriter writerConteudo;
                 switch(input){
                     case "lotericas":          
                             Loterica loterica = new Loterica(request);
@@ -63,12 +59,14 @@ public class Home {
                             Terminal terminal = new Terminal(request);
                             contextPrinc = terminal.getHtmlTerminal(contextPrinc, ve, id);
                         break;
+                    
+                    case "funcionarios":      
+                            Funcionario funcionario = new Funcionario(request);
+                            contextPrinc = funcionario.getHtmlTerminal(contextPrinc, ve, id);
+                        break;
                     default:
-                            templateConteudo = ve.getTemplate( "templates/Modern/estatisticas.html" , "UTF-8");
-                            contextConteudo = new VelocityContext();
-                            writerConteudo = new StringWriter();
-                            templateConteudo.merge( contextConteudo, writerConteudo );
-                            contextPrinc.put("conteudo", writerConteudo.toString());
+                            Estatisticas estatisticas = new Estatisticas();
+                            contextPrinc = estatisticas.getHtmlTerminal(contextPrinc, ve, id);
                         break;
                 }
             }

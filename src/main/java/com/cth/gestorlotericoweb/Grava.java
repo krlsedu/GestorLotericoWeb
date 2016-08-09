@@ -6,16 +6,13 @@
 package com.cth.gestorlotericoweb;
 
 import com.cth.gestorlotericoweb.dados.ColunasTabelas;
+import com.cth.gestorlotericoweb.dados.Funcionario;
 import com.cth.gestorlotericoweb.dados.Loterica;
 import com.cth.gestorlotericoweb.dados.Terminal;
 import com.cth.gestorlotericoweb.parametros.Parametros;
-import java.io.StringWriter;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.velocity.VelocityContext;
 
 /**
  *
@@ -69,6 +66,15 @@ public class Grava {
                     terminal.altera(request.getParameter("id"));
                 }
                 id = terminal.getId();
+                break;
+            case "funcionarios":       
+                Funcionario funcionario = new Funcionario(request.getParameter("codigo_caixa"), request.getParameter("nome"), request.getParameter("cpf"), Integer.valueOf(request.getParameter("tipo_func")), request.getParameter("observacoes"), request);
+                if("0".equals(request.getParameter("id"))){
+                    funcionario.insere();
+                }else{
+                    funcionario.altera(request.getParameter("id"));
+                }
+                id = funcionario.getId();
                 break;
             default:
                 break;

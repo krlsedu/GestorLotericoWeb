@@ -14,7 +14,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class LogError{
     public LogError(String message, Throwable cause,HttpServletRequest request) {
-        Erros erros = new  Erros(request, message, StringUtils.join(cause.getStackTrace(),';'));
+        new  Erros(request, message, StringUtils.join(cause.getStackTrace(),';'));
         throw new RuntimeException(message, cause);
     }    
 }

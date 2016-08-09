@@ -1,6 +1,6 @@
 
 <div class="xs">
-<h3>Dados do Terminal</h3>
+<h3>Dados do Funcionário</h3>
     <div class="tab-content">
         <div class="tab-pane active" id="horizontal-form">
             <form class="form-horizontal" id="form_dados">     
@@ -8,39 +8,28 @@
                 <div class="form-group mb-n">
                         <label for="smallinput" class="col-sm-2 control-label label-input-sm">Código Caixa</label>
                         <div class="col-sm-4">
-                            <input name="codigo_caixa" type="text" class="form-control1 input-lg" id="codigo_caixa" placeholder="Código do Terminal na Caixa" value="$codcaixa" required>
+                            <input name="codigo_caixa" type="text" class="form-control1 input-lg" id="codigo_caixa" placeholder="Código do Funcionário na Caixa" value="$codcaixa" required>
                         </div>
                     <div class="botao-buscar">
                         <i class="i_botao_buscar fa fa-search" onclick="ativaPopUp('id','id')"></i>
                     </div>
                 </div>
                 <div class="form-group mb-n">
-                        <label for="smallinput" class="col-sm-2 control-label label-input-sm">Lotérica</label>
-                        <div class="col-sm-2">
-                            <input name="id_loterica" type="text" class="form-control1 input-lg" id="id_loterica" placeholder="Código da Lotérica" value="$id_loterica" required>
-                        </div>
-                        <div class="col-sm-1">
-                            <div class="botao-buscar">
-                                <i class="i_botao_buscar fa fa-search" onclick="ativaPopUp('lotericas','id_loterica')"></i>
-                            </div>
-                        </div>
-                </div>
-                <div class="form-group mb-n">
                     <label for="largeinput" class="col-sm-2 control-label label-input-lg">Nome</label>
                     <div class="col-sm-6">
-                        <input name="nome" type="text" class="form-control1 input-lg" id="nome" placeholder="Nome do terminal. Ex.: Terminal 1" value="$nome" required>
+                        <input name="nome" type="text" class="form-control1 input-lg" id="nome" placeholder="Nome do Funcionário" value="$nome" required>
                     </div>
                 </div>
                 <div class="form-group mb-n">
-                        <label for="largeinput" class="col-sm-2 control-label label-input-lg">Marca</label>
+                        <label for="largeinput" class="col-sm-2 control-label label-input-lg">CPF</label>
                         <div class="col-sm-6">
-                            <input  name="marca" type="text" class="form-control1 input-lg" id="marca" placeholder="Marca" value="$marca" >
+                            <input  name="cpf" type="text" class="form-control1 input-lg" id="cpf" placeholder="CPF" value="$cpf" required>
                         </div>
                 </div>
                 <div class="form-group mb-n">
-                        <label for="largeinput" class="col-sm-2 control-label label-input-lg">Modelo</label>
+                        <label for="largeinput" class="col-sm-2 control-label label-input-lg">Tipo</label>
                         <div class="col-sm-6">
-                            <input  name="modelo" type="text" class="form-control1 input-lg" id="modelo" placeholder="Modelo do terminal" value="$modelo">
+                            <input  name="tipo_func" type="text" class="form-control1 input-lg" id="tipo_func" placeholder="Tipo de Funcionário" value="$tipo" required>
                         </div>
                 </div>
                 <div class="form-group">
@@ -63,9 +52,10 @@
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="it" name="it" value="terminais" />                
+                <input type="hidden" id="it" name="it" value="funcionarios" />                
                 <input type="hidden" id="id" name="id" value="$idbd" />
             </form>
         </div>
     </div>	
 </div>
+
