@@ -6,6 +6,7 @@
 package com.cth.gestorlotericoweb;
 
 import com.cth.gestorlotericoweb.dados.ColunasTabelas;
+import com.cth.gestorlotericoweb.dados.Conta;
 import com.cth.gestorlotericoweb.dados.Funcionario;
 import com.cth.gestorlotericoweb.dados.Loterica;
 import com.cth.gestorlotericoweb.dados.Terminal;
@@ -49,6 +50,24 @@ public class Grava {
     private void grava(){
         String input = request.getParameter("it");
         switch(input){
+            case "contas":
+                Conta conta = new Conta(request.getParameter("nome_conta"), request.getParameter("agencia"), request.getParameter("operacao"), request.getParameter("conta_corrente"), request.getParameter("dv"), request.getParameter("telefone"), request.getParameter("gerente"), request.getParameter("observacoes"), Integer.valueOf(request.getParameter("id_loterica")), request);
+                if("0".equals(request.getParameter("id"))){
+                    conta.insere();
+                }else{
+                    conta.altera(request.getParameter("id"));
+                }
+                id = conta.getId();
+                break;
+            case "funcionarios":       
+                Funcionario funcionario = new Funcionario(request.getParameter("codigo_caixa"), request.getParameter("nome"), request.getParameter("cpf"), Integer.valueOf(request.getParameter("tipo_func")), request.getParameter("observacoes"), request);
+                if("0".equals(request.getParameter("id"))){
+                    funcionario.insere();
+                }else{
+                    funcionario.altera(request.getParameter("id"));
+                }
+                id = funcionario.getId();
+                break;
             case "lotericas":     
                 Loterica loterica = new Loterica(request.getParameter("codigo_caixa"), request.getParameter("nome"),request);
                 if("0".equals(request.getParameter("id"))){
@@ -66,15 +85,6 @@ public class Grava {
                     terminal.altera(request.getParameter("id"));
                 }
                 id = terminal.getId();
-                break;
-            case "funcionarios":       
-                Funcionario funcionario = new Funcionario(request.getParameter("codigo_caixa"), request.getParameter("nome"), request.getParameter("cpf"), Integer.valueOf(request.getParameter("tipo_func")), request.getParameter("observacoes"), request);
-                if("0".equals(request.getParameter("id"))){
-                    funcionario.insere();
-                }else{
-                    funcionario.altera(request.getParameter("id"));
-                }
-                id = funcionario.getId();
                 break;
             default:
                 break;

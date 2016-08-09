@@ -5,6 +5,7 @@
  */
 package com.cth.gestorlotericoweb;
 
+import com.cth.gestorlotericoweb.dados.Conta;
 import com.cth.gestorlotericoweb.dados.Estatisticas;
 import com.cth.gestorlotericoweb.dados.Funcionario;
 import com.cth.gestorlotericoweb.dados.Loterica;
@@ -51,19 +52,26 @@ public class Home {
                 contextPrinc = estatisticas.getHtmlTerminal(contextPrinc, ve, id);
             }else{
                 switch(input){
-                    case "lotericas":          
-                            Loterica loterica = new Loterica(request);
-                            contextPrinc = loterica.getHtmlLoterica(contextPrinc, ve, id);
-                        break;
-                    case "terminais":      
-                            Terminal terminal = new Terminal(request);
-                            contextPrinc = terminal.getHtmlTerminal(contextPrinc, ve, id);
+                    case "contas":      
+                            Conta conta = new Conta(request);
+                            contextPrinc = conta.getHtml(contextPrinc, ve, id);
                         break;
                     
                     case "funcionarios":      
                             Funcionario funcionario = new Funcionario(request);
-                            contextPrinc = funcionario.getHtmlTerminal(contextPrinc, ve, id);
+                            contextPrinc = funcionario.getHtml(contextPrinc, ve, id);
                         break;
+                        
+                    case "lotericas":          
+                            Loterica loterica = new Loterica(request);
+                            contextPrinc = loterica.getHtml(contextPrinc, ve, id);
+                        break;
+                        
+                    case "terminais":      
+                            Terminal terminal = new Terminal(request);
+                            contextPrinc = terminal.getHtmlTerminal(contextPrinc, ve, id);
+                        break;
+                        
                     default:
                             Estatisticas estatisticas = new Estatisticas();
                             contextPrinc = estatisticas.getHtmlTerminal(contextPrinc, ve, id);

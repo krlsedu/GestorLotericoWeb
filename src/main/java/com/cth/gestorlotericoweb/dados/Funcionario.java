@@ -84,7 +84,11 @@ public class Funcionario extends Cadastros{
             ps.setString(3, cpf);
             ps.setInt(4, tipo);
             ps.setInt(5, Parametros.idEntidade);
-            ps.setString(6, observacoes);
+            if(observacoes == null){
+                ps.setNull(6, java.sql.Types.LONGVARCHAR);
+            }else{
+                ps.setString(6, observacoes);
+            }
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()){
@@ -151,7 +155,7 @@ public class Funcionario extends Cadastros{
         return lOpts;
     }
     
-    public VelocityContext getHtmlTerminal(VelocityContext contextPrinc,VelocityEngine ve,String idS){
+    public VelocityContext getHtml(VelocityContext contextPrinc,VelocityEngine ve,String idS){
         
         Template templateConteudo;
         VelocityContext contextConteudo;
@@ -181,7 +185,7 @@ public class Funcionario extends Cadastros{
         setOpcoesFiltro();
         templateConteudo.merge( contextConteudo, writerConteudo );
         contextPrinc.put("conteudo", writerConteudo.toString());
-        contextPrinc.put("popup", getSWPopup(ve,"terminais").toString());
+        contextPrinc.put("popup", getSWPopup(ve,"funcionarios").toString());
         return contextPrinc;
     }
 }

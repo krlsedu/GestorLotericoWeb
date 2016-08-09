@@ -119,7 +119,7 @@ public class Loterica extends Cadastros{
         return lOpts;
     }
     
-    public VelocityContext getHtmlLoterica(VelocityContext contextPrinc,VelocityEngine ve,String idS){
+    public VelocityContext getHtml(VelocityContext contextPrinc,VelocityEngine ve,String idS){
         
         Template templateConteudo;
         VelocityContext contextConteudo;
