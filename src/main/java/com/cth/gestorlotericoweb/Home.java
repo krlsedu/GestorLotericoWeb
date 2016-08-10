@@ -9,6 +9,7 @@ import com.cth.gestorlotericoweb.dados.Conta;
 import com.cth.gestorlotericoweb.dados.Estatisticas;
 import com.cth.gestorlotericoweb.dados.Funcionario;
 import com.cth.gestorlotericoweb.dados.Loterica;
+import com.cth.gestorlotericoweb.dados.Operacao;
 import com.cth.gestorlotericoweb.dados.Terminal;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import java.io.StringWriter;
@@ -65,6 +66,11 @@ public class Home {
                     case "lotericas":          
                             Loterica loterica = new Loterica(request);
                             contextPrinc = loterica.getHtml(contextPrinc, ve, id);
+                        break;
+                        
+                    case "operacoes":          
+                            Operacao operacao = new Operacao(request);
+                            contextPrinc = operacao.getHtml(contextPrinc, ve, id);
                         break;
                         
                     case "terminais":      

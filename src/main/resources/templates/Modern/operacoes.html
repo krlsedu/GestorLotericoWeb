@@ -1,0 +1,60 @@
+
+<div class="xs">
+    <h3>Dados das Operações</h3>
+    <div class="tab-content">
+        <div class="tab-pane active" id="horizontal-form">
+            <form class="form-horizontal" id="form_dados"> 
+                $btns_percorrer
+                <div class="form-group mb-n">
+                    <label for="smallinput" class="col-sm-2 control-label label-input-sm">Nome Caixa</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control1 input-lg" id="nome_oper_caixa" placeholder="Nome Operação na caixa" name="nome_oper_caixa" required>                                                                        
+                        </div>
+                        <div class="botao-buscar">
+                            <i class="i_botao_buscar fa fa-search" onclick="ativaPopUp('id','id')"></i>
+                        </div>
+                </div>
+                <div class="form-group mb-n">
+                    <label for="largeinput" class="col-sm-2 control-label label-input-lg">Nome Operação</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control1 input-lg" id="nome_oper" placeholder="Nome operação" name="nome_oper" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                        <label for="selector1" class="col-sm-2 control-label">Tipo Operação</label>
+                        <div class="col-sm-8"><select name="tipo_oper" id="tipo_oper" class="form-control1">
+                                <option value="1" selected="selected">Contas</option>
+                                <option value="2" >Jogos</option>
+                                <option value="3" >Negocial</option>
+                                <option value="4" >Pagamento de Prêmios</option>
+                                <option value="5" >Pagamento</option>
+                                <option value="6" >Serviços</option>
+                        </select></div>
+                </div>
+                <div class="form-group mb-n">
+                    <label for="txtarea1" class="col-sm-2 control-label">Observações</label>
+                        <div class="col-sm-8">
+                            <textarea name="observacoes" id="observacoes" cols="50" rows="4" class="form-control1" placeholder="Observações da Operação" ></textarea>
+                        </div>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-1 col-sm-offset-9">
+                            <button type="submit" class="btn btn-primary" id="botao-gravar">Gravar</button>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="reset" class="btn botao-deletar" onclick="deletarDados()">Excluir</button>
+                        </div>
+                        
+                        <div class="col-sm-1">
+                            <button type="reset" class="btn btn-default" onclick="limpa()">Limpar</button>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="it" name="it" value="operacoes" />                
+                <input type="hidden" id="id" name="id" value="0" />
+            </form>
+        </div>
+    </div>	
+</div>
+

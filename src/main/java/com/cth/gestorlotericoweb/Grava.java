@@ -9,6 +9,7 @@ import com.cth.gestorlotericoweb.dados.ColunasTabelas;
 import com.cth.gestorlotericoweb.dados.Conta;
 import com.cth.gestorlotericoweb.dados.Funcionario;
 import com.cth.gestorlotericoweb.dados.Loterica;
+import com.cth.gestorlotericoweb.dados.Operacao;
 import com.cth.gestorlotericoweb.dados.Terminal;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import java.sql.PreparedStatement;
@@ -76,6 +77,15 @@ public class Grava {
                     loterica.altera(request.getParameter("id"));
                 }
                 id = loterica.getId();
+                break;
+            case "operacoes":
+                Operacao operacao = new Operacao(request.getParameter("nome_oper_caixa"), request.getParameter("nome_oper"), request.getParameter("tipo_oper"), request.getParameter("observacoes"), request);
+                if("0".equals(request.getParameter("id"))){
+                    operacao.insere();
+                }else{
+                    operacao.altera(request.getParameter("id"));
+                }
+                id = operacao.getId();
                 break;
             case "terminais":       
                 Terminal terminal = new Terminal(request.getParameter("codigo_caixa"), Integer.valueOf(request.getParameter("id_loterica")), request.getParameter("nome"), request.getParameter("marca"), request.getParameter("modelo"), request.getParameter("observacoes"), request);

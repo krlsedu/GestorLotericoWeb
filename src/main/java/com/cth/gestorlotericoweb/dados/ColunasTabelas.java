@@ -73,6 +73,7 @@ public class ColunasTabelas {
         mTabelas.put("terminais", "terminais");
         mTabelas.put("funcionarios", "funcionarios");
         mTabelas.put("contas", "contas");
+        mTabelas.put("operacoes", "operacoes");
     }
     
     private void carregaTabColsBusca(){
@@ -80,12 +81,14 @@ public class ColunasTabelas {
         mTabColsSelBusca.put("terminais", "id,codigo_caixa, id_loterica, nome, marca, modelo");
         mTabColsSelBusca.put("funcionarios", "id, codigo_caixa, nome, cpf");
         mTabColsSelBusca.put("contas", "id, conta_corrente, dv, nome_conta, operacao, agencia");
+        mTabColsSelBusca.put("operacoes", "id, nome_oper_caixa, nome_oper, tipo_oper");
     }
     private void carregaTabColsDados(){
         mTabColsSelDados.put("lotericas", "codigo_caixa,nome");
         mTabColsSelDados.put("terminais", "codigo_caixa, nome, marca, modelo, observacoes, id_loterica");
         mTabColsSelDados.put("funcionarios", "codigo_caixa, nome, cpf, tipo_func, observacoes");
         mTabColsSelDados.put("contas", "conta_corrente, dv, nome_conta, operacao, agencia, telefone, gerente, id_loterica, observacoes");
+        mTabColsSelDados.put("operacoes", "nome_oper_caixa, nome_oper, tipo_oper, observacoes");
     }
     private void carregaTabOpts(){
         List<String> lOpts = new ArrayList<>();
@@ -110,6 +113,11 @@ public class ColunasTabelas {
         lOpts.add("<option>Número da Conta</option>");
         lOpts.add("<option>Operação</option>");
         mTabOpts.put("contas", lOpts);
+        lOpts = new ArrayList<>();
+        lOpts.add("<option>Nome da Operação (Caixa)</option>");
+        lOpts.add("<option>Nome da Operação</option>");
+        lOpts.add("<option>Tipo Operação</option>");
+        mTabOpts.put("operacoes", lOpts);
     }
     
     public String getOpts(String tabela){
