@@ -5,6 +5,7 @@
  */
 package com.cth.gestorlotericoweb;
 
+import com.cth.gestorlotericoweb.dados.Cofre;
 import com.cth.gestorlotericoweb.dados.Conta;
 import com.cth.gestorlotericoweb.dados.Estatisticas;
 import com.cth.gestorlotericoweb.dados.Funcionario;
@@ -53,6 +54,11 @@ public class Home {
                 contextPrinc = estatisticas.getHtmlTerminal(contextPrinc, ve, id);
             }else{
                 switch(input){
+                    case "cofres":      
+                            Cofre cofre = new Cofre(request);
+                            contextPrinc = cofre.getHtml(contextPrinc, ve, id);
+                        break;
+                        
                     case "contas":      
                             Conta conta = new Conta(request);
                             contextPrinc = conta.getHtml(contextPrinc, ve, id);

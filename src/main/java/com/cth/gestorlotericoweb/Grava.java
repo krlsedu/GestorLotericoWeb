@@ -5,6 +5,7 @@
  */
 package com.cth.gestorlotericoweb;
 
+import com.cth.gestorlotericoweb.dados.Cofre;
 import com.cth.gestorlotericoweb.dados.ColunasTabelas;
 import com.cth.gestorlotericoweb.dados.Conta;
 import com.cth.gestorlotericoweb.dados.Funcionario;
@@ -51,6 +52,15 @@ public class Grava {
     private void grava(){
         String input = request.getParameter("it");
         switch(input){
+            case "cofres":
+                Cofre cofre = new Cofre(request.getParameter("nome_cofre"), request.getParameter("tipo_cofre"), request.getParameter("id_loterica"), request.getParameter("observacoes"), request);
+                if("0".equals(request.getParameter("id"))){
+                    cofre.insere();
+                }else{
+                    cofre.altera(request.getParameter("id"));
+                }
+                id = cofre.getId();
+                break;
             case "contas":
                 Conta conta = new Conta(request.getParameter("nome_conta"), request.getParameter("agencia"), request.getParameter("operacao"), request.getParameter("conta_corrente"), request.getParameter("dv"), request.getParameter("telefone"), request.getParameter("gerente"), request.getParameter("observacoes"), Integer.valueOf(request.getParameter("id_loterica")), request);
                 if("0".equals(request.getParameter("id"))){

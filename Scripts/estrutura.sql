@@ -5,7 +5,7 @@
 -- Dumped from database version 9.5.3
 -- Dumped by pg_dump version 9.5.3
 
--- Started on 2016-08-09 21:51:23
+-- Started on 2016-08-09 23:17:17
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -24,7 +24,7 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 2247 (class 0 OID 0)
+-- TOC entry 2259 (class 0 OID 0)
 -- Dependencies: 1
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
@@ -41,7 +41,7 @@ CREATE EXTENSION IF NOT EXISTS chkpass WITH SCHEMA public;
 
 
 --
--- TOC entry 2248 (class 0 OID 0)
+-- TOC entry 2260 (class 0 OID 0)
 -- Dependencies: 2
 -- Name: EXTENSION chkpass; Type: COMMENT; Schema: -; Owner: 
 --
@@ -50,6 +50,42 @@ COMMENT ON EXTENSION chkpass IS 'data type for auto-encrypted passwords';
 
 
 SET search_path = public, pg_catalog;
+
+--
+-- TOC entry 206 (class 1259 OID 16806)
+-- Name: seq_cofres; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE seq_cofres
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE seq_cofres OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 207 (class 1259 OID 16808)
+-- Name: cofres; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE cofres (
+    id bigint DEFAULT nextval('seq_cofres'::regclass) NOT NULL,
+    nome_cofre character varying(200) NOT NULL,
+    tipo_cofre smallint NOT NULL,
+    observacoes text,
+    id_loterica bigint NOT NULL,
+    id_entidade bigint NOT NULL
+);
+
+
+ALTER TABLE cofres OWNER TO postgres;
 
 --
 -- TOC entry 194 (class 1259 OID 16608)
@@ -65,10 +101,6 @@ CREATE SEQUENCE seq_cols_descri
 
 
 ALTER TABLE seq_cols_descri OWNER TO postgres;
-
-SET default_tablespace = '';
-
-SET default_with_oids = false;
 
 --
 -- TOC entry 195 (class 1259 OID 16620)
@@ -448,7 +480,16 @@ CREATE TABLE usuarios_entidades (
 ALTER TABLE usuarios_entidades OWNER TO postgres;
 
 --
--- TOC entry 2106 (class 2606 OID 16628)
+-- TOC entry 2126 (class 2606 OID 16816)
+-- Name: cofres_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY cofres
+    ADD CONSTRAINT cofres_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2114 (class 2606 OID 16628)
 -- Name: cols_descri_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -457,7 +498,7 @@ ALTER TABLE ONLY cols_descri
 
 
 --
--- TOC entry 2114 (class 2606 OID 16776)
+-- TOC entry 2122 (class 2606 OID 16776)
 -- Name: contas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -466,7 +507,7 @@ ALTER TABLE ONLY contas
 
 
 --
--- TOC entry 2090 (class 2606 OID 16523)
+-- TOC entry 2098 (class 2606 OID 16523)
 -- Name: entidades_nome_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -475,7 +516,7 @@ ALTER TABLE ONLY entidades
 
 
 --
--- TOC entry 2092 (class 2606 OID 16414)
+-- TOC entry 2100 (class 2606 OID 16414)
 -- Name: entidades_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -484,7 +525,7 @@ ALTER TABLE ONLY entidades
 
 
 --
--- TOC entry 2110 (class 2606 OID 16697)
+-- TOC entry 2118 (class 2606 OID 16697)
 -- Name: erros_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -493,7 +534,7 @@ ALTER TABLE ONLY erros
 
 
 --
--- TOC entry 2112 (class 2606 OID 16741)
+-- TOC entry 2120 (class 2606 OID 16741)
 -- Name: funcionarios_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -502,7 +543,7 @@ ALTER TABLE ONLY funcionarios
 
 
 --
--- TOC entry 2098 (class 2606 OID 16483)
+-- TOC entry 2106 (class 2606 OID 16483)
 -- Name: logins_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -511,7 +552,7 @@ ALTER TABLE ONLY logins
 
 
 --
--- TOC entry 2102 (class 2606 OID 16521)
+-- TOC entry 2110 (class 2606 OID 16521)
 -- Name: lotericas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -520,7 +561,7 @@ ALTER TABLE ONLY lotericas
 
 
 --
--- TOC entry 2116 (class 2606 OID 16798)
+-- TOC entry 2124 (class 2606 OID 16798)
 -- Name: operacoes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -529,7 +570,7 @@ ALTER TABLE ONLY operacoes
 
 
 --
--- TOC entry 2100 (class 2606 OID 16509)
+-- TOC entry 2108 (class 2606 OID 16509)
 -- Name: sessoes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -538,7 +579,7 @@ ALTER TABLE ONLY sessoes
 
 
 --
--- TOC entry 2108 (class 2606 OID 16673)
+-- TOC entry 2116 (class 2606 OID 16673)
 -- Name: terminais_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -547,7 +588,7 @@ ALTER TABLE ONLY terminais
 
 
 --
--- TOC entry 2094 (class 2606 OID 16471)
+-- TOC entry 2102 (class 2606 OID 16471)
 -- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -556,7 +597,7 @@ ALTER TABLE ONLY usuarios
 
 
 --
--- TOC entry 2096 (class 2606 OID 16473)
+-- TOC entry 2104 (class 2606 OID 16473)
 -- Name: users_usuario_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -565,7 +606,7 @@ ALTER TABLE ONLY usuarios
 
 
 --
--- TOC entry 2104 (class 2606 OID 16594)
+-- TOC entry 2112 (class 2606 OID 16594)
 -- Name: usuarios_entidades_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -574,7 +615,25 @@ ALTER TABLE ONLY usuarios_entidades
 
 
 --
--- TOC entry 2123 (class 2606 OID 16777)
+-- TOC entry 2136 (class 2606 OID 16817)
+-- Name: cofres_id_entidade_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY cofres
+    ADD CONSTRAINT cofres_id_entidade_fkey FOREIGN KEY (id_entidade) REFERENCES entidades(id);
+
+
+--
+-- TOC entry 2137 (class 2606 OID 16822)
+-- Name: cofres_id_loterica_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY cofres
+    ADD CONSTRAINT cofres_id_loterica_fkey FOREIGN KEY (id_loterica) REFERENCES lotericas(id);
+
+
+--
+-- TOC entry 2133 (class 2606 OID 16777)
 -- Name: contas_id_entidade_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -583,7 +642,7 @@ ALTER TABLE ONLY contas
 
 
 --
--- TOC entry 2124 (class 2606 OID 16782)
+-- TOC entry 2134 (class 2606 OID 16782)
 -- Name: contas_id_loterica_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -592,7 +651,7 @@ ALTER TABLE ONLY contas
 
 
 --
--- TOC entry 2122 (class 2606 OID 16742)
+-- TOC entry 2132 (class 2606 OID 16742)
 -- Name: funcionarios_id_loterica_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -601,7 +660,7 @@ ALTER TABLE ONLY funcionarios
 
 
 --
--- TOC entry 2117 (class 2606 OID 16559)
+-- TOC entry 2127 (class 2606 OID 16559)
 -- Name: lotericas_i_entidades_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -610,7 +669,7 @@ ALTER TABLE ONLY lotericas
 
 
 --
--- TOC entry 2125 (class 2606 OID 16799)
+-- TOC entry 2135 (class 2606 OID 16799)
 -- Name: operacoes_i_entidades_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -619,7 +678,7 @@ ALTER TABLE ONLY operacoes
 
 
 --
--- TOC entry 2121 (class 2606 OID 16679)
+-- TOC entry 2131 (class 2606 OID 16679)
 -- Name: terminais_id_entidade_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -628,7 +687,7 @@ ALTER TABLE ONLY terminais
 
 
 --
--- TOC entry 2120 (class 2606 OID 16674)
+-- TOC entry 2130 (class 2606 OID 16674)
 -- Name: terminais_id_loterica_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -637,7 +696,7 @@ ALTER TABLE ONLY terminais
 
 
 --
--- TOC entry 2118 (class 2606 OID 16595)
+-- TOC entry 2128 (class 2606 OID 16595)
 -- Name: usuarios_entidades_i_entidades_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -646,7 +705,7 @@ ALTER TABLE ONLY usuarios_entidades
 
 
 --
--- TOC entry 2119 (class 2606 OID 16600)
+-- TOC entry 2129 (class 2606 OID 16600)
 -- Name: usuarios_entidades_i_usuarios_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -655,7 +714,7 @@ ALTER TABLE ONLY usuarios_entidades
 
 
 --
--- TOC entry 2246 (class 0 OID 0)
+-- TOC entry 2258 (class 0 OID 0)
 -- Dependencies: 7
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
@@ -666,7 +725,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2016-08-09 21:51:24
+-- Completed on 2016-08-09 23:17:18
 
 --
 -- PostgreSQL database dump complete

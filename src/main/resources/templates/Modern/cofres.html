@@ -1,0 +1,63 @@
+
+<div class="xs">
+    <h3>Dados dos Cofres</h3>
+    <div class="tab-content">
+        <div class="tab-pane active" id="horizontal-form">
+            <form class="form-horizontal" id="form_dados"> 
+                $btns_percorrer
+                <div class="form-group mb-n">
+                    <label for="smallinput" class="col-sm-2 control-label label-input-sm">Nome Caixa</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control1 input-lg" id="nome_cofre" placeholder="Nome do Cofre" name="nome_cofre" required>                                                                        
+                        </div>
+                        <div class="botao-buscar">
+                            <i class="i_botao_buscar fa fa-search" onclick="ativaPopUp('id','id')"></i>
+                        </div>
+                </div>
+                <div class="form-group">
+                        <label for="selector1" class="col-sm-2 control-label">Tipo Operação</label>
+                        <div class="col-sm-8"><select name="tipo_cofre" id="tipo_cofre" class="form-control1">
+                                <option value="1" selected="selected">Boca de Lobo</option>
+                                <option value="2" >Inteligente</option>
+                                <option value="3" >Normal</option>
+                        </select></div>
+                </div>
+                <div class="form-group mb-n">
+                        <label for="smallinput" class="col-sm-2 control-label label-input-sm">Lotérica</label>
+                        <div class="col-sm-2">
+                            <input name="id_loterica" type="text" class="form-control1 input-lg" id="id_loterica" placeholder="Código da Lotérica" required>
+                        </div>
+                        <div class="col-sm-1">
+                            <div class="botao-buscar">
+                                <i class="i_botao_buscar fa fa-search" onclick="ativaPopUp('lotericas','id_loterica')"></i>
+                            </div>
+                        </div>
+                </div>
+                <div class="form-group mb-n">
+                    <label for="txtarea1" class="col-sm-2 control-label">Observações</label>
+                        <div class="col-sm-8">
+                            <textarea name="observacoes" id="observacoes" cols="50" rows="4" class="form-control1" placeholder="Observações do Cofre" ></textarea>
+                        </div>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-1 col-sm-offset-9">
+                            <button type="submit" class="btn btn-primary" id="botao-gravar">Gravar</button>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="reset" class="btn botao-deletar" onclick="deletarDados()">Excluir</button>
+                        </div>
+                        
+                        <div class="col-sm-1">
+                            <button type="reset" class="btn btn-default" onclick="limpa()">Limpar</button>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="it" name="it" value="cofres" />                
+                <input type="hidden" id="id" name="id" value="0" />
+            </form>
+        </div>
+    </div>	
+</div>
+
+
