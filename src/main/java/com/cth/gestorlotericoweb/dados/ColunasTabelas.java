@@ -78,10 +78,10 @@ public class ColunasTabelas {
     }
     
     private void carregaTabColsBusca(){
-        mTabColsSelBusca.put("lotericas", "id,codigo_caixa,nome");
-        mTabColsSelBusca.put("terminais", "id,codigo_caixa, id_loterica, nome, marca, modelo");
-        mTabColsSelBusca.put("funcionarios", "id, codigo_caixa, nome, cpf");
-        mTabColsSelBusca.put("contas", "id, conta_corrente, dv, nome_conta, operacao, agencia");
+        mTabColsSelBusca.put("lotericas", "id,nome,codigo_caixa");
+        mTabColsSelBusca.put("terminais", "id,nome,codigo_caixa, id_loterica,  marca, modelo");
+        mTabColsSelBusca.put("funcionarios", "id, nome, codigo_caixa, cpf");
+        mTabColsSelBusca.put("contas", "id, nome_conta, conta_corrente, dv,  operacao, agencia");
         mTabColsSelBusca.put("operacoes", "id, nome_oper_caixa, nome_oper, tipo_oper");
         mTabColsSelBusca.put("cofres", "id, nome_cofre, tipo_cofre, id_loterica");
     }

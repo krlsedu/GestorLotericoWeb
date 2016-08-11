@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.cth.gestorlotericoweb.dados;
+package com.cth.gestorlotericoweb.processos;
 
+import com.cth.gestorlotericoweb.dados.ColunasTabelas;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -17,10 +19,13 @@ import org.apache.velocity.app.VelocityEngine;
  *
  * @author CarlosEduardo
  */
-public class Cadastros {
+public class Processos {
     List<String> lOpts = new ArrayList<>();
-    public Cadastros() {
-    }   
+    final HttpServletRequest request;
+
+    public Processos(HttpServletRequest request) {
+        this.request = request;
+    }    
     
     public StringWriter getSWPopup(VelocityEngine ve,String tipo){
         Template templatePopup;
@@ -45,4 +50,11 @@ public class Cadastros {
         templateBtnPerc.merge(contextBtnPerc, writerBtnPerc);
         return writerBtnPerc;
     }
+    
+    public List<String> setOpcoesFiltro(String tipo){
+        ColunasTabelas colunasTabelas = new ColunasTabelas(request);
+        lOpts = colunasTabelas.getlOpts(tipo);
+        return lOpts;
+    }
+
 }

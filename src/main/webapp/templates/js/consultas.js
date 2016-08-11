@@ -18,7 +18,7 @@ function CriaRequest() {
          return request; 
  }  
 
-function ativaPopUp(tipo,colunaBuscar){
+function ativaPopUp(tipo,colunaBuscar,nomeBusca){
     if(tipo === 'id'){
         var tabela = document.getElementById("it").value;
         buscaOpcoesCBPopUp(tabela);
@@ -27,7 +27,8 @@ function ativaPopUp(tipo,colunaBuscar){
     }  
     document.getElementById("tipo_busca").value = tipo;
     document.getElementById("col_buscar").value = colunaBuscar;
-    document.getElementById('popup').style.display='block';  
+    document.getElementById("titulo_busca").innerHTML = nomeBusca;
+    $('#myModal').modal('show');
 }
 
 function buscaOpcoesCBPopUp(tabela){
@@ -180,13 +181,14 @@ function deletarDados(){
     );
 }
 
-function setaIdFk(id,campo){
+function setaIdFk(id,campo,nome){
     document.getElementById(campo).value = id;
+    document.getElementById('label_'+campo).innerHTML = nome;
     fechaPopUp();
 }
 
 function fechaPopUp(){    
-    document.getElementById('popup').style.display='none';
+    $('#myModal').modal('hide');
     document.getElementById('dados_busca').value = '';
     document.getElementById("tab_dados").innerHTML='';
 }

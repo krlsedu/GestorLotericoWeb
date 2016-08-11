@@ -158,7 +158,7 @@ public class Consulta {
                                 if(colunaBuscar.equals("id")){
                                     lVals.add("<th onclick=\"setaIdEBusca('"+rs.getString("id")+"')\">"+rs.getString(i)+"</th>");
                                 }else{
-                                    lVals.add("<th onclick=\"setaIdFk('"+rs.getString("id")+"','"+colunaBuscar+"')\">"+rs.getString(i)+"</th>");
+                                    lVals.add("<th onclick=\"setaIdFk('"+rs.getString(1)+"','"+colunaBuscar+"','"+rs.getString(2)+"')\">"+rs.getString(i)+"</th>");
                                 }
                             }
                         }

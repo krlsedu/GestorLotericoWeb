@@ -1,0 +1,38 @@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h2 class="modal-title" id="titulo_busca"></h2>
+            </div>
+            <div class="modal-body">
+                <div class="form-group mb-n">
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control1 input-lg" id="dados_busca" placeholder="Sua Busca" name="sua_busca" required>                                                
+                    </div>
+                    <div class="col-sm-1">
+                        <div class="botao-buscar" id="botao_buscar_popup" onclick="consultaDadosBusca()">
+                            <i class="i_botao_buscar fa fa-search"></i>
+                        </div>
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="form-group">
+                            <label for="selector1" class="col-sm-2 control-label">Campo Buscar</label>
+                            <div class="col-sm-10"><select name="selector1" id="selector1" class="form-control1">
+                                    $opt
+                            </select></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="scrollbar" id="style-2">
+                    <table class="table" id="tab_dados">
+                    </table>
+                </div>
+
+                <input type="hidden" id="tipo_busca" name="tipo_busca" value="" />                
+                <input type="hidden" id="col_buscar" name="col_buscar" value="" />
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
