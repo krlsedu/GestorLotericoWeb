@@ -6,7 +6,6 @@
 package com.cth.gestorlotericoweb;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import java.io.StringWriter;
-import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -34,7 +33,7 @@ public class Login{
             Template t = ve.getTemplate( "templates/web/login.html" , "UTF-8");
             /*  create a context and add data */
             VelocityContext context = new VelocityContext();
-            context.put("var", "World");
+            context.put("var", "Bem Vindo ao Gestor Lotérico Web");
             //context.put("path",ve.getProperty(output));
             /* now render the template into a StringWriter */
             StringWriter writer = new StringWriter();
