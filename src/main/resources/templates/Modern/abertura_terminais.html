@@ -12,7 +12,9 @@
                                 <div class="input-group-addon" onclick="ativaPopUp('lotericas','id_loterica','Consulta código Lotérica')">
                                     <i class="i_botao_buscar fa fa-search" ></i>
                                 </div>
-                                <input  name="id_loterica" type="text" class="form-control1 input-lg" id="id_loterica" placeholder="Cód Lotérica" required>                        
+                                <input  name="id_loterica" type="text" class="form-control1 input-lg" id="id_loterica" placeholder="Cód Lotérica" 
+                                        onchange="buscaNome('lotericas','id_loterica')" 
+                                        required>                        
                             </div>
                         </div> 
                         <div class="col-sm-6">
@@ -27,7 +29,9 @@
                                 <div class="input-group-addon" onclick="ativaPopUp('terminais','id_terminal','Consulta código Terminal')">
                                     <i class="i_botao_buscar fa fa-search" ></i>
                                 </div>
-                                <input  name="id_terminal" type="text" class="form-control1 input-lg" id="id_terminal" placeholder="Cód Terminal" required>                        
+                                <input  name="id_terminal" type="text" class="form-control1 input-lg" id="id_terminal" placeholder="Cód Terminal"  
+                                        onchange="buscaNome('terminais','id_terminal')" 
+                                        required>                        
                             </div>
                         </div> 
                         <div class="col-sm-6">
@@ -42,7 +46,9 @@
                                 <div class="input-group-addon" onclick="ativaPopUp('funcionarios','id_funcionario','Consulta código Funcionário')">
                                     <i class="i_botao_buscar fa fa-search" ></i>
                                 </div>
-                                <input name="id_funcionario" type="text" class="form-control1 input-lg" id="id_funcionario" placeholder="Cód Funcionário" required>  
+                                <input name="id_funcionario" type="text" class="form-control1 input-lg" id="id_funcionario" placeholder="Cód Funcionário"  
+                                        onchange="buscaNome('funcionarios','id_funcionario')" 
+                                        required>  
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -62,11 +68,11 @@
                         </div>
                 </div>
                 <div class="form-group mb-n">
-                    <label for="troco_anterior" class="col-sm-2 control-label">Troco Dia Anterior</label>
+                    <label for="troco_dia_anterior" class="col-sm-2 control-label">Troco Dia Anterior</label>
                     <div class="col-sm-3"> 
                         <div class="input-group">
                             <span class="input-group-addon">R$</span>
-                            <input name="troco_anterior" id="troco_anterior" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
+                            <input name="troco_dia_anterior" id="troco_dia_anterior" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
                         </div>
                     </div>
                 </div>

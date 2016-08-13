@@ -115,8 +115,33 @@ function buscaDadosN(tabela){
                     var nomeCol = htmlDoc.getElementById("nome_coluna_"+i).value;
                     var valr = htmlDoc.getElementById("busca_col_"+nomeCol).value;
                     document.getElementById(nomeCol).value = valr;
+                    try{
+                        document.getElementById(nomeCol).onchange();
+                    }catch (e){
+                        
+                    }
                 }
                 fechaPopUp();
+            }, 
+            error: function (jXHR, textStatus, errorThrown) {
+                alert("Desculpe ocorreu um erro! :(");
+            }             
+        }
+    );
+}
+
+function buscaNome(tabela,campo){
+    var id = document.getElementById(campo).value;
+    if(id.length===0){
+        id = 0;
+    }
+    $.ajax(
+        {
+            type: "POST",
+            url:  "consulta",
+            data:{"id":id,"tabela":tabela,"tipo":"nome"},
+            success: function (data) {     
+                document.getElementById('label_'+campo).innerHTML = data;
             }, 
             error: function (jXHR, textStatus, errorThrown) {
                 alert("Desculpe ocorreu um erro! :(");

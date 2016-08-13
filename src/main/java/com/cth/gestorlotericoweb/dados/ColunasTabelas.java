@@ -53,6 +53,8 @@ public class ColunasTabelas {
         } catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);
         }
+        putMs("id_terminal","Código do Terminal (Sistema)");
+        putMs("id_funcionario", "Código do Funcionário (Sistema)");
     }
     
     private void putMs(String coluna,String descri){
@@ -75,6 +77,7 @@ public class ColunasTabelas {
         mTabelas.put("contas", "contas");
         mTabelas.put("operacoes", "operacoes");
         mTabelas.put("cofres", "cofres");
+        mTabelas.put("abertura_terminais", "abertura_terminais");
     }
     
     private void carregaTabColsBusca(){
@@ -84,6 +87,7 @@ public class ColunasTabelas {
         mTabColsSelBusca.put("contas", "id, nome_conta, conta_corrente, dv,  operacao, agencia");
         mTabColsSelBusca.put("operacoes", "id, nome_oper_caixa, nome_oper, tipo_oper");
         mTabColsSelBusca.put("cofres", "id, nome_cofre, tipo_cofre, id_loterica");
+        mTabColsSelBusca.put("abertura_terminais", "id, id_loterica, id_terminal, id_funcionario, data_abertura");
     }
     private void carregaTabColsDados(){
         mTabColsSelDados.put("lotericas", "codigo_caixa,nome");
@@ -92,6 +96,7 @@ public class ColunasTabelas {
         mTabColsSelDados.put("contas", "conta_corrente, dv, nome_conta, operacao, agencia, telefone, gerente, id_loterica, observacoes");
         mTabColsSelDados.put("operacoes", "nome_oper_caixa, nome_oper, tipo_oper, observacoes");
         mTabColsSelDados.put("cofres", "nome_cofre, tipo_cofre, observacoes, id_loterica");
+        mTabColsSelDados.put("abertura_terminais", "id_loterica, id_terminal, id_funcionario, data_abertura, troco_dia_anterior, troco_dia, observacoes");
     }
     private void carregaTabOpts(){
         List<String> lOpts = new ArrayList<>();
@@ -126,6 +131,11 @@ public class ColunasTabelas {
         lOpts.add("<option>Nome do Cofre</option>");
         lOpts.add("<option>Tipo Cofre</option>");
         mTabOpts.put("cofres", lOpts);
+        lOpts = new ArrayList<>();
+        lOpts.add("<option>Código da lotérica (Sistema)</option>");
+        lOpts.add("<option>Código do Terminal (Sistema)</option>");
+        lOpts.add("<option>Código do Funcionário (Sistema)</option>");
+        mTabOpts.put("abertura_terminais", lOpts);
     }
     
     public String getOpts(String tabela){

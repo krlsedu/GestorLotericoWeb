@@ -13,6 +13,7 @@ import com.cth.gestorlotericoweb.dados.Loterica;
 import com.cth.gestorlotericoweb.dados.Operacao;
 import com.cth.gestorlotericoweb.dados.Terminal;
 import com.cth.gestorlotericoweb.parametros.Parametros;
+import com.cth.gestorlotericoweb.processos.AberturaTerminal;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
@@ -52,60 +53,73 @@ public class Grava {
     private void grava(){
         String input = request.getParameter("it");
         switch(input){
-            case "cofres":
-                Cofre cofre = new Cofre(request.getParameter("nome_cofre"), request.getParameter("tipo_cofre"), request.getParameter("id_loterica"), request.getParameter("observacoes"), request);
-                if("0".equals(request.getParameter("id"))){
-                    cofre.insere();
-                }else{
-                    cofre.altera(request.getParameter("id"));
-                }
-                id = cofre.getId();
-                break;
-            case "contas":
-                Conta conta = new Conta(request.getParameter("nome_conta"), request.getParameter("agencia"), request.getParameter("operacao"), request.getParameter("conta_corrente"), request.getParameter("dv"), request.getParameter("telefone"), request.getParameter("gerente"), request.getParameter("observacoes"), Integer.valueOf(request.getParameter("id_loterica")), request);
-                if("0".equals(request.getParameter("id"))){
-                    conta.insere();
-                }else{
-                    conta.altera(request.getParameter("id"));
-                }
-                id = conta.getId();
-                break;
-            case "funcionarios":       
-                Funcionario funcionario = new Funcionario(request.getParameter("codigo_caixa"), request.getParameter("nome"), request.getParameter("cpf"), Integer.valueOf(request.getParameter("tipo_func")), request.getParameter("observacoes"), request);
-                if("0".equals(request.getParameter("id"))){
-                    funcionario.insere();
-                }else{
-                    funcionario.altera(request.getParameter("id"));
-                }
-                id = funcionario.getId();
-                break;
-            case "lotericas":     
-                Loterica loterica = new Loterica(request.getParameter("codigo_caixa"), request.getParameter("nome"),request);
-                if("0".equals(request.getParameter("id"))){
-                    loterica.insere();
-                }else{
-                    loterica.altera(request.getParameter("id"));
-                }
-                id = loterica.getId();
-                break;
-            case "operacoes":
-                Operacao operacao = new Operacao(request.getParameter("nome_oper_caixa"), request.getParameter("nome_oper"), request.getParameter("tipo_oper"), request.getParameter("observacoes"), request);
-                if("0".equals(request.getParameter("id"))){
-                    operacao.insere();
-                }else{
-                    operacao.altera(request.getParameter("id"));
-                }
-                id = operacao.getId();
-                break;
-            case "terminais":       
-                Terminal terminal = new Terminal(request.getParameter("codigo_caixa"), Integer.valueOf(request.getParameter("id_loterica")), request.getParameter("nome"), request.getParameter("marca"), request.getParameter("modelo"), request.getParameter("observacoes"), request);
-                if("0".equals(request.getParameter("id"))){
-                    terminal.insere();
-                }else{
-                    terminal.altera(request.getParameter("id"));
-                }
-                id = terminal.getId();
-                break;
+            //inicio gravação cadastros;
+                case "cofres":
+                    Cofre cofre = new Cofre(request.getParameter("nome_cofre"), request.getParameter("tipo_cofre"), request.getParameter("id_loterica"), request.getParameter("observacoes"), request);
+                    if("0".equals(request.getParameter("id"))){
+                        cofre.insere();
+                    }else{
+                        cofre.altera(request.getParameter("id"));
+                    }
+                    id = cofre.getId();
+                    break;
+                case "contas":
+                    Conta conta = new Conta(request.getParameter("nome_conta"), request.getParameter("agencia"), request.getParameter("operacao"), request.getParameter("conta_corrente"), request.getParameter("dv"), request.getParameter("telefone"), request.getParameter("gerente"), request.getParameter("observacoes"), Integer.valueOf(request.getParameter("id_loterica")), request);
+                    if("0".equals(request.getParameter("id"))){
+                        conta.insere();
+                    }else{
+                        conta.altera(request.getParameter("id"));
+                    }
+                    id = conta.getId();
+                    break;
+                case "funcionarios":       
+                    Funcionario funcionario = new Funcionario(request.getParameter("codigo_caixa"), request.getParameter("nome"), request.getParameter("cpf"), Integer.valueOf(request.getParameter("tipo_func")), request.getParameter("observacoes"), request);
+                    if("0".equals(request.getParameter("id"))){
+                        funcionario.insere();
+                    }else{
+                        funcionario.altera(request.getParameter("id"));
+                    }
+                    id = funcionario.getId();
+                    break;
+                case "lotericas":     
+                    Loterica loterica = new Loterica(request.getParameter("codigo_caixa"), request.getParameter("nome"),request);
+                    if("0".equals(request.getParameter("id"))){
+                        loterica.insere();
+                    }else{
+                        loterica.altera(request.getParameter("id"));
+                    }
+                    id = loterica.getId();
+                    break;
+                case "operacoes":
+                    Operacao operacao = new Operacao(request.getParameter("nome_oper_caixa"), request.getParameter("nome_oper"), request.getParameter("tipo_oper"), request.getParameter("observacoes"), request);
+                    if("0".equals(request.getParameter("id"))){
+                        operacao.insere();
+                    }else{
+                        operacao.altera(request.getParameter("id"));
+                    }
+                    id = operacao.getId();
+                    break;
+                case "terminais":       
+                    Terminal terminal = new Terminal(request.getParameter("codigo_caixa"), Integer.valueOf(request.getParameter("id_loterica")), request.getParameter("nome"), request.getParameter("marca"), request.getParameter("modelo"), request.getParameter("observacoes"), request);
+                    if("0".equals(request.getParameter("id"))){
+                        terminal.insere();
+                    }else{
+                        terminal.altera(request.getParameter("id"));
+                    }
+                    id = terminal.getId();
+                    break;
+            //fim gravação cadastros;
+            //inicio gravação processos
+                case "abertura_terminais":
+                    AberturaTerminal aberturaTerminal = new AberturaTerminal(request.getParameter("id_loterica"), request.getParameter("id_terminal"), request.getParameter("id_funcionario"),request.getParameter("data_abertura"), request.getParameter("troco_dia_anterior"), request.getParameter("troco_dia"), request.getParameter("observacoes"), request);
+                    if("0".equals(request.getParameter("id"))){
+                        aberturaTerminal.insere();
+                    }else{
+                        aberturaTerminal.altera(request.getParameter("id"));
+                    }
+                    id = aberturaTerminal.getId();
+                    break;
+            //fim gravação processos
             default:
                 break;
         }

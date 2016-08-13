@@ -69,6 +69,7 @@ fechar_popup {
     z-index: 1100;
 
 }
+
 .bar_fechar{
     width: 100%;
     display: flex;
@@ -132,4 +133,19 @@ fechar_popup {
   height: 40px;
   display: flex;
   align-items: center;
+}
+
+.botao-b-proc{
+  color: #ffffff;
+  font-size: 17px;
+  background: #ed9a15;
+  padding: 5px 5px 5px 5px;
+  text-decoration: none;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;  
+  -moz-border-radius: 8;
+  -webkit-border-radius: 8;
 }

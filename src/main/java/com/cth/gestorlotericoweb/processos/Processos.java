@@ -22,10 +22,22 @@ import org.apache.velocity.app.VelocityEngine;
 public class Processos {
     List<String> lOpts = new ArrayList<>();
     final HttpServletRequest request;
+    Integer id;
 
     public Processos(HttpServletRequest request) {
         this.request = request;
-    }    
+    }  
+
+    public Processos(HttpServletRequest request, Integer id) {
+        this.request = request;
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+    
+    
     
     public StringWriter getSWPopup(VelocityEngine ve,String tipo){
         Template templatePopup;

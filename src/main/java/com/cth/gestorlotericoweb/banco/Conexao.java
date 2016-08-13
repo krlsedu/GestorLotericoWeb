@@ -4,13 +4,17 @@
  * and open the template in the editor.
  */
 package com.cth.gestorlotericoweb.banco;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import static java.sql.DriverManager.getConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import static java.sql.DriverManager.getConnection;
+import java.util.Properties;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -22,26 +26,27 @@ public class Conexao {
     public static String ip;
     public static String porta;
     public static String banco;
-    public static String userConv;
-    public static String senhaConv;
-    public static String ipConv;
-    public static String portaConv;
-    public static String bancoConv;
     public Connection Con;
     public Statement st;
     public static String sql;
     public ResultSet results;
+    final HttpServletRequest request;
     
-    public Conexao() throws ClassNotFoundException, SQLException{
-        Class.forName("org.postgresql.Driver");
-        String usuarioPg = "postgres";
-        String senhaPg = "Thaisa-2707";
-        String ipPg = "127.0.0.1";
-        String portaPg = "5432";
-        String bancoPg = "glw";
-        String url ="jdbc:postgresql://"+ipPg+":"+portaPg+"/"+bancoPg;
-        Con = getConnection(url,usuarioPg, senhaPg);
-        st = Con.createStatement();
+    public Conexao(HttpServletRequest request) {      
+        try{
+            this.request = request;
+            Class.forName("org.postgresql.Driver");
+            String usuarioPg = lerPropriedade("user");
+            String senhaPg = lerPropriedade("senha");
+            String ipPg = lerPropriedade("ip");
+            String portaPg = lerPropriedade("porta");
+            String bancoPg = lerPropriedade("banco");
+            String url ="jdbc:postgresql://"+ipPg+":"+portaPg+"/"+bancoPg;
+            Con = getConnection(url,usuarioPg, senhaPg);
+            st = Con.createStatement();
+        }catch(ClassNotFoundException|SQLException ex){
+            throw new RuntimeException(ex.getMessage(), ex);
+        }
     }
     
     public Statement getSt() throws SQLException{
@@ -75,6 +80,26 @@ public class Conexao {
     }
     public void commit() throws SQLException{
 	Con.commit();
+    }
+    
+
+    private String lerPropriedade(String chave) {
+        InputStream input = request.getServletContext().getResourceAsStream("/WEB-INF/db.properties");
+        Properties propSalvar = new Properties();
+        try {
+            propSalvar.load(input);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex.getMessage(), ex);
+        }
+        try {
+            String ret = propSalvar.getProperty(chave);
+            input.close();
+            if (ret == null)
+                ret = "";
+            return ret;
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
     
 }

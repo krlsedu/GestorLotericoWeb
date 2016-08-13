@@ -1,0 +1,48 @@
+banco=pezddedg_glw
+user=pezddedg_glwdbapo
+senha=Thaisa_2707
+
+2)      Favor alterar o DNS do domínio: gestorloterico.com.br para
+
+ 
+Ns1.brasilwork.com.br
+Ns2.brasilwork.com.br
+ 
+ 
+3)      Acesso ao CPANEL e NGASI                              
+
+CPANEL: http://gestorloterico.com.br/cpanel  
+Usuário: pezddedg
+Senha: JQo5vdNx5MvV
+ 
+NGASI: http://srv07.brasilwork.com.br:8666/ngu/?jamunpassword=&jamunuser=pezddedg  
+Usuário: pezddedg
+Senha: br20BRA16bw
+4)      Tutoriais que podem ser uteis na utilização dos serviços
+
+ 
+
+                               Segue o tutorial abaixo para o deploy do Java:
+ 
+                               https://brasilwork.com.br/tutoriais/publicando-sua-aplicacao-war-na-hospedagem-java/
+ 
+                               E este outro dos LOGs: https://brasilwork.com.br/tutoriais/logs-da-aplicacao-java/
+ 
+ 
+                               Qualquer dúvida que tiver, poste ticket em nosso Suporte utilizando estes dados abaixo:
+ 
+                               Utiliza o tutorial para abrir ticket: https://brasilwork.com.br/tutoriais/como-abrir-ticket-de-suporte/
+ 
+5)      Painel do cliente da Brasil Work
+
+http://painel.brasilwork.com.br
+
+Usuário: krlsedu@gmail.com  
+
+Senha: Gelot30+30==
+
+ 
+
+6)      Nosso Chat Online funciona de Segunda a Sexta Feira em horário comercial
+
+http://www.brasilwork.com.br

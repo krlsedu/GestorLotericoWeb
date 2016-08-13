@@ -7,14 +7,11 @@ package com.cth.gestorlotericoweb.parametros;
 
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.banco.Conexao;
-import com.cth.gestorlotericoweb.dados.ColunasTabelas;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 
@@ -27,11 +24,7 @@ public class Parametros {
     public static Integer idUsuario;
     public static Integer idEntidade;
     public static void initDb(HttpServletRequest request){
-        try {
-            conexao = new Conexao();
-        } catch (ClassNotFoundException | SQLException ex) {
-            new LogError(ex.getMessage(), ex.getCause(), request);
-        }
+        conexao = new Conexao(request);
     }
 
     public static Conexao getConexao(HttpServletRequest request) {
