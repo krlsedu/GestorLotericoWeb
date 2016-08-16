@@ -132,16 +132,153 @@
 
 
     </dependencies>
+    
+    <scm>
+        <connection>scm:svn:http://none</connection>
+        <developerConnection>scm:svn:https://none</developerConnection>
+        <url>scm:svn:https://none</url>
+    </scm>
 
     <build>
         <plugins>
+            
+            
+            <!-- Início versionamento de Banco -->
+            <!-- User liquibase plugin -->
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>3.5.1</version>                
+                <executions>
+                    <execution>
+                        <id>1-estrutura</id>
+                        <configuration>
+                            <propertyFile>liquibase/liquibase.properties</propertyFile>
+                            <changeLogFile>liquibase/db-changelog-master.xml</changeLogFile>
+                            <diffChangeLogFile>db_versions/diffs_liquibase/db-changelog-${project.artifactId}-${project.version}-${buildNumber}-${current.time}-0-esquema.xml</diffChangeLogFile>
+                            <diffTypes> tables, views, columns, indexes, foreignkeys, primarykeys, uniqueconstraints</diffTypes>
+                        </configuration>
+                        <phase>initialize</phase>                                                                                        
+                        <goals>
+                            <goal>diff</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>2-data_tabs_padrao</id>
+                        <configuration>
+                            <propertyFile>liquibase/liquibase.properties</propertyFile>
+                            <changeLogFile>liquibase/db-changelog-master.xml</changeLogFile>
+                            <diffChangeLogFile>db_versions/diffs_liquibase/db-changelog-${project.artifactId}-${project.version}-${buildNumber}-${current.time}-1-tabs_padrao.xml</diffChangeLogFile>
+                            <diffTypes>Data</diffTypes>
+                            <diffIncludeObjects>cols_descri,usuarios,entidades,usuarios_entidades</diffIncludeObjects>
+                        </configuration>
+                        <phase>initialize</phase>                                                                                     
+                        <goals>
+                            <goal>diff</goal>
+                        </goals>
+                    </execution>
+                    
+                    <execution>
+                        <id>3-update</id>
+                        <configuration>
+                            <propertyFile>liquibase/liquibase.properties</propertyFile>
+                            <changeLogFile>liquibase/db-changelog-master.xml</changeLogFile>
+                            <diffTypes>tables, views, columns, indexes, foreignkeys, primarykeys, uniqueconstraints, Data</diffTypes>
+                        </configuration>
+                        <phase>initialize</phase>                                                                                            
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>5-update-final</id>
+                        <phase>test</phase>
+
+                        <configuration>
+                            <propertyFile>liquibase/liquibase.properties</propertyFile>
+                            <changeLogFile>liquibase/db-changelog-master.xml</changeLogFile>
+                        </configuration>                                                                                     
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2</version>
+                <executions>
+                    <execution>
+                        <id>5-runbatchfile</id>
+                        <phase>initialize</phase>   
+                        <configuration>
+                            <executable>${session.executionRootDirectory}/apgdiff/gera_diffs.bat</executable>
+                            <arguments>
+                                <argument>db-changelog-${project.artifactId}-${project.version}-${buildNumber}-${current.time}-2-outros</argument>
+                                <argument>${session.executionRootDirectory}</argument>
+                                <argument>${project.artifactId}</argument>
+                                <argument>${project.version}</argument>
+                                <argument>${buildNumber}</argument>
+                                <argument>${current.time}</argument>
+                            </arguments>
+                        </configuration>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sql-maven-plugin</artifactId>
+                <version>1.5</version>     
+                <dependencies>
+                    <dependency>
+                        <groupId>postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>9.1-901-1.jdbc4</version>
+                    </dependency>
+                </dependencies>       
+                <configuration>
+                    <driver>org.postgresql.Driver</driver>
+                    <url>jdbc:postgresql://localhost:5432/glw</url>
+                    <username>postgres</username>
+                    <password>Thaisa-2707</password>
+                    <autocommit>true</autocommit>       
+                    <sqlCommand>INSERT INTO public.db_version(versao_major, versao_minor, build,compilation) VALUES ('${project.artifactId}', '${project.version}', '${buildNumber}','${current.time}');</sqlCommand>       
+                    <!--<srcFiles>
+                        <srcFile>
+                            ${session.executionRootDirectory}/db_versions/diffs_sql/db-changelog-${project.artifactId}-${project.version}-${buildNumber}-${current.time}-outros_estrutura.sql
+                        </srcFile>
+                    </srcFiles>-->
+                </configuration>           
+                <executions>
+                    <execution>   
+                        <id>insert_db_ver</id>        
+                        <phase>package</phase>     
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+
+            <!-- Fim versionamento de Banco -->
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                     <compilerArguments>
                         <endorseddirs>${endorsed.dir}</endorseddirs>
                     </compilerArguments>
@@ -150,18 +287,71 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.3</version>
+                <version>2.6</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-                        </manifest>
-                    </archive>
+                        
+                        <archive>
+                            <manifest>
+                                <addClasspath>true</addClasspath>
+                                <classpathPrefix>lib/</classpathPrefix>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            </manifest>
+                            <manifestEntries>
+                                <Implementation-Build>${buildNumber}-${current.time}</Implementation-Build>
+                            </manifestEntries>
+                        </archive>
+                    <webResources>
+                        <resource>
+                          <!-- this is relative to the pom.xml directory -->
+                          <directory>db_versions/</directory>
+                          <targetPath>WEB-INF/db_versions/</targetPath>
+                        </resource>
+                     </webResources>
                 </configuration>
             </plugin>
-            
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                  <execution>
+                    <phase>validate</phase>
+                    <goals>
+                      <goal>create</goal>
+                    </goals>
+                  </execution>
+                </executions>
+                <configuration>
+                  <doCheck>true</doCheck>
+                  <doUpdate>false</doUpdate>
+                  <format>{0,number}</format>
+                  <items>
+                    <item>buildNumber</item>
+                  </items>
+                </configuration>                
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.10</version>
+                <executions>
+                    <execution>
+                        <id>timestamp-property</id>
+                        <goals>
+                            <goal>timestamp-property</goal>
+                        </goals>
+                        <configuration>
+                            <name>current.time</name>
+                            <pattern>yyyyMMdd-HHmmss</pattern>
+                            <timeZone>GMT-3</timeZone>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -187,7 +377,10 @@
                     </execution>
                 </executions>
             </plugin>
-        </plugins>
+        </plugins>        
+        <finalName>
+            ${project.artifactId}-${project.version}-${buildNumber}-${current.time}
+        </finalName>
     </build>
 
 </project>

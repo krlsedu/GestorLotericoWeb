@@ -1,0 +1,382 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-1" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="abertura_terminais">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="aberturas_terminais_pkey"/>
+            </column>
+            <column name="id_loterica" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_terminal" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_funcionario" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="now()" name="data_abertura" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_estorno" type="date"/>
+            <column defaultValueNumeric="0" name="troco_dia_anterior" type="numeric(15, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="troco_dia" type="numeric(15, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="observacoes" type="TEXT"/>
+            <column defaultValueComputed="now()" name="data_cadastro" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_entidade" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-2" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="cofres">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="cofres_pkey"/>
+            </column>
+            <column name="nome_cofre" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tipo_cofre" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="observacoes" type="TEXT"/>
+            <column name="id_loterica" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_entidade" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-3" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="cols_descri">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="cols_descri_pkey"/>
+            </column>
+            <column name="coluna" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="descricao" type="VARCHAR(1000)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-4" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="contas">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="contas_pkey"/>
+            </column>
+            <column name="conta_corrente" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dv" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nome_conta" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="operacao" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="agencia" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="telefone" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gerente" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_loterica" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="observacoes" type="TEXT"/>
+            <column name="id_entidade" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-5" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="db_version">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="pk_db_version"/>
+            </column>
+            <column name="versao_major" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="versao_minor" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="build" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="compilation" type="VARCHAR(200)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-6" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="entidades">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="entidades_pkey"/>
+            </column>
+            <column name="nome" type="CHARACTER VARYING">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="1" name="tipo" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-7" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="erros">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="erros_pkey"/>
+            </column>
+            <column name="id_usuario" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_entidade" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_sessao" type="CHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ip" type="CHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nome_maquina" type="CHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pg_anterior" type="TEXT"/>
+            <column name="pg_atual" type="TEXT"/>
+            <column defaultValueComputed="now()" name="data_erro" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="erro" type="TEXT"/>
+            <column name="stacktrace" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-8" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="funcionarios">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="funcionarios_pkey"/>
+            </column>
+            <column name="codigo_caixa" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nome" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cpf" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="1" name="tipo_func" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_entidade" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="observacoes" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-9" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="logins">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="logins_pkey"/>
+            </column>
+            <column name="usuario" type="CHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ip" type="CHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nome_maquina" type="CHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="S" name="sucesso" type="CHAR(1)"/>
+            <column defaultValueComputed="now()" name="datatentativa" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-10" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="lotericas">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="lotericas_pkey"/>
+            </column>
+            <column name="codigo_caixa" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nome" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="2" name="id_entidade" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-11" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="operacoes">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="operacoes_pkey"/>
+            </column>
+            <column name="nome_oper_caixa" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nome_oper" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tipo_oper" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="observacoes" type="TEXT"/>
+            <column defaultValueNumeric="2" name="id_entidade" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-12" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="sessoes">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="sessoes_pkey"/>
+            </column>
+            <column name="id_usuario" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_entidade" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_sessao" type="CHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ip" type="CHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nome_maquina" type="CHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pg_anterior" type="TEXT"/>
+            <column name="pg_atual" type="TEXT"/>
+            <column defaultValueNumeric="0" name="tempo_sessao" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="now()" name="data_acesso" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-13" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="terminais">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="terminais_pkey"/>
+            </column>
+            <column name="codigo_caixa" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nome" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="marca" type="VARCHAR(200)"/>
+            <column name="modelo" type="VARCHAR(200)"/>
+            <column name="observacoes" type="TEXT"/>
+            <column name="id_loterica" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_entidade" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-14" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="usuarios">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="users_pkey"/>
+            </column>
+            <column name="codigo_caixa" type="BIGINT"/>
+            <column name="usuario" type="CHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="senha" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="1" name="tipo" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nome" type="CHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="CHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="telefone" type="CHAR(50)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-15" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="usuarios_entidades">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="usuarios_entidades_pkey"/>
+            </column>
+            <column name="id_usuario" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_entidade" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-16" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addUniqueConstraint columnNames="nome" constraintName="entidades_nome_key" tableName="entidades"/>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-17" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addUniqueConstraint columnNames="usuario" constraintName="users_usuario_key" tableName="usuarios"/>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-18" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addForeignKeyConstraint baseColumnNames="id_entidade" baseTableName="abertura_terminais" constraintName="aberturas_terminais_id_entidade_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entidades"/>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-19" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addForeignKeyConstraint baseColumnNames="id_funcionario" baseTableName="abertura_terminais" constraintName="aberturas_terminais_id_funcionario_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="funcionarios"/>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-20" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addForeignKeyConstraint baseColumnNames="id_loterica" baseTableName="abertura_terminais" constraintName="aberturas_terminais_id_loterica_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="lotericas"/>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-21" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addForeignKeyConstraint baseColumnNames="id_terminal" baseTableName="abertura_terminais" constraintName="aberturas_terminais_id_terminal_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="terminais"/>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-22" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addForeignKeyConstraint baseColumnNames="id_entidade" baseTableName="cofres" constraintName="cofres_id_entidade_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entidades"/>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-23" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addForeignKeyConstraint baseColumnNames="id_loterica" baseTableName="cofres" constraintName="cofres_id_loterica_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="lotericas"/>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-24" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addForeignKeyConstraint baseColumnNames="id_entidade" baseTableName="contas" constraintName="contas_id_entidade_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entidades"/>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-25" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addForeignKeyConstraint baseColumnNames="id_loterica" baseTableName="contas" constraintName="contas_id_loterica_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="lotericas"/>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-26" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addForeignKeyConstraint baseColumnNames="id_entidade" baseTableName="funcionarios" constraintName="funcionarios_id_loterica_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entidades"/>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-27" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addForeignKeyConstraint baseColumnNames="id_entidade" baseTableName="lotericas" constraintName="lotericas_i_entidades_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entidades"/>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-28" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addForeignKeyConstraint baseColumnNames="id_entidade" baseTableName="operacoes" constraintName="operacoes_i_entidades_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entidades"/>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-29" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addForeignKeyConstraint baseColumnNames="id_entidade" baseTableName="terminais" constraintName="terminais_id_entidade_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entidades"/>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-30" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addForeignKeyConstraint baseColumnNames="id_loterica" baseTableName="terminais" constraintName="terminais_id_loterica_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="lotericas"/>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-31" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addForeignKeyConstraint baseColumnNames="id_entidade" baseTableName="usuarios_entidades" constraintName="usuarios_entidades_i_entidades_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entidades"/>
+    </changeSet>
+    <changeSet author="CarlosEduardo (generated)" id="1471383124204-32" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addForeignKeyConstraint baseColumnNames="id_usuario" baseTableName="usuarios_entidades" constraintName="usuarios_entidades_i_usuarios_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="usuarios"/>
+    </changeSet>
+</databaseChangeLog>

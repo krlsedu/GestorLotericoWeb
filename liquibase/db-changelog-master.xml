@@ -1,0 +1,11 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+ 
+  <!--<include file="C:\CarlosEduardo\Ferramentas\IntegradorContabil\liquibase\versoes\db-changelog-IntegradorContabil-1.0-SNAPSHOT-92-20160811-110059.xml"/> 
+    <changeSet  author="carloseduardo (generated)" id="1" failOnError="false">
+        <createSequence sequenceName="new_sequence"/>
+    </changeSet>-->
+    <includeAll path="db_versions/diffs_liquibase/"></includeAll>
+</databaseChangeLog>

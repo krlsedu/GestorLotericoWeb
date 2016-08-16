@@ -1,0 +1,12 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+ <changeSet author="carloseduardo (generated)" id="8-20160816-183318-1"  objectQuotingStrategy="QUOTE_ALL_OBJECTS" > 
+    <sqlFile dbms="PostgreSQL" 
+            encoding="utf8" 
+            endDelimiter=";" 
+	     stripComments="true" 
+	     splitStatements="true" 
+            path="diffs_sql/db-changelog-GestorLotericoWeb-1.0-SNAPSHOT-8-20160816-183318-2-outros_estrutura.sql" 
+            relativeToChangelogFile="true" />
+</changeSet> 
+</databaseChangeLog> 
