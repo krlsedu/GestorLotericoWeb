@@ -61,7 +61,7 @@ public class Conta extends Cadastros{
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("select conta_corrente, dv, nome_conta, operacao, agencia, telefone, gerente, \n" +
 "       id_loterica, observacoes \n" +
-"  FROM public.contas where id = ? and id_entidade = ? ",false);
+"  FROM contas where id = ? and id_entidade = ? ",false);
             ps.setInt(1, id);
             ps.setInt(2, Parametros.idEntidade);
             ResultSet rs = ps.executeQuery();
@@ -93,7 +93,7 @@ public class Conta extends Cadastros{
     
     public void insere(){
         try {
-            PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.contas(\n" +
+            PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO contas(\n" +
             "            conta_corrente, dv, nome_conta, operacao, agencia,"
                     + "  telefone, gerente, id_loterica, observacoes, id_entidade)\n" +
             "    VALUES (?, ?, ?, ?, ?,"
@@ -126,7 +126,7 @@ public class Conta extends Cadastros{
     
     public void altera(String idL){
         try {
-            PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.contas\n" +
+            PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE contas\n" +
 "   SET  conta_corrente=?, dv=?, nome_conta=?, operacao=?, agencia=?, \n" +
 "       telefone=?, gerente=?, id_loterica=?, observacoes=? "
                     + " where id = ? and id_entidade = ? ", false);

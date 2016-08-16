@@ -41,7 +41,7 @@ public class Erros {
                 //pgAtu = String.valueOf(request.getRequestURL().append('?').append(request.getQueryString()));
                 
             }
-            PreparedStatement ps = conexao.getPst("INSERT INTO public.erros(\n" +
+            PreparedStatement ps = conexao.getPst("INSERT INTO erros(\n" +
 "            id_usuario, id_entidade, id_sessao, ip, nome_maquina, pg_anterior, \n" +
         "            pg_atual, erro, stacktrace)\n" +
         "    VALUES ( ?, ?, ?, ?, ?, ?, \n" +

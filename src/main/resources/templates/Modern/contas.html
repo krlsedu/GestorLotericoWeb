@@ -10,9 +10,6 @@
                         <div class="col-sm-4">
                             <input name="conta_corrente" type="text" class="form-control1 input-lg" id="conta_corrente" placeholder="Conta Corrente"  required>
                         </div>
-                    <div class="botao-buscar">
-                        <i class="i_botao_buscar fa fa-search" onclick="ativaPopUp('id','id','Busca de Contas')"></i>
-                    </div>
                 </div>
                 <div class="form-group mb-n">
                     <label for="largeinput" class="col-sm-2 control-label label-input-lg">Dígito Verificador</label>
@@ -51,14 +48,20 @@
                         </div>
                 </div>
                 
-                <div class="form-group mb-n">
+                <div class="form-group mb">
                         <label for="smallinput" class="col-sm-2 control-label label-input-sm">Lotérica</label>
                         <div class="col-sm-2">
-                            <input name="id_loterica" type="text" class="form-control1 input-lg" id="id_loterica" placeholder="Código da Lotérica" required>
-                        </div>
-                        <div class="col-sm-1">
-                            <div class="botao-buscar">
-                                <i class="i_botao_buscar fa fa-search" onclick="ativaPopUp('lotericas','id_loterica','Consulta código Lotérica')"></i>
+                            <div class="input-group">
+                                <div class="input-group-addon" onclick="ativaPopUp('lotericas','id_loterica','Consulta código Lotérica')">
+                                    <i class="i_botao_buscar fa fa-search" ></i>
+                                </div>
+                                <input  name="id_loterica" type="text" class="form-control1 input-lg" id="id_loterica" placeholder="Cód Lotérica" 
+                                        onchange="buscaNome('lotericas','id_loterica')" 
+                                        required>                        
+                            </div>
+                        </div> 
+                        <div class="col-sm-6">
+                            <div class="well-sm" id="label_id_loterica">
                             </div>
                         </div>
                 </div>

@@ -49,7 +49,7 @@ public class Cofre extends Cadastros{
     private void getDados(){
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("select nome_cofre, tipo_cofre, observacoes, id_loterica \n" +
-"  FROM public.cofres where id = ? and id_entidade = ? ",false);
+"  FROM cofres where id = ? and id_entidade = ? ",false);
             ps.setInt(1, id);
             ps.setInt(2, Parametros.idEntidade);
             ResultSet rs = ps.executeQuery();
@@ -71,7 +71,7 @@ public class Cofre extends Cadastros{
     
     public void insere(){
         try {
-            PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.cofres(\n" +
+            PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO cofres(\n" +
 "            nome_cofre, tipo_cofre, observacoes, id_loterica, id_entidade)\n" +
 "    VALUES ( ?, ?, ?, ?, ? );");
             ps.setString(1, nomeCofre);
@@ -97,7 +97,7 @@ public class Cofre extends Cadastros{
     
     public void altera(String idL){
         try {
-            PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.cofres\n" +
+            PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE cofres\n" +
 "   SET nome_cofre = ?, tipo_cofre = ?, observacoes = ?, id_loterica = ? \n" 
                     + " where id = ? and id_entidade = ? ", false);
             ps.setString(1, nomeCofre);

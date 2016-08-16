@@ -53,7 +53,7 @@ public class Terminal extends Cadastros{
     private void getDados(){
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT codigo_caixa, nome, marca, modelo, observacoes, id_loterica \n" +
-                    "  FROM public.terminais where id = ? and id_entidade = ? ",false);
+                    "  FROM terminais where id = ? and id_entidade = ? ",false);
             ps.setInt(1, id);
             ps.setInt(2, Parametros.idEntidade);
             ResultSet rs = ps.executeQuery();
@@ -80,7 +80,7 @@ public class Terminal extends Cadastros{
     
     public void insere(){
         try {
-            PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.terminais(\n" +
+            PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO terminais(\n" +
             "             codigo_caixa, nome, marca, modelo, observacoes, id_loterica, id_entidade)\n" +
             "    VALUES ( ?, ?, ?, ?, ?, ?, ?);");
             ps.setString(1, codigoCaixa);
@@ -102,7 +102,7 @@ public class Terminal extends Cadastros{
     
     public void altera(String idL){
         try {
-            PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.terminais\n" +
+            PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE terminais\n" +
             "   SET codigo_caixa=?, nome=?, marca=?, modelo=?, observacoes=?, \n" +
             "       id_loterica=? where id = ? and id_entidade = ? ", false);
             ps.setString(1, codigoCaixa);

@@ -10,9 +10,6 @@
                         <div class="col-sm-4">
                             <input name="codigo_caixa" type="text" class="form-control1 input-lg" id="codigo_caixa" placeholder="Código do Funcionário na Caixa" value="$codcaixa" required>
                         </div>
-                    <div class="botao-buscar">
-                        <i class="i_botao_buscar fa fa-search" onclick="ativaPopUp('id','id','Busca de Funcionários')"></i>
-                    </div>
                 </div>
                 <div class="form-group mb-n">
                     <label for="largeinput" class="col-sm-2 control-label label-input-lg">Nome</label>
@@ -25,12 +22,13 @@
                         <div class="col-sm-6">
                             <input  name="cpf" type="text" class="form-control1 input-lg" id="cpf" placeholder="CPF" value="$cpf" required>
                         </div>
-                </div>
-                <div class="form-group mb-n">
-                        <label for="largeinput" class="col-sm-2 control-label label-input-lg">Tipo</label>
-                        <div class="col-sm-6">
-                            <input  name="tipo_func" type="text" class="form-control1 input-lg" id="tipo_func" placeholder="Tipo de Funcionário" value="$tipo" required>
-                        </div>
+                </div>                
+                <div class="form-group">
+                        <label for="selector1" class="col-sm-2 control-label">Tipo De Funcionário</label>
+                        <div class="col-sm-8"><select name="tipo_func" id="tipo_func" class="form-control1">
+                                <option value="1" selected="selected">Atendente</option>
+                                <option value="2" >Supervisor</option>
+                        </select></div>
                 </div>
                 <div class="form-group">
                         <label for="txtarea1" class="col-sm-2 control-label">Observações</label>

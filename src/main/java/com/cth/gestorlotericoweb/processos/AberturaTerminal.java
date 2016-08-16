@@ -57,7 +57,7 @@ public class AberturaTerminal extends Processos{
             PreparedStatement ps = Parametros.getConexao().getPst("select id_loterica, id_terminal, id_funcionario, data_abertura, \n" +
 "        troco_dia_anterior, troco_dia, observacoes \n" +
 "        \n" +
-"  FROM public.abertura_terminais where id = ? and id_entidade = ? ",false);
+"  FROM abertura_terminais where id = ? and id_entidade = ? ",false);
             ps.setInt(1, id);
             ps.setInt(2, Parametros.idEntidade);
             ResultSet rs = ps.executeQuery();
@@ -85,7 +85,7 @@ public class AberturaTerminal extends Processos{
     
     public void insere(){
         try {
-            PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.abertura_terminais(\n" +
+            PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO abertura_terminais(\n" +
 "            id_loterica, id_terminal, id_funcionario, data_abertura, \n" +
 "            troco_dia_anterior, troco_dia, observacoes, id_entidade)\n" +
 "    VALUES (?, ?, ?, ?, \n" +
@@ -125,7 +125,7 @@ public class AberturaTerminal extends Processos{
     
     public void altera(String idL){
         try {
-            PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.abertura_terminais\n" +
+            PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE abertura_terminais\n" +
         "   SET id_loterica=?, id_terminal=?, id_funcionario=?, data_abertura=?, \n" +
         "       troco_dia_anterior=?, troco_dia=?, observacoes=?\n" 
                     + " where id = ? and id_entidade = ? ", false);

@@ -47,7 +47,7 @@ public class Usuario {
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT id\n" +
                     "FROM \n" +
-                    "	public.usuarios\n" +
+                    "	usuarios\n" +
                     "where \n" +
                     "	usuario = ? and\n" +
                     "	senha = ?",false);
@@ -81,7 +81,7 @@ public class Usuario {
     private void setListEntidadesUsuario(){
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT id_entidade\n" +
-                    "  FROM public.usuarios_entidades where id_usuario = ? ", false);
+                    "  FROM usuarios_entidades where id_usuario = ? ", false);
             ps.setInt(1, idUsuario);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {                

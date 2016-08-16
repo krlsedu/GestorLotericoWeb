@@ -48,7 +48,7 @@ public class Operacao extends Cadastros{
     private void getDados(){
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("select nome_oper_caixa, nome_oper, tipo_oper, observacoes \n" +
-"  FROM public.contas where id = ? and id_entidade = ? ",false);
+"  FROM contas where id = ? and id_entidade = ? ",false);
             ps.setInt(1, id);
             ps.setInt(2, Parametros.idEntidade);
             ResultSet rs = ps.executeQuery();
@@ -70,7 +70,7 @@ public class Operacao extends Cadastros{
     
     public void insere(){
         try {
-            PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.operacoes(\n" +
+            PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO operacoes(\n" +
 "            nome_oper_caixa, nome_oper, tipo_oper, observacoes, id_entidade)\n" +
 "    VALUES ( ?, ?, ?, ?, ?);");
             ps.setString(1, nomeOperCaixa);
@@ -96,7 +96,7 @@ public class Operacao extends Cadastros{
     
     public void altera(String idL){
         try {
-            PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.operacoes\n" +
+            PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE operacoes\n" +
 "   SET nome_oper_caixa=?, nome_oper=?, tipo_oper=?, observacoes=? "
                     + " where id = ? and id_entidade = ? ", false);
             ps.setString(1, nomeOperCaixa);

@@ -75,7 +75,7 @@ public class Parametros {
     
     public static void gravaSessao(HttpServletRequest request,String pgAnterior,String pgAtual,Long tempoSessao){
         try {
-            PreparedStatement ps = conexao.getPst("INSERT INTO public.sessoes(\n" +
+            PreparedStatement ps = conexao.getPst("INSERT INTO sessoes(\n" +
                     "            id_usuario, id_entidade, id_sessao, ip, nome_maquina, pg_anterior, \n" +
                     "            pg_atual, tempo_sessao)\n" +
                     "    VALUES ( ?, ?, ?, ?, ?, ?, \n" +
@@ -96,7 +96,7 @@ public class Parametros {
     
     public static void gravaLogin(String usuario,String ip,String host, String sucesso,HttpServletRequest request){
         try {
-            PreparedStatement ps = conexao.getPst("INSERT INTO public.logins(\n" +
+            PreparedStatement ps = conexao.getPst("INSERT INTO logins(\n" +
                     "            usuario, ip, nome_maquina, sucesso)\n" +
                     "    VALUES (?, ?, ?, ?);", false);
             ps.setString(1, usuario);

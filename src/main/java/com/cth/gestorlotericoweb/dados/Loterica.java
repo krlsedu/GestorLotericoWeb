@@ -50,7 +50,7 @@ public class Loterica extends Cadastros{
     private void getDados(){
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT codigo_caixa, nome\n" +
-                    "  FROM public.lotericas where id = ? and id_entidade = ? ",false);
+                    "  FROM lotericas where id = ? and id_entidade = ? ",false);
             ps.setInt(1, id);
             ps.setInt(2, Parametros.idEntidade);
             ResultSet rs = ps.executeQuery();
@@ -69,7 +69,7 @@ public class Loterica extends Cadastros{
     
     public void insere(){
         try {
-            PreparedStatement ps = Parametros.getConexao().getPst("INSERT INTO public.lotericas(\n" +
+            PreparedStatement ps = Parametros.getConexao().getPst("INSERT INTO lotericas(\n" +
                     "            codigo_caixa, nome,id_entidade)\n" +
                     "    VALUES (?, ?, ?);");
             ps.setString(1, (codigoCaixa));
@@ -87,7 +87,7 @@ public class Loterica extends Cadastros{
     
     public void altera(String idL){
         try {
-            PreparedStatement ps = Parametros.getConexao().getPst("UPDATE public.lotericas\n" +
+            PreparedStatement ps = Parametros.getConexao().getPst("UPDATE lotericas\n" +
                     "   SET  codigo_caixa=?, nome=?\n" +
                     " WHERE id=? and id_entidade = ? ", false);
             ps.setString(1, codigoCaixa);

@@ -51,7 +51,7 @@ public class Funcionario extends Cadastros{
     private void getDados(){
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT codigo_caixa, nome, cpf, tipo,observacoes \n" +
-                    "  FROM public.funcionarios where id = ? and id_entidade = ? ",false);
+                    "  FROM funcionarios where id = ? and id_entidade = ? ",false);
             ps.setInt(1, id);
             ps.setInt(2, Parametros.idEntidade);
             ResultSet rs = ps.executeQuery();
@@ -76,7 +76,7 @@ public class Funcionario extends Cadastros{
     
     public void insere(){
         try {
-            PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.funcionarios(\n" +
+            PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO funcionarios(\n" +
             "            codigo_caixa, nome, cpf, tipo, id_entidade, observacoes)\n" +
             "    VALUES ( ?, ?, ?, ?, ?, ?);");
             ps.setString(1, codigoCaixa);
@@ -102,7 +102,7 @@ public class Funcionario extends Cadastros{
     
     public void altera(String idL){
         try {
-            PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.funcionarios \n" +
+            PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE funcionarios \n" +
                     "set codigo_caixa = ?, nome = ?, cpf = ?, tipo_func = ?, observacoes = ? "
                     + " where id = ? and id_entidade = ? ", false);
             ps.setString(1, codigoCaixa);
