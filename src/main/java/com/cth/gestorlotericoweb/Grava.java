@@ -14,6 +14,7 @@ import com.cth.gestorlotericoweb.dados.Operacao;
 import com.cth.gestorlotericoweb.dados.Terminal;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.AberturaTerminal;
+import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
@@ -111,13 +112,22 @@ public class Grava {
             //fim gravação cadastros;
             //inicio gravação processos
                 case "abertura_terminais":
-                    AberturaTerminal aberturaTerminal = new AberturaTerminal(request.getParameter("id_loterica"), request.getParameter("id_terminal"), request.getParameter("id_funcionario"),request.getParameter("data_abertura"), request.getParameter("troco_dia_anterior"), request.getParameter("troco_dia"), request.getParameter("observacoes"), request);
+                    AberturaTerminal aberturaTerminal = new AberturaTerminal(request);
                     if("0".equals(request.getParameter("id"))){
                         aberturaTerminal.insere();
                     }else{
-                        aberturaTerminal.altera(request.getParameter("id"));
+                        aberturaTerminal.altera();
                     }
                     id = aberturaTerminal.getId();
+                    break;
+                case "movimentos_caixas":
+                    MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request);
+                    if("0".equals(request.getParameter("id"))){
+                        movimentoCaixa.insere();
+                    }else{
+                        movimentoCaixa.altera();
+                    }
+                    id = movimentoCaixa.getId();
                     break;
             //fim gravação processos
             default:

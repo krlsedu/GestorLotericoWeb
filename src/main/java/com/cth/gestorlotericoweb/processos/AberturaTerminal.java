@@ -33,17 +33,17 @@ public class AberturaTerminal extends Processos{
     String observacoes;
     public AberturaTerminal(HttpServletRequest request) {
         super(request);
+        setAberturaTerminal();
     }
 
-    public AberturaTerminal(String idLoteria, String idTerminal, String idFuncionario, String dataAbertura, String trocoDiaAnterior, String trocoDia, String observacoes, HttpServletRequest request) {
-        super(request);
-        this.idLoterica = idLoteria;
-        this.idTerminal = idTerminal;
-        this.idFuncionario = idFuncionario;
-        this.dataAbertura = dataAbertura;
-        this.trocoDiaAnterior = trocoDiaAnterior;
-        this.trocoDia = trocoDia;
-        this.observacoes = observacoes;
+    private void setAberturaTerminal() {
+        this.idLoterica = request.getParameter("id_loterica");
+        this.idTerminal = request.getParameter("id_terminal");
+        this.idFuncionario = request.getParameter("id_funcionario");
+        this.dataAbertura = request.getParameter("data_abertura");
+        this.trocoDiaAnterior = request.getParameter("troco_dia_anterior");
+        this.trocoDia = request.getParameter("troco_dia");
+        this.observacoes = request.getParameter("observacoes");
     }
 
     
@@ -123,7 +123,8 @@ public class AberturaTerminal extends Processos{
         }
     }
     
-    public void altera(String idL){
+    public void altera(){
+        String idL = request.getParameter("id");
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE abertura_terminais\n" +
         "   SET id_loterica=?, id_terminal=?, id_funcionario=?, data_abertura=?, \n" +

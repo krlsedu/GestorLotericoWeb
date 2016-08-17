@@ -55,6 +55,7 @@ public class ColunasTabelas {
         }
         putMs("id_terminal","Código do Terminal (Sistema)");
         putMs("id_funcionario", "Código do Funcionário (Sistema)");
+        putMs("tipo_operacao_caixa", "Tipo de movimento caixa");
     }
     
     private void putMs(String coluna,String descri){
@@ -78,6 +79,7 @@ public class ColunasTabelas {
         mTabelas.put("operacoes", "operacoes");
         mTabelas.put("cofres", "cofres");
         mTabelas.put("abertura_terminais", "abertura_terminais");
+        mTabelas.put("movimentos_caixas", "movimentos_caixas");
     }
     
     private void carregaTabColsBusca(){
@@ -88,6 +90,7 @@ public class ColunasTabelas {
         mTabColsSelBusca.put("operacoes", "id, nome_oper_caixa, nome_oper, tipo_oper");
         mTabColsSelBusca.put("cofres", "id, nome_cofre, tipo_cofre, id_loterica");
         mTabColsSelBusca.put("abertura_terminais", "id, id_loterica, id_terminal, id_funcionario, data_abertura");
+        mTabColsSelBusca.put("movimentos_caixas", "id, id_terminal, id_funcionario, tipo_operacao_caixa,data_hora_mov");
     }
     private void carregaTabColsDados(){
         mTabColsSelDados.put("lotericas", "codigo_caixa,nome");
@@ -97,6 +100,7 @@ public class ColunasTabelas {
         mTabColsSelDados.put("operacoes", "nome_oper_caixa, nome_oper, tipo_oper, observacoes");
         mTabColsSelDados.put("cofres", "nome_cofre, tipo_cofre, observacoes, id_loterica");
         mTabColsSelDados.put("abertura_terminais", "id_loterica, id_terminal, id_funcionario, data_abertura, troco_dia_anterior, troco_dia, observacoes");
+        mTabColsSelDados.put("movimentos_caixas", "tipo_operacao_caixa, id_terminal, id_funcionario, data_hora_mov, valor_movimentado, observacoes");
     }
     private void carregaTabOpts(){
         List<String> lOpts = new ArrayList<>();
@@ -136,6 +140,11 @@ public class ColunasTabelas {
         lOpts.add("<option>Código do Terminal (Sistema)</option>");
         lOpts.add("<option>Código do Funcionário (Sistema)</option>");
         mTabOpts.put("abertura_terminais", lOpts);
+        lOpts = new ArrayList<>();
+        lOpts.add("<option>Código do Terminal (Sistema)</option>");
+        lOpts.add("<option>Código do Funcionário (Sistema)</option>");
+        lOpts.add("<option>Tipo de movimento caixa</option>");
+        mTabOpts.put("movimentos_caixas", lOpts);
     }
     
     public String getOpts(String tabela){

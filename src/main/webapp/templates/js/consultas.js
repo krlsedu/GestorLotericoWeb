@@ -114,11 +114,13 @@ function buscaDadosN(tabela){
                 for (i=1;i<=ncols;i++){
                     var nomeCol = htmlDoc.getElementById("nome_coluna_"+i).value;
                     var valr = htmlDoc.getElementById("busca_col_"+nomeCol).value;
-                    document.getElementById(nomeCol).value = valr;
-                    try{
-                        document.getElementById(nomeCol).onchange();
-                    }catch (e){
-                        
+                    if(!(valr===null||valr==='null')){
+                        document.getElementById(nomeCol).value = valr;
+                        try{
+                            document.getElementById(nomeCol).onchange();
+                        }catch (e){
+
+                        }
                     }
                 }
                 fechaPopUp();

@@ -146,8 +146,18 @@ public class Consulta {
                     lInputs.add("<input type=\"text\" id=\"num_cols\" value=\""+rs.getMetaData().getColumnCount()+"\" readonly>");
                     for(int i = 1; i<=rs.getMetaData().getColumnCount();i++){  
                         lInputs.add("<input type=\"text\" id=\"nome_coluna_"+i+"\" value=\""+rs.getMetaData().getColumnName(i)+"\" readonly>");
-                        if(rs.getMetaData().getColumnType(i)==java.sql.Types.NUMERIC){
-                            lInputs.add("<input type=\"text\" id=\"busca_col_"+rs.getMetaData().getColumnName(i)+"\" value=\""+rs.getString(i).replace(",", "x").replace(".",",").replace("x", ".")+"\" readonly>");
+                        if(rs.getString(i)!=null){
+                            switch(rs.getMetaData().getColumnType(i)){
+                                case java.sql.Types.NUMERIC:
+                                    lInputs.add("<input type=\"text\" id=\"busca_col_"+rs.getMetaData().getColumnName(i)+"\" value=\""+rs.getString(i).replace(",", "x").replace(".",",").replace("x", ".")+"\" readonly>");
+                                    break;
+                                case java.sql.Types.TIMESTAMP:
+                                    lInputs.add("<input type=\"text\" id=\"busca_col_"+rs.getMetaData().getColumnName(i)+"\" value=\""+rs.getString(i).trim().replace(" ", "T")+"\" readonly>");
+                                    break;
+                                default:
+                                    lInputs.add("<input type=\"text\" id=\"busca_col_"+rs.getMetaData().getColumnName(i)+"\" value=\""+rs.getString(i)+"\" readonly>");
+                                    break;
+                            }
                         }else{
                             lInputs.add("<input type=\"text\" id=\"busca_col_"+rs.getMetaData().getColumnName(i)+"\" value=\""+rs.getString(i)+"\" readonly>");
                         }
