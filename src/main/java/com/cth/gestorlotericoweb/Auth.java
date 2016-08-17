@@ -5,12 +5,8 @@
  */
 package com.cth.gestorlotericoweb;
 
-import com.cth.gestorlotericoweb.banco.Conexao;
 import com.cth.gestorlotericoweb.dados.Usuario;
 import com.cth.gestorlotericoweb.parametros.Parametros;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -26,7 +22,7 @@ public class Auth {
         this.request = request;
     }
     public void auth(){
-        Usuario usuario = new Usuario(request.getParameter("user"), request.getParameter("password"),request);
+        Usuario usuario = new Usuario(request);
         if(usuario.getIdUsuario()>0){
             Parametros.setIdUsuario(usuario.getIdUsuario());
             Parametros.setIdEntidade(2);

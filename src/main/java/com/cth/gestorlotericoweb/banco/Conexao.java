@@ -101,5 +101,9 @@ public class Conexao {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
+
+    public Connection getCon() {
+        return Con;
+    }
     
 }

@@ -29,6 +29,12 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.3.2</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
@@ -130,6 +136,13 @@
             <version>9.1-901-1.jdbc4</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>3.5.0</version>
+            <type>jar</type>
+        </dependency>
 
     </dependencies>
     
@@ -155,7 +168,7 @@
                         <configuration>
                             <propertyFile>liquibase/liquibase.properties</propertyFile>
                             <changeLogFile>liquibase/db-changelog-master.xml</changeLogFile>
-                            <diffChangeLogFile>db_versions/diffs_liquibase/db-changelog-${project.artifactId}-${project.version}-${buildNumber}-${current.time}-0-esquema.xml</diffChangeLogFile>
+                            <diffChangeLogFile>db_versions/db-changelog-${project.artifactId}-${project.version}-${current.time}-${buildNumber}-0-esquema.xml</diffChangeLogFile>
                             <diffTypes> tables, views, columns, indexes, foreignkeys, primarykeys, uniqueconstraints</diffTypes>
                         </configuration>
                         <phase>initialize</phase>                                                                                        
@@ -169,7 +182,7 @@
                         <configuration>
                             <propertyFile>liquibase/liquibase.properties</propertyFile>
                             <changeLogFile>liquibase/db-changelog-master.xml</changeLogFile>
-                            <diffChangeLogFile>db_versions/diffs_liquibase/db-changelog-${project.artifactId}-${project.version}-${buildNumber}-${current.time}-1-tabs_padrao.xml</diffChangeLogFile>
+                            <diffChangeLogFile>db_versions/db-changelog-${project.artifactId}-${project.version}-${current.time}-${buildNumber}-1-tabs_padrao.xml</diffChangeLogFile>
                             <diffTypes>Data</diffTypes>
                             <diffIncludeObjects>cols_descri,usuarios,entidades,usuarios_entidades</diffIncludeObjects>
                         </configuration>
@@ -218,7 +231,7 @@
                         <configuration>
                             <executable>${session.executionRootDirectory}/apgdiff/gera_diffs.bat</executable>
                             <arguments>
-                                <argument>db-changelog-${project.artifactId}-${project.version}-${buildNumber}-${current.time}-2-outros</argument>
+                                <argument>db-changelog-${project.artifactId}-${project.version}-${current.time}-${buildNumber}-2-outros</argument>
                                 <argument>${session.executionRootDirectory}</argument>
                                 <argument>${project.artifactId}</argument>
                                 <argument>${project.version}</argument>
@@ -295,7 +308,6 @@
                             <manifest>
                                 <addClasspath>true</addClasspath>
                                 <classpathPrefix>lib/</classpathPrefix>
-                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             </manifest>
                             <manifestEntries>
                                 <Implementation-Build>${buildNumber}-${current.time}</Implementation-Build>
@@ -304,9 +316,21 @@
                     <webResources>
                         <resource>
                           <!-- this is relative to the pom.xml directory -->
+                          <directory>liquibase/</directory>
+                          <targetPath>WEB-INF/liquibase/</targetPath>
+                        </resource>
+                        <resource>
+                          <!-- this is relative to the pom.xml directory -->
                           <directory>db_versions/</directory>
                           <targetPath>WEB-INF/db_versions/</targetPath>
                         </resource>
+                        <resource> 
+                            <directory>/</directory>
+                            <targetPath>WEB-INF</targetPath> <!-- introduced in plugin v 2.1 -->
+                            <includes> 
+                              <include>buildNumber.properties</include> 
+                            </includes> 
+                        </resource> 
                      </webResources>
                 </configuration>
             </plugin>
@@ -377,10 +401,7 @@
                     </execution>
                 </executions>
             </plugin>
-        </plugins>        
-        <finalName>
-            ${project.artifactId}-${project.version}-${buildNumber}-${current.time}
-        </finalName>
+        </plugins>    
     </build>
 
 </project>

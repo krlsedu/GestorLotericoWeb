@@ -77,7 +77,7 @@ public class Funcionario extends Cadastros{
     public void insere(){
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO funcionarios(\n" +
-            "            codigo_caixa, nome, cpf, tipo, id_entidade, observacoes)\n" +
+            "            codigo_caixa, nome, cpf, tipo_func, id_entidade, observacoes)\n" +
             "    VALUES ( ?, ?, ?, ?, ?, ?);");
             ps.setString(1, codigoCaixa);
             ps.setString(2, nome);

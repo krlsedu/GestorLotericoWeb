@@ -1,6 +1,6 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-    <changeSet author="CarlosEduardo (generated)" id="1471383126291-1" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395471924-1" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <insert tableName="cols_descri">
             <column name="id" valueNumeric="1"/>
             <column name="coluna" value="id"/>
@@ -92,14 +92,14 @@
             <column name="descricao" value="Tipo Cofre"/>
         </insert>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383126291-2" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395471924-2" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <insert tableName="entidades">
             <column name="id" valueNumeric="2"/>
             <column name="nome" value="Testes"/>
             <column name="tipo" valueNumeric="1"/>
         </insert>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383126291-3" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395471924-3" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <insert tableName="usuarios">
             <column name="id" valueNumeric="1"/>
             <column name="codigo_caixa" valueNumeric="0"/>
@@ -111,7 +111,7 @@
             <column name="telefone" value="5198212766                                        "/>
         </insert>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383126291-4" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395471924-4" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <insert tableName="usuarios_entidades">
             <column name="id" valueNumeric="1"/>
             <column name="id_usuario" valueNumeric="1"/>

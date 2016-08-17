@@ -1,6 +1,6 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-1" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-1" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <createTable tableName="abertura_terminais">
             <column autoIncrement="true" name="id" type="BIGSERIAL">
                 <constraints primaryKey="true" primaryKeyName="aberturas_terminais_pkey"/>
@@ -33,7 +33,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-2" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-2" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <createTable tableName="cofres">
             <column autoIncrement="true" name="id" type="BIGSERIAL">
                 <constraints primaryKey="true" primaryKeyName="cofres_pkey"/>
@@ -53,7 +53,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-3" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-3" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <createTable tableName="cols_descri">
             <column autoIncrement="true" name="id" type="BIGSERIAL">
                 <constraints primaryKey="true" primaryKeyName="cols_descri_pkey"/>
@@ -66,7 +66,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-4" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-4" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <createTable tableName="contas">
             <column autoIncrement="true" name="id" type="BIGSERIAL">
                 <constraints primaryKey="true" primaryKeyName="contas_pkey"/>
@@ -101,7 +101,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-5" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-5" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <createTable tableName="db_version">
             <column autoIncrement="true" name="id" type="BIGSERIAL">
                 <constraints primaryKey="true" primaryKeyName="pk_db_version"/>
@@ -118,7 +118,7 @@
             <column name="compilation" type="VARCHAR(200)"/>
         </createTable>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-6" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-6" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <createTable tableName="entidades">
             <column autoIncrement="true" name="id" type="BIGSERIAL">
                 <constraints primaryKey="true" primaryKeyName="entidades_pkey"/>
@@ -131,7 +131,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-7" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-7" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <createTable tableName="erros">
             <column autoIncrement="true" name="id" type="BIGSERIAL">
                 <constraints primaryKey="true" primaryKeyName="erros_pkey"/>
@@ -160,7 +160,7 @@
             <column name="stacktrace" type="TEXT"/>
         </createTable>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-8" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-8" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <createTable tableName="funcionarios">
             <column autoIncrement="true" name="id" type="BIGSERIAL">
                 <constraints primaryKey="true" primaryKeyName="funcionarios_pkey"/>
@@ -183,7 +183,7 @@
             <column name="observacoes" type="TEXT"/>
         </createTable>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-9" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-9" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <createTable tableName="logins">
             <column autoIncrement="true" name="id" type="BIGSERIAL">
                 <constraints primaryKey="true" primaryKeyName="logins_pkey"/>
@@ -203,7 +203,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-10" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-10" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <createTable tableName="lotericas">
             <column autoIncrement="true" name="id" type="BIGSERIAL">
                 <constraints primaryKey="true" primaryKeyName="lotericas_pkey"/>
@@ -219,7 +219,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-11" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-11" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <createTable tableName="operacoes">
             <column autoIncrement="true" name="id" type="BIGSERIAL">
                 <constraints primaryKey="true" primaryKeyName="operacoes_pkey"/>
@@ -239,7 +239,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-12" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-12" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <createTable tableName="sessoes">
             <column autoIncrement="true" name="id" type="BIGSERIAL">
                 <constraints primaryKey="true" primaryKeyName="sessoes_pkey"/>
@@ -269,7 +269,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-13" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-13" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <createTable tableName="terminais">
             <column autoIncrement="true" name="id" type="BIGSERIAL">
                 <constraints primaryKey="true" primaryKeyName="terminais_pkey"/>
@@ -291,7 +291,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-14" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-14" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <createTable tableName="usuarios">
             <column autoIncrement="true" name="id" type="BIGSERIAL">
                 <constraints primaryKey="true" primaryKeyName="users_pkey"/>
@@ -315,7 +315,7 @@
             <column name="telefone" type="CHAR(50)"/>
         </createTable>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-15" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-15" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <createTable tableName="usuarios_entidades">
             <column autoIncrement="true" name="id" type="BIGSERIAL">
                 <constraints primaryKey="true" primaryKeyName="usuarios_entidades_pkey"/>
@@ -328,55 +328,55 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-16" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-16" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <addUniqueConstraint columnNames="nome" constraintName="entidades_nome_key" tableName="entidades"/>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-17" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-17" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <addUniqueConstraint columnNames="usuario" constraintName="users_usuario_key" tableName="usuarios"/>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-18" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-18" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <addForeignKeyConstraint baseColumnNames="id_entidade" baseTableName="abertura_terminais" constraintName="aberturas_terminais_id_entidade_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entidades"/>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-19" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-19" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <addForeignKeyConstraint baseColumnNames="id_funcionario" baseTableName="abertura_terminais" constraintName="aberturas_terminais_id_funcionario_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="funcionarios"/>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-20" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-20" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <addForeignKeyConstraint baseColumnNames="id_loterica" baseTableName="abertura_terminais" constraintName="aberturas_terminais_id_loterica_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="lotericas"/>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-21" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-21" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <addForeignKeyConstraint baseColumnNames="id_terminal" baseTableName="abertura_terminais" constraintName="aberturas_terminais_id_terminal_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="terminais"/>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-22" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-22" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <addForeignKeyConstraint baseColumnNames="id_entidade" baseTableName="cofres" constraintName="cofres_id_entidade_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entidades"/>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-23" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-23" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <addForeignKeyConstraint baseColumnNames="id_loterica" baseTableName="cofres" constraintName="cofres_id_loterica_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="lotericas"/>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-24" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-24" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <addForeignKeyConstraint baseColumnNames="id_entidade" baseTableName="contas" constraintName="contas_id_entidade_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entidades"/>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-25" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-25" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <addForeignKeyConstraint baseColumnNames="id_loterica" baseTableName="contas" constraintName="contas_id_loterica_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="lotericas"/>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-26" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-26" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <addForeignKeyConstraint baseColumnNames="id_entidade" baseTableName="funcionarios" constraintName="funcionarios_id_loterica_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entidades"/>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-27" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-27" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <addForeignKeyConstraint baseColumnNames="id_entidade" baseTableName="lotericas" constraintName="lotericas_i_entidades_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entidades"/>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-28" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-28" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <addForeignKeyConstraint baseColumnNames="id_entidade" baseTableName="operacoes" constraintName="operacoes_i_entidades_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entidades"/>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-29" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-29" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <addForeignKeyConstraint baseColumnNames="id_entidade" baseTableName="terminais" constraintName="terminais_id_entidade_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entidades"/>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-30" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-30" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <addForeignKeyConstraint baseColumnNames="id_loterica" baseTableName="terminais" constraintName="terminais_id_loterica_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="lotericas"/>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-31" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-31" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <addForeignKeyConstraint baseColumnNames="id_entidade" baseTableName="usuarios_entidades" constraintName="usuarios_entidades_i_entidades_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entidades"/>
     </changeSet>
-    <changeSet author="CarlosEduardo (generated)" id="1471383124204-32" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet author="CarlosEduardo (generated)" id="1471395469981-32" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <addForeignKeyConstraint baseColumnNames="id_usuario" baseTableName="usuarios_entidades" constraintName="usuarios_entidades_i_usuarios_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="usuarios"/>
     </changeSet>
 </databaseChangeLog>

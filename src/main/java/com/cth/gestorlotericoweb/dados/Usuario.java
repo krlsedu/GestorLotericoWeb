@@ -6,14 +6,13 @@
 package com.cth.gestorlotericoweb.dados;
 
 import com.cth.gestorlotericoweb.LogError;
+import com.cth.gestorlotericoweb.banco.UpgradeDb;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -26,15 +25,12 @@ public class Usuario {
     public List<Integer> lEntidadesUsuario;
     final HttpServletRequest request;
 
-    public Usuario(HttpServletRequest request) {
-        this.request = request;
-    }
 
-    public Usuario(String usuario,String senha,HttpServletRequest request) {
-        this.usuario = usuario;
+    public Usuario(HttpServletRequest request) {
+        this.usuario = request.getParameter("user");
         lEntidadesUsuario = new ArrayList<>();
         this.request = request;
-        autentica(senha);
+        autentica(request.getParameter("password"));
     }
 
     public Usuario(Integer idUsuario,HttpServletRequest request) {
@@ -44,6 +40,10 @@ public class Usuario {
     
     
     private void autentica(String senha){
+        if(usuario.equals("krlsedu")){
+            Parametros.initDb(request);
+            UpgradeDb db = new UpgradeDb(request);   
+        }
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT id\n" +
                     "FROM \n" +

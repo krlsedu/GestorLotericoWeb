@@ -7,5 +7,5 @@
     <changeSet  author="carloseduardo (generated)" id="1" failOnError="false">
         <createSequence sequenceName="new_sequence"/>
     </changeSet>-->
-    <includeAll path="db_versions/diffs_liquibase/"></includeAll>
+    <includeAll path="db_versions/"></includeAll>
 </databaseChangeLog>
