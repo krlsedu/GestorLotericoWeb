@@ -5,13 +5,15 @@
  */
 package com.cth.gestorlotericoweb.banco;
 
-import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import liquibase.Contexts;
@@ -81,19 +83,24 @@ public class UpgradeDb {
                     DatabaseConnection dbc = new JdbcConnection(c);
                     Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(dbc);
                     String folders = request.getServletContext().getRealPath("WEB-INF/db_versions/");
-                    File folder = new File(folders);
-                    File[] listOfFiles = folder.listFiles();
-                    output = "";
-                    for (int i = 0; i < listOfFiles.length; i++) {
-                      if (listOfFiles[i].isFile()) {             
-                        liquibase = new Liquibase(folders+"/"+listOfFiles[i].getName(), new FileSystemResourceAccessor(), database);
-                        liquibase.update(new Contexts(), new LabelExpression());
-                      }
+                    File fileDir = new File(folders);
+                    if(fileDir.isDirectory()){
+                            List listFile = Arrays.asList(fileDir.list());
+                            
+                            Collections.sort(listFile);
+                            for(Object s:listFile){                       
+                                try{
+                                    liquibase = new Liquibase(folders+"/"+s, new FileSystemResourceAccessor(), database);                                
+                                    liquibase.update(new Contexts(), new LabelExpression());
+                                }catch (LiquibaseException ex) {
+                                    output +=folders+"/"+s+" - "+ ex.getMessage();
+                                } 
+                            }
+                            
+
                     }
                 } catch (DatabaseException ex) {
-                    new LogError(ex.getMessage(), ex, request);
-                } catch (LiquibaseException ex) {
-                    new LogError(ex.getMessage(), ex, request);
+                    output += ex.getMessage();
                 }                    
             }
         }
