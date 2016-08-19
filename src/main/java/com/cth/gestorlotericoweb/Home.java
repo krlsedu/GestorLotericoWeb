@@ -14,6 +14,7 @@ import com.cth.gestorlotericoweb.dados.Operacao;
 import com.cth.gestorlotericoweb.dados.Terminal;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.AberturaTerminal;
+import com.cth.gestorlotericoweb.processos.FechamentoTerminal;
 import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
 import java.io.StringWriter;
 import javax.servlet.http.HttpServletRequest;
@@ -96,6 +97,11 @@ public class Home {
                         case "movimentos_caixas":      
                             MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request);
                             contextPrinc = movimentoCaixa.getHtml(contextPrinc, ve, id);
+                        break;
+                        
+                        case "fechamento_terminais":      
+                            FechamentoTerminal fechamentoTerminal = new FechamentoTerminal(request);
+                            contextPrinc = fechamentoTerminal.getHtml(contextPrinc, ve, id);
                         break;
                     // Fim Processos   
                     default:

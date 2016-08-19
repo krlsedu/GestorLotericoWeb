@@ -7,6 +7,7 @@ package com.cth.gestorlotericoweb;
 
 import com.cth.gestorlotericoweb.dados.ColunasTabelas;
 import com.cth.gestorlotericoweb.parametros.Parametros;
+import com.cth.gestorlotericoweb.processos.FechamentoTerminal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,6 +37,9 @@ public class Consulta {
             case "busca":
                 geraTabelaPopUp(request.getParameter("coluna_buscar"));
                 break;
+            case "dado":
+                buscaDado();
+                break;  
             case "dados":
                 geraTabelaDados();
                 break;                
@@ -215,5 +219,22 @@ public class Consulta {
         }
     }
     
+    public void buscaDado(){
+        String tabela = request.getParameter("tabela");
+        String valorBuscar = request.getParameter("valor_buscar");
+        List<String> lInputs = new ArrayList<>();
+        switch(tabela){
+            case "fechamento_terminais":
+                FechamentoTerminal fechamentoTerminal = new FechamentoTerminal(request);
+                switch(valorBuscar){
+                    case "total_movimentos_dia":
+                        lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                        lInputs.add("<input type=\"text\" id=\"valor\" value=\""+fechamentoTerminal.getTotalMovimentosDia()+"\" readonly>");
+                        output = StringUtils.join(lInputs,'\n');
+                        break;
+                }
+                break;
+        }
+    }
     
 }

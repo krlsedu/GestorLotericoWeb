@@ -7,6 +7,7 @@ package com.cth.gestorlotericoweb.processos;
 
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
+import com.cth.gestorlotericoweb.utils.Seter;
 import java.io.StringWriter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,6 +31,7 @@ public class MovimentoCaixa extends Processos{
     String valorMovimentado;
     String tipoOperacao;
     String observacoes;
+    
     public MovimentoCaixa(HttpServletRequest request) {
         super(request);
         setMovimentosCaixas();
@@ -125,11 +127,7 @@ public class MovimentoCaixa extends Processos{
             "    valor_movimentado=?, observacoes=?\n" 
                     + " where id = ? and id_entidade = ? ", false);
             ps.setInt(1, Integer.valueOf(tipoOperacao));
-            if(idTerminal == null||idTerminal.trim().equals("")){
-                ps.setNull(2, java.sql.Types.BIGINT);
-            }else{
-                ps.setInt(2, Integer.valueOf(idTerminal));
-            }
+            ps = Seter.set(ps, 2, Integer.valueOf(idTerminal));
             ps.setInt(3, Integer.valueOf(idFuncionario));
             
             try {
@@ -145,11 +143,7 @@ public class MovimentoCaixa extends Processos{
             }
             
             ps.setDouble(5, Double.parseDouble(valorMovimentado.replace(".", "x").replace(",", ".").replace("x", ",")));
-            if(observacoes == null){
-                ps.setNull(6, java.sql.Types.LONGVARCHAR);
-            }else{
-                ps.setString(6, observacoes);
-            }
+            ps = Seter.set(ps, 6, observacoes);
             
             id = Integer.valueOf(idL);
             ps.setInt(7, id);
