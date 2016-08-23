@@ -112,13 +112,14 @@ public class FechamentoTerminal extends Processos{
                     "from \n" +
                     "	movimentos_caixas  \n" +
                     "where\n" +
-                    "	data_hora_mov::date = ? and\n" +
+                    "	date(data_hora_mov) = ? and\n" +
                     "	id_terminal = ? and\n" +
                     "	id_funcionario = ? \n" +
                     "	";
         try {
-            PreparedStatement ps = Parametros.getConexao().getPst(sql);
-            if(dataFechamentoDt!=null){
+            PreparedStatement ps = Parametros.getConexao().getPst(sql,false);
+            dataFechamentoDt = Parser.toDbDate(dataFechamento);
+            if(dataFechamentoDt!=null&&idTerminal!=null&&idFuncionario!=null){
                 ps.setDate(1, dataFechamentoDt);
                 ps = Seter.set(ps, 2, Integer.valueOf(idTerminal));
                 ps = Seter.set(ps, 3, Integer.valueOf(idFuncionario));
@@ -132,7 +133,7 @@ public class FechamentoTerminal extends Processos{
                 totalMovimentosDia += Parser.toDouble(restoCaixa);
             }
         } catch (SQLException ex) {
-            new LogError(sql, ex, request);
+            new LogError(ex.getMessage()+sql, ex, request);
         }        
         return Parser.toHtmlDouble(totalMovimentosDia);
     }
@@ -147,8 +148,8 @@ public class FechamentoTerminal extends Processos{
                 "	id_terminal = ? and\n" +
                 "	id_funcionario = ?";
         try {
-            PreparedStatement ps = Parametros.getConexao().getPst(sql);
-            if(dataFechamentoDt!=null){
+            PreparedStatement ps = Parametros.getConexao().getPst(sql,false);
+            if(dataFechamentoDt!=null&&idTerminal!=null&&idFuncionario!=null){
                 ps.setDate(1, dataFechamentoDt);
                 ps = Seter.set(ps, 2, Integer.valueOf(idTerminal));
                 ps = Seter.set(ps, 3, Integer.valueOf(idFuncionario));
@@ -157,8 +158,7 @@ public class FechamentoTerminal extends Processos{
                     return rs.getDouble(1);
                 }else{
                     return 0.0;
-                }
-                
+                }                
             }
         } catch (SQLException ex) {
             new LogError(sql, ex, request);

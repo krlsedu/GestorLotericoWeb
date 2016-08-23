@@ -132,6 +132,34 @@ function buscaDadosN(tabela){
     );
 }
 
+function consultaCampoAuto(valorBuscar){
+    var tabela = document.getElementById("it").value;
+    $.ajax(
+            {                
+                type: "POST",
+                url:  "consulta",
+                data: $("#form_dados").serialize()+'&'+$.param({"valor_buscar":valorBuscar,"tabela":tabela,"tipo":"dado"}),
+                success: function (data) {     
+                    var parser = new DOMParser();
+                    var htmlDoc = parser.parseFromString(data, "text/html");
+                    var nomeCol = htmlDoc.getElementById("nome_coluna").value;
+                    var valr = htmlDoc.getElementById("valor").value;
+                    if(!(valr===null||valr==='null')){
+                        document.getElementById(nomeCol).value = valr;
+                        try{
+                            document.getElementById(nomeCol).onchange();
+                        }catch (e){
+
+                        }
+                    }                    
+                }, 
+                error: function (jXHR, textStatus, errorThrown) {
+                    alert("Desculpe ocorreu um erro! :(");
+                }
+            }
+    )    
+}
+
 function buscaNome(tabela,campo){
     var id = document.getElementById(campo).value;
     if(id.length===0){

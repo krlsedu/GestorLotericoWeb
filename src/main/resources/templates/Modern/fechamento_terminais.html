@@ -46,7 +46,8 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input name="data_fechamento" id="data_fechamento" type="date" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.date">
+                                <input name="data_fechamento" id="data_fechamento" type="date" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.date"
+                                       onchange="consultaCampoAuto('total_movimentos_dia')">
                             </div>
                         </div>
                 </div>

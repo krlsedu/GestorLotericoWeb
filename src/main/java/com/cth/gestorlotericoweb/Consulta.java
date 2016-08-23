@@ -223,17 +223,19 @@ public class Consulta {
         String tabela = request.getParameter("tabela");
         String valorBuscar = request.getParameter("valor_buscar");
         List<String> lInputs = new ArrayList<>();
-        switch(tabela){
-            case "fechamento_terminais":
-                FechamentoTerminal fechamentoTerminal = new FechamentoTerminal(request);
-                switch(valorBuscar){
-                    case "total_movimentos_dia":
-                        lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
-                        lInputs.add("<input type=\"text\" id=\"valor\" value=\""+fechamentoTerminal.getTotalMovimentosDia()+"\" readonly>");
-                        output = StringUtils.join(lInputs,'\n');
-                        break;
-                }
-                break;
+        if(valorBuscar!=null){
+            switch(tabela){
+                case "fechamento_terminais":
+                    FechamentoTerminal fechamentoTerminal = new FechamentoTerminal(request);
+                    switch(valorBuscar){
+                        case "total_movimentos_dia":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+fechamentoTerminal.getTotalMovimentosDia()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                    }
+                    break;
+            }
         }
     }
     
