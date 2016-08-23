@@ -24,20 +24,19 @@ import org.apache.velocity.app.VelocityEngine;
  * @author CarlosEduardo
  */
 public class AberturaTerminal extends Processos{
-    String idLoterica;
     String idTerminal;
     String idFuncionario;
     String dataAbertura;
     String trocoDiaAnterior;
     String trocoDia;
     String observacoes;
+    
     public AberturaTerminal(HttpServletRequest request) {
         super(request);
         setAberturaTerminal();
     }
 
     private void setAberturaTerminal() {
-        this.idLoterica = request.getParameter("id_loterica");
         this.idTerminal = request.getParameter("id_terminal");
         this.idFuncionario = request.getParameter("id_funcionario");
         this.dataAbertura = request.getParameter("data_abertura");
@@ -52,25 +51,24 @@ public class AberturaTerminal extends Processos{
         super(request, id);
         getDados();
     }
+    
     private void getDados(){
         try {
-            PreparedStatement ps = Parametros.getConexao().getPst("select id_loterica, id_terminal, id_funcionario, data_abertura, \n" +
-"        troco_dia_anterior, troco_dia, observacoes \n" +
-"        \n" +
-"  FROM abertura_terminais where id = ? and id_entidade = ? ",false);
+            PreparedStatement ps = Parametros.getConexao().getPst("select  id_terminal, id_funcionario, data_abertura, \n" +
+            "        troco_dia_anterior, troco_dia, observacoes \n" +
+            "        \n" +
+            "  FROM abertura_terminais where id = ? and id_entidade = ? ",false);
             ps.setInt(1, id);
             ps.setInt(2, Parametros.idEntidade);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                idLoterica = rs.getString(1);
-                idTerminal = rs.getString(2);
-                idFuncionario = rs.getString(3);
-                dataAbertura = rs.getString(4);
-                trocoDiaAnterior = rs.getString(5);
-                trocoDia = rs.getString(6);
-                idTerminal = rs.getString(7);
+                idTerminal = rs.getString(1);
+                idFuncionario = rs.getString(2);
+                dataAbertura = rs.getString(3);
+                trocoDiaAnterior = rs.getString(4);
+                trocoDia = rs.getString(5);
+                idTerminal = rs.getString(6);
             }else{
-                idLoterica = "";
                 idTerminal = "";
                 idFuncionario = "";
                 dataAbertura = "";
@@ -86,13 +84,12 @@ public class AberturaTerminal extends Processos{
     public void insere(){
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO abertura_terminais(\n" +
-"            id_loterica, id_terminal, id_funcionario, data_abertura, \n" +
-"            troco_dia_anterior, troco_dia, observacoes, id_entidade)\n" +
-"    VALUES (?, ?, ?, ?, \n" +
-"            ?, ?, ?, ?);");
-            ps.setInt(1, Integer.valueOf(idLoterica));
-            ps.setInt(2, Integer.valueOf(idTerminal));
-            ps.setInt(3, Integer.valueOf(idFuncionario));
+            "             id_terminal, id_funcionario, data_abertura, \n" +
+            "            troco_dia_anterior, troco_dia, observacoes, id_entidade)\n" +
+            "    VALUES ( ?, ?, ?, \n" +
+            "            ?, ?, ?, ?);");
+            ps.setInt(1, Integer.valueOf(idTerminal));
+            ps.setInt(2, Integer.valueOf(idFuncionario));
             Date dateAbertura;
             try {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -103,15 +100,15 @@ public class AberturaTerminal extends Processos{
                 java.util.Date parsed = new java.util.Date();
                 dateAbertura = new java.sql.Date(parsed.getTime());
             }
-            ps.setDate(4, dateAbertura);
-            ps.setDouble(5, Double.parseDouble(trocoDiaAnterior.replace(".", "x").replace(",", ".").replace("x", ",")));
-            ps.setDouble(6, Double.parseDouble(trocoDia.replace(".", "x").replace(",", ".").replace("x", ",")));
+            ps.setDate(3, dateAbertura);
+            ps.setDouble(4, Double.parseDouble(trocoDiaAnterior.replace(".", "x").replace(",", ".").replace("x", ",")));
+            ps.setDouble(5, Double.parseDouble(trocoDia.replace(".", "x").replace(",", ".").replace("x", ",")));
             if(observacoes == null){
-                ps.setNull(7, java.sql.Types.LONGVARCHAR);
+                ps.setNull(6, java.sql.Types.LONGVARCHAR);
             }else{
-                ps.setString(7, observacoes);
+                ps.setString(6, observacoes);
             }
-            ps.setInt(8, Parametros.idEntidade);
+            ps.setInt(7, Parametros.idEntidade);
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()){
@@ -127,12 +124,11 @@ public class AberturaTerminal extends Processos{
         String idL = request.getParameter("id");
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE abertura_terminais\n" +
-        "   SET id_loterica=?, id_terminal=?, id_funcionario=?, data_abertura=?, \n" +
+        "   SET id_terminal=?, id_funcionario=?, data_abertura=?, \n" +
         "       troco_dia_anterior=?, troco_dia=?, observacoes=?\n" 
                     + " where id = ? and id_entidade = ? ", false);
-            ps.setInt(1, Integer.valueOf(idLoterica));
-            ps.setInt(2, Integer.valueOf(idTerminal));
-            ps.setInt(3, Integer.valueOf(idFuncionario));
+            ps.setInt(1, Integer.valueOf(idTerminal));
+            ps.setInt(2, Integer.valueOf(idFuncionario));
             
             Date dateAbertura;
             try {
@@ -142,19 +138,19 @@ public class AberturaTerminal extends Processos{
             } catch (ParseException ex) {
                 throw new RuntimeException(dataAbertura, ex);
             }
-            ps.setDate(4, dateAbertura);
+            ps.setDate(3, dateAbertura);
             
-            ps.setDouble(5, Double.parseDouble(trocoDiaAnterior.replace(".", "x").replace(",", ".").replace("x", ",")));
-            ps.setDouble(6, Double.parseDouble(trocoDia.replace(".", "x").replace(",", ".").replace("x", ",")));
+            ps.setDouble(4, Double.parseDouble(trocoDiaAnterior.replace(".", "x").replace(",", ".").replace("x", ",")));
+            ps.setDouble(5, Double.parseDouble(trocoDia.replace(".", "x").replace(",", ".").replace("x", ",")));
             if(observacoes == null){
-                ps.setNull(7, java.sql.Types.LONGVARCHAR);
+                ps.setNull(6, java.sql.Types.LONGVARCHAR);
             }else{
-                ps.setString(7, observacoes);
+                ps.setString(6, observacoes);
             }
             
             id = Integer.valueOf(idL);
-            ps.setInt(8, id);
-            ps.setInt(9, Parametros.idEntidade);
+            ps.setInt(7, id);
+            ps.setInt(8, Parametros.idEntidade);
             
             ps.execute();
         } catch (SQLException ex) {

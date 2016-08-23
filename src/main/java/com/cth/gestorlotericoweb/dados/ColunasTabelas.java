@@ -89,7 +89,7 @@ public class ColunasTabelas {
         mTabColsSelBusca.put("contas", "id, nome_conta, conta_corrente, dv,  operacao, agencia");
         mTabColsSelBusca.put("operacoes", "id, nome_oper_caixa, nome_oper, tipo_oper");
         mTabColsSelBusca.put("cofres", "id, nome_cofre, tipo_cofre, id_loterica");
-        mTabColsSelBusca.put("abertura_terminais", "id, id_loterica, id_terminal, id_funcionario, data_abertura");
+        mTabColsSelBusca.put("abertura_terminais", "id, id_terminal, id_funcionario, data_abertura");
         mTabColsSelBusca.put("movimentos_caixas", "id, id_terminal, id_funcionario, tipo_operacao_caixa,data_hora_mov");
     }
     private void carregaTabColsDados(){
@@ -99,7 +99,7 @@ public class ColunasTabelas {
         mTabColsSelDados.put("contas", "conta_corrente, dv, nome_conta, operacao, agencia, telefone, gerente, id_loterica, observacoes");
         mTabColsSelDados.put("operacoes", "nome_oper_caixa, nome_oper, tipo_oper, observacoes");
         mTabColsSelDados.put("cofres", "nome_cofre, tipo_cofre, observacoes, id_loterica");
-        mTabColsSelDados.put("abertura_terminais", "id_loterica, id_terminal, id_funcionario, data_abertura, troco_dia_anterior, troco_dia, observacoes");
+        mTabColsSelDados.put("abertura_terminais", " id_terminal, id_funcionario, data_abertura, troco_dia_anterior, troco_dia, observacoes");
         mTabColsSelDados.put("movimentos_caixas", "tipo_operacao_caixa, id_terminal, id_funcionario, data_hora_mov, valor_movimentado, observacoes");
     }
     private void carregaTabOpts(){
@@ -136,7 +136,6 @@ public class ColunasTabelas {
         lOpts.add("<option>Tipo Cofre</option>");
         mTabOpts.put("cofres", lOpts);
         lOpts = new ArrayList<>();
-        lOpts.add("<option>Código da lotérica (Sistema)</option>");
         lOpts.add("<option>Código do Terminal (Sistema)</option>");
         lOpts.add("<option>Código do Funcionário (Sistema)</option>");
         mTabOpts.put("abertura_terminais", lOpts);
