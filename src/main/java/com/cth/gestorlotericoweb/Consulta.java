@@ -8,6 +8,7 @@ package com.cth.gestorlotericoweb;
 import com.cth.gestorlotericoweb.dados.ColunasTabelas;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.FechamentoTerminal;
+import com.cth.gestorlotericoweb.utils.Parser;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -153,7 +154,7 @@ public class Consulta {
                         if(rs.getString(i)!=null){
                             switch(rs.getMetaData().getColumnType(i)){
                                 case java.sql.Types.NUMERIC:
-                                    lInputs.add("<input type=\"text\" id=\"busca_col_"+rs.getMetaData().getColumnName(i)+"\" value=\""+rs.getString(i).replace(",", "x").replace(".",",").replace("x", ".")+"\" readonly>");
+                                    lInputs.add("<input type=\"text\" id=\"busca_col_"+rs.getMetaData().getColumnName(i)+"\" value=\""+Parser.toHtmlDouble(rs.getDouble(i))+"\" readonly>");
                                     break;
                                 case java.sql.Types.TIMESTAMP:
                                     lInputs.add("<input type=\"text\" id=\"busca_col_"+rs.getMetaData().getColumnName(i)+"\" value=\""+rs.getString(i).trim().replace(" ", "T")+"\" readonly>");
@@ -219,7 +220,7 @@ public class Consulta {
         }
     }
     
-    public void buscaDado(){
+    private void buscaDado(){
         String tabela = request.getParameter("tabela");
         String valorBuscar = request.getParameter("valor_buscar");
         List<String> lInputs = new ArrayList<>();
@@ -231,6 +232,21 @@ public class Consulta {
                         case "total_movimentos_dia":
                             lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
                             lInputs.add("<input type=\"text\" id=\"valor\" value=\""+fechamentoTerminal.getTotalMovimentosDia()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "saldo_terminal":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+fechamentoTerminal.getSaldoTerminal()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "diferenca_caixa":    
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+fechamentoTerminal.getDiferencaCaixa()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "data_encerramento":    
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+fechamentoTerminal.getDataFechar()+"\" readonly>");
                             output = StringUtils.join(lInputs,'\n');
                             break;
                     }

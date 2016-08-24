@@ -14,6 +14,7 @@ import com.cth.gestorlotericoweb.dados.Operacao;
 import com.cth.gestorlotericoweb.dados.Terminal;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.AberturaTerminal;
+import com.cth.gestorlotericoweb.processos.FechamentoTerminal;
 import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -128,6 +129,15 @@ public class Grava {
                         movimentoCaixa.altera();
                     }
                     id = movimentoCaixa.getId();
+                    break;
+                case "fechamento_terminais":
+                    FechamentoTerminal fechamentoTerminal = new FechamentoTerminal(request);
+                    if("0".equals(request.getParameter("id"))){
+                        fechamentoTerminal.insere();
+                    }else{
+                        fechamentoTerminal.altera();
+                    }
+                    id = fechamentoTerminal.getId();
                     break;
             //fim gravação processos
             default:

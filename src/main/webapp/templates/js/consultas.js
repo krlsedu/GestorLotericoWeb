@@ -151,7 +151,16 @@ function consultaCampoAuto(valorBuscar){
                         }catch (e){
 
                         }
-                    }                    
+                    }  
+                    //var x = document.getElementById("form_dados").elements.length;
+                    //for(i=1;i<=x;i++){
+                        //var y = document.getElementById("form_dados").elements.item(i);
+                        //try{
+                           // y.onchange();
+                        //}catch (e){
+
+                        //}
+                    //}
                 }, 
                 error: function (jXHR, textStatus, errorThrown) {
                     alert("Desculpe ocorreu um erro! :(");

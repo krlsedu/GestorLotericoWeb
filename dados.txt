@@ -1,5 +1,5 @@
 ﻿banco= pezddedg_glw
-user=pezddedg_glwdba
+user= pezddedg_glwdba
 senha=Thaisa_2707
 
 2)      Favor alterar o DNS do domínio: gestorloterico.com.br para

@@ -1,4 +1,33 @@
 
+<script type="text/javascript">
+        $(function () {
+              $("#id_terminal").mask("99999999");
+        });
+        $(function () {
+              $("#id_funcionario").mask("99999999");
+        });
+        $(function () {
+              //$("#data_encerramento").mask("99/99/9999");
+        });
+        $(function () {
+              $("#resto_caixa").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+        });
+        $(function () {
+              $("#total_movimentos_dia").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+        });
+        $(function () {
+              $("#total_creditos_terminal").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+        });
+        $(function () {
+              $("#total_debitos_terminal").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+        });
+        $(function () {
+              $("#saldo_terminal").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+        });
+        $(function () {
+              $("#diferenca_caixa").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+        });
+</script>
 <div class="xs">
     <h3>Fechamento do Terminal</h3>
     <div class="tab-content">
@@ -13,7 +42,7 @@
                                     <i class="i_botao_buscar fa fa-search" ></i>
                                 </div>
                                 <input  name="id_terminal" type="text" class="form-control1 input-lg" id="id_terminal" placeholder="Cód Terminal"  
-                                        onchange="buscaNome('terminais','id_terminal')" 
+                                        onchange="buscaNome('terminais','id_terminal');consultaCampoAuto('total_movimentos_dia');consultaCampoAuto('data_encerramento');" 
                                         required>                        
                             </div>
                         </div> 
@@ -30,7 +59,7 @@
                                     <i class="i_botao_buscar fa fa-search" ></i>
                                 </div>
                                 <input name="id_funcionario" type="text" class="form-control1 input-lg" id="id_funcionario" placeholder="Cód Funcionário"  
-                                        onchange="buscaNome('funcionarios','id_funcionario')" 
+                                        onchange="buscaNome('funcionarios','id_funcionario');consultaCampoAuto('total_movimentos_dia');consultaCampoAuto('data_encerramento');" 
                                         required>  
                             </div>
                         </div>
@@ -40,13 +69,13 @@
                         </div>
                 </div>
                 <div class="form-group mb-n">
-                    <label for="data_fechamento" class="col-sm-2 control-label">Data Fechamento</label>
+                    <label for="data_encerramento" class="col-sm-2 control-label">Data Fechamento</label>
                         <div class="col-sm-3">    
                             <div class="input-group">
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input name="data_fechamento" id="data_fechamento" type="date" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.date"
+                                <input name="data_encerramento" id="data_encerramento" type="date" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.date"
                                        onchange="consultaCampoAuto('total_movimentos_dia')">
                             </div>
                         </div>
@@ -56,7 +85,8 @@
                     <div class="col-sm-3"> 
                         <div class="input-group">
                             <span class="input-group-addon">R$</span>
-                            <input name="resto_caixa" id="resto_caixa" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
+                            <input name="resto_caixa" id="resto_caixa" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required
+                                   onchange="consultaCampoAuto('total_movimentos_dia')">
                         </div>
                     </div>
                 </div>
@@ -76,7 +106,8 @@
                     <div class="col-sm-3"> 
                         <div class="input-group">
                             <span class="input-group-addon">R$</span>
-                            <input name="total_creditos_terminal" id="total_creditos_terminal" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
+                            <input name="total_creditos_terminal" id="total_creditos_terminal" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required
+                                   onchange="consultaCampoAuto('saldo_terminal')">
                         </div>
                     </div>
                 </div>
@@ -86,7 +117,8 @@
                     <div class="col-sm-3"> 
                         <div class="input-group">
                             <span class="input-group-addon">R$</span>
-                            <input name="total_debitos_terminal" id="total_debitos_terminal" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
+                            <input name="total_debitos_terminal" id="total_debitos_terminal" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required
+                                   onchange="consultaCampoAuto('saldo_terminal')">
                         </div>
                     </div>
                 </div>
@@ -96,7 +128,8 @@
                     <div class="col-sm-3"> 
                         <div class="input-group">
                             <span class="input-group-addon">R$</span>
-                            <input readonly name="saldo_terminal" id="saldo_terminal" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
+                            <input readonly name="saldo_terminal" id="saldo_terminal" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required
+                                   onchange="consultaCampoAuto('diferenca_caixa')">
                         </div>
                     </div>
                 </div>

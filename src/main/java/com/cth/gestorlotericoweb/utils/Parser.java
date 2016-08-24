@@ -28,16 +28,37 @@ public class Parser {
     
     public static String toHtmlDouble(Double valor){
         try{
-            return valor.toString().replace(".", "x").replace(",", ".").replace("x", ",");
+            String st = String.format("%,.2f", valor);
+            return st;//.replace(".", "x").replace(",", ".").replace("x", ",");
         }catch(Exception e){
             return "0,00";
         }
     }
-    public static Double toDouble(String valor){
+    
+    public static Double toDoubleFromHtml(String valor){
+        String st = valor;
+        st = st.replace(".", "");
+        st = st.replace(",", ".");
         try{
-            return Double.valueOf(valor.replace(".", "x").replace(",", ".").replace("x", ","));
+            return Double.valueOf(st);
         }catch(Exception e){
             return 0.0;
+        }
+    }
+    
+    public static String toDoubleSt(String valor){
+        String st = valor;
+        st = st.replace(".", "x");
+        st = st.replace(",", ".");
+        st = st.replace("x", ",");
+        return st;
+    }
+    
+    public static Integer toInteger(String valor){
+        try{
+            return Integer.valueOf(valor);
+        }catch(Exception e){
+            return 0;
         }
     }
 }
