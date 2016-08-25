@@ -11,7 +11,6 @@ import java.io.StringWriter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -23,26 +22,24 @@ import org.apache.velocity.app.VelocityEngine;
  */
 public class Terminal extends Cadastros{
     String codigoCaixa;
-    Integer idLoterica;
+    String idLoterica;
     String nome;
     String marca;
     String modelo;
     String observacoes;
-    Integer id;
-    final HttpServletRequest request;
 
-    public Terminal(String codigoCaixa, Integer idLoterica, String nome, String marca, String modelo, String observacoes, HttpServletRequest request) {
-        this.codigoCaixa = codigoCaixa;
-        this.idLoterica = idLoterica;
-        this.nome = nome;
-        this.marca = marca;
-        this.modelo = modelo;
-        this.observacoes = observacoes;
-        this.request = request;
+    private void setTerminal() {
+        this.codigoCaixa = request.getParameter("codigo_caixa");
+        this.idLoterica = request.getParameter("id_loterica");
+        this.nome = request.getParameter("nome");
+        this.marca = request.getParameter("marca");
+        this.modelo = request.getParameter("modelo");
+        this.observacoes =  request.getParameter("observacoes");
     }    
 
     public Terminal(HttpServletRequest request) {
         this.request = request;
+        setTerminal();
     }
     
     public Terminal(Integer id,HttpServletRequest request) {
@@ -63,14 +60,14 @@ public class Terminal extends Cadastros{
                 marca = rs.getString(3);
                 modelo = rs.getString(4);
                 observacoes = rs.getString(5);
-                idLoterica = rs.getInt(6);
+                idLoterica = rs.getString(6);
             }else{
                 codigoCaixa = "";
                 nome = "";
                 marca = "";
                 modelo = "";
                 observacoes = "";
-                idLoterica = 0;
+                idLoterica = "";
                 id = 0;
             }
         } catch (SQLException ex) {
@@ -88,7 +85,7 @@ public class Terminal extends Cadastros{
             ps.setString(3, marca);
             ps.setString(4, modelo);
             ps.setString(5, observacoes);
-            ps.setInt(6, idLoterica);
+            ps.setInt(6, Integer.valueOf(idLoterica));
             ps.setInt(7, Parametros.idEntidade);
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
@@ -122,7 +119,7 @@ public class Terminal extends Cadastros{
             }else{
                 ps.setString(5, observacoes);                
             }
-            ps.setInt(6, idLoterica);
+            ps.setInt(6, Integer.valueOf(idLoterica));
             
             id = Integer.valueOf(idL);
             ps.setInt(7, id);
@@ -133,10 +130,6 @@ public class Terminal extends Cadastros{
         }
     }
 
-    public Integer getId() {
-        return id;
-    }
-
     public String getCodigoCaixa() {
         return codigoCaixa;
     }
@@ -145,7 +138,7 @@ public class Terminal extends Cadastros{
         return nome;
     }
 
-    public Integer getIdLoterica() {
+    public String getIdLoterica() {
         return idLoterica;
     }
 
@@ -159,12 +152,6 @@ public class Terminal extends Cadastros{
 
     public String getObservacoes() {
         return observacoes;
-    }
-       
-    private List<String> setOpcoesFiltro(){
-        ColunasTabelas colunasTabelas = new ColunasTabelas(request);
-        lOpts = colunasTabelas.getlOpts("terminais");
-        return lOpts;
     }
     
     public VelocityContext getHtmlTerminal(VelocityContext contextPrinc,VelocityEngine ve,String idS){
@@ -196,7 +183,7 @@ public class Terminal extends Cadastros{
             contextConteudo.put("btns_percorrer",getSWBotoesPercorrer(ve).toString());   
             contextConteudo.put("btns_percorrer",getSWBotoesPercorrer(ve).toString());
         }
-        setOpcoesFiltro();
+        setOpcoesFiltro("terminais");
         templateConteudo.merge( contextConteudo, writerConteudo );
         contextPrinc.put("conteudo", writerConteudo.toString());
         contextPrinc.put("popup", getSWPopup(ve,"terminais").toString());

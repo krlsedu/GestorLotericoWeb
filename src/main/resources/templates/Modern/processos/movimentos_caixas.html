@@ -1,4 +1,10 @@
-
+<script type="text/javascript">
+        $(function () {
+              $("#id_terminal").mask("99999999");
+              $("#id_funcionario").mask("99999999");
+              $("#valor_movimentado").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+        });
+</script>
 <div class="xs">
     <h3>Movimentação dos Caixas</h3>
     <div class="tab-content">

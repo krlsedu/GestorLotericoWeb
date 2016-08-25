@@ -166,7 +166,7 @@ public class FechamentoTerminal extends Processos{
         Template templateConteudo;
         VelocityContext contextConteudo;
         StringWriter writerConteudo;
-        templateConteudo = ve.getTemplate( "templates/Modern/fechamento_terminais.html" , "UTF-8");
+        templateConteudo = ve.getTemplate( "templates/Modern/processos/fechamento_terminais.html" , "UTF-8");
         contextConteudo = new VelocityContext();
         writerConteudo = new StringWriter();
         contextConteudo.put("btns_percorrer",getSWBotoesPercorrer(ve).toString());       

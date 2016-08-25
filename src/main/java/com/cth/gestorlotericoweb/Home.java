@@ -11,11 +11,13 @@ import com.cth.gestorlotericoweb.dados.Estatisticas;
 import com.cth.gestorlotericoweb.dados.Funcionario;
 import com.cth.gestorlotericoweb.dados.Loterica;
 import com.cth.gestorlotericoweb.dados.Operacao;
+import com.cth.gestorlotericoweb.dados.TarifaOperacao;
 import com.cth.gestorlotericoweb.dados.Terminal;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.AberturaTerminal;
 import com.cth.gestorlotericoweb.processos.FechamentoTerminal;
 import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
+import com.cth.gestorlotericoweb.processos.OutroMovimento;
 import java.io.StringWriter;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.velocity.Template;
@@ -83,6 +85,11 @@ public class Home {
                                 contextPrinc = operacao.getHtml(contextPrinc, ve, id);
                             break;
 
+                        case "tarifas_operacoes":          
+                                TarifaOperacao tarifaOperacao = new TarifaOperacao(request);
+                                contextPrinc = tarifaOperacao.getHtml(contextPrinc, ve, id);
+                            break;
+
                         case "terminais":      
                                 Terminal terminal = new Terminal(request);
                                 contextPrinc = terminal.getHtmlTerminal(contextPrinc, ve, id);
@@ -97,6 +104,11 @@ public class Home {
                         case "movimentos_caixas":      
                             MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request);
                             contextPrinc = movimentoCaixa.getHtml(contextPrinc, ve, id);
+                        break;
+                        
+                        case "outros_movimentos":      
+                            OutroMovimento outroMovimento = new OutroMovimento(request);
+                            contextPrinc = outroMovimento.getHtml(contextPrinc, ve, id);
                         break;
                         
                         case "fechamento_terminais":      

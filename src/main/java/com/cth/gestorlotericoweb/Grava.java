@@ -11,11 +11,13 @@ import com.cth.gestorlotericoweb.dados.Conta;
 import com.cth.gestorlotericoweb.dados.Funcionario;
 import com.cth.gestorlotericoweb.dados.Loterica;
 import com.cth.gestorlotericoweb.dados.Operacao;
+import com.cth.gestorlotericoweb.dados.TarifaOperacao;
 import com.cth.gestorlotericoweb.dados.Terminal;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.AberturaTerminal;
 import com.cth.gestorlotericoweb.processos.FechamentoTerminal;
 import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
+import com.cth.gestorlotericoweb.processos.OutroMovimento;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
@@ -93,7 +95,7 @@ public class Grava {
                     id = loterica.getId();
                     break;
                 case "operacoes":
-                    Operacao operacao = new Operacao(request.getParameter("nome_oper_caixa"), request.getParameter("nome_oper"), request.getParameter("tipo_oper"), request.getParameter("observacoes"), request);
+                    Operacao operacao = new Operacao(request);
                     if("0".equals(request.getParameter("id"))){
                         operacao.insere();
                     }else{
@@ -101,8 +103,17 @@ public class Grava {
                     }
                     id = operacao.getId();
                     break;
+                case "tarifas_operacoes":
+                    TarifaOperacao tarifaOperacao = new TarifaOperacao(request);
+                    if("0".equals(request.getParameter("id"))){
+                        tarifaOperacao.insere();
+                    }else{
+                        tarifaOperacao.altera(request.getParameter("id"));
+                    }
+                    id = tarifaOperacao.getId();
+                    break;
                 case "terminais":       
-                    Terminal terminal = new Terminal(request.getParameter("codigo_caixa"), Integer.valueOf(request.getParameter("id_loterica")), request.getParameter("nome"), request.getParameter("marca"), request.getParameter("modelo"), request.getParameter("observacoes"), request);
+                    Terminal terminal = new Terminal(request);
                     if("0".equals(request.getParameter("id"))){
                         terminal.insere();
                     }else{
@@ -129,6 +140,15 @@ public class Grava {
                         movimentoCaixa.altera();
                     }
                     id = movimentoCaixa.getId();
+                    break;
+                case "outros_movimentos":
+                    OutroMovimento outroMovimento = new OutroMovimento(request);
+                    if("0".equals(request.getParameter("id"))){
+                        outroMovimento.insere();
+                    }else{
+                        outroMovimento.altera();
+                    }
+                    id = outroMovimento.getId();
                     break;
                 case "fechamento_terminais":
                     FechamentoTerminal fechamentoTerminal = new FechamentoTerminal(request);

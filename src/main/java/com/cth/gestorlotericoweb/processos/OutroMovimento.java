@@ -22,7 +22,7 @@ import org.apache.velocity.app.VelocityEngine;
  *
  * @author CarlosEduardo
  */
-public class MovimentoCaixa extends Processos{
+public class OutroMovimento extends Processos{
     String idTerminal;
     String idFuncionario;
     String dataHoraMov;
@@ -30,11 +30,11 @@ public class MovimentoCaixa extends Processos{
     String tipoOperacao;
     String observacoes;
     
-    public MovimentoCaixa(HttpServletRequest request) {
+    public OutroMovimento(HttpServletRequest request) {
         super(request);
-        setMovimentosCaixas();
+        setOutrosMovimentos();
     }
-    private void setMovimentosCaixas() {
+    private void setOutrosMovimentos() {
         this.idTerminal = request.getParameter("id_terminal");
         this.idFuncionario = request.getParameter("id_funcionario");
         this.dataHoraMov = request.getParameter("data_hora_mov");
@@ -42,7 +42,7 @@ public class MovimentoCaixa extends Processos{
         this.tipoOperacao = request.getParameter("tipo_operacao_caixa");
         this.observacoes = request.getParameter("observacoes");
     }
-    public MovimentoCaixa(Integer id,HttpServletRequest request) {
+    public OutroMovimento(Integer id,HttpServletRequest request) {
         super(request, id);
         getDados();
     }
@@ -50,7 +50,7 @@ public class MovimentoCaixa extends Processos{
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT  tipo_operacao_caixa,id_terminal, id_funcionario, data_hora_mov, \n" +
             "       valor_movimentado, observacoes\n" +
-            "  FROM public.movimentos_caixas where id = ? and id_entidade = ? ",false);
+            "  FROM public.outros_movimentos where id = ? and id_entidade = ? ",false);
             ps.setInt(1, id);
             ps.setInt(2, Parametros.idEntidade);
             ResultSet rs = ps.executeQuery();
@@ -77,7 +77,7 @@ public class MovimentoCaixa extends Processos{
     
     public void insere(){
         try {
-            PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.movimentos_caixas(\n" +
+            PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.outros_movimentos(\n" +
 "            tipo_operacao_caixa, id_terminal, id_funcionario, data_hora_mov, \n" +
 "            valor_movimentado, observacoes, id_entidade)\n" +
 "    VALUES (?, ?, ?, ?, \n" +
@@ -107,7 +107,7 @@ public class MovimentoCaixa extends Processos{
     public void altera(){
         String idL = request.getParameter("id");
         try {
-            PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.movimentos_caixas\n" +
+            PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.outros_movimentos\n" +
             "   SET tipo_operacao_caixa=?, id_terminal=?, id_funcionario=?, data_hora_mov=?,\n" +
             "    valor_movimentado=?, observacoes=?\n" 
                     + " where id = ? and id_entidade = ? ", false);
@@ -136,14 +136,14 @@ public class MovimentoCaixa extends Processos{
         Template templateConteudo;
         VelocityContext contextConteudo;
         StringWriter writerConteudo;
-        templateConteudo = ve.getTemplate( "templates/Modern/processos/movimentos_caixas.html" , "UTF-8");
+        templateConteudo = ve.getTemplate( "templates/Modern/processos/outros_movimentos.html" , "UTF-8");
         contextConteudo = new VelocityContext();
         writerConteudo = new StringWriter();
         contextConteudo.put("btns_percorrer",getSWBotoesPercorrer(ve).toString());       
-        setOpcoesFiltro("movimentos_caixas");
+        setOpcoesFiltro("outros_movimentos");
         templateConteudo.merge( contextConteudo, writerConteudo );
         contextPrinc.put("conteudo", writerConteudo.toString());
-        contextPrinc.put("popup", getSWPopup(ve,"movimentos_caixas").toString());
+        contextPrinc.put("popup", getSWPopup(ve,"outros_movimentos").toString());
         return contextPrinc;
     }
 }

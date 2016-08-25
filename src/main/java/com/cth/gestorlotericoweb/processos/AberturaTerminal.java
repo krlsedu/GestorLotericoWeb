@@ -7,13 +7,12 @@ package com.cth.gestorlotericoweb.processos;
 
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
+import com.cth.gestorlotericoweb.utils.Parser;
+import com.cth.gestorlotericoweb.utils.Seter;
 import java.io.StringWriter;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -65,8 +64,8 @@ public class AberturaTerminal extends Processos{
                 idTerminal = rs.getString(1);
                 idFuncionario = rs.getString(2);
                 dataAbertura = rs.getString(3);
-                trocoDiaAnterior = rs.getString(4);
-                trocoDia = rs.getString(5);
+                trocoDiaAnterior = Parser.toDoubleSt(rs.getString(4));
+                trocoDia = Parser.toDoubleSt(rs.getString(5));
                 idTerminal = rs.getString(6);
             }else{
                 idTerminal = "";
@@ -89,25 +88,11 @@ public class AberturaTerminal extends Processos{
             "    VALUES ( ?, ?, ?, \n" +
             "            ?, ?, ?, ?);");
             ps.setInt(1, Integer.valueOf(idTerminal));
-            ps.setInt(2, Integer.valueOf(idFuncionario));
-            Date dateAbertura;
-            try {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                java.util.Date parsed = format.parse(dataAbertura);
-                dateAbertura = new java.sql.Date(parsed.getTime());
-            } catch (ParseException ex) {
-                new LogError(ex.getMessage(), ex,request);
-                java.util.Date parsed = new java.util.Date();
-                dateAbertura = new java.sql.Date(parsed.getTime());
-            }
-            ps.setDate(3, dateAbertura);
-            ps.setDouble(4, Double.parseDouble(trocoDiaAnterior.replace(".", "x").replace(",", ".").replace("x", ",")));
-            ps.setDouble(5, Double.parseDouble(trocoDia.replace(".", "x").replace(",", ".").replace("x", ",")));
-            if(observacoes == null){
-                ps.setNull(6, java.sql.Types.LONGVARCHAR);
-            }else{
-                ps.setString(6, observacoes);
-            }
+            ps.setInt(2, Integer.valueOf(idFuncionario));       
+            ps.setDate(3, Parser.toDbDate(dataAbertura));            
+            ps.setDouble(4, Parser.toDoubleFromHtml(trocoDiaAnterior));
+            ps.setDouble(5, Parser.toDoubleFromHtml(trocoDia));
+            ps = Seter.set(ps,6, observacoes);
             ps.setInt(7, Parametros.idEntidade);
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
@@ -128,25 +113,11 @@ public class AberturaTerminal extends Processos{
         "       troco_dia_anterior=?, troco_dia=?, observacoes=?\n" 
                     + " where id = ? and id_entidade = ? ", false);
             ps.setInt(1, Integer.valueOf(idTerminal));
-            ps.setInt(2, Integer.valueOf(idFuncionario));
-            
-            Date dateAbertura;
-            try {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                java.util.Date parsed = format.parse(dataAbertura);
-                dateAbertura = new java.sql.Date(parsed.getTime());
-            } catch (ParseException ex) {
-                throw new RuntimeException(dataAbertura, ex);
-            }
-            ps.setDate(3, dateAbertura);
-            
-            ps.setDouble(4, Double.parseDouble(trocoDiaAnterior.replace(".", "x").replace(",", ".").replace("x", ",")));
-            ps.setDouble(5, Double.parseDouble(trocoDia.replace(".", "x").replace(",", ".").replace("x", ",")));
-            if(observacoes == null){
-                ps.setNull(6, java.sql.Types.LONGVARCHAR);
-            }else{
-                ps.setString(6, observacoes);
-            }
+            ps.setInt(2, Integer.valueOf(idFuncionario));            
+            ps.setDate(3, Parser.toDbDate(dataAbertura));            
+            ps.setDouble(4, Parser.toDoubleFromHtml(trocoDiaAnterior));
+            ps.setDouble(5, Parser.toDoubleFromHtml(trocoDia));
+            ps = Seter.set(ps,6, observacoes);
             
             id = Integer.valueOf(idL);
             ps.setInt(7, id);
@@ -162,7 +133,7 @@ public class AberturaTerminal extends Processos{
         Template templateConteudo;
         VelocityContext contextConteudo;
         StringWriter writerConteudo;
-        templateConteudo = ve.getTemplate( "templates/Modern/abertura_terminais.html" , "UTF-8");
+        templateConteudo = ve.getTemplate( "templates/Modern/processos/abertura_terminais.html" , "UTF-8");
         contextConteudo = new VelocityContext();
         writerConteudo = new StringWriter();
         contextConteudo.put("btns_percorrer",getSWBotoesPercorrer(ve).toString());       

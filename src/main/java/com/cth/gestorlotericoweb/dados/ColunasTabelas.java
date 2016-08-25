@@ -56,6 +56,7 @@ public class ColunasTabelas {
         putMs("id_terminal","Código do Terminal (Sistema)");
         putMs("id_funcionario", "Código do Funcionário (Sistema)");
         putMs("tipo_operacao_caixa", "Tipo de movimento caixa");
+        putMs("id_operacao", "Código da Operação (Sistema)");
     }
     
     private void putMs(String coluna,String descri){
@@ -81,6 +82,8 @@ public class ColunasTabelas {
         mTabelas.put("abertura_terminais", "abertura_terminais");
         mTabelas.put("movimentos_caixas", "movimentos_caixas");
         mTabelas.put("fechamento_terminais", "fechamento_terminais");
+        mTabelas.put("outros_movimentos", "outros_movimentos");
+        mTabelas.put("tarifas_operacoes", "tarifas_operacoes");
     }
     
     private void carregaTabColsBusca(){
@@ -92,7 +95,9 @@ public class ColunasTabelas {
         mTabColsSelBusca.put("cofres", "id, nome_cofre, tipo_cofre, id_loterica");
         mTabColsSelBusca.put("abertura_terminais", "id, id_terminal, id_funcionario, data_abertura");
         mTabColsSelBusca.put("movimentos_caixas", "id, id_terminal, id_funcionario, tipo_operacao_caixa,data_hora_mov");
+        mTabColsSelBusca.put("outros_movimentos", "id, id_terminal, id_funcionario, tipo_operacao_caixa,data_hora_mov");
         mTabColsSelBusca.put("fechamento_terminais", "id, id_terminal, id_funcionario, data_encerramento");
+        mTabColsSelBusca.put("tarifas_operacoes", "id, id_operacao, data_base");
     }
     private void carregaTabColsDados(){
         mTabColsSelDados.put("lotericas", "codigo_caixa,nome");
@@ -103,7 +108,9 @@ public class ColunasTabelas {
         mTabColsSelDados.put("cofres", "nome_cofre, tipo_cofre, observacoes, id_loterica");
         mTabColsSelDados.put("abertura_terminais", " id_terminal, id_funcionario, data_abertura, troco_dia_anterior, troco_dia, observacoes");
         mTabColsSelDados.put("movimentos_caixas", "tipo_operacao_caixa, id_terminal, id_funcionario, data_hora_mov, valor_movimentado, observacoes");
+        mTabColsSelDados.put("outros_movimentos", "tipo_operacao_caixa, id_terminal, id_funcionario, data_hora_mov, valor_movimentado, observacoes");
         mTabColsSelDados.put("fechamento_terminais", "id_terminal, id_funcionario, data_encerramento,resto_caixa, total_movimentos_dia, total_creditos_terminal, total_debitos_terminal,saldo_terminal, diferenca_caixa, observacoes");
+        mTabColsSelDados.put("tarifas_operacoes", "id_operacao, data_base, valor_tarifa, observacoes");
     }
     private void carregaTabOpts(){
         List<String> lOpts = new ArrayList<>();
@@ -150,7 +157,15 @@ public class ColunasTabelas {
         lOpts = new ArrayList<>();
         lOpts.add("<option>Código do Terminal (Sistema)</option>");
         lOpts.add("<option>Código do Funcionário (Sistema)</option>");
+        lOpts.add("<option>Tipo de movimento caixa</option>");
+        mTabOpts.put("outros_movimentos", lOpts);
+        lOpts = new ArrayList<>();
+        lOpts.add("<option>Código do Terminal (Sistema)</option>");
+        lOpts.add("<option>Código do Funcionário (Sistema)</option>");
         mTabOpts.put("fechamento_terminais", lOpts);
+        lOpts = new ArrayList<>();
+        lOpts.add("<option>Código da Operação (Sistema)</option>");
+        mTabOpts.put("tarifas_operacoes", lOpts);
     }
     
     public String getOpts(String tabela){

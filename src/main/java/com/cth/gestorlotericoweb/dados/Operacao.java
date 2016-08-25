@@ -22,24 +22,23 @@ import org.apache.velocity.app.VelocityEngine;
  * @author CarlosEduardo
  */
 public class Operacao extends Cadastros{
-    Integer id;
     String nomeOperCaixa;
     String nomeOper;
     String tipoOper;
-    String observacoes;
-    final HttpServletRequest request;
-
-    public Operacao(String nomeOperCaixa, String nomeOper, String tipoOper, String observacoes, HttpServletRequest request) {
-        this.nomeOperCaixa = nomeOperCaixa;
-        this.nomeOper = nomeOper;
-        this.tipoOper = tipoOper;
-        this.observacoes = observacoes;
-        this.request = request;
-    }    
+    String observacoes;     
 
     public Operacao(HttpServletRequest request) {
         this.request = request;
+        setOperacao();
     }
+    
+    private void setOperacao() {
+        this.nomeOperCaixa = request.getParameter("nome_oper_caixa"); 
+        this.nomeOper =  request.getParameter("nome_oper");
+        this.tipoOper = request.getParameter("tipo_oper");
+        this.observacoes = request.getParameter("observacoes");
+    }  
+    
     public Operacao(Integer id,HttpServletRequest request) {
         this.id = id;
         this.request = request;
@@ -135,10 +134,6 @@ public class Operacao extends Cadastros{
         contextPrinc.put("conteudo", writerConteudo.toString());
         contextPrinc.put("popup", getSWPopup(ve,"operacoes").toString());
         return contextPrinc;
-    }
-
-    public Integer getId() {
-        return id;
     }
 
     public String getNomeOperCaixa() {

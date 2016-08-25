@@ -6,6 +6,7 @@
 package com.cth.gestorlotericoweb.utils;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -23,6 +24,17 @@ public class Parser {
             return dateAbertura;
         } catch (ParseException ex) {
         }
+        return null;
+    }
+    
+    public static Timestamp toDbTimeStamp(String dataString){
+        try {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddhh:mm");
+                java.util.Date parsedDate = dateFormat.parse(dataString.replace("T", ""));
+                Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+                return timestamp;
+            } catch (ParseException ex) {
+            }
         return null;
     }
     

@@ -1,0 +1,79 @@
+<script type="text/javascript">
+        $(function () {
+              $("#id_operacao").mask("99999999");
+              $("#valor_tarifa").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+        });
+</script>
+<div class="xs">
+    <h3>Tarifário das Operações</h3>
+    <div class="tab-content">
+        <div class="tab-pane active" id="horizontal-form">
+            <form class="form-horizontal" id="form_dados"> 
+                $btns_percorrer
+                <div class="form-group mb-n">
+                        <label for="smallinput" class="col-sm-2 control-label label-input-sm">Operação</label>
+                        <div class="col-sm-2">
+                            <div class="input-group">
+                                <div class="input-group-addon" onclick="ativaPopUp('operacoes','id_operacao','Consulta código Operação')">
+                                    <i class="i_botao_buscar fa fa-search" ></i>
+                                </div>
+                                <input name="id_operacao" id="id_operacao" type="text" class="form-control1 input-lg" placeholder="Cód Operação"  
+                                        onchange="buscaNome('operacoes','id_operacao')" 
+                                        required>  
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="well-sm" id="label_id_operacao">
+                            </div>
+                        </div>
+                </div>
+                <div class="form-group mb-n">
+                    <label for="data_base" class="col-sm-2 control-label">Data Início Validade</label>
+                        <div class="col-sm-3">    
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input name="data_base" id="data_base" type="date" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.date">
+                            </div>
+                        </div>
+                </div>
+                <div class="form-group mb-n">
+                    <label for="valor_tarifa" class="col-sm-2 control-label">Valor</label>
+                    <div class="col-sm-3"> 
+                        <div class="input-group">
+                            <span class="input-group-addon">R$</span>
+                            <input name="valor_tarifa" id="valor_tarifa" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group mb-n">
+                    <label for="txtarea1" class="col-sm-2 control-label">Observações</label>
+                        <div class="col-sm-8">
+                            <textarea name="observacoes" id="observacoes" cols="50" rows="4" class="form-control1" placeholder="Observações" ></textarea>
+                        </div>
+                </div>
+                
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-1 col-sm-offset-9">
+                            <button type="submit" class="btn btn-primary" id="botao-gravar">Gravar</button>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="reset" class="btn botao-deletar" onclick="deletarDados()">Excluir</button>
+                        </div>
+                        
+                        <div class="col-sm-1">
+                            <button type="reset" class="btn btn-default" onclick="limpa()">Limpar</button>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="it" name="it" value="tarifas_operacoes" />                
+                <input type="hidden" id="id" name="id" value="0" />
+            </form>
+        </div>
+    </div>	
+</div>
+
+
