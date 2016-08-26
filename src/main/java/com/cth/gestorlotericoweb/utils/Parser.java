@@ -40,7 +40,7 @@ public class Parser {
     
     public static String toHtmlDouble(Double valor){
         try{
-            String st = String.format("%,.2f", valor);
+            String st = valor.toString();
             return st;//.replace(".", "x").replace(",", ".").replace("x", ",");
         }catch(Exception e){
             return "0,00";

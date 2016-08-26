@@ -210,7 +210,7 @@ function btnsPercorrer(btn){
 $("document").ready(function () {
     $("#botao-gravar").click(function () {
         $('#form_dados').submit(function (e) {
-            e.preventDefault();
+            e.preventDefault();   
             $.ajax({
                 type: "POST",
                 url:  "grava",
@@ -223,6 +223,7 @@ $("document").ready(function () {
                     alert("Desculpe ocorreu um erro! :(");
                 }
             }); 
+            $("#botao-gravar").off("click");
         });
     });     
 });
