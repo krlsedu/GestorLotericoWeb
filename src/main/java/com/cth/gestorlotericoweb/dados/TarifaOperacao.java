@@ -75,7 +75,7 @@ public class TarifaOperacao extends Cadastros{
                     "             ?);");
             ps.setInt(1, Integer.valueOf(idOperacao));
             ps.setDate(2, Parser.toDbDate(dataBase));
-            ps.setDouble(3, Parser.toDoubleFromHtml(valorTarifa));
+            ps.setBigDecimal(3, Parser.toBigDecimalFromHtml(valorTarifa));
             ps = Seter.set(ps, 4, observacoes);
             ps.setInt(5, Parametros.idEntidade);
             
@@ -98,7 +98,7 @@ public class TarifaOperacao extends Cadastros{
                     + " where id = ? and id_entidade = ? ", false);
             ps.setInt(1, Integer.valueOf(idOperacao));
             ps.setDate(2, Parser.toDbDate(dataBase));
-            ps.setDouble(3, Parser.toDoubleFromHtml(valorTarifa));
+            ps.setBigDecimal(3, Parser.toBigDecimalFromHtml(valorTarifa));
             ps = Seter.set(ps, 4, observacoes);
             
             id = Integer.valueOf(idL);

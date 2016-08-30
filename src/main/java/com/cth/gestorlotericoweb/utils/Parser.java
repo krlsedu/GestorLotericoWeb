@@ -6,7 +6,6 @@
 package com.cth.gestorlotericoweb.utils;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
@@ -42,17 +41,15 @@ public class Parser {
         return null;
     }
     
-    public static String toHtmlDouble(Double valor){
+    public static String toHtmlDouble(BigDecimal valor){
         try{
             DecimalFormat df = new DecimalFormat("#.##");
             DecimalFormatSymbols dfs = new DecimalFormatSymbols();
             dfs.setDecimalSeparator('.');
             df.setDecimalFormatSymbols(dfs); 
-            valor = Double.parseDouble(df.format(BigDecimal.valueOf(valor)));
-            //valor = valor*100d;
-            BigDecimal b = new BigDecimal(valor, MathContext.DECIMAL64);
-            b=b.multiply(new BigDecimal("100"));
-            String st = b.toString();
+            valor = new BigDecimal(df.format((valor)));
+            valor = valor.multiply(new BigDecimal("100"));
+            String st = valor.toString();
             return st.substring(0,st.lastIndexOf("."));
             //return st.replace(",", "").replace(".", ",").replace("x", ",");
         }catch(Exception e){
@@ -60,14 +57,14 @@ public class Parser {
         }
     }
     
-    public static Double toDoubleFromHtml(String valor){
+    public static BigDecimal toBigDecimalFromHtml(String valor){
         String st = valor;
         st = st.replace(".", "");
         st = st.replace(",", ".");
         try{
-            return Double.valueOf(st);
+            return new BigDecimal(st);
         }catch(Exception e){
-            return 0.0;
+            return BigDecimal.ZERO;
         }
     }
     

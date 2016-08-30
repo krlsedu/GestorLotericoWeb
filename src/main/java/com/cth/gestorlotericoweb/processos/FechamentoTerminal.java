@@ -10,6 +10,7 @@ import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.utils.Parser;
 import com.cth.gestorlotericoweb.utils.Seter;
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -114,12 +115,12 @@ public class FechamentoTerminal extends Processos{
             ps.setInt(1, Integer.valueOf(idTerminal));
             ps.setInt(2, Integer.valueOf(idFuncionario));            
             ps.setDate(3, Parser.toDbDate(dataEncerramento));
-            ps.setDouble(4, Parser.toDoubleFromHtml(restoCaixa));
-            ps.setDouble(5, Parser.toDoubleFromHtml(totalMovimentosDia));
-            ps.setDouble(6, Parser.toDoubleFromHtml(totalCreditosTerminal));
-            ps.setDouble(7, Parser.toDoubleFromHtml(totalDebitosTerminal));
-            ps.setDouble(8, Parser.toDoubleFromHtml(saldoTerminal));
-            ps.setDouble(9, Parser.toDoubleFromHtml(diferencaCaixa));
+            ps.setBigDecimal(4, Parser.toBigDecimalFromHtml(restoCaixa));
+            ps.setBigDecimal(5, Parser.toBigDecimalFromHtml(totalMovimentosDia));
+            ps.setBigDecimal(6, Parser.toBigDecimalFromHtml(totalCreditosTerminal));
+            ps.setBigDecimal(7, Parser.toBigDecimalFromHtml(totalDebitosTerminal));
+            ps.setBigDecimal(8, Parser.toBigDecimalFromHtml(saldoTerminal));
+            ps.setBigDecimal(9, Parser.toBigDecimalFromHtml(diferencaCaixa));
             ps = Seter.set(ps, 10, observacoes);
             ps.setInt(11, Parametros.idEntidade);
             ps.execute();
@@ -145,12 +146,12 @@ public class FechamentoTerminal extends Processos{
             ps.setInt(1, Integer.valueOf(idTerminal));
             ps.setInt(2, Integer.valueOf(idFuncionario));            
             ps.setDate(3, Parser.toDbDate(dataEncerramento));
-            ps.setDouble(4, Parser.toDoubleFromHtml(restoCaixa));
-            ps.setDouble(5, Parser.toDoubleFromHtml(totalMovimentosDia));
-            ps.setDouble(6, Parser.toDoubleFromHtml(totalCreditosTerminal));
-            ps.setDouble(7, Parser.toDoubleFromHtml(totalDebitosTerminal));
-            ps.setDouble(8, Parser.toDoubleFromHtml(saldoTerminal));
-            ps.setDouble(9, Parser.toDoubleFromHtml(diferencaCaixa));
+            ps.setBigDecimal(4, Parser.toBigDecimalFromHtml(restoCaixa));
+            ps.setBigDecimal(5, Parser.toBigDecimalFromHtml(totalMovimentosDia));
+            ps.setBigDecimal(6, Parser.toBigDecimalFromHtml(totalCreditosTerminal));
+            ps.setBigDecimal(7, Parser.toBigDecimalFromHtml(totalDebitosTerminal));
+            ps.setBigDecimal(8, Parser.toBigDecimalFromHtml(saldoTerminal));
+            ps.setBigDecimal(9, Parser.toBigDecimalFromHtml(diferencaCaixa));
             ps = Seter.set(ps, 10, observacoes);
             id = Integer.valueOf(idL);
             ps.setInt(11, id);
@@ -178,7 +179,7 @@ public class FechamentoTerminal extends Processos{
     }
     
     public String getTotalMovimentosDia(){
-        Double totalMovimentosDiaL = 0.0;
+        BigDecimal totalMovimentosDiaL = BigDecimal.ZERO;
         String sql = "select \n" +
                     "	sum(case when tipo_operacao_caixa in (1) then valor_movimentado else valor_movimentado * (-1) end) \n" +
                     "from \n" +
@@ -197,13 +198,13 @@ public class FechamentoTerminal extends Processos{
                 ps = Seter.set(ps, 3, Integer.valueOf(idFuncionario));
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
-                    totalMovimentosDiaL = rs.getDouble(1);
+                    totalMovimentosDiaL = rs.getBigDecimal(1);
                 }else{
-                    totalMovimentosDiaL = 0.0;
+                    totalMovimentosDiaL = BigDecimal.ZERO;
                 }
-                totalMovimentosDiaL -= getSaldoAbertura();
-                totalMovimentosDiaL += getSaldoOutrosMovimentos();
-                totalMovimentosDiaL += Parser.toDoubleFromHtml(restoCaixa);
+                totalMovimentosDiaL = totalMovimentosDiaL.subtract(getSaldoAbertura());
+                totalMovimentosDiaL = totalMovimentosDiaL.add(getSaldoOutrosMovimentos());
+                totalMovimentosDiaL = totalMovimentosDiaL.add(Parser.toBigDecimalFromHtml(restoCaixa));
             }
         } catch (SQLException ex) {
             new LogError(ex.getMessage()+sql, ex, request);
@@ -211,7 +212,7 @@ public class FechamentoTerminal extends Processos{
         return Parser.toHtmlDouble(totalMovimentosDiaL);
     }
     
-    public Double getSaldoAbertura(){
+    public BigDecimal getSaldoAbertura(){
         String sql = "select \n" +
                 "	troco_dia_anterior+troco_dia \n" +
                 "from \n" +
@@ -228,18 +229,18 @@ public class FechamentoTerminal extends Processos{
                 ps = Seter.set(ps, 3, Integer.valueOf(idFuncionario));
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
-                    return rs.getDouble(1);
+                    return rs.getBigDecimal(1);
                 }else{
-                    return 0.0;
+                    return BigDecimal.ZERO;
                 }                
             }
         } catch (SQLException ex) {
             new LogError(sql, ex, request);
         }
-        return 0.0;
+        return BigDecimal.ZERO;
     }
     
-    public Double getSaldoOutrosMovimentos(){
+    public BigDecimal getSaldoOutrosMovimentos(){
         String sql = "SELECT \n" +
                 "	sum(case when tipo_operacao_caixa in (1,3,5,7) then valor_movimentado else valor_movimentado * (-1) end)\n" +
                 "FROM \n" +
@@ -256,24 +257,24 @@ public class FechamentoTerminal extends Processos{
                 ps = Seter.set(ps, 3, Integer.valueOf(idFuncionario));
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
-                    return rs.getDouble(1);
+                    return rs.getBigDecimal(1);
                 }else{
-                    return 0.0;
+                    return BigDecimal.ZERO;
                 }                
             }
         } catch (SQLException ex) {
             new LogError(sql, ex, request);
         }
-        return 0.0;
+        return BigDecimal.ZERO;
     }
     
     public String getSaldoTerminal(){
-      Double valor = Parser.toDoubleFromHtml(totalCreditosTerminal)-Parser.toDoubleFromHtml(totalDebitosTerminal);
+      BigDecimal valor = Parser.toBigDecimalFromHtml(totalCreditosTerminal).subtract(Parser.toBigDecimalFromHtml(totalDebitosTerminal));
       return Parser.toHtmlDouble(valor);
     };
     
     public String getDiferencaCaixa(){
-      Double valor = Parser.toDoubleFromHtml(totalMovimentosDia)-Parser.toDoubleFromHtml(saldoTerminal);
+      BigDecimal valor = Parser.toBigDecimalFromHtml(totalMovimentosDia).subtract(Parser.toBigDecimalFromHtml(saldoTerminal));
       return Parser.toHtmlDouble(valor);
     };
     

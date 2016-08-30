@@ -90,8 +90,8 @@ public class AberturaTerminal extends Processos{
             ps.setInt(1, Integer.valueOf(idTerminal));
             ps.setInt(2, Integer.valueOf(idFuncionario));       
             ps.setDate(3, Parser.toDbDate(dataAbertura));            
-            ps.setDouble(4, Parser.toDoubleFromHtml(trocoDiaAnterior));
-            ps.setDouble(5, Parser.toDoubleFromHtml(trocoDia));
+            ps.setBigDecimal(4, Parser.toBigDecimalFromHtml(trocoDiaAnterior));
+            ps.setBigDecimal(5, Parser.toBigDecimalFromHtml(trocoDia));
             ps = Seter.set(ps,6, observacoes);
             ps.setInt(7, Parametros.idEntidade);
             ps.execute();
@@ -115,8 +115,8 @@ public class AberturaTerminal extends Processos{
             ps.setInt(1, Integer.valueOf(idTerminal));
             ps.setInt(2, Integer.valueOf(idFuncionario));            
             ps.setDate(3, Parser.toDbDate(dataAbertura));            
-            ps.setDouble(4, Parser.toDoubleFromHtml(trocoDiaAnterior));
-            ps.setDouble(5, Parser.toDoubleFromHtml(trocoDia));
+            ps.setBigDecimal(4, Parser.toBigDecimalFromHtml(trocoDiaAnterior));
+            ps.setBigDecimal(5, Parser.toBigDecimalFromHtml(trocoDia));
             ps = Seter.set(ps,6, observacoes);
             
             id = Integer.valueOf(idL);

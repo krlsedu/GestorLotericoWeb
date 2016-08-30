@@ -90,7 +90,7 @@ public class MovimentoCaixa extends Processos{
             }
             ps.setInt(3, Integer.valueOf(idFuncionario));
             ps.setTimestamp(4, Parser.toDbTimeStamp(dataHoraMov));
-            ps.setDouble(5, Parser.toDoubleFromHtml(valorMovimentado));
+            ps.setBigDecimal(5, Parser.toBigDecimalFromHtml(valorMovimentado));
             ps = Seter.set(ps, 6, observacoes);
             ps.setInt(7, Parametros.idEntidade);
             ps.execute();
@@ -119,7 +119,7 @@ public class MovimentoCaixa extends Processos{
             }
             ps.setInt(3, Integer.valueOf(idFuncionario));
             ps.setTimestamp(4, Parser.toDbTimeStamp(dataHoraMov));
-            ps.setDouble(5, Parser.toDoubleFromHtml(valorMovimentado));
+            ps.setBigDecimal(5, Parser.toBigDecimalFromHtml(valorMovimentado));
             ps = Seter.set(ps, 6, observacoes);
             
             id = Integer.valueOf(idL);
