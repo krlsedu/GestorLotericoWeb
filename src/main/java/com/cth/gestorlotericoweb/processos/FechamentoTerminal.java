@@ -77,12 +77,12 @@ public class FechamentoTerminal extends Processos{
                 idTerminal = rs.getString(1);
                 idFuncionario = rs.getString(2);
                 dataEncerramento = rs.getString(3);
-                restoCaixa =Parser.toDoubleSt(rs.getString(4));
-                totalMovimentosDia = Parser.toDoubleSt(rs.getString(5));
-                totalCreditosTerminal =  Parser.toDoubleSt(rs.getString(6));
-                totalDebitosTerminal = Parser.toDoubleSt(rs.getString(7));
-                saldoTerminal = Parser.toDoubleSt(rs.getString(8));
-                diferencaCaixa = Parser.toDoubleSt(rs.getString(9));
+                restoCaixa =Parser.toBigDecimalSt(rs.getString(4));
+                totalMovimentosDia = Parser.toBigDecimalSt(rs.getString(5));
+                totalCreditosTerminal =  Parser.toBigDecimalSt(rs.getString(6));
+                totalDebitosTerminal = Parser.toBigDecimalSt(rs.getString(7));
+                saldoTerminal = Parser.toBigDecimalSt(rs.getString(8));
+                diferencaCaixa = Parser.toBigDecimalSt(rs.getString(9));
                 observacoes = rs.getString(10);
             }else{
                 idTerminal = "";
@@ -209,7 +209,7 @@ public class FechamentoTerminal extends Processos{
         } catch (SQLException ex) {
             new LogError(ex.getMessage()+sql, ex, request);
         }        
-        return Parser.toHtmlDouble(totalMovimentosDiaL);
+        return Parser.toHtmlBigDecimal(totalMovimentosDiaL);
     }
     
     public BigDecimal getSaldoAbertura(){
@@ -270,12 +270,12 @@ public class FechamentoTerminal extends Processos{
     
     public String getSaldoTerminal(){
       BigDecimal valor = Parser.toBigDecimalFromHtml(totalCreditosTerminal).subtract(Parser.toBigDecimalFromHtml(totalDebitosTerminal));
-      return Parser.toHtmlDouble(valor);
+      return Parser.toHtmlBigDecimal(valor);
     };
     
     public String getDiferencaCaixa(){
       BigDecimal valor = Parser.toBigDecimalFromHtml(totalMovimentosDia).subtract(Parser.toBigDecimalFromHtml(saldoTerminal));
-      return Parser.toHtmlDouble(valor);
+      return Parser.toHtmlBigDecimal(valor);
     };
     
     public String getDataFechar(){

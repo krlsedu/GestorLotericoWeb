@@ -98,6 +98,9 @@ function consultaDadosFk(tabela,colunaBuscar){
 function setaIdEBusca(id){
     document.getElementById("id").value = id;
     buscaDadosN(document.getElementById("it").value);
+    
+    var x = document.getElementById("form_dados").elements.length;
+    
 }
 
 function buscaDadosN(tabela){
@@ -115,9 +118,9 @@ function buscaDadosN(tabela){
                     var nomeCol = htmlDoc.getElementById("nome_coluna_"+i).value;
                     var valr = htmlDoc.getElementById("busca_col_"+nomeCol).value;
                     if(!(valr===null||valr==='null')){
-                        $('input#'+nomeCol).val(valr ).trigger('mask.maskMoney');
+                        $('input#'+nomeCol).val(valr).trigger('mask.maskMoney');
                         try{
-                            document.getElementById(nomeCol).onchange();
+                            document.getElementById(nomeCol).onchange()
                         }catch (e){
 
                         }
@@ -145,7 +148,6 @@ function consultaCampoAuto(valorBuscar){
                     var nomeCol = htmlDoc.getElementById("nome_coluna").value;
                     var valr = htmlDoc.getElementById("valor").value;
                     if(!(valr===null||valr==='null')){
-                        //$('input#'+nomeCol).val(valr );
                         $('input#'+nomeCol).val(valr ).trigger('mask.maskMoney');
                         try{
                             document.getElementById(nomeCol).onchange();
@@ -153,15 +155,6 @@ function consultaCampoAuto(valorBuscar){
 
                         }
                     }  
-                    //var x = document.getElementById("form_dados").elements.length;
-                    //for(i=1;i<=x;i++){
-                        //var y = document.getElementById("form_dados").elements.item(i);
-                        //try{
-                           // y.onchange();
-                        //}catch (e){
-
-                        //}
-                    //}
                 }, 
                 error: function (jXHR, textStatus, errorThrown) {
                     alert("Desculpe ocorreu um erro! :(");

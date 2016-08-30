@@ -25,7 +25,8 @@
                                     <i class="i_botao_buscar fa fa-search" ></i>
                                 </div>
                                 <input  name="id_terminal" type="text" class="form-control1 input-lg" id="id_terminal" placeholder="Cód Terminal"  
-                                        onchange="buscaNome('terminais','id_terminal');consultaCampoAuto('total_movimentos_dia');consultaCampoAuto('data_encerramento');" 
+                                        onchange="buscaNome('terminais','id_terminal');" 
+                                        onkeyup="consultaCampoAuto('total_movimentos_dia');consultaCampoAuto('data_encerramento');"
                                         required>                        
                             </div>
                         </div> 
@@ -42,7 +43,8 @@
                                     <i class="i_botao_buscar fa fa-search" ></i>
                                 </div>
                                 <input name="id_funcionario" type="text" class="form-control1 input-lg" id="id_funcionario" placeholder="Cód Funcionário"  
-                                        onchange="buscaNome('funcionarios','id_funcionario');consultaCampoAuto('total_movimentos_dia');consultaCampoAuto('data_encerramento');" 
+                                        onchange="buscaNome('funcionarios','id_funcionario');" 
+                                        onkeyup="consultaCampoAuto('total_movimentos_dia');consultaCampoAuto('data_encerramento');" 
                                         required>  
                             </div>
                         </div>
@@ -59,7 +61,7 @@
                                     <i class="fa fa-calendar"></i>
                                 </div>
                                 <input name="data_encerramento" id="data_encerramento" type="date" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.date"
-                                       onchange="consultaCampoAuto('total_movimentos_dia')">
+                                       onkeyup="consultaCampoAuto('total_movimentos_dia')">
                             </div>
                         </div>
                 </div>
@@ -69,7 +71,7 @@
                         <div class="input-group">
                             <span class="input-group-addon">R$</span>
                             <input name="resto_caixa" id="resto_caixa" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required
-                                   onchange="consultaCampoAuto('total_movimentos_dia')">
+                                   onkeyup="consultaCampoAuto('total_movimentos_dia')">
                         </div>
                     </div>
                 </div>
@@ -90,7 +92,7 @@
                         <div class="input-group">
                             <span class="input-group-addon">R$</span>
                             <input name="total_creditos_terminal" id="total_creditos_terminal" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required
-                                   onchange="consultaCampoAuto('saldo_terminal')">
+                                   onkeyup="consultaCampoAuto('saldo_terminal')">
                         </div>
                     </div>
                 </div>
@@ -101,7 +103,7 @@
                         <div class="input-group">
                             <span class="input-group-addon">R$</span>
                             <input name="total_debitos_terminal" id="total_debitos_terminal" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required
-                                   onchange="consultaCampoAuto('saldo_terminal')">
+                                   onkeyup="consultaCampoAuto('saldo_terminal')">
                         </div>
                     </div>
                 </div>
@@ -112,7 +114,7 @@
                         <div class="input-group">
                             <span class="input-group-addon">R$</span>
                             <input readonly name="saldo_terminal" id="saldo_terminal" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required
-                                   onchange="consultaCampoAuto('diferenca_caixa')">
+                                   onkeyup="consultaCampoAuto('diferenca_caixa')">
                         </div>
                     </div>
                 </div>

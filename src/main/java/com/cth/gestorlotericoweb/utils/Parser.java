@@ -41,7 +41,7 @@ public class Parser {
         return null;
     }
     
-    public static String toHtmlDouble(BigDecimal valor){
+    public static String toHtmlBigDecimal(BigDecimal valor){
         try{
             DecimalFormat df = new DecimalFormat("#.##");
             DecimalFormatSymbols dfs = new DecimalFormatSymbols();
@@ -50,8 +50,11 @@ public class Parser {
             valor = new BigDecimal(df.format((valor)));
             valor = valor.multiply(new BigDecimal("100"));
             String st = valor.toString();
-            return st.substring(0,st.lastIndexOf("."));
-            //return st.replace(",", "").replace(".", ",").replace("x", ",");
+            if(st.contains(".")){
+                return st.substring(0,st.lastIndexOf("."));
+            }else{
+                return st;
+            }
         }catch(Exception e){
             return e.getMessage();
         }
@@ -68,7 +71,7 @@ public class Parser {
         }
     }
     
-    public static String toDoubleSt(String valor){
+    public static String toBigDecimalSt(String valor){
         String st = valor;
         st = st.replace(".", "x");
         st = st.replace(",", ".");

@@ -64,8 +64,8 @@ public class AberturaTerminal extends Processos{
                 idTerminal = rs.getString(1);
                 idFuncionario = rs.getString(2);
                 dataAbertura = rs.getString(3);
-                trocoDiaAnterior = Parser.toDoubleSt(rs.getString(4));
-                trocoDia = Parser.toDoubleSt(rs.getString(5));
+                trocoDiaAnterior = Parser.toBigDecimalSt(rs.getString(4));
+                trocoDia = Parser.toBigDecimalSt(rs.getString(5));
                 idTerminal = rs.getString(6);
             }else{
                 idTerminal = "";

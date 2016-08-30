@@ -60,7 +60,7 @@ public class OutroMovimento extends Processos{
                 idFuncionario = rs.getString(3);
                 dataHoraMov = 
                         rs.getString(4);
-                valorMovimentado = Parser.toDoubleSt(rs.getString(5));
+                valorMovimentado = Parser.toBigDecimalSt(rs.getString(5));
                 observacoes = rs.getString(6);
             }else{
                 tipoOperacao = "";

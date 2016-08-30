@@ -154,7 +154,7 @@ public class Consulta {
                         if(rs.getString(i)!=null){
                             switch(rs.getMetaData().getColumnType(i)){
                                 case java.sql.Types.NUMERIC:
-                                    lInputs.add("<input type=\"text\" id=\"busca_col_"+rs.getMetaData().getColumnName(i)+"\" value=\""+Parser.toHtmlDouble(rs.getBigDecimal(i))+"\" readonly>");
+                                    lInputs.add("<input type=\"text\" id=\"busca_col_"+rs.getMetaData().getColumnName(i)+"\" value=\""+Parser.toHtmlBigDecimal(rs.getBigDecimal(i))+"\" readonly>");
                                     break;
                                 case java.sql.Types.TIMESTAMP:
                                     lInputs.add("<input type=\"text\" id=\"busca_col_"+rs.getMetaData().getColumnName(i)+"\" value=\""+rs.getString(i).trim().replace(" ", "T")+"\" readonly>");
