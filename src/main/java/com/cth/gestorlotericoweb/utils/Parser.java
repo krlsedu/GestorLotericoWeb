@@ -5,8 +5,12 @@
  */
 package com.cth.gestorlotericoweb.utils;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -40,10 +44,19 @@ public class Parser {
     
     public static String toHtmlDouble(Double valor){
         try{
-            String st = valor.toString();
-            return st;//.replace(".", "x").replace(",", ".").replace("x", ",");
+            DecimalFormat df = new DecimalFormat("#.##");
+            DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+            dfs.setDecimalSeparator('.');
+            df.setDecimalFormatSymbols(dfs); 
+            valor = Double.parseDouble(df.format(BigDecimal.valueOf(valor)));
+            //valor = valor*100d;
+            BigDecimal b = new BigDecimal(valor, MathContext.DECIMAL64);
+            b=b.multiply(new BigDecimal("100"));
+            String st = b.toString();
+            return st.substring(0,st.lastIndexOf("."));
+            //return st.replace(",", "").replace(".", ",").replace("x", ",");
         }catch(Exception e){
-            return "0,00";
+            return e.getMessage();
         }
     }
     

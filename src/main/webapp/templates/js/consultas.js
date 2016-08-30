@@ -115,7 +115,7 @@ function buscaDadosN(tabela){
                     var nomeCol = htmlDoc.getElementById("nome_coluna_"+i).value;
                     var valr = htmlDoc.getElementById("busca_col_"+nomeCol).value;
                     if(!(valr===null||valr==='null')){
-                        document.getElementById(nomeCol).value = valr;
+                        $('input#'+nomeCol).val(valr ).trigger('mask.maskMoney');
                         try{
                             document.getElementById(nomeCol).onchange();
                         }catch (e){
@@ -145,7 +145,8 @@ function consultaCampoAuto(valorBuscar){
                     var nomeCol = htmlDoc.getElementById("nome_coluna").value;
                     var valr = htmlDoc.getElementById("valor").value;
                     if(!(valr===null||valr==='null')){
-                        document.getElementById(nomeCol).value = valr;
+                        //$('input#'+nomeCol).val(valr );
+                        $('input#'+nomeCol).val(valr ).trigger('mask.maskMoney');
                         try{
                             document.getElementById(nomeCol).onchange();
                         }catch (e){

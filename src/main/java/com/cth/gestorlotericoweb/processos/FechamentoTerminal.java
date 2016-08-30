@@ -153,8 +153,8 @@ public class FechamentoTerminal extends Processos{
             ps.setDouble(9, Parser.toDoubleFromHtml(diferencaCaixa));
             ps = Seter.set(ps, 10, observacoes);
             id = Integer.valueOf(idL);
-            ps.setInt(7, id);
-            ps.setInt(8, Parametros.idEntidade);
+            ps.setInt(11, id);
+            ps.setInt(12, Parametros.idEntidade);
             
             ps.execute();
         } catch (SQLException ex) {
@@ -201,7 +201,8 @@ public class FechamentoTerminal extends Processos{
                 }else{
                     totalMovimentosDiaL = 0.0;
                 }
-                totalMovimentosDiaL += getSaldoAbertura();
+                totalMovimentosDiaL -= getSaldoAbertura();
+                totalMovimentosDiaL += getSaldoOutrosMovimentos();
                 totalMovimentosDiaL += Parser.toDoubleFromHtml(restoCaixa);
             }
         } catch (SQLException ex) {
@@ -217,6 +218,34 @@ public class FechamentoTerminal extends Processos{
                 "	abertura_terminais  \n" +
                 "where\n" +
                 "	data_abertura = ? and\n" +
+                "	id_terminal = ? and\n" +
+                "	id_funcionario = ?";
+        try {
+            PreparedStatement ps = Parametros.getConexao().getPst(sql,false);
+            if(dataFechamentoDt!=null&&idTerminal!=null&&idFuncionario!=null){
+                ps.setDate(1, dataFechamentoDt);
+                ps = Seter.set(ps, 2, Integer.valueOf(idTerminal));
+                ps = Seter.set(ps, 3, Integer.valueOf(idFuncionario));
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    return rs.getDouble(1);
+                }else{
+                    return 0.0;
+                }                
+            }
+        } catch (SQLException ex) {
+            new LogError(sql, ex, request);
+        }
+        return 0.0;
+    }
+    
+    public Double getSaldoOutrosMovimentos(){
+        String sql = "SELECT \n" +
+                "	sum(case when tipo_operacao_caixa in (1,3,5,7) then valor_movimentado else valor_movimentado * (-1) end)\n" +
+                "FROM \n" +
+                "	outros_movimentos \n" +
+                                "where\n" +
+                "	date(data_hora_mov) = ? and\n" +
                 "	id_terminal = ? and\n" +
                 "	id_funcionario = ?";
         try {
