@@ -41,7 +41,8 @@ function buscaOpcoesCBPopUp(tabela){
                 document.getElementById("selector1").innerHTML = data;
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                alert("Desculpe ocorreu um erro! :(");
+                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
+                $('#modal_avisos').modal('show');   
             }             
         }
     );
@@ -70,7 +71,8 @@ function consultaDadosBuscaId(tabela){
                 document.getElementById("tab_dados").innerHTML = data;
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                alert("Desculpe ocorreu um erro! :(");
+                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
+                $('#modal_avisos').modal('show');   
             }             
         }
     );
@@ -89,7 +91,8 @@ function consultaDadosFk(tabela,colunaBuscar){
                 document.getElementById("tab_dados").innerHTML = data;
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                alert("Desculpe ocorreu um erro! :(");
+                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
+                $('#modal_avisos').modal('show');   
             }             
         }
     );
@@ -126,7 +129,8 @@ function buscaDadosN(tabela){
                 fechaPopUp();
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                alert("Desculpe ocorreu um erro! :(");
+                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
+                $('#modal_avisos').modal('show');   
             }             
         }
     );
@@ -154,7 +158,8 @@ function consultaCampoAuto(valorBuscar){
                     }  
                 }, 
                 error: function (jXHR, textStatus, errorThrown) {
-                    alert("Desculpe ocorreu um erro! :(");
+                    document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
+                    $('#modal_avisos').modal('show');   
                 }
             }
     )    
@@ -174,7 +179,8 @@ function buscaNome(tabela,campo){
                 document.getElementById('label_'+campo).innerHTML = data;
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                alert("Desculpe ocorreu um erro! :(");
+                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
+                $('#modal_avisos').modal('show');   
             }             
         }
     );
@@ -192,7 +198,8 @@ function btnsPercorrer(btn){
                 setaIdEBusca(data.trim());
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                alert("Desculpe ocorreu um erro! :(");
+                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
+                $('#modal_avisos').modal('show');   
             }            
         }
     );
@@ -208,10 +215,13 @@ $("document").ready(function () {
                 data: $("#form_dados").serialize(),
                 success: function (data) {    
                     setaIdEBusca(data.trim());
-                    alert("Gravado com Sucesso!");
+                    document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-success\" role=\"alert\" style=\"text-align: center\"> O registro foi gravado com sucesso! </div>";
+                    $('#modal_avisos').modal('show');
+                    limpa();
                 }, 
                 error: function (jXHR, textStatus, errorThrown) {
-                    alert("Desculpe ocorreu um erro! :(");
+                    document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
+                    $('#modal_avisos').modal('show');   
                 }
             }); 
             $("#botao-gravar").off("click");
@@ -227,11 +237,13 @@ function deletarDados(){
             url:  "grava",
             data:{"id":id,"tipo":"rm","tabela":document.getElementById("it").value},
             success: function (data) {  
-                alert("Excluído com Sucesso!");
+                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-success\" role=\"alert\" style=\"text-align: center\"> O registro foi removido com sucesso! </div>";
+                $('#modal_avisos').modal('show');
                 limpa();
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                alert("Desculpe ocorreu um erro! :(");
+                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
+                $('#modal_avisos').modal('show');       
             } 
         }
     );
