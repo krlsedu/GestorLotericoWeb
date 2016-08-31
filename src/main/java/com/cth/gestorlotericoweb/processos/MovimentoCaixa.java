@@ -25,6 +25,7 @@ import org.apache.velocity.app.VelocityEngine;
 public class MovimentoCaixa extends Processos{
     String idTerminal;
     String idFuncionario;
+    String idCofre;
     String dataHoraMov;
     String valorMovimentado;
     String tipoOperacao;
@@ -37,6 +38,7 @@ public class MovimentoCaixa extends Processos{
     private void setMovimentosCaixas() {
         this.idTerminal = request.getParameter("id_terminal");
         this.idFuncionario = request.getParameter("id_funcionario");
+        this.idCofre = request.getParameter("id_cofre");
         this.dataHoraMov = request.getParameter("data_hora_mov");
         this.valorMovimentado = request.getParameter("valor_movimentado");
         this.tipoOperacao = request.getParameter("tipo_operacao_caixa");
@@ -49,7 +51,7 @@ public class MovimentoCaixa extends Processos{
     private void getDados(){
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT  tipo_operacao_caixa,id_terminal, id_funcionario, data_hora_mov, \n" +
-            "       valor_movimentado, observacoes\n" +
+            "       valor_movimentado, observacoes, id_cofre \n" +
             "  FROM public.movimentos_caixas where id = ? and id_entidade = ? ",false);
             ps.setInt(1, id);
             ps.setInt(2, Parametros.idEntidade);
@@ -58,10 +60,10 @@ public class MovimentoCaixa extends Processos{
                 tipoOperacao = rs.getString(1);
                 idTerminal = rs.getString(2);
                 idFuncionario = rs.getString(3);
-                dataHoraMov = 
-                        rs.getString(4);
+                dataHoraMov = rs.getString(4);
                 valorMovimentado = Parser.toBigDecimalSt(rs.getString(5));
                 observacoes = rs.getString(6);
+                idCofre = rs.getString(7);
             }else{
                 tipoOperacao = "";
                 idTerminal = "";
@@ -69,6 +71,7 @@ public class MovimentoCaixa extends Processos{
                 dataHoraMov = "";
                 valorMovimentado = "";
                 observacoes = "";
+                idCofre = "";
             }
         } catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);
@@ -79,9 +82,9 @@ public class MovimentoCaixa extends Processos{
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.movimentos_caixas(\n" +
 "            tipo_operacao_caixa, id_terminal, id_funcionario, data_hora_mov, \n" +
-"            valor_movimentado, observacoes, id_entidade)\n" +
+"            valor_movimentado, observacoes, id_entidade,id_cofre)\n" +
 "    VALUES (?, ?, ?, ?, \n" +
-"            ?, ?, ?);");
+"            ?, ?, ?, ?);");
             ps.setInt(1, Integer.valueOf(tipoOperacao));
             if(idTerminal == null||idTerminal.trim().equals("")){
                 ps.setNull(2, java.sql.Types.BIGINT);
@@ -93,6 +96,7 @@ public class MovimentoCaixa extends Processos{
             ps.setBigDecimal(5, Parser.toBigDecimalFromHtml(valorMovimentado));
             ps = Seter.set(ps, 6, observacoes);
             ps.setInt(7, Parametros.idEntidade);
+            ps = Seter.set(ps,8,Integer.valueOf(idCofre));
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()){
@@ -109,7 +113,7 @@ public class MovimentoCaixa extends Processos{
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.movimentos_caixas\n" +
             "   SET tipo_operacao_caixa=?, id_terminal=?, id_funcionario=?, data_hora_mov=?,\n" +
-            "    valor_movimentado=?, observacoes=?\n" 
+            "    valor_movimentado=?, observacoes=?, id_cofre=? \n" 
                     + " where id = ? and id_entidade = ? ", false);
             ps.setInt(1, Integer.valueOf(tipoOperacao));
             if(idTerminal == null||idTerminal.trim().equals("")){
@@ -121,10 +125,11 @@ public class MovimentoCaixa extends Processos{
             ps.setTimestamp(4, Parser.toDbTimeStamp(dataHoraMov));
             ps.setBigDecimal(5, Parser.toBigDecimalFromHtml(valorMovimentado));
             ps = Seter.set(ps, 6, observacoes);
+            ps = Seter.set(ps,7,Integer.valueOf(idCofre));
             
             id = Integer.valueOf(idL);
-            ps.setInt(7, id);
-            ps.setInt(8, Parametros.idEntidade);
+            ps.setInt(8, id);
+            ps.setInt(9, Parametros.idEntidade);
             
             ps.execute();
         } catch (SQLException ex) {

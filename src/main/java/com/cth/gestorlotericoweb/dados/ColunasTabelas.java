@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 public class ColunasTabelas {
     public Map<String,String> mDescri;
     public Map<String,String> mCol;
+    public Map<String,String> mColNome;
     public Map<String,String> mTabelas;
     public Map<String,String> mTabColsSelBusca;
     public Map<String,String> mTabColsSelDados;
@@ -36,14 +37,15 @@ public class ColunasTabelas {
         mTabColsSelBusca = new HashMap<>();
         mTabColsSelDados = new HashMap<>();
         mTabOpts = new HashMap<>();
+        mColNome = new HashMap<>();
         this.request = request;
         carregaTabOpts();
         setColTab();
         carregaTabelas();
         carregaTabColsBusca();
         carregaTabColsDados();
+        carregaColNome();
     }
-    
     private void setColTab(){
         try {
             ResultSet rs = Parametros.getConexao().getRs("select * from cols_descri");
@@ -86,6 +88,20 @@ public class ColunasTabelas {
         mTabelas.put("tarifas_operacoes", "tarifas_operacoes");
     }
     
+    private void carregaColNome(){
+        mColNome.put("lotericas", "nome");
+        mColNome.put("terminais", "nome");
+        mColNome.put("funcionarios", "nome");
+        mColNome.put("contas", "nome_conta");
+        mColNome.put("operacoes", "nome_oper");
+        mColNome.put("cofres", "nome_cofre");
+    }
+    
+    public String getColNome(String tabela){
+        return mColNome.get(tabela);
+    }
+    
+    
     private void carregaTabColsBusca(){
         mTabColsSelBusca.put("lotericas", "id,nome,codigo_caixa");
         mTabColsSelBusca.put("terminais", "id,nome,codigo_caixa, id_loterica,  marca, modelo");
@@ -94,7 +110,7 @@ public class ColunasTabelas {
         mTabColsSelBusca.put("operacoes", "id, nome_oper_caixa, nome_oper, tipo_oper");
         mTabColsSelBusca.put("cofres", "id, nome_cofre, tipo_cofre, id_loterica");
         mTabColsSelBusca.put("abertura_terminais", "id, id_terminal, id_funcionario, data_abertura");
-        mTabColsSelBusca.put("movimentos_caixas", "id, id_terminal, id_funcionario, tipo_operacao_caixa,data_hora_mov");
+        mTabColsSelBusca.put("movimentos_caixas", "id, id_terminal, id_funcionario, tipo_operacao_caixa, data_hora_mov");
         mTabColsSelBusca.put("outros_movimentos", "id, id_terminal, id_funcionario, tipo_operacao_caixa,data_hora_mov");
         mTabColsSelBusca.put("fechamento_terminais", "id, id_terminal, id_funcionario, data_encerramento");
         mTabColsSelBusca.put("tarifas_operacoes", "id, id_operacao, data_base");
@@ -107,7 +123,7 @@ public class ColunasTabelas {
         mTabColsSelDados.put("operacoes", "nome_oper_caixa, nome_oper, tipo_oper, observacoes");
         mTabColsSelDados.put("cofres", "nome_cofre, tipo_cofre, observacoes, id_loterica");
         mTabColsSelDados.put("abertura_terminais", " id_terminal, id_funcionario, data_abertura, troco_dia_anterior, troco_dia, observacoes");
-        mTabColsSelDados.put("movimentos_caixas", "tipo_operacao_caixa, id_terminal, id_funcionario, data_hora_mov, valor_movimentado, observacoes");
+        mTabColsSelDados.put("movimentos_caixas", "tipo_operacao_caixa, id_terminal, id_funcionario, data_hora_mov, valor_movimentado, observacoes, id_cofre");
         mTabColsSelDados.put("outros_movimentos", "tipo_operacao_caixa, id_terminal, id_funcionario, data_hora_mov, valor_movimentado, observacoes");
         mTabColsSelDados.put("fechamento_terminais", "id_terminal, id_funcionario, data_encerramento,resto_caixa, total_movimentos_dia, total_creditos_terminal, total_debitos_terminal,saldo_terminal, diferenca_caixa, observacoes");
         mTabColsSelDados.put("tarifas_operacoes", "id_operacao, data_base, valor_tarifa, observacoes");

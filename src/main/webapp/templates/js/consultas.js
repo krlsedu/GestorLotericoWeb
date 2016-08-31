@@ -98,9 +98,6 @@ function consultaDadosFk(tabela,colunaBuscar){
 function setaIdEBusca(id){
     document.getElementById("id").value = id;
     buscaDadosN(document.getElementById("it").value);
-    
-    var x = document.getElementById("form_dados").elements.length;
-    
 }
 
 function buscaDadosN(tabela){
@@ -120,7 +117,7 @@ function buscaDadosN(tabela){
                     if(!(valr===null||valr==='null')){
                         $('input#'+nomeCol).val(valr).trigger('mask.maskMoney');
                         try{
-                            document.getElementById(nomeCol).onchange()
+                            document.getElementById(nomeCol).onchange();
                         }catch (e){
 
                         }
@@ -150,7 +147,7 @@ function consultaCampoAuto(valorBuscar){
                     if(!(valr===null||valr==='null')){
                         $('input#'+nomeCol).val(valr ).trigger('mask.maskMoney');
                         try{
-                            document.getElementById(nomeCol).onchange();
+                            document.getElementById(nomeCol).onkeyup();
                         }catch (e){
 
                         }

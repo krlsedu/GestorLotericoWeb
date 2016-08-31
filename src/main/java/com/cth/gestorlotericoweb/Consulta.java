@@ -64,14 +64,18 @@ public class Consulta {
         String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
         if(tabela !=null){         
             String id = request.getParameter("id");
-            String sql = "select * from "+tabela+" where id_entidade = ? and id = ? ";
+            String col = colunasTabelas.getColNome(tabela);
+            if(col==null){
+                col = "*";
+            }
+            String sql = "select "+col+" from "+tabela+" where id_entidade = ? and id = ? ";
             try {
                 PreparedStatement ps = Parametros.getConexao(request).getPst(sql, false);
                 ps.setInt(1, Parametros.idEntidade);
                 ps.setInt(2, Integer.valueOf(id));
                 ResultSet rs = ps.executeQuery();
-                if (rs.next()) {
-                    output = rs.getString(3);
+                if (rs.next()) {                    
+                    output = rs.getString(1);
                 }else{
                     output = "";
                 }
