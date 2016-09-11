@@ -15,7 +15,7 @@ import java.sql.SQLException;
 public class Seter {
     public static PreparedStatement set(PreparedStatement ps,Integer index,Integer valor) throws SQLException{
         if(valor==null){
-            ps.setNull(index, java.sql.Types.INTEGER);
+            ps.setNull(index, java.sql.Types.BIGINT);
         }else{
             ps.setInt(index, valor);
         }
@@ -24,7 +24,7 @@ public class Seter {
     
     public static PreparedStatement set(PreparedStatement ps,Integer index,String valor) throws SQLException{
         if(valor==null){
-            ps.setNull(index, java.sql.Types.LONGNVARCHAR);
+            ps.setNull(index, java.sql.Types.LONGVARCHAR);
         }else{
             ps.setString(index, valor);
         }

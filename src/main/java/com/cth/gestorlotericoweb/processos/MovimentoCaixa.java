@@ -101,6 +101,14 @@ public class MovimentoCaixa extends Processos{
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()){
                 id = rs.getInt(1);
+                if(this.idCofre!=null){
+                    try{
+                        MovimentoCofre movimentoCofre = new MovimentoCofre(request, this);         
+                        movimentoCofre.gravaAutoMovCaixa();
+                    }catch(Exception e){
+
+                    }
+                }
             }
             
         } catch (SQLException ex) {
@@ -132,6 +140,14 @@ public class MovimentoCaixa extends Processos{
             ps.setInt(9, Parametros.idEntidade);
             
             ps.execute();
+            if(this.idCofre!=null){
+                try{
+                    MovimentoCofre movimentoCofre = new MovimentoCofre(request, this);         
+                    movimentoCofre.gravaAutoMovCaixa();
+                }catch(Exception e){
+
+                }
+            }
         } catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);
         }

@@ -17,6 +17,7 @@ import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.AberturaTerminal;
 import com.cth.gestorlotericoweb.processos.FechamentoTerminal;
 import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
+import com.cth.gestorlotericoweb.processos.MovimentoCofre;
 import com.cth.gestorlotericoweb.processos.OutroMovimento;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -140,6 +141,15 @@ public class Grava {
                         movimentoCaixa.altera();
                     }
                     id = movimentoCaixa.getId();
+                    break;
+                case "movimentos_cofres":
+                    MovimentoCofre movimentoCofre = new MovimentoCofre(request);
+                    if("0".equals(request.getParameter("id"))){
+                        movimentoCofre.insere();
+                    }else{
+                        movimentoCofre.altera();
+                    }
+                    id = movimentoCofre.getId();
                     break;
                 case "outros_movimentos":
                     OutroMovimento outroMovimento = new OutroMovimento(request);

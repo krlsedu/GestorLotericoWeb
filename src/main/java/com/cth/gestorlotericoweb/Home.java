@@ -17,6 +17,7 @@ import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.AberturaTerminal;
 import com.cth.gestorlotericoweb.processos.FechamentoTerminal;
 import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
+import com.cth.gestorlotericoweb.processos.MovimentoCofre;
 import com.cth.gestorlotericoweb.processos.OutroMovimento;
 import java.io.StringWriter;
 import javax.servlet.http.HttpServletRequest;
@@ -104,6 +105,11 @@ public class Home {
                         case "movimentos_caixas":      
                             MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request);
                             contextPrinc = movimentoCaixa.getHtml(contextPrinc, ve, id);
+                        break;                        
+                        
+                        case "movimentos_cofres":      
+                            MovimentoCofre movimentoCofre = new MovimentoCofre(request);
+                            contextPrinc = movimentoCofre.getHtml(contextPrinc, ve, id);
                         break;
                         
                         case "outros_movimentos":      

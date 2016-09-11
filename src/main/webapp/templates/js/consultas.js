@@ -117,8 +117,14 @@ function buscaDadosN(tabela){
                 for (i=1;i<=ncols;i++){
                     var nomeCol = htmlDoc.getElementById("nome_coluna_"+i).value;
                     var valr = htmlDoc.getElementById("busca_col_"+nomeCol).value;
+                    var tipo = document.getElementById(nomeCol).type;
                     if(!(valr===null||valr==='null')){
-                        $('input#'+nomeCol).val(valr).trigger('mask.maskMoney');
+                        if(tipo==="select-one"){
+                                document.getElementById(nomeCol).value = valr;
+                        }else{
+                                $('input#'+nomeCol).val(valr).trigger('mask.maskMoney');
+                        }
+                        
                         try{
                             document.getElementById(nomeCol).onchange();
                         }catch (e){

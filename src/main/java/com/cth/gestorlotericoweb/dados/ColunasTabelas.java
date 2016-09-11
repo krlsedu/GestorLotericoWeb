@@ -59,6 +59,7 @@ public class ColunasTabelas {
         putMs("id_funcionario", "Código do Funcionário (Sistema)");
         putMs("tipo_operacao_caixa", "Tipo de movimento caixa");
         putMs("id_operacao", "Código da Operação (Sistema)");
+        putMs("id_cofre", "Código do Cofre (Sistema)");
     }
     
     private void putMs(String coluna,String descri){
@@ -86,6 +87,7 @@ public class ColunasTabelas {
         mTabelas.put("fechamento_terminais", "fechamento_terminais");
         mTabelas.put("outros_movimentos", "outros_movimentos");
         mTabelas.put("tarifas_operacoes", "tarifas_operacoes");
+        mTabelas.put("movimentos_cofres", "movimentos_cofres");
     }
     
     private void carregaColNome(){
@@ -114,6 +116,7 @@ public class ColunasTabelas {
         mTabColsSelBusca.put("outros_movimentos", "id, id_terminal, id_funcionario, tipo_operacao_caixa,data_hora_mov");
         mTabColsSelBusca.put("fechamento_terminais", "id, id_terminal, id_funcionario, data_encerramento");
         mTabColsSelBusca.put("tarifas_operacoes", "id, id_operacao, data_base");
+        mTabColsSelBusca.put("movimentos_cofres", "id, id_cofre, data_hora_mov");
     }
     private void carregaTabColsDados(){
         mTabColsSelDados.put("lotericas", "codigo_caixa,nome");
@@ -127,6 +130,7 @@ public class ColunasTabelas {
         mTabColsSelDados.put("outros_movimentos", "tipo_operacao_caixa, id_terminal, id_funcionario, data_hora_mov, valor_movimentado, observacoes");
         mTabColsSelDados.put("fechamento_terminais", "id_terminal, id_funcionario, data_encerramento,resto_caixa, total_movimentos_dia, total_creditos_terminal, total_debitos_terminal,saldo_terminal, diferenca_caixa, observacoes");
         mTabColsSelDados.put("tarifas_operacoes", "id_operacao, data_base, valor_tarifa, observacoes");
+        mTabColsSelDados.put("movimentos_cofres", "id_cofre, tipo_movimento_cofre, data_hora_mov, valor_movimentado, observacoes");    
     }
     private void carregaTabOpts(){
         List<String> lOpts = new ArrayList<>();
@@ -182,6 +186,9 @@ public class ColunasTabelas {
         lOpts = new ArrayList<>();
         lOpts.add("<option>Código da Operação (Sistema)</option>");
         mTabOpts.put("tarifas_operacoes", lOpts);
+        lOpts = new ArrayList<>();
+        lOpts.add("<option>Código do Cofre (Sistema)</option>");
+        mTabOpts.put("movimentos_cofres", lOpts);
     }
     
     public String getOpts(String tabela){
