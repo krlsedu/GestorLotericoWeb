@@ -78,6 +78,23 @@ function consultaDadosBuscaId(tabela){
     );
 }
 
+function buscaConteudoTela(tela){    
+    $.ajax(
+        {
+            type: "POST",
+            url:  "conteudo_telas",
+            data:{"it":tela},
+            success: function (data) {   
+                document.getElementById("conteudo_telas").innerHTML = data;
+            }, 
+            error: function (jXHR, textStatus, errorThrown) {
+                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
+                $('#modal_avisos').modal('show');   
+            }             
+        }
+    );
+}
+
 function consultaDadosFk(tabela,colunaBuscar){
     var id = document.getElementById("dados_busca").value;
     var sel = document.getElementById("selector1");
@@ -123,8 +140,7 @@ function buscaDadosN(tabela){
                                 document.getElementById(nomeCol).value = valr;
                         }else{
                                 $('input#'+nomeCol).val(valr).trigger('mask.maskMoney');
-                        }
-                        
+                        }                        
                         try{
                             document.getElementById(nomeCol).onchange();
                         }catch (e){
