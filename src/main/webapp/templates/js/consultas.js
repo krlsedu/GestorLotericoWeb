@@ -85,7 +85,8 @@ function buscaConteudoTela(tela){
             url:  "conteudo_telas",
             data:{"it":tela},
             success: function (data) {   
-                document.getElementById("conteudo_telas").innerHTML = data;
+                $("#conteudo_telas").html(data);
+                //document.getElementById("conteudo_telas").innerHTML = data;
             }, 
             error: function (jXHR, textStatus, errorThrown) {
                 document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
@@ -227,30 +228,6 @@ function btnsPercorrer(btn){
     );
 }
 
-$("document").ready(function () {
-    $("#botao-gravar").click(function () {
-        $('#form_dados').submit(function (e) {
-            e.preventDefault();   
-            $.ajax({
-                type: "POST",
-                url:  "grava",
-                data: $("#form_dados").serialize(),
-                success: function (data) {    
-                    setaIdEBusca(data.trim());
-                    document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-success\" role=\"alert\" style=\"text-align: center\"> O registro foi gravado com sucesso! </div>";
-                    $('#modal_avisos').modal('show');
-                    limpa();
-                }, 
-                error: function (jXHR, textStatus, errorThrown) {
-                    document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
-                    $('#modal_avisos').modal('show');   
-                }
-            }); 
-            $("#botao-gravar").off("click");
-        });
-    });     
-});
-
 function deletarDados(){
     var id = document.getElementById("id").value;
     $.ajax(
@@ -286,3 +263,23 @@ function fechaPopUp(){
 function limpa(){    
     document.getElementById('id').value='0';
 }
+
+$(document).on("submit", '#form_dados', function(event) { 
+    event.preventDefault();  
+    $.ajax({
+        type: "POST",
+        url:  "grava",
+        data: $("#form_dados").serialize(),
+        success: function (data) {    
+            setaIdEBusca(data.trim());
+            document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-success\" role=\"alert\" style=\"text-align: center\"> O registro foi gravado com sucesso! </div>";
+            $('#modal_avisos').modal('show');
+            limpa();
+        }, 
+        error: function (jXHR, textStatus, errorThrown) {
+            document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
+            $('#modal_avisos').modal('show');   
+        }
+    }); 
+    $("#botao-gravar").off("click");
+});
