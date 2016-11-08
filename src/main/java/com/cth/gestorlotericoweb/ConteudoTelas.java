@@ -18,6 +18,7 @@ import com.cth.gestorlotericoweb.processos.AberturaTerminal;
 import com.cth.gestorlotericoweb.processos.FechamentoTerminal;
 import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
 import com.cth.gestorlotericoweb.processos.MovimentoCofre;
+import com.cth.gestorlotericoweb.processos.MovimentoConta;
 import com.cth.gestorlotericoweb.processos.OutroMovimento;
 import java.io.StringWriter;
 import javax.servlet.http.HttpServletRequest;
@@ -93,6 +94,11 @@ public class ConteudoTelas {
                     case "movimentos_cofres":      
                         MovimentoCofre movimentoCofre = new MovimentoCofre(request);
                         contextPrinc = movimentoCofre.getHtml(contextPrinc, ve, id);
+                    break;                      
+
+                    case "movimentos_contas":      
+                        MovimentoConta movimentoConta = new MovimentoConta(request);
+                        contextPrinc = movimentoConta.getHtml(contextPrinc, ve, id);
                     break;
 
                     case "outros_movimentos":      

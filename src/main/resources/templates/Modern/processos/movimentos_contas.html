@@ -1,0 +1,98 @@
+<script type="text/javascript">
+        $(function () {
+              $("#id_conta").mask("99999999");              
+              $("#valor_movimentado").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+        });
+</script>
+<div class="xs">
+    <h3>Movimentação das Contas</h3>
+    <div class="tab-content">
+        <div class="tab-pane active" id="horizontal-form">
+            <form class="form-horizontal" id="form_dados"> 
+                $btns_percorrer
+                              
+                <div class="form-group">
+                        <label for="selector1" class="col-sm-2 control-label">Tipo</label>
+                        <div class="col-sm-4">
+                            <select name="tipo_movimento" id="tipo_movimento_cofre" class="form-control1">
+                                <option value="2" selected="selected">Depósito</option>
+                            </select>
+                        </div>
+                </div>
+                <div class="form-group">
+                        <label for="selector1" class="col-sm-2 control-label">Forma depósito</label>
+                        <div class="col-sm-4">
+                            <select name="forma_deposito" id="tipo_movimento_cofre" class="form-control1">
+                                <option value="1" selected="selected">Caixa Eletrônico</option>
+                                <option value="2" >Malote</option>
+                                <option value="3" >Carro Forte</option>
+                            </select>
+                        </div>
+                </div>
+                <div class="form-group mb-n">
+                        <label for="smallinput" class="col-sm-2 control-label label-input-sm">Conta</label>
+                        <div class="col-sm-2">
+                            <div class="input-group">
+                                <div class="input-group-addon" onclick="ativaPopUp('contas','id_conta','Consulta código Conta')">
+                                    <i class="i_botao_buscar fa fa-search" ></i>
+                                </div>
+                                <input  name="id_conta" type="text" class="form-control1 input-lg" id="id_conta" placeholder="Cód Conta"  
+                                        onchange="buscaNome('contas','id_conta')" 
+                                        >                        
+                            </div>
+                        </div> 
+                        <div class="col-sm-6">
+                            <div class="well-sm" id="label_id_cofre">
+                            </div>
+                        </div>
+                </div>
+                <div class="form-group mb-n">
+                    <label for="data_hora_mov" class="col-sm-2 control-label">Data e hora</label>
+                        <div class="col-sm-3">    
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input name="data_hora_mov" id="data_hora_mov" type="datetime-local" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.date">
+                            </div>
+                        </div>
+                </div>
+                <div class="form-group mb-n">
+                    <label for="valor_movimentado" class="col-sm-2 control-label">Valor</label>
+                    <div class="col-sm-3"> 
+                        <div class="input-group">
+                            <span class="input-group-addon">R$</span>
+                            <input name="valor_movimentado" id="valor_movimentado" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group mb-n">
+                    <label for="txtarea1" class="col-sm-2 control-label">Observações</label>
+                        <div class="col-sm-8">
+                            <textarea name="observacoes" id="observacoes" cols="50" rows="4" class="form-control1" placeholder="Observações da Abertura de Terminal" ></textarea>
+                        </div>
+                </div>
+                
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-1 col-sm-offset-9">
+                            <button type="submit" class="btn btn-primary" id="botao-gravar">Gravar</button>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="reset" class="btn botao-deletar" onclick="deletarDados()">Excluir</button>
+                        </div>
+                        
+                        <div class="col-sm-1">
+                            <button type="reset" class="btn btn-default" onclick="limpa()">Limpar</button>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="it" name="it" value="movimentos_contas" />                
+                <input type="hidden" id="id" name="id" value="0" />
+            </form>
+        </div>
+    </div>	
+</div>
+
+
