@@ -134,7 +134,7 @@ public class ColunasTabelas {
         mTabColsSelDados.put("fechamento_terminais", "id_terminal, id_funcionario, data_encerramento,resto_caixa, total_movimentos_dia, total_creditos_terminal, total_debitos_terminal,saldo_terminal, diferenca_caixa, observacoes");
         mTabColsSelDados.put("tarifas_operacoes", "id_operacao, data_base, valor_tarifa, observacoes");
         mTabColsSelDados.put("movimentos_cofres", "id_cofre, tipo_movimento_cofre, data_hora_mov, valor_movimentado, observacoes");    
-        mTabColsSelDados.put("movimentos_contas", "id_conta, tipo_movimento_conta,forma_deposito, data_hora_mov, valor_movimentado, observacoes");   
+        mTabColsSelDados.put("movimentos_contas", "id_conta,id_cofre, tipo_movimento_conta,forma_deposito, data_hora_mov, valor_movimentado, observacoes");   
     }
     private void carregaTabOpts(){
         List<String> lOpts = new ArrayList<>();

@@ -25,9 +25,10 @@ import org.apache.velocity.app.VelocityEngine;
 public class MovimentoConta extends Processos{
     Integer idMovimentoConta;
     String idConta;
+    String idCofre;
     String dataHoraMov;
     String formaDeposito;
-    String tipoMovimento;
+    String tipoMovimentoConta;
     String valorMovimentado;
     String observacoes;
     
@@ -43,10 +44,11 @@ public class MovimentoConta extends Processos{
             this.idMovimentoConta = null;
         }
         this.idConta = request.getParameter("id_conta");
+        this.idCofre = request.getParameter("id_cofre");
         this.dataHoraMov = request.getParameter("data_hora_mov");
         this.formaDeposito = request.getParameter("forma_deposito");
         this.valorMovimentado = request.getParameter("valor_movimentado");
-        this.tipoMovimento = request.getParameter("tipo_movimento");
+        this.tipoMovimentoConta = request.getParameter("tipo_movimento_conta");
         this.observacoes = request.getParameter("observacoes");
     }
     
@@ -58,7 +60,7 @@ public class MovimentoConta extends Processos{
     private void getDados(){
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT   id_conta, data_hora_mov,  valor_movimentado, \n" +
-                                                        "       tipo_movimento_conta, forma_deposito, observacoes \n" +
+                                                        "       tipo_movimento_conta, forma_deposito, observacoes,id_cofre \n" +
                         "  FROM public.movimentos_contas where id = ? and id_entidade = ? ",false);
             ps.setInt(1, id);
             ps.setInt(2, Parametros.idEntidade);
@@ -67,16 +69,18 @@ public class MovimentoConta extends Processos{
                 idConta = rs.getString(1);
                 dataHoraMov = rs.getString(2);
                 valorMovimentado = Parser.toBigDecimalSt(rs.getString(3));
-                tipoMovimento = rs.getString(4);
+                tipoMovimentoConta = rs.getString(4);
                 formaDeposito = rs.getString(5);
                 observacoes = rs.getString(6);
+                idCofre = rs.getString(7);
             }else{
-                tipoMovimento = "";
+                tipoMovimentoConta = "";
                 formaDeposito = "";
                 dataHoraMov = "";
                 valorMovimentado = "";
                 observacoes = "";
                 idConta = "";
+                idCofre = null;
                 idMovimentoConta = null;
             }
         } catch (SQLException ex) {
@@ -88,22 +92,31 @@ public class MovimentoConta extends Processos{
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.movimentos_contas(\n" +
 "             id_conta, data_hora_mov, valor_movimentado, \n" +
-"            tipo_movimento_cofre, forma_deposito, observacoes, \n" +
+"            tipo_movimento_conta, forma_deposito, observacoes, id_cofre, \n" +
 "            id_entidade)\n" +
 "    VALUES ( ?, ?, ?, \n" +
-"            ?, ?, ?, \n" +
+"            ?, ?, ?, ?, \n" +
 "            ?);");
             ps.setInt(1, Integer.valueOf(idConta));
             ps.setTimestamp(2, Parser.toDbTimeStamp(dataHoraMov));
             ps.setBigDecimal(3, Parser.toBigDecimalFromHtml(valorMovimentado));
-            ps.setInt(4, Integer.valueOf(tipoMovimento));
-            ps.setString(5,formaDeposito);
+            ps.setInt(4, Integer.valueOf(tipoMovimentoConta));
+            ps.setInt(5,Integer.valueOf(formaDeposito));
             ps = Seter.set(ps, 6, observacoes);
-            ps.setInt(7, Parametros.idEntidade);
+            ps = Seter.set(ps, 7, Integer.valueOf(idCofre));
+            ps.setInt(8, Parametros.idEntidade);
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()){
                 id = rs.getInt(1);
+                if(this.idCofre!=null){
+                    try{
+                        MovimentoCofre movimentoCofre = new MovimentoCofre(request, this);         
+                        movimentoCofre.gravaAutoMovCaixa();
+                    }catch(Exception e){
+
+                    }
+                }
             }
             
         } catch (SQLException ex) {
@@ -116,18 +129,19 @@ public class MovimentoConta extends Processos{
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.movimentos_contas\n" +
                         "   SET  id_conta=?, data_hora_mov=?, valor_movimentado=?, \n" +
-                        "       tipo_movimento_cofre=?, forma_deposito=?, observacoes=? \n" +
+                        "       tipo_movimento_conta=?, forma_deposito=?, observacoes=? , id_cofre = ? \n" +
                         " where id = ? and id_entidade = ? ", false);
             ps.setInt(1, Integer.valueOf(idConta));
             ps.setTimestamp(2, Parser.toDbTimeStamp(dataHoraMov));
             ps.setBigDecimal(3, Parser.toBigDecimalFromHtml(valorMovimentado));
-            ps.setInt(4, Integer.valueOf(tipoMovimento));
-            ps.setString(5,formaDeposito);
+            ps.setInt(4, Integer.valueOf(tipoMovimentoConta));
+            ps.setInt(5,Integer.valueOf(formaDeposito));
             ps = Seter.set(ps, 6, observacoes);
+            ps = Seter.set(ps, 7, Integer.valueOf(idCofre));
             
             id = Integer.valueOf(idL);
-            ps.setInt(7, id);
-            ps.setInt(8, Parametros.idEntidade);
+            ps.setInt(8, id);
+            ps.setInt(9, Parametros.idEntidade);
             
             ps.execute();
         } catch (SQLException ex) {

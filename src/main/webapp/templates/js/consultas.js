@@ -137,7 +137,7 @@ function buscaDadosN(tabela){
                     var valr = htmlDoc.getElementById("busca_col_"+nomeCol).value;
                     var tipo = document.getElementById(nomeCol).type;
                     if(!(valr===null||valr==='null')){
-                        if(tipo==="select-one"){
+                        if(tipo==="select-one"||tipo==="textarea"){
                                 document.getElementById(nomeCol).value = valr;
                         }else{
                                 $('input#'+nomeCol).val(valr).trigger('mask.maskMoney');

@@ -14,7 +14,7 @@
                 <div class="form-group">
                         <label for="selector1" class="col-sm-2 control-label">Tipo</label>
                         <div class="col-sm-4">
-                            <select name="tipo_movimento" id="tipo_movimento_cofre" class="form-control1">
+                            <select name="tipo_movimento_conta" id="tipo_movimento_conta" class="form-control1">
                                 <option value="2" selected="selected">Depósito</option>
                             </select>
                         </div>
@@ -22,7 +22,7 @@
                 <div class="form-group">
                         <label for="selector1" class="col-sm-2 control-label">Forma depósito</label>
                         <div class="col-sm-4">
-                            <select name="forma_deposito" id="tipo_movimento_cofre" class="form-control1">
+                            <select name="forma_deposito" id="forma_deposito" class="form-control1">
                                 <option value="1" selected="selected">Caixa Eletrônico</option>
                                 <option value="2" >Malote</option>
                                 <option value="3" >Carro Forte</option>
@@ -38,6 +38,23 @@
                                 </div>
                                 <input  name="id_conta" type="text" class="form-control1 input-lg" id="id_conta" placeholder="Cód Conta"  
                                         onchange="buscaNome('contas','id_conta')" 
+                                        >                        
+                            </div>
+                        </div> 
+                        <div class="col-sm-6">
+                            <div class="well-sm" id="label_id_conta">
+                            </div>
+                        </div>
+                </div>
+                <div class="form-group mb-n">
+                        <label for="smallinput" class="col-sm-2 control-label label-input-sm">Cofre</label>
+                        <div class="col-sm-2">
+                            <div class="input-group">
+                                <div class="input-group-addon" onclick="ativaPopUp('cofres','id_cofre','Consulta código Cofre')">
+                                    <i class="i_botao_buscar fa fa-search" ></i>
+                                </div>
+                                <input  name="id_cofre" type="text" class="form-control1 input-lg" id="id_cofre" placeholder="Cód Codfre"  
+                                        onchange="buscaNome('cofres','id_cofre')" 
                                         >                        
                             </div>
                         </div> 
