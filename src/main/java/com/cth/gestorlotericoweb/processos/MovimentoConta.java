@@ -30,6 +30,7 @@ public class MovimentoConta extends Processos{
     String formaDeposito;
     String tipoMovimentoConta;
     String valorMovimentado;
+    String numeroVolumes;
     String observacoes;
     
     
@@ -49,6 +50,8 @@ public class MovimentoConta extends Processos{
         this.formaDeposito = request.getParameter("forma_deposito");
         this.valorMovimentado = request.getParameter("valor_movimentado");
         this.tipoMovimentoConta = request.getParameter("tipo_movimento_conta");
+        this.numeroVolumes = request.getParameter("numero_volumes");
+        if(this.numeroVolumes == null) this.numeroVolumes = "1";
         this.observacoes = request.getParameter("observacoes");
     }
     
@@ -60,7 +63,7 @@ public class MovimentoConta extends Processos{
     private void getDados(){
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT   id_conta, data_hora_mov,  valor_movimentado, \n" +
-                                                        "       tipo_movimento_conta, forma_deposito, observacoes,id_cofre \n" +
+                                                        "       tipo_movimento_conta, forma_deposito, observacoes, id_cofre, numero_volumes \n" +
                         "  FROM public.movimentos_contas where id = ? and id_entidade = ? ",false);
             ps.setInt(1, id);
             ps.setInt(2, Parametros.idEntidade);
@@ -73,6 +76,7 @@ public class MovimentoConta extends Processos{
                 formaDeposito = rs.getString(5);
                 observacoes = rs.getString(6);
                 idCofre = rs.getString(7);
+                numeroVolumes = rs.getString(8);
             }else{
                 tipoMovimentoConta = "";
                 formaDeposito = "";
@@ -82,6 +86,7 @@ public class MovimentoConta extends Processos{
                 idConta = "";
                 idCofre = null;
                 idMovimentoConta = null;
+                numeroVolumes = "1";
             }
         } catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);
@@ -92,10 +97,10 @@ public class MovimentoConta extends Processos{
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.movimentos_contas(\n" +
 "             id_conta, data_hora_mov, valor_movimentado, \n" +
-"            tipo_movimento_conta, forma_deposito, observacoes, id_cofre, \n" +
+"            tipo_movimento_conta, forma_deposito, observacoes, id_cofre, numero_volumes, \n" +
 "            id_entidade)\n" +
 "    VALUES ( ?, ?, ?, \n" +
-"            ?, ?, ?, ?, \n" +
+"            ?, ?, ?, ?, ?, \n" +
 "            ?);");
             ps.setInt(1, Integer.valueOf(idConta));
             ps.setTimestamp(2, Parser.toDbTimeStamp(dataHoraMov));
@@ -104,7 +109,8 @@ public class MovimentoConta extends Processos{
             ps.setInt(5,Integer.valueOf(formaDeposito));
             ps = Seter.set(ps, 6, observacoes);
             ps = Seter.set(ps, 7, Integer.valueOf(idCofre));
-            ps.setInt(8, Parametros.idEntidade);
+            ps = Seter.set(ps, 8, Integer.valueOf(numeroVolumes));
+            ps.setInt(9, Parametros.idEntidade);
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()){
@@ -129,7 +135,7 @@ public class MovimentoConta extends Processos{
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.movimentos_contas\n" +
                         "   SET  id_conta=?, data_hora_mov=?, valor_movimentado=?, \n" +
-                        "       tipo_movimento_conta=?, forma_deposito=?, observacoes=? , id_cofre = ? \n" +
+                        "       tipo_movimento_conta=?, forma_deposito=?, observacoes=? , id_cofre = ?, numero_volumes = ?  \n" +
                         " where id = ? and id_entidade = ? ", false);
             ps.setInt(1, Integer.valueOf(idConta));
             ps.setTimestamp(2, Parser.toDbTimeStamp(dataHoraMov));
@@ -138,10 +144,11 @@ public class MovimentoConta extends Processos{
             ps.setInt(5,Integer.valueOf(formaDeposito));
             ps = Seter.set(ps, 6, observacoes);
             ps = Seter.set(ps, 7, Integer.valueOf(idCofre));
+            ps = Seter.set(ps, 8, Integer.valueOf(numeroVolumes));
             
             id = Integer.valueOf(idL);
-            ps.setInt(8, id);
-            ps.setInt(9, Parametros.idEntidade);
+            ps.setInt(9, id);
+            ps.setInt(10, Parametros.idEntidade);
             
             ps.execute();
         } catch (SQLException ex) {

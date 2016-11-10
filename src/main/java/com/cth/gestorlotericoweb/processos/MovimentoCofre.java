@@ -30,6 +30,7 @@ public class MovimentoCofre extends Processos{
     String valorMovimentado;
     String tipoOperacao;
     String observacoes;
+    String numeroVolumes;
     
     public MovimentoCofre(HttpServletRequest request) {
         super(request);
@@ -70,6 +71,7 @@ public class MovimentoCofre extends Processos{
         this.idMovimentoConta = movimentoConta.id;
         this.dataHoraMov = movimentoConta.dataHoraMov;
         this.valorMovimentado = movimentoConta.valorMovimentado;
+        this.valorMovimentado = movimentoConta.numeroVolumes;
         this.tipoOperacao = movimentoConta.tipoMovimentoConta.trim().equals("1")?"2":"1";        
     }
     
@@ -153,7 +155,7 @@ public class MovimentoCofre extends Processos{
             ps.setInt(1, Integer.valueOf(idCofre));
             ps = Seter.set(ps, 2, idMovimentoCaixa);
             ps.setTimestamp(3, Parser.toDbTimeStamp(dataHoraMov));
-            ps.setBigDecimal(4, Parser.toBigDecimalFromHtml(valorMovimentado));
+            ps.setBigDecimal(4, Parser.toBigDecimalFromHtml(valorMovimentado).multiply(Parser.toBigDecimalFromHtml(numeroVolumes)));
             ps.setInt(5, Integer.valueOf(tipoOperacao));
             ps = Seter.set(ps, 6, observacoes);
             ps = Seter.set(ps, 7, idMovimentoConta);
@@ -179,7 +181,7 @@ public class MovimentoCofre extends Processos{
             ps.setInt(1, Integer.valueOf(idCofre));
             ps = Seter.set(ps, 2, idMovimentoCaixa);
             ps.setTimestamp(3, Parser.toDbTimeStamp(dataHoraMov));
-            ps.setBigDecimal(4, Parser.toBigDecimalFromHtml(valorMovimentado));
+            ps.setBigDecimal(4,  Parser.toBigDecimalFromHtml(valorMovimentado).multiply(Parser.toBigDecimalFromHtml(numeroVolumes)));
             ps.setInt(5, Integer.valueOf(tipoOperacao));
             ps = Seter.set(ps, 6, observacoes);
             ps = Seter.set(ps, 7, idMovimentoConta);

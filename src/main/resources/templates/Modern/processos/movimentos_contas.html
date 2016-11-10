@@ -1,6 +1,7 @@
 <script type="text/javascript">
         $(function () {
-              $("#id_conta").mask("99999999");              
+              $("#id_conta").mask("99999999");   
+              $("#numero_volumes").mask("99999999");            
               $("#valor_movimentado").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
         });
 </script>
@@ -75,7 +76,16 @@
                         </div>
                 </div>
                 <div class="form-group mb-n">
-                    <label for="valor_movimentado" class="col-sm-2 control-label">Valor</label>
+                    <label for="numero_volumes" class="col-sm-2 control-label">Volumes</label>
+                    <div class="col-sm-3"> 
+                        <div class="input-group">
+                            <span class="input-group-addon">R$</span>
+                            <input value="1" name="numero_volumes" id="numero_volumes" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-n">
+                    <label for="valor_movimentado" class="col-sm-2 control-label">Valor por volume</label>
                     <div class="col-sm-3"> 
                         <div class="input-group">
                             <span class="input-group-addon">R$</span>
