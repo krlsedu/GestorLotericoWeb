@@ -7,12 +7,12 @@ package com.cth.gestorlotericoweb;
 
 import com.cth.gestorlotericoweb.dados.Cofre;
 import com.cth.gestorlotericoweb.dados.Conta;
-import com.cth.gestorlotericoweb.dados.Estatisticas;
 import com.cth.gestorlotericoweb.dados.Funcionario;
 import com.cth.gestorlotericoweb.dados.Loterica;
 import com.cth.gestorlotericoweb.dados.Operacao;
 import com.cth.gestorlotericoweb.dados.TarifaOperacao;
 import com.cth.gestorlotericoweb.dados.Terminal;
+import com.cth.gestorlotericoweb.estatisticas.Estatisticas;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.AberturaTerminal;
 import com.cth.gestorlotericoweb.processos.FechamentoTerminal;
@@ -40,8 +40,8 @@ public class ConteudoTelas {
         String id = request.getParameter("id");
         String input = request.getParameter("it");
         if(input == null){                
-            Estatisticas estatisticas = new Estatisticas();
-            contextPrinc = estatisticas.getHtmlTerminal(contextPrinc, ve, id);
+            Estatisticas estatisticas = new Estatisticas(request);
+            contextPrinc = estatisticas.getHtml(contextPrinc, ve, id);
         }else{
             switch(input){
                 // inicio Cadastros
@@ -112,8 +112,8 @@ public class ConteudoTelas {
                     break;
                 // Fim Processos   
                 default:
-                        Estatisticas estatisticas = new Estatisticas();
-                        contextPrinc = estatisticas.getHtmlTerminal(contextPrinc, ve, id);
+                        Estatisticas estatisticas = new Estatisticas(request);
+                        contextPrinc = estatisticas.getHtml(contextPrinc, ve, id);
                     break;
             }
         }

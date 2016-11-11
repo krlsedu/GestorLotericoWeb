@@ -187,7 +187,8 @@ public class FechamentoTerminal extends Processos{
                     "where\n" +
                     "	date(data_hora_mov) = ? and\n" +
                     "	id_terminal = ? and\n" +
-                    "	id_funcionario = ? \n" +
+                    "	id_funcionario = ? and\n" +
+                    "	id_entidade = ? \n" +
                     "	";
         try {
             PreparedStatement ps = Parametros.getConexao().getPst(sql,false);
@@ -196,6 +197,7 @@ public class FechamentoTerminal extends Processos{
                 ps.setDate(1, dataFechamentoDt);
                 ps = Seter.set(ps, 2, Integer.valueOf(idTerminal));
                 ps = Seter.set(ps, 3, Integer.valueOf(idFuncionario));
+                ps.setInt(4, Parametros.idEntidade);
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
                     totalMovimentosDiaL = rs.getBigDecimal(1);

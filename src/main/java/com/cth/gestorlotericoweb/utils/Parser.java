@@ -60,6 +60,18 @@ public class Parser {
         }
     }
     
+    public static String toString(BigDecimal valor){
+        try{
+            DecimalFormat df = new DecimalFormat("0.00");
+            DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+            dfs.setDecimalSeparator(',');
+            df.setDecimalFormatSymbols(dfs); 
+            return "R$ "+df.format((valor));
+        }catch(Exception e){
+            return e.getMessage();
+        }
+    }
+    
     public static BigDecimal toBigDecimalFromHtml(String valor){
         String st = valor;
         st = st.replace(".", "");
