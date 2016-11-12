@@ -6,6 +6,7 @@
 package com.cth.gestorlotericoweb.estatisticas;
 
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import org.apache.velocity.app.VelocityEngine;
 public class Estatisticas {
     final HttpServletRequest request;
     String valorApresentar;
+    BigDecimal valorMovimentado;
     Boolean bom;
 
     public Estatisticas(HttpServletRequest request) {
@@ -36,9 +38,9 @@ public class Estatisticas {
         writerConteudo = new StringWriter(); 
         Diarias movimentoDiario = new Diarias(request);
         contextConteudo.put("acm_dia",movimentoDiario.valorApresentar); 
-        Semanal movimentoSemanal = new Semanal(request);
+        Semanal movimentoSemanal = new Semanal(request,movimentoDiario);
         contextConteudo.put("acm_semana",movimentoSemanal.valorApresentar); 
-        Mensal movimentoMensal = new Mensal(request);
+        Mensal movimentoMensal = new Mensal(request,movimentoDiario);
         contextConteudo.put("acm_mes",movimentoMensal.valorApresentar); 
         templateConteudo.merge( contextConteudo, writerConteudo );
         contextPrinc.put("conteudo", writerConteudo.toString());

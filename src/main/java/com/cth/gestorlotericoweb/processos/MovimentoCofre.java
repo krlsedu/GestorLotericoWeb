@@ -61,7 +61,8 @@ public class MovimentoCofre extends Processos{
         this.idMovimentoCaixa = movimentoCaixa.id;
         this.dataHoraMov = movimentoCaixa.dataHoraMov;
         this.valorMovimentado = movimentoCaixa.valorMovimentado;
-        this.tipoOperacao = movimentoCaixa.tipoOperacao.trim().equals("1")?"2":"1";        
+        this.tipoOperacao = movimentoCaixa.tipoOperacao.trim().equals("1")?"2":"1";     
+        this.numeroVolumes = "1";
     }
     
     public MovimentoCofre(HttpServletRequest request,MovimentoConta movimentoConta) {

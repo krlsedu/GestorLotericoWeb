@@ -19,9 +19,10 @@ import javax.servlet.http.HttpServletRequest;
  * @author CarlosEduardo
  */
 public class Mensal extends Estatisticas{
-
-    public Mensal(HttpServletRequest request) {
+    Diarias diarias;
+    public Mensal(HttpServletRequest request,Diarias diarias) {
         super(request);
+        this.diarias = diarias;
         calculaValorMovimentado();
     }
       
@@ -33,12 +34,12 @@ public class Mensal extends Estatisticas{
     public String getSaldoMovimentosMes(){
         BigDecimal totalMovimentosDiaL = BigDecimal.ZERO;
         String sql = "select \n" +
-                    "	sum(case when tipo_operacao_caixa in (1) then valor_movimentado else valor_movimentado * (-1) end) \n" +
+                    "	sum(saldo_terminal) \n" +
                     "from \n" +
-                    "	movimentos_caixas  \n" +
+                    "	fechamento_terminais  \n" +
                     "where\n" +
-                    "	extract(month from data_hora_mov) = extract(month from now()) and\n" +
-                    "	extract(year from data_hora_mov) = extract(year from now()) and\n" +
+                    "	extract(month from data_encerramento) = extract(month from now()) and\n" +
+                    "	extract(year from data_encerramento) = extract(year from now()) and\n" +
                     "	id_entidade = ? \n" +
                     "	";
         try {
@@ -51,64 +52,10 @@ public class Mensal extends Estatisticas{
                 totalMovimentosDiaL = BigDecimal.ZERO;
             }
             if(totalMovimentosDiaL==null) totalMovimentosDiaL = BigDecimal.ZERO;
-            totalMovimentosDiaL = totalMovimentosDiaL.subtract(getSaldoAbertura());
-            totalMovimentosDiaL = totalMovimentosDiaL.add(getSaldoOutrosMovimentos());
+            totalMovimentosDiaL = totalMovimentosDiaL.add(diarias.valorMovimentado);
         } catch (SQLException ex) {
             new LogError(ex.getMessage()+sql, ex, request);
         }        
-        return Parser.toString(totalMovimentosDiaL);
-    }
-    
-    public BigDecimal getSaldoAbertura(){
-        String sql = "select \n" +
-                "	troco_dia_anterior+troco_dia \n" +
-                "from \n" +
-                "	abertura_terminais  \n" +
-                "where\n" +
-                    "	extract(month from data_abertura) = extract(month from now()) and\n" +
-                    "	extract(year from data_abertura) = extract(year from now()) and\n" +
-                    "	id_entidade = ? \n";
-        try {
-            PreparedStatement ps = Parametros.getConexao().getPst(sql,false);
-            ps.setInt(1, Parametros.idEntidade);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getBigDecimal(1);
-            }else{
-                return BigDecimal.ZERO;
-            }           
-        } catch (SQLException ex) {
-            new LogError(sql, ex, request);
-        }
-        return BigDecimal.ZERO;
-    }
-    
-    public BigDecimal getSaldoOutrosMovimentos(){
-        String sql = "SELECT \n" +
-                "	sum(case when tipo_operacao_caixa in (1,3,5,7) then valor_movimentado else valor_movimentado * (-1) end)\n" +
-                "FROM \n" +
-                "	outros_movimentos \n" +
-                                "where\n" +
-                    "	extract(month from data_hora_mov) = extract(month from now()) and\n" +
-                    "	extract(year from data_hora_mov) = extract(year from now()) and\n" +
-                    "	id_entidade = ? \n";
-        try {
-            PreparedStatement ps = Parametros.getConexao().getPst(sql,false);
-            ps.setInt(1, Parametros.idEntidade);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                String bgd = rs.getString(1);
-                if(bgd==null){
-                    return BigDecimal.ZERO;
-                }else{
-                    return rs.getBigDecimal(1);
-                }
-            }else{
-                return BigDecimal.ZERO;
-            }  
-        } catch (SQLException ex) {
-            new LogError(sql, ex, request);
-        }
-        return BigDecimal.ZERO;
+        return Parser.formataComMascara(totalMovimentosDiaL);
     }
 }

@@ -60,9 +60,9 @@ public class Parser {
         }
     }
     
-    public static String toString(BigDecimal valor){
+    public static String formataComMascara(BigDecimal valor){
         try{
-            DecimalFormat df = new DecimalFormat("0.00");
+            DecimalFormat df = new DecimalFormat("#,##0.00");
             DecimalFormatSymbols dfs = new DecimalFormatSymbols();
             dfs.setDecimalSeparator(',');
             df.setDecimalFormatSymbols(dfs); 

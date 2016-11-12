@@ -26,10 +26,11 @@ public class Diarias extends Estatisticas{
     }
     
     private void calculaValorMovimentado(){
-        this.valorApresentar = getSaldoMovimentosDia();
+        this.valorMovimentado = getSaldoMovimentosDia();
+        this.valorApresentar = Parser.formataComMascara(this.valorMovimentado);
     }
     
-    public String getSaldoMovimentosDia(){
+    public BigDecimal getSaldoMovimentosDia(){
         BigDecimal totalMovimentosDiaL = BigDecimal.ZERO;
         String sql = "select \n" +
                     "	sum(case when tipo_operacao_caixa in (1) then valor_movimentado else valor_movimentado * (-1) end) \n" +
@@ -54,7 +55,7 @@ public class Diarias extends Estatisticas{
         } catch (SQLException ex) {
             new LogError(ex.getMessage()+sql, ex, request);
         }        
-        return Parser.toString(totalMovimentosDiaL);
+        return totalMovimentosDiaL;
     }
     
     public BigDecimal getSaldoAbertura(){
