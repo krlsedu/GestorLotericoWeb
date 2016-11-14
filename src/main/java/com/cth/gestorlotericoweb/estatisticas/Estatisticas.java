@@ -5,6 +5,7 @@
  */
 package com.cth.gestorlotericoweb.estatisticas;
 
+import com.cth.gestorlotericoweb.saldos.SaldoCofre;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -36,12 +37,19 @@ public class Estatisticas {
         templateConteudo = ve.getTemplate( "templates/Modern/estatisticas.html" , "UTF-8");
         contextConteudo = new VelocityContext();
         writerConteudo = new StringWriter(); 
+        
         Diarias movimentoDiario = new Diarias(request);
         contextConteudo.put("acm_dia",movimentoDiario.valorApresentar); 
         Semanal movimentoSemanal = new Semanal(request,movimentoDiario);
         contextConteudo.put("acm_semana",movimentoSemanal.valorApresentar); 
         Mensal movimentoMensal = new Mensal(request,movimentoDiario);
         contextConteudo.put("acm_mes",movimentoMensal.valorApresentar); 
+        
+        SaldoCofre saldoCofre1 = new SaldoCofre(1, request);
+        SaldoCofre saldoCofre2 = new SaldoCofre(2, request);        
+        contextConteudo.put("saldo_cofre_1", saldoCofre1.getSaldoSt());
+        contextConteudo.put("saldo_cofre_2", saldoCofre2.getSaldoSt());
+        
         templateConteudo.merge( contextConteudo, writerConteudo );
         contextPrinc.put("conteudo", writerConteudo.toString());
         contextPrinc.put("popup", getSWPopup(ve,"movimentos_contas").toString());

@@ -20,10 +20,34 @@ import javax.servlet.http.HttpServletRequest;
  * @author CarlosEduardo
  */
 public class SaldoCofre extends Saldos{
-
+    Integer idCofre;
     public SaldoCofre(HttpServletRequest request) {
         super(request);
     }      
+
+    public SaldoCofre(Integer idCofre, HttpServletRequest request) {
+        super(request);
+        this.idCofre = idCofre;
+    }
+    
+    public String getSaldoSt(){
+        return Parser.formataComMascara(getSaldo());
+    }
+    
+    private BigDecimal getSaldo(){
+        try{
+            PreparedStatement ps = Parametros.getConexao().getPst("SELECT saldo FROM saldos_cofres where id_cofre = ? and id_entidade = ? order by data_saldo desc, data_hora_movimento desc limit 1", false);
+            ps.setInt(1, idCofre);
+            ps.setInt(2, Parametros.idEntidade);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {                
+                return rs.getBigDecimal(1);
+            }
+        }catch (SQLException ex) {
+            new LogError(ex.getMessage(), ex,request);  
+        }
+        return BigDecimal.ZERO;
+    }
     
     public void grava(MovimentoCofre movimentoCofre){
         id = getIdSaldo(movimentoCofre);
