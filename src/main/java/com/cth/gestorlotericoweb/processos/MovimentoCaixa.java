@@ -104,7 +104,7 @@ public class MovimentoCaixa extends Processos{
                 if(this.idCofre!=null){
                     try{
                         MovimentoCofre movimentoCofre = new MovimentoCofre(request, this);         
-                        movimentoCofre.gravaAutoMovCaixa();
+                        movimentoCofre.gravaAutoMov();
                     }catch(Exception e){
 
                     }
@@ -143,7 +143,7 @@ public class MovimentoCaixa extends Processos{
             if(this.idCofre!=null){
                 try{
                     MovimentoCofre movimentoCofre = new MovimentoCofre(request, this);         
-                    movimentoCofre.gravaAutoMovCaixa();
+                    movimentoCofre.gravaAutoMov();
                 }catch(Exception e){
 
                 }

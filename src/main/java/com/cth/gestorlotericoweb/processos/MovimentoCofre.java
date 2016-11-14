@@ -7,6 +7,7 @@ package com.cth.gestorlotericoweb.processos;
 
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
+import com.cth.gestorlotericoweb.saldos.SaldoCofre;
 import com.cth.gestorlotericoweb.utils.Parser;
 import com.cth.gestorlotericoweb.utils.Seter;
 import java.io.StringWriter;
@@ -27,10 +28,10 @@ public class MovimentoCofre extends Processos{
     Integer idMovimentoConta;
     String idCofre;
     String dataHoraMov;
-    String valorMovimentado;
-    String tipoOperacao;
+    public String valorMovimentado;
+    public String tipoOperacao;
     String observacoes;
-    String numeroVolumes;
+    public String numeroVolumes;
     
     public MovimentoCofre(HttpServletRequest request) {
         super(request);
@@ -47,6 +48,7 @@ public class MovimentoCofre extends Processos{
         this.valorMovimentado = request.getParameter("valor_movimentado");
         this.tipoOperacao = request.getParameter("tipo_movimento_cofre");
         this.observacoes = request.getParameter("observacoes");
+        numeroVolumes = "1";
     }
     public MovimentoCofre(Integer id,HttpServletRequest request) {
         super(request, id);
@@ -72,16 +74,18 @@ public class MovimentoCofre extends Processos{
         this.idMovimentoConta = movimentoConta.id;
         this.dataHoraMov = movimentoConta.dataHoraMov;
         this.valorMovimentado = movimentoConta.valorMovimentado;
-        this.valorMovimentado = movimentoConta.numeroVolumes;
+        this.numeroVolumes = movimentoConta.numeroVolumes;
         this.tipoOperacao = movimentoConta.tipoMovimentoConta.trim().equals("1")?"2":"1";        
     }
     
-    public void gravaAutoMovCaixa(){
+    public void gravaAutoMov(){
         if(this.id == 0){
             insere();
         }else{
             altera();
         }
+        SaldoCofre saldoCofre = new SaldoCofre(request);
+        saldoCofre.grava(this);
     }
     
     private Integer getIdMovimentoCofre(MovimentoCaixa movimentoCaixa){
@@ -144,7 +148,17 @@ public class MovimentoCofre extends Processos{
         }
     }
     
-    public void insere(){
+    public void grava(){
+        if("0".equals(request.getParameter("id"))){
+            insere();
+        }else{
+            altera();
+        }
+        SaldoCofre saldoCofre = new SaldoCofre(request);
+        saldoCofre.grava(this);
+    }
+    
+    private void insere(){
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.movimentos_cofres(\n" +
 "             id_cofre, id_movimento_caixa, data_hora_mov, \n" +
@@ -172,7 +186,7 @@ public class MovimentoCofre extends Processos{
         }
     }
     
-    public void altera(){
+    private void altera(){
         String idL = request.getParameter("id");
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.movimentos_cofres\n" +
@@ -211,4 +225,13 @@ public class MovimentoCofre extends Processos{
         contextPrinc.put("popup", getSWPopup(ve,"movimentos_cofres").toString());
         return contextPrinc;
     }
+
+    public String getIdCofre() {
+        return idCofre;
+    }
+
+    public String getDataHoraMov() {
+        return dataHoraMov;
+    }
+    
 }

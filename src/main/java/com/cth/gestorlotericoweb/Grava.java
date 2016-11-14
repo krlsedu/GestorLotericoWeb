@@ -47,8 +47,9 @@ public class Grava {
             ColunasTabelas colunasTabelas = new ColunasTabelas(request);
             String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
             if(tabela !=null){
-                PreparedStatement ps = Parametros.getConexao(request).getPst("delete from "+tabela+" where id = ?", Boolean.FALSE);     
+                PreparedStatement ps = Parametros.getConexao(request).getPst("delete from "+tabela+" where id = ? and id_entidade = ?", Boolean.FALSE);     
                 ps.setInt(1, Integer.valueOf(request.getParameter("id")));
+                ps.setInt(2, Parametros.idEntidade);
                 ps.execute();
             }            
         } catch (SQLException ex) {
@@ -145,11 +146,7 @@ public class Grava {
                     break;
                 case "movimentos_cofres":
                     MovimentoCofre movimentoCofre = new MovimentoCofre(request);
-                    if("0".equals(request.getParameter("id"))){
-                        movimentoCofre.insere();
-                    }else{
-                        movimentoCofre.altera();
-                    }
+                    movimentoCofre.grava();
                     id = movimentoCofre.getId();
                     break;
                 case "movimentos_contas":

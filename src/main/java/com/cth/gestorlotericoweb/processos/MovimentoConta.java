@@ -118,7 +118,7 @@ public class MovimentoConta extends Processos{
                 if(this.idCofre!=null){
                     try{
                         MovimentoCofre movimentoCofre = new MovimentoCofre(request, this);         
-                        movimentoCofre.gravaAutoMovCaixa();
+                        movimentoCofre.gravaAutoMov();
                     }catch(Exception e){
 
                     }
@@ -151,6 +151,14 @@ public class MovimentoConta extends Processos{
             ps.setInt(10, Parametros.idEntidade);
             
             ps.execute();
+            if(this.idCofre!=null){
+                try{
+                    MovimentoCofre movimentoCofre = new MovimentoCofre(request, this);         
+                    movimentoCofre.gravaAutoMov();
+                }catch(Exception e){
+
+                }
+            }
         } catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);
         }
