@@ -93,6 +93,25 @@ public class MovimentoConta extends Processos{
         }
     }
     
+    public void deleta(){
+        try{
+            PreparedStatement psIdMovCofre = Parametros.getConexao().getPst("SELECT id FROM movimentos_cofres WHERE id_movimento_conta = ? and id_entidade = ? ",false);
+            psIdMovCofre.setInt(1, id);
+            psIdMovCofre.setInt(2, Parametros.idEntidade);
+            ResultSet rs = psIdMovCofre.executeQuery();
+            while (rs.next()) {     
+                MovimentoCofre movimentoCofre = new  MovimentoCofre(rs.getInt(1), request);
+                movimentoCofre.deleta();          
+            }
+            PreparedStatement ps = Parametros.getConexao(request).getPst("delete from movimentos_contas where id = ? and id_entidade = ?", Boolean.FALSE);     
+            ps.setInt(1, Integer.valueOf(request.getParameter("id")));
+            ps.setInt(2, Parametros.idEntidade);
+            ps.execute();
+        }catch (SQLException ex) {
+            new LogError(ex.getMessage(), ex,request);
+        }
+    }
+    
     public void insere(){
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.movimentos_contas(\n" +

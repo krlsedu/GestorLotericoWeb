@@ -37,6 +37,7 @@ public class MovimentoCofre extends Processos{
         super(request);
         setMovimentosCaixas();
     }
+    
     private void setMovimentosCaixas() {
         try{
             this.idMovimentoCaixa = Integer.valueOf(request.getParameter("id_movimento_caixa"));
@@ -50,11 +51,11 @@ public class MovimentoCofre extends Processos{
         this.observacoes = request.getParameter("observacoes");
         numeroVolumes = "1";
     }
+    
     public MovimentoCofre(Integer id,HttpServletRequest request) {
         super(request, id);
         getDados();
-    }
-    
+    }    
     
     public MovimentoCofre(HttpServletRequest request,MovimentoCaixa movimentoCaixa) {
         super(request);
@@ -168,9 +169,15 @@ public class MovimentoCofre extends Processos{
                                                                 "set\n" +
                                                                 "	saldo = saldo + ?\n" +
                                                                 "where\n" +
-                                                                "	id > (SELECT id FROM saldos_cofres sc1 where id_movimento_cofre = ?)", false);
+                                                                "	id > (SELECT id FROM saldos_cofres sc1 where id_movimento_cofre = ? limit 1) and"
+                                                                + "     id_cofre = ? and"
+                                                                + "     data_saldo >= (SELECT data_saldo FROM saldos_cofres sc1 where id_movimento_cofre = ? limit 1) and"
+                                                                + "     id_entidade = ? ", false);
                 psUpSaldos.setBigDecimal(1,Parser.toBigDecimalFromHtml(valorMovimentado).multiply(Parser.toBigDecimalFromHtml(numeroVolumes)));
                 psUpSaldos.setInt(2, id);
+                psUpSaldos.setInt(3, Integer.valueOf(idCofre));
+                psUpSaldos.setInt(4, id);
+                psUpSaldos.setInt(5, Parametros.idEntidade);
                 psUpSaldos.execute();
             }else{
                 PreparedStatement psUpSaldos = Parametros.getConexao().getPst("update\n" +
@@ -178,13 +185,19 @@ public class MovimentoCofre extends Processos{
                                                                 "set\n" +
                                                                 "	saldo = saldo - ?\n" +
                                                                 "where\n" +
-                                                                "	id > (SELECT id FROM saldos_cofres sc1 where id_movimento_cofre = ?)", false);
+                                                                "	id > (SELECT id FROM saldos_cofres sc1 where id_movimento_cofre = ? limit 1) and"
+                                                                + "     id_cofre = ? and"
+                                                                + "     data_saldo >= (SELECT data_saldo FROM saldos_cofres sc1 where id_movimento_cofre = ? limit 1) and"
+                                                                + "     id_entidade = ? ", false);
                 psUpSaldos.setBigDecimal(1,Parser.toBigDecimalFromHtml(valorMovimentado).multiply(Parser.toBigDecimalFromHtml(numeroVolumes)));
                 psUpSaldos.setInt(2, id);
+                psUpSaldos.setInt(3, Integer.valueOf(idCofre));
+                psUpSaldos.setInt(4, id);
+                psUpSaldos.setInt(5, Parametros.idEntidade);
                 psUpSaldos.execute();
             }
             PreparedStatement ps = Parametros.getConexao(request).getPst("delete from movimentos_cofres where id = ? and id_entidade = ?", Boolean.FALSE);     
-            ps.setInt(1, Integer.valueOf(request.getParameter("id")));
+            ps.setInt(1, id);
             ps.setInt(2, Parametros.idEntidade);
             ps.execute();
         }catch (SQLException ex) {

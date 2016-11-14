@@ -51,6 +51,14 @@ public class Grava {
                     MovimentoCofre movimentoCofre = new MovimentoCofre(Integer.valueOf(request.getParameter("id")),request);
                     movimentoCofre.deleta();
                     break;
+                case "movimentos_caixas":
+                    MovimentoCaixa movimentoCaixa = new MovimentoCaixa(Integer.valueOf(request.getParameter("id")),request);
+                    movimentoCaixa.deleta();
+                    break;
+                case "movimentos_contas":
+                    MovimentoConta movimentoConta = new MovimentoConta(Integer.valueOf(request.getParameter("id")), request);
+                    movimentoConta.deleta();
+                    break;
                 default:                    
                     tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
                     if(tabela !=null){
