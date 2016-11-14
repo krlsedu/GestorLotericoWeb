@@ -116,7 +116,10 @@ function addItem(tela){
 }
 
 function rmItem(){
-    var element = document.getElementById("item_"+document.getElementById("num_linhas").value);
+    var num_linhas = parseInt(document.getElementById("num_linhas").value);
+    var element = document.getElementById("item_"+num_linhas);
+    num_linhas -= 1;
+    document.getElementById("num_linhas").value = num_linhas;
     element.parentNode.removeChild(element);
     element.remove();
 }
