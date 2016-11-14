@@ -65,6 +65,7 @@ public class Parser {
             DecimalFormat df = new DecimalFormat("#,##0.00");
             DecimalFormatSymbols dfs = new DecimalFormatSymbols();
             dfs.setDecimalSeparator(',');
+            dfs.setMonetaryDecimalSeparator('.');
             df.setDecimalFormatSymbols(dfs); 
             return "R$ "+df.format((valor));
         }catch(Exception e){

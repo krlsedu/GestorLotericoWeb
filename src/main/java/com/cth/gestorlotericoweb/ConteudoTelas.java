@@ -19,6 +19,8 @@ import com.cth.gestorlotericoweb.processos.FechamentoTerminal;
 import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
 import com.cth.gestorlotericoweb.processos.MovimentoCofre;
 import com.cth.gestorlotericoweb.processos.MovimentoConta;
+import com.cth.gestorlotericoweb.processos.OperacoesDiarias;
+import com.cth.gestorlotericoweb.processos.OperacoesDiariasLinhas;
 import com.cth.gestorlotericoweb.processos.OutroMovimento;
 import java.io.StringWriter;
 import javax.servlet.http.HttpServletRequest;
@@ -104,6 +106,16 @@ public class ConteudoTelas {
                     case "outros_movimentos":      
                         OutroMovimento outroMovimento = new OutroMovimento(request);
                         contextPrinc = outroMovimento.getHtml(contextPrinc, ve, id);
+                    break;
+
+                    case "operacoes_diarias":      
+                        OperacoesDiarias operacoesDiarias = new OperacoesDiarias(request);
+                        contextPrinc = operacoesDiarias.getHtml(contextPrinc, ve, id);
+                    break;
+
+                    case "operacoes_diarias_linhas":      
+                        OperacoesDiariasLinhas operacoesDiariasLinhas = new OperacoesDiariasLinhas(request);
+                        contextPrinc = operacoesDiariasLinhas.getHtml(contextPrinc, ve, id);
                     break;
 
                     case "fechamento_terminais":      

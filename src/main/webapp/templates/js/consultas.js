@@ -86,7 +86,6 @@ function buscaConteudoTela(tela){
             data:{"it":tela},
             success: function (data) {   
                 $("#conteudo_telas").html(data);
-                //document.getElementById("conteudo_telas").innerHTML = data;
             }, 
             error: function (jXHR, textStatus, errorThrown) {
                 document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
@@ -94,6 +93,32 @@ function buscaConteudoTela(tela){
             }             
         }
     );
+}
+
+function addItem(tela){    
+    var num_linhas = parseInt(document.getElementById("num_linhas").value);
+    num_linhas += 1;
+    document.getElementById("num_linhas").value = num_linhas;
+    $.ajax(
+        {
+            type: "POST",
+            url:  "conteudo_telas",
+            data:{"it":tela,"num_linhas":num_linhas},
+            success: function (data) {   
+                $("#btns-add-rm-linhas").before(data);
+            }, 
+            error: function (jXHR, textStatus, errorThrown) {
+                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
+                $('#modal_avisos').modal('show');   
+            }             
+        }
+    );
+}
+
+function rmItem(){
+    var element = document.getElementById("item_"+document.getElementById("num_linhas").value);
+    element.parentNode.removeChild(element);
+    element.remove();
 }
 
 function consultaDadosFk(tabela,colunaBuscar){
@@ -266,6 +291,7 @@ function limpa(){
 
 $(document).on("submit", '#form_dados', function(event) { 
     event.preventDefault();  
+    alert($("#form_dados").serialize());
     $.ajax({
         type: "POST",
         url:  "grava",
