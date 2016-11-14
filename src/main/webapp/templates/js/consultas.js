@@ -261,7 +261,7 @@ function fechaPopUp(){
 }
 
 function limpa(){    
-    document.getElementById('id').value='0';
+    buscaConteudoTela(document.getElementById("it").value);
 }
 
 $(document).on("submit", '#form_dados', function(event) { 
@@ -280,6 +280,6 @@ $(document).on("submit", '#form_dados', function(event) {
             document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
             $('#modal_avisos').modal('show');   
         }
-    }); 
+    });     
     $("#botao-gravar").off("click");
 });
