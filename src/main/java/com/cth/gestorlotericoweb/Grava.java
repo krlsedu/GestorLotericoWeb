@@ -45,13 +45,22 @@ public class Grava {
     private void deleta(){
         try {                    
             ColunasTabelas colunasTabelas = new ColunasTabelas(request);
-            String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
-            if(tabela !=null){
-                PreparedStatement ps = Parametros.getConexao(request).getPst("delete from "+tabela+" where id = ? and id_entidade = ?", Boolean.FALSE);     
-                ps.setInt(1, Integer.valueOf(request.getParameter("id")));
-                ps.setInt(2, Parametros.idEntidade);
-                ps.execute();
-            }            
+            String tabela = request.getParameter("tabela");
+            switch(tabela){
+                case "movimentos_cofres":
+                    MovimentoCofre movimentoCofre = new MovimentoCofre(Integer.valueOf(request.getParameter("id")),request);
+                    movimentoCofre.deleta();
+                    break;
+                default:                    
+                    tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
+                    if(tabela !=null){
+                        PreparedStatement ps = Parametros.getConexao(request).getPst("delete from "+tabela+" where id = ? and id_entidade = ?", Boolean.FALSE);     
+                        ps.setInt(1, Integer.valueOf(request.getParameter("id")));
+                        ps.setInt(2, Parametros.idEntidade);
+                        ps.execute();
+                    }   
+                    break;
+            }         
         } catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);
         }
