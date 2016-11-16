@@ -1,5 +1,12 @@
+
 <div class="form-group mb-n" id="item_$num">
-        <label for="smallinput" class="col-sm-2 control-label label-input-sm">Item $num</label>
+        <script type="text/javascript">
+                $(function () {
+                    $("#id_operacao_$num").mask("99999999");
+                    $("#quantidade_$num").mask("99999999");
+                });
+        </script>
+        <label for="smallinput" class="col-sm-2 control-label label-input-sm" id="label_id_operacao_$num">Item $num</label>
         <div class="col-sm-2">
             <div class="input-group">
                 <div class="input-group-addon" onclick="ativaPopUp('operacoes','id_operacao_$num','Consulta código Operação')">
@@ -10,11 +17,7 @@
                         required>                        
             </div>
         </div> 
-        <div class="col-sm-3">
-            <div class="well-sm" id="label_id_operacao_$num">
-            </div>
-        </div>
-        <div class="col-sm-4"> 
+        <div class="col-sm-2"> 
             <div class="input-group">
                 <span class="input-group-addon">Qtd</span>
                 <input name="quantidade_$num" id="quantidade_$num" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
