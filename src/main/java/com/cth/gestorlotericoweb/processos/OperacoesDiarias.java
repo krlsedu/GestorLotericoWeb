@@ -25,7 +25,6 @@ public class OperacoesDiarias extends Processos{
 
     public OperacoesDiarias(HttpServletRequest request) {
         super(request);
-        setOperacoesDiarias();
     }
     
     private void setOperacoesDiarias(){
