@@ -23,6 +23,10 @@ public class OperacoesDiariasLinhas extends Processos{
         this.linha = request.getParameter("num_linhas");
     } 
     
+    public OperacoesDiariasLinhas(HttpServletRequest request,OperacoesDiarias operacoesDiarias) {
+        super(request);
+    } 
+    
     public VelocityContext getHtml(VelocityContext contextPrinc,VelocityEngine ve,String idS){        
         Template templateConteudo;
         VelocityContext contextConteudo;
