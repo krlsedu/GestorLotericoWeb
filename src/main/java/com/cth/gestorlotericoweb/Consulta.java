@@ -182,28 +182,29 @@ public class Consulta {
                             while (rsDet.next()) {                                
                                 nLinhas++;
                                 for(int i = 1; i<=rsDet.getMetaData().getColumnCount();i++){  
-                                    lInputs.add("<input type=\"text\" id=\"nome_coluna_"+i+colCount+"\" value=\""+rsDet.getMetaData().getColumnName(i)+"\" readonly>");
+                                    Integer nCol = i+colCount;
+                                    lInputs.add("<input type=\"text\" id=\"nome_coluna_"+nCol+"\" value=\""+rsDet.getMetaData().getColumnName(i)+"_"+nLinhas+"\" readonly>");
                                     if(rsDet.getString(i)!=null){
                                         switch(rsDet.getMetaData().getColumnType(i)){
                                             case java.sql.Types.NUMERIC:
-                                                lInputs.add("<input type=\"text\" id=\"busca_col_"+rsDet.getMetaData().getColumnName(i)+"\" value=\""+Parser.toHtmlBigDecimal(rsDet.getBigDecimal(i))+"\" readonly>");
+                                                lInputs.add("<input type=\"text\" id=\"busca_col_"+rsDet.getMetaData().getColumnName(i)+"_"+nLinhas+"\" value=\""+Parser.toHtmlBigDecimal(rsDet.getBigDecimal(i))+"\" readonly>");
                                                 break;
                                             case java.sql.Types.TIMESTAMP:
-                                                lInputs.add("<input type=\"text\" id=\"busca_col_"+rsDet.getMetaData().getColumnName(i)+"\" value=\""+rsDet.getString(i).trim().replace(" ", "T")+"\" readonly>");
+                                                lInputs.add("<input type=\"text\" id=\"busca_col_"+rsDet.getMetaData().getColumnName(i)+"_"+nLinhas+"\" value=\""+rsDet.getString(i).trim().replace(" ", "T")+"\" readonly>");
                                                 break;
                                             default:
-                                                lInputs.add("<input type=\"text\" id=\"busca_col_"+rsDet.getMetaData().getColumnName(i)+"\" value=\""+rsDet.getString(i)+"\" readonly>");
+                                                lInputs.add("<input type=\"text\" id=\"busca_col_"+rsDet.getMetaData().getColumnName(i)+"_"+nLinhas+"\" value=\""+rsDet.getString(i)+"\" readonly>");
                                                 break;
                                         }
                                     }else{
-                                        lInputs.add("<input type=\"text\" id=\"busca_col_"+rsDet.getMetaData().getColumnName(i)+"\" value=\""+rsDet.getString(i)+"\" readonly>");
+                                        lInputs.add("<input type=\"text\" id=\"busca_col_"+rsDet.getMetaData().getColumnName(i)+"_"+nLinhas+"\" value=\""+rsDet.getString(i)+"\" readonly>");
                                     }
                                 }
                                 colCount += rs.getMetaData().getColumnCount();
                             }
                             lInputs.add("<input type=\"text\" id=\"num_linhas\" value=\""+nLinhas+"\" readonly>");
                             lInputs.add("<input type=\"text\" id=\"nome_linhas\" value=\"operacoes_diarias_linhas\" readonly>");
-                            break;
+                        break;
                     }
                 }
                 lInputs.add("<input type=\"text\" id=\"num_cols\" value=\""+colCount+"\" readonly>");

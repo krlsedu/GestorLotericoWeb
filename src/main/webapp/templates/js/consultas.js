@@ -159,32 +159,15 @@ function buscaDadosN(tabela){
             success: function (data) {     
                 var parser = new DOMParser();
                 var htmlDoc = parser.parseFromString(data, "text/html");
-                var ncols = htmlDoc.getElementById("num_cols").value;
                 var nLinhas = htmlDoc.getElementById("num_linhas").value;
                 var nomeLinhas = htmlDoc.getElementById("nome_linhas").value;
                 if(!(nLinhas===null||nLinhas==='null')){
-                    for(i=0;i<parseInt(nLinhas);i++){
-                        addItem(nomeLinhas);
+                    var numLinhas = parseInt(document.getElementById("num_linhas").value);
+                    for(i=numLinhas;i<parseInt(nLinhas);i++){
+                        addItem(nomeLinhas);            
                     }
                 }
-                for (i=1;i<=ncols;i++){
-                    var nomeCol = htmlDoc.getElementById("nome_coluna_"+i).value;
-                    var valr = htmlDoc.getElementById("busca_col_"+nomeCol).value;
-                    var tipo = document.getElementById(nomeCol).type;
-                    if(!(valr===null||valr==='null')){
-                        if(tipo==="select-one"||tipo==="textarea"){
-                                document.getElementById(nomeCol).value = valr;
-                        }else{
-                                $('input#'+nomeCol).val(valr).trigger('mask.maskMoney');
-                        }                        
-                        try{
-                            document.getElementById(nomeCol).onchange();
-                        }catch (e){
-
-                        }
-                    }
-                }
-                fechaPopUp();
+                setTimeout(function() {insereDados(htmlDoc);}, 100);
             }, 
             error: function (jXHR, textStatus, errorThrown) {
                 document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
@@ -192,6 +175,33 @@ function buscaDadosN(tabela){
             }             
         }
     );
+}
+
+function insereDados(htmlDoc){
+    var ncols = htmlDoc.getElementById("num_cols").value;
+    
+    for (i=1;i<=ncols;i++){
+        try{
+            var nomeCol = htmlDoc.getElementById("nome_coluna_"+i).value;
+            var valr = htmlDoc.getElementById("busca_col_"+nomeCol).value;
+            var tipo = document.getElementById(nomeCol).type;
+            if(!(valr===null||valr==='null')){
+                if(tipo==="select-one"||tipo==="textarea"){
+                        document.getElementById(nomeCol).value = valr;
+                }else{
+                        $('input#'+nomeCol).val(valr).trigger('mask.maskMoney');
+                }                        
+                try{
+                    document.getElementById(nomeCol).onchange();
+                }catch (e){
+
+                }
+            }
+        }catch (e){
+
+        }
+    }
+    fechaPopUp();
 }
 
 function consultaCampoAuto(valorBuscar){
