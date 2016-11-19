@@ -26,7 +26,7 @@ import org.apache.velocity.app.VelocityEngine;
  */
 public class OperacoesDiarias extends Processos{
     Integer numLinhas;
-    public Map<Integer,Integer> mapOpers;
+    public Map<Integer,Map<Integer,Integer>> mapOpers;
     Integer idTerminal;
     Integer idFuncionario;
     String dataOperacoes;
@@ -34,26 +34,36 @@ public class OperacoesDiarias extends Processos{
 
     public OperacoesDiarias(HttpServletRequest request) {
         super(request);
-        setOperacoesDiarias();
+        this.id = 0;
     }
     
-    private void setOperacoesDiarias(){
+    public void setOperacoesDiarias(){
         try{
-            this.numLinhas = Integer.valueOf(request.getParameter("id_conta"));
-            mapOpers = new HashMap<>();
-            for(int i=1;i<=numLinhas;i++){
-                mapOpers.put(Integer.valueOf(request.getParameter("id_operacao_"+i)),Integer.valueOf(request.getParameter("quantidade_"+1)));
-            }
+            this.numLinhas = Integer.valueOf(request.getParameter("num_linhas"));
             idTerminal = Integer.valueOf(request.getParameter("id_terminal"));
             idFuncionario = Integer.valueOf(request.getParameter("id_funcionario"));
             dataOperacoes = request.getParameter("data_operacoes");
             this.observacoes = request.getParameter("observacoes");
+            mapOpers = new HashMap<>();
+            for(int i=1;i<=numLinhas;i++){
+                Map<Integer,Integer> mv = new HashMap<>();
+                mv.put(Integer.valueOf(request.getParameter("id_item_"+i)),Integer.valueOf(request.getParameter("quantidade_"+i)));
+                mapOpers.put(Integer.valueOf(request.getParameter("id_operacao_"+i)),mv);
+            }
         }catch(Exception ex){
-            
+            new LogError(ex.getMessage(), ex,request);
         }
     }
     
-    public void insere(){
+    public void grava(){
+        if("0".equals(request.getParameter("id"))){
+            insere();
+        }else{
+            altera();
+        }
+    }
+    
+    private void insere(){
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.operacoes_diarias(\n" +
                                                                 "             id_terminal, id_funcionario, data_operacoes, \n" +
@@ -69,7 +79,8 @@ public class OperacoesDiarias extends Processos{
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()){
                 id = rs.getInt(1);
-                
+                OperacoesDiariasLinhas odl = new OperacoesDiariasLinhas(request, this);
+                odl.insere();
             }
             
         } catch (SQLException ex) {
@@ -77,7 +88,7 @@ public class OperacoesDiarias extends Processos{
         }
     }
     
-    public void altera(){
+    private void altera(){
         String idL = request.getParameter("id");
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.operacoes_diarias\n" +
@@ -117,7 +128,12 @@ public class OperacoesDiarias extends Processos{
         templateConteudo = ve.getTemplate( "templates/Modern/processos/operacoes_diarias.html" , "UTF-8");
         contextConteudo = new VelocityContext();
         writerConteudo = new StringWriter();
-        contextConteudo.put("btns_percorrer",getSWBotoesPercorrer(ve).toString());       
+        contextConteudo.put("btns_percorrer",getSWBotoesPercorrer(ve).toString()); 
+        if(!id.equals(0)){
+            contextConteudo.put("linhas_det","");
+        }else{
+            contextConteudo.put("linhas_det","");
+        }
         setOpcoesFiltro("operacoes_diarias");
         templateConteudo.merge( contextConteudo, writerConteudo );
         contextPrinc.put("conteudo", writerConteudo.toString());

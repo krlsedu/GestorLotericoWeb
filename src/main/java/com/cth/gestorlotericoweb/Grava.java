@@ -19,6 +19,7 @@ import com.cth.gestorlotericoweb.processos.FechamentoTerminal;
 import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
 import com.cth.gestorlotericoweb.processos.MovimentoCofre;
 import com.cth.gestorlotericoweb.processos.MovimentoConta;
+import com.cth.gestorlotericoweb.processos.OperacoesDiarias;
 import com.cth.gestorlotericoweb.processos.OutroMovimento;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -192,6 +193,12 @@ public class Grava {
                         fechamentoTerminal.altera();
                     }
                     id = fechamentoTerminal.getId();
+                    break;
+                case "operacoes_diarias":
+                    OperacoesDiarias operacoesDiarias = new OperacoesDiarias(request);
+                    operacoesDiarias.setOperacoesDiarias();
+                    operacoesDiarias.grava();
+                    id = operacoesDiarias.getId();
                     break;
             //fim gravação processos
             default:
