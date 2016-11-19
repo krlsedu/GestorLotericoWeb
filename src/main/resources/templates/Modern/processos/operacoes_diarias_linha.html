@@ -7,8 +7,8 @@
                 });
         </script>
         <label for="smallinput" class="col-sm-2 control-label label-input-sm" id="label_id_operacao_$num">Item $num</label>
-        <div class="col-sm-2">
-            <div class="input-group">
+        <div class="col-sm-2" id="col_1_$num">
+            <div class="input-group" id="col_1_1_$num">
                 <div class="input-group-addon" onclick="ativaPopUp('operacoes','id_operacao_$num','Consulta código Operação')">
                     <i class="i_botao_buscar fa fa-search" ></i>
                 </div>
@@ -17,10 +17,15 @@
                         required>                        
             </div>
         </div> 
-        <div class="col-sm-2"> 
-            <div class="input-group">
+        <div class="col-sm-2" id="col_2_$num"> 
+            <div class="input-group" id="col_2_1_$num">
                 <span class="input-group-addon">Qtd</span>
                 <input name="quantidade_$num" id="quantidade_$num" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
+            </div>
+        </div>
+        <div class="col-sm-2" id="col_3_$num"> 
+            <div class="input-group" id="col_3_1_$num">
+                <button id="rm_btn_$num" type="button" class="btn btn-success warning_2" onclick="rmItem('$num','label_id_operacao_$num , id_operacao_$num , quantidade_$num')">Remover</button>
             </div>
         </div>
         <input type="hidden" id="id_$num" name="id_$num" value="$id_reg" />

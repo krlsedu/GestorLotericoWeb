@@ -78,7 +78,7 @@ function consultaDadosBuscaId(tabela){
     );
 }
 
-function buscaConteudoTela(tela){    
+function buscaConteudoTela(tela){ 
     $.ajax(
         {
             type: "POST",
@@ -86,6 +86,7 @@ function buscaConteudoTela(tela){
             data:{"it":tela},
             success: function (data) {   
                 $("#conteudo_telas").html(data);
+                    alert(tela);
             }, 
             error: function (jXHR, textStatus, errorThrown) {
                 document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
@@ -114,14 +115,36 @@ function addItem(tela){
         }
     );
 }
-
 function rmItem(){
+    rmItem(null,null)
+}
+function rmItem(linha,elementos){
     var num_linhas = parseInt(document.getElementById("num_linhas").value);
-    var element = document.getElementById("item_"+num_linhas);
-    num_linhas -= 1;
-    document.getElementById("num_linhas").value = num_linhas;
-    element.parentNode.removeChild(element);
-    element.remove();
+    if(!(linha===null||linha==='null')&&num_linhas!==linha){
+        var element = document.getElementById("item_"+linha);
+        var elements = elementos.split(",");
+        var i = elements.length;
+        while(i--){
+            document.getElementById(elements[i].replace(linha,num_linhas).trim()).setAttribute('name', elements[i].trim());
+            document.getElementById(elements[i].replace(linha,num_linhas).trim()).setAttribute('id', elements[i].trim()); 
+        } 
+        document.getElementById("item_"+num_linhas).setAttribute('id', "item_"+linha); 
+        document.getElementById("id_"+num_linhas).setAttribute('name', "id_"+linha); 
+        document.getElementById("id_"+num_linhas).setAttribute('id', "id_"+linha); 
+        document.getElementById('rm_btn_'+num_linhas).setAttribute('onclick',"rmItem('"+linha+"','label_id_operacao_"+linha+" , id_operacao_"+linha+" , quantidade_"+linha+"')");
+        document.getElementById('rm_btn_'+num_linhas).setAttribute('id', 'rm_btn_'+linha);  
+        num_linhas -= 1;
+        document.getElementById("num_linhas").value = num_linhas;
+        element.parentNode.removeChild(element);
+        element.remove(); 
+    }else{
+        var num_linhas = parseInt(document.getElementById("num_linhas").value);
+        var element = document.getElementById("item_"+num_linhas);
+        num_linhas -= 1;
+        document.getElementById("num_linhas").value = num_linhas;
+        element.parentNode.removeChild(element);
+        element.remove();        
+    }
 }
 
 function consultaDadosFk(tabela,colunaBuscar){
@@ -159,21 +182,25 @@ function buscaDadosN(tabela){
             success: function (data) {     
                 var parser = new DOMParser();
                 var htmlDoc = parser.parseFromString(data, "text/html");
-                var nLinhas = htmlDoc.getElementById("num_linhas").value;
-                var nomeLinhas = htmlDoc.getElementById("nome_linhas").value;
-                if(!(nLinhas===null||nLinhas==='null')){
-                    var numLinhas = parseInt(document.getElementById("num_linhas").value);
-                    if(numLinhas<parseInt(nLinhas)){
-                        for(i=numLinhas;i<parseInt(nLinhas);i++){
-                            addItem(nomeLinhas);            
+                try{
+                    var nLinhas = htmlDoc.getElementById("num_linhas").value;
+                    var nomeLinhas = htmlDoc.getElementById("nome_linhas").value;
+                    if(!(nLinhas===null||nLinhas==='null')){
+                        var numLinhas = parseInt(document.getElementById("num_linhas").value);
+                        if(numLinhas<parseInt(nLinhas)){
+                            for(i=numLinhas;i<parseInt(nLinhas);i++){
+                                addItem(nomeLinhas);            
+                            }
+                        }else{
+                            for(i=parseInt(nLinhas);i<numLinhas;i++){
+                                rmItem(null);
+                            }
                         }
-                    }else{
-                        for(i=parseInt(nLinhas);i<numLinhas;i++){
-                            rmItem();
-                        }
-                    }
+                    }                
+                    setTimeout(function() {insereDados(htmlDoc);}, 100);
+                }catch (e){
+                    insereDados(htmlDoc);
                 }
-                setTimeout(function() {insereDados(htmlDoc);}, 100);
             }, 
             error: function (jXHR, textStatus, errorThrown) {
                 document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
@@ -322,7 +349,7 @@ $(document).on("submit", '#form_dados', function(event) {
         url:  "grava",
         data: $("#form_dados").serialize(),
         success: function (data) {    
-            setaIdEBusca(data.trim());
+            //setaIdEBusca(data.trim());
             document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-success\" role=\"alert\" style=\"text-align: center\"> O registro foi gravado com sucesso! </div>";
             $('#modal_avisos').modal('show');
             limpa();

@@ -34,7 +34,6 @@ public class OperacoesDiarias extends Processos{
 
     public OperacoesDiarias(HttpServletRequest request) {
         super(request);
-        this.id = 0;
     }
     
     public void setOperacoesDiarias(){
@@ -131,7 +130,7 @@ public class OperacoesDiarias extends Processos{
         contextConteudo = new VelocityContext();
         writerConteudo = new StringWriter();
         contextConteudo.put("btns_percorrer",getSWBotoesPercorrer(ve).toString()); 
-        if(!id.equals(0)){
+        if(id!=null){
             contextConteudo.put("linhas_det","");
         }else{
             contextConteudo.put("linhas_det","");
