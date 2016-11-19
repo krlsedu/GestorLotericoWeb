@@ -50,8 +50,8 @@ public class OperacoesDiariasLinhas extends Processos{
     
     public void insere(){
         mapOpers.keySet().stream().forEach((i) -> {
-            mapOpers.get(i).keySet().stream().forEach((id) -> {
-                insere( i, mapOpers.get(i).get(id));
+            mapOpers.get(i).keySet().stream().forEach((idTmp) -> {
+                insere( i, mapOpers.get(i).get(idTmp));
             });
         });
     }
@@ -91,7 +91,7 @@ public class OperacoesDiariasLinhas extends Processos{
                     if(listKeys.contains(idGr)&&!idGr.equals(0)){
                         update(idGr,mapOpers.get(oper).get(idGr));
                     }else{
-                        insere(idGr, id);
+                        insere(oper, mapOpers.get(oper).get(idGr));
                     }
                 });
             });
@@ -109,8 +109,8 @@ public class OperacoesDiariasLinhas extends Processos{
     private void update(Integer idGr,Integer qtd){
         try{           
             
-            PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.operacoes_diarias_det\n" +
-                                                        " quantidade=? \n" +
+            PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.operacoes_diarias_det \n" +
+                                                        "set quantidade=? \n" +
                                                     " where id = ? ", false);
             ps.setInt(1, qtd);
             ps.setInt(2, idGr);
@@ -123,9 +123,8 @@ public class OperacoesDiariasLinhas extends Processos{
     
     private void deleta(Integer idRm){
         try{
-            PreparedStatement ps = Parametros.getConexao(request).getPst("delete from operacoes_diarias_det where id = ? and id_entidade = ?", Boolean.FALSE);     
+            PreparedStatement ps = Parametros.getConexao(request).getPst("delete from operacoes_diarias_det where id = ? ", Boolean.FALSE);     
             ps.setInt(1, idRm);
-            ps.setInt(2, Parametros.idEntidade);
             ps.execute();
         }catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);

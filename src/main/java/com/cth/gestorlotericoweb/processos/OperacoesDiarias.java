@@ -47,8 +47,8 @@ public class OperacoesDiarias extends Processos{
             mapOpers = new HashMap<>();
             for(int i=1;i<=numLinhas;i++){
                 Map<Integer,Integer> mv = new HashMap<>();
-                mv.put(Integer.valueOf(request.getParameter("id_item_"+i)),Integer.valueOf(request.getParameter("quantidade_"+i)));
-                mapOpers.put(Integer.valueOf(request.getParameter("id_"+i)),mv);
+                mv.put(Integer.valueOf(request.getParameter("id_"+i)),Integer.valueOf(request.getParameter("quantidade_"+i)));
+                mapOpers.put(Integer.valueOf(request.getParameter("id_operacao_"+i)),mv);
             }
         }catch(Exception ex){
             new LogError(ex.getMessage(), ex,request);
@@ -105,6 +105,8 @@ public class OperacoesDiarias extends Processos{
             ps.setInt(6, Parametros.idEntidade);
             
             ps.execute();
+            OperacoesDiariasLinhas odl = new OperacoesDiariasLinhas(request, this);
+            odl.altera();
         } catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);
         }

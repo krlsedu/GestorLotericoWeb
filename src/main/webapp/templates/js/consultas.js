@@ -163,8 +163,14 @@ function buscaDadosN(tabela){
                 var nomeLinhas = htmlDoc.getElementById("nome_linhas").value;
                 if(!(nLinhas===null||nLinhas==='null')){
                     var numLinhas = parseInt(document.getElementById("num_linhas").value);
-                    for(i=numLinhas;i<parseInt(nLinhas);i++){
-                        addItem(nomeLinhas);            
+                    if(numLinhas<parseInt(nLinhas)){
+                        for(i=numLinhas;i<parseInt(nLinhas);i++){
+                            addItem(nomeLinhas);            
+                        }
+                    }else{
+                        for(i=parseInt(nLinhas);i<numLinhas;i++){
+                            rmItem();
+                        }
                     }
                 }
                 setTimeout(function() {insereDados(htmlDoc);}, 100);
@@ -311,7 +317,6 @@ function limpa(){
 
 $(document).on("submit", '#form_dados', function(event) { 
     event.preventDefault();  
-    alert($("#form_dados").serialize());
     $.ajax({
         type: "POST",
         url:  "grava",
