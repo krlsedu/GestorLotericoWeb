@@ -160,6 +160,13 @@ function buscaDadosN(tabela){
                 var parser = new DOMParser();
                 var htmlDoc = parser.parseFromString(data, "text/html");
                 var ncols = htmlDoc.getElementById("num_cols").value;
+                var nLinhas = htmlDoc.getElementById("num_linhas").value;
+                var nomeLinhas = htmlDoc.getElementById("nome_linhas").value;
+                if(!(nLinhas===null||nLinhas==='null')){
+                    for(i=0;i<parseInt(nLinhas);i++){
+                        addItem(nomeLinhas);
+                    }
+                }
                 for (i=1;i<=ncols;i++){
                     var nomeCol = htmlDoc.getElementById("nome_coluna_"+i).value;
                     var valr = htmlDoc.getElementById("busca_col_"+nomeCol).value;

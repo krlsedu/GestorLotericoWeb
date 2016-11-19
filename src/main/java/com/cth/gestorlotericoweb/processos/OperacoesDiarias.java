@@ -48,7 +48,7 @@ public class OperacoesDiarias extends Processos{
             for(int i=1;i<=numLinhas;i++){
                 Map<Integer,Integer> mv = new HashMap<>();
                 mv.put(Integer.valueOf(request.getParameter("id_item_"+i)),Integer.valueOf(request.getParameter("quantidade_"+i)));
-                mapOpers.put(Integer.valueOf(request.getParameter("id_operacao_"+i)),mv);
+                mapOpers.put(Integer.valueOf(request.getParameter("id_"+i)),mv);
             }
         }catch(Exception ex){
             new LogError(ex.getMessage(), ex,request);

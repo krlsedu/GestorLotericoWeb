@@ -143,6 +143,7 @@ public class Consulta {
     private void geraTabelaDados(){        
         ColunasTabelas colunasTabelas = new ColunasTabelas(request);
         String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
+        Integer colCount = 0;
         if(tabela !=null){
             String sql = "select "+colunasTabelas.getTabColsDados(tabela)+" from "+tabela+" where id_entidade = ? and id = ? ";
             try {
@@ -152,7 +153,7 @@ public class Consulta {
                 ResultSet rs = ps.executeQuery();
                 List<String> lInputs = new ArrayList<>();
                 if (rs.next()) {
-                    lInputs.add("<input type=\"text\" id=\"num_cols\" value=\""+rs.getMetaData().getColumnCount()+"\" readonly>");
+                    colCount = rs.getMetaData().getColumnCount();
                     for(int i = 1; i<=rs.getMetaData().getColumnCount();i++){  
                         lInputs.add("<input type=\"text\" id=\"nome_coluna_"+i+"\" value=\""+rs.getMetaData().getColumnName(i)+"\" readonly>");
                         if(rs.getString(i)!=null){
@@ -171,7 +172,41 @@ public class Consulta {
                             lInputs.add("<input type=\"text\" id=\"busca_col_"+rs.getMetaData().getColumnName(i)+"\" value=\""+rs.getString(i)+"\" readonly>");
                         }
                     }
+                    switch(tabela){
+                        case "operacoes_diarias":
+                            String sqlDet = "select "+colunasTabelas.getTabColsDados(tabela+"_det")+" from "+tabela+"_det where id_operacoes_diarias = ? ";
+                            PreparedStatement psDet = Parametros.getConexao(request).getPst(sqlDet, false);
+                            psDet.setInt(1, Integer.valueOf(request.getParameter("id")));
+                            ResultSet rsDet = psDet.executeQuery();
+                            Integer nLinhas = 0;
+                            while (rsDet.next()) {                                
+                                nLinhas++;
+                                for(int i = 1; i<=rsDet.getMetaData().getColumnCount();i++){  
+                                    lInputs.add("<input type=\"text\" id=\"nome_coluna_"+i+colCount+"\" value=\""+rsDet.getMetaData().getColumnName(i)+"\" readonly>");
+                                    if(rsDet.getString(i)!=null){
+                                        switch(rsDet.getMetaData().getColumnType(i)){
+                                            case java.sql.Types.NUMERIC:
+                                                lInputs.add("<input type=\"text\" id=\"busca_col_"+rsDet.getMetaData().getColumnName(i)+"\" value=\""+Parser.toHtmlBigDecimal(rsDet.getBigDecimal(i))+"\" readonly>");
+                                                break;
+                                            case java.sql.Types.TIMESTAMP:
+                                                lInputs.add("<input type=\"text\" id=\"busca_col_"+rsDet.getMetaData().getColumnName(i)+"\" value=\""+rsDet.getString(i).trim().replace(" ", "T")+"\" readonly>");
+                                                break;
+                                            default:
+                                                lInputs.add("<input type=\"text\" id=\"busca_col_"+rsDet.getMetaData().getColumnName(i)+"\" value=\""+rsDet.getString(i)+"\" readonly>");
+                                                break;
+                                        }
+                                    }else{
+                                        lInputs.add("<input type=\"text\" id=\"busca_col_"+rsDet.getMetaData().getColumnName(i)+"\" value=\""+rsDet.getString(i)+"\" readonly>");
+                                    }
+                                }
+                                colCount += rs.getMetaData().getColumnCount();
+                            }
+                            lInputs.add("<input type=\"text\" id=\"num_linhas\" value=\""+nLinhas+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"nome_linhas\" value=\"operacoes_diarias_linhas\" readonly>");
+                            break;
+                    }
                 }
+                lInputs.add("<input type=\"text\" id=\"num_cols\" value=\""+colCount+"\" readonly>");
                 output = StringUtils.join(lInputs, "\n");
             } catch (SQLException ex) {
                 new LogError(ex.getMessage(), ex,request);
