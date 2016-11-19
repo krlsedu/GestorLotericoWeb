@@ -86,7 +86,6 @@ function buscaConteudoTela(tela){
             data:{"it":tela},
             success: function (data) {   
                 $("#conteudo_telas").html(data);
-                    alert(tela);
             }, 
             error: function (jXHR, textStatus, errorThrown) {
                 document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
