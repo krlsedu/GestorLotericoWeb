@@ -91,7 +91,6 @@ function buscaConteudoTela(tela){
             }, 
             error: function (jXHR, textStatus, errorThrown) {
                 document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
-                $('#modal_carregando').modal('hide');
                 $('#modal_avisos').modal('show');   
             }             
         }
@@ -119,7 +118,7 @@ function addItem(tela){
 }
 
 function rmItem(){
-    rmItem(null,null)
+    rmItem(null,null);
 }
 
 function rmItem(linha,elementos){
@@ -208,7 +207,6 @@ function buscaDadosN(tabela){
                 }
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                $('#modal_carregando').modal('hide');
                 document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
                 $('#modal_avisos').modal('show');   
             }             
@@ -317,6 +315,7 @@ function btnsPercorrer(btn){
 }
 
 function deletarDados(){
+    $('#modal_carregando').modal('show');
     var id = document.getElementById("id").value;
     $.ajax(
         {
@@ -365,14 +364,12 @@ $(document).on("submit", '#form_dados', function(event) {
         success: function (data) {    
             //setaIdEBusca(data.trim());
             document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-success\" role=\"alert\" style=\"text-align: center\"> O registro foi gravado com sucesso! </div>";
-            $('#modal_carregando').modal('hide');
-            $('#modal_avisos').modal('show');
+            setTimeout(function() {$('#modal_avisos').modal('show');}, 100);             
             limpa();
         }, 
         error: function (jXHR, textStatus, errorThrown) {
             document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
-            $('#modal_carregando').modal('hide');
-            $('#modal_avisos').modal('show');   
+            setTimeout(function() {$('#modal_avisos').modal('show');}, 100);   
         }
     });     
     $("#botao-gravar").off("click");
