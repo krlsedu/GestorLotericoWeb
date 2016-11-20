@@ -56,6 +56,21 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
+<div class="modal fade" id="modal_carregando" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                    
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h2 class="modal-title" id="titulo_aviso">Carregando...</h2>
+            </div>
+            <div class="modal-body" id="corpo_carregando" style="display: flex;  justify-content: center;">
+                <img src="images/progress_bar.gif" />
+                <div class="progress-bar progress-bar-success"><span class="sr-only">35% Complete (success)</span></div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
     $popup  
 <div id="wrapper">
      <!-- Navigation -->
@@ -225,6 +240,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         </nav>
         <div id="page-wrapper">
             <div class="graphs">
+                
+                
                 <div id="conteudo_telas">
                 $conteudo                     
                 </div>                    

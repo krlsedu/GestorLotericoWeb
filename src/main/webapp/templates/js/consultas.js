@@ -78,7 +78,8 @@ function consultaDadosBuscaId(tabela){
     );
 }
 
-function buscaConteudoTela(tela){ 
+function buscaConteudoTela(tela){     
+    $('#modal_carregando').modal('show');
     $.ajax(
         {
             type: "POST",
@@ -86,9 +87,11 @@ function buscaConteudoTela(tela){
             data:{"it":tela},
             success: function (data) {   
                 $("#conteudo_telas").html(data);
+                $('#modal_carregando').modal('hide');
             }, 
             error: function (jXHR, textStatus, errorThrown) {
                 document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
+                $('#modal_carregando').modal('hide');
                 $('#modal_avisos').modal('show');   
             }             
         }
@@ -174,6 +177,7 @@ function setaIdEBusca(id){
 }
 
 function buscaDadosN(tabela){
+    $('#modal_carregando').modal('show');
     var id = document.getElementById("id").value;
     $.ajax(
         {
@@ -204,11 +208,13 @@ function buscaDadosN(tabela){
                 }
             }, 
             error: function (jXHR, textStatus, errorThrown) {
+                $('#modal_carregando').modal('hide');
                 document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
                 $('#modal_avisos').modal('show');   
             }             
         }
     );
+    fechaPopUp(); 
 }
 
 function insereDados(htmlDoc){
@@ -229,17 +235,16 @@ function insereDados(htmlDoc){
                     try{
                         document.getElementById(nomeCol).onchange();
                     }catch (e){
-                        setTimeout(function() {insereDados(htmlDoc);}, 1000);
                     }
                 }
             }catch (ex){
-                
+                setTimeout(function() {insereDados(htmlDoc);}, 1000);                
             }
         }catch (e){
 
         }
     }
-    fechaPopUp();
+    $('#modal_carregando').modal('hide');   
 }
 
 function consultaCampoAuto(valorBuscar){
@@ -339,9 +344,12 @@ function setaIdFk(id,campo,nome){
 
 function fechaPopUp(){    
     $('#myModal').modal('hide');
+}
+
+$(document).on('hide.bs.modal','#myModal', function () {
     document.getElementById('dados_busca').value = '';
     document.getElementById("tab_dados").innerHTML='';
-}
+});
 
 function limpa(){    
     buscaConteudoTela(document.getElementById("it").value);
