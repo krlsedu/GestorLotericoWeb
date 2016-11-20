@@ -356,6 +356,7 @@ function limpa(){
 }
 
 $(document).on("submit", '#form_dados', function(event) { 
+    $('#modal_carregando').modal('show');
     event.preventDefault();  
     $.ajax({
         type: "POST",
@@ -364,11 +365,13 @@ $(document).on("submit", '#form_dados', function(event) {
         success: function (data) {    
             //setaIdEBusca(data.trim());
             document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-success\" role=\"alert\" style=\"text-align: center\"> O registro foi gravado com sucesso! </div>";
+            $('#modal_carregando').modal('hide');
             $('#modal_avisos').modal('show');
             limpa();
         }, 
         error: function (jXHR, textStatus, errorThrown) {
             document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
+            $('#modal_carregando').modal('hide');
             $('#modal_avisos').modal('show');   
         }
     });     
