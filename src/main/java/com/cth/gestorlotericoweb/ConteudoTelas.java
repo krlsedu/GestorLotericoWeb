@@ -122,7 +122,13 @@ public class ConteudoTelas {
                         FechamentoTerminal fechamentoTerminal = new FechamentoTerminal(request);
                         contextPrinc = fechamentoTerminal.getHtml(contextPrinc, ve, id);
                     break;
-                // Fim Processos   
+                // Fim Processos  
+                // Início Configurações
+                    case "config_estatisticas":      
+                        com.cth.gestorlotericoweb.configuracoes.Estatisticas configEstatisticas = new com.cth.gestorlotericoweb.configuracoes.Estatisticas(request);
+                        contextPrinc = configEstatisticas.getHtml(contextPrinc, ve, id);
+                    break;
+                // Fim Configurações
                 default:
                         Estatisticas estatisticas = new Estatisticas(request);
                         contextPrinc = estatisticas.getHtml(contextPrinc, ve, id);
