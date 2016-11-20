@@ -114,9 +114,11 @@ function addItem(tela){
         }
     );
 }
+
 function rmItem(){
     rmItem(null,null)
 }
+
 function rmItem(linha,elementos){
     var num_linhas = parseInt(document.getElementById("num_linhas").value);
     if(!(linha===null||linha==='null')&&num_linhas!==linha){
@@ -216,18 +218,22 @@ function insereDados(htmlDoc){
         try{
             var nomeCol = htmlDoc.getElementById("nome_coluna_"+i).value;
             var valr = htmlDoc.getElementById("busca_col_"+nomeCol).value;
-            var tipo = document.getElementById(nomeCol).type;
-            if(!(valr===null||valr==='null')){
-                if(tipo==="select-one"||tipo==="textarea"){
-                        document.getElementById(nomeCol).value = valr;
-                }else{
-                        $('input#'+nomeCol).val(valr).trigger('mask.maskMoney');
-                }                        
-                try{
-                    document.getElementById(nomeCol).onchange();
-                }catch (e){
-
+            try{
+                var tipo = document.getElementById(nomeCol).type;
+                if(!(valr===null||valr==='null')){
+                    if(tipo==="select-one"||tipo==="textarea"){
+                            document.getElementById(nomeCol).value = valr;
+                    }else{
+                            $('input#'+nomeCol).val(valr).trigger('mask.maskMoney');
+                    }                        
+                    try{
+                        document.getElementById(nomeCol).onchange();
+                    }catch (e){
+                        setTimeout(function() {insereDados(htmlDoc);}, 1000);
+                    }
                 }
+            }catch (ex){
+                
             }
         }catch (e){
 
