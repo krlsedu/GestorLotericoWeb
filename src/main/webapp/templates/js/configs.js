@@ -5,7 +5,15 @@ function configWidget(linha,coluna){
 }
 
 function acaoSelectTipo(){
+}
+
+function selectEstilo(){
     $('#modal_widgets').modal('show'); 
     $("#tamanho_widget").width(500);
     $("#tamanho_widget").css("padding-top",100);
+}
+
+function addEstilo(componente){
+    $("#estilo_widget").html($("#"+componente));
+    $('#modal_widgets').modal('hide'); 
 }
