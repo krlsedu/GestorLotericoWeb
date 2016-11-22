@@ -5,6 +5,7 @@
  */
 package com.cth.gestorlotericoweb;
 
+import com.cth.gestorlotericoweb.configuracoes.EstatisticasLinhas;
 import com.cth.gestorlotericoweb.dados.Cofre;
 import com.cth.gestorlotericoweb.dados.Conta;
 import com.cth.gestorlotericoweb.dados.Funcionario;
@@ -127,6 +128,11 @@ public class ConteudoTelas {
                     case "config_estatisticas":      
                         com.cth.gestorlotericoweb.configuracoes.Estatisticas configEstatisticas = new com.cth.gestorlotericoweb.configuracoes.Estatisticas(request);
                         contextPrinc = configEstatisticas.getHtml(contextPrinc, ve, id);
+                    break;
+
+                    case "estatisticas_linhas":      
+                        EstatisticasLinhas estatisticasLinhas = new EstatisticasLinhas(request);
+                        contextPrinc = estatisticasLinhas.getHtml(contextPrinc, ve, id);
                     break;
                 // Fim Configurações
                 default:

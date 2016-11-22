@@ -1,39 +1,125 @@
 
+<div class="modal fade" id="modal_edit_configs" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                    
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h2 class="modal-title" id="titulo_configs">Carregando...</h2>
+            </div>
+            <div class="modal-body" id="corpo_edit_configs" style="display: flex;  justify-content: center;">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="horizontal-form">                        
+                        <form class="form-horizontal" id="form_dados"> 
+                            <div class="form-group">
+                                    <label for="selector1" class="col-sm-2 control-label">Tipo</label>
+                                    <div class="col-sm-4">
+                                        <select name="tipo_widget" id="tipo_widget" class="form-control1" onchange="acaoSelectTipo()">
+                                            <option value="1" selected="selected">Saldo</option>
+                                            <option value="2" >Quantidade</option>
+                                    </select></div>
+                            </div>
+                            <div class="form-group mb-n">
+                                <label for="smallinput" class="col-sm-2 control-label label-input-sm">Nome</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control1 input-lg" id="nome_cofre" placeholder="Nome do Cofre" name="nome_cofre" required>                                                                        
+                                </div>
+                            </div>
+                            <div class="form-group mb">
+                                    <label for="smallinput" class="col-sm-2 control-label label-input-sm">Item</label>
+                                    <div class="col-sm-3">
+                                        <div class="input-group">
+                                            <div class="input-group-addon" onclick="ativaPopUp('lotericas','id_loterica','Consulta código Lotérica')">
+                                                <i class="i_botao_buscar fa fa-search" ></i>
+                                            </div>
+                                            <input  name="id_loterica" type="text" class="form-control1 input-lg" id="id_loterica" placeholder="Cód Lotérica" 
+                                                    onchange="buscaNome('lotericas','id_loterica')" 
+                                                    required>                        
+                                        </div>
+                                    </div> 
+                                    <div class="col-sm-5">
+                                        <div class="well-sm" id="label_id_loterica">
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="form-group mb-n">
+                                <label for="txtarea1" class="col-sm-2 control-label">Html</label>
+                                    <div class="col-sm-8">
+                                        <textarea name="observacoes" id="observacoes" cols="50" rows="4" class="form-control1" placeholder="Observações do Cofre" ></textarea>
+                                    </div>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <div class="col-sm-2 col-sm-offset-3">
+                                        <button type="button" class="btn btn-primary" id="botao-gravar">Gravar</button>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button type="reset" class="btn botao-deletar" onclick="deletarDados()">Excluir</button>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <button type="reset" class="btn btn-default" onclick="limpa()">Limpar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="modal_widgets" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+    <div class="modal-dialog" id="tamanho_widget">
+        <div class="modal-content">
+            <div class="modal-header">
+                    
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h2 class="modal-title" id="titulo_aviso">Estilo icones</h2>
+            </div>
+            <div class="modal-body" id="corpo_aviso" style="align-content: center">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="horizontal-form">                        
+                        <form class="form-horizontal" id="form_dados"> 
+                            <div class="form-group">
+                                <div class="tile-progress bg-info">
+                                    <div class="content">
+                                        <h4><i class="fa fa-dashboard icon-sm"></i> Server Load</h4>
+                                        <div class="progress"><div class="progress-bar inviewport animated visible slideInLeft" style="width: 40%;"></div></div>
+                                        <span>40% increase</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<script src="templates/js/configs.js"></script>
 <div class="xs">
     <h3>Configurações da tela de estatísticas</h3>
     <div class="tab-content">
         <div class="tab-pane active" id="horizontal-form">
-            <form class="form-horizontal" id="form_dados"> 
-                <div class="col_3">
-                    <div class="col-md-3 widget widget1">
-                        <div class="r3_counter_box">
-                            <i class="pull-left fa fa-plus-circle icon-rounded"></i>
-                            <div class="stats">
-                            </div>
-                        </div>
+            <form class="form-horizontal" id="form_dados">   
+                <div class="form-group mb-n" id="btns-add-rm-linhas">
+                    <label for="txtarea1" class="col-sm-2 control-label">Itens</label>
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-info" onclick="addItem('estatisticas_linhas')">Adicionar</button>
                     </div>
-                    <div class="col-md-3 widget widget1">
-                        <div class="r3_counter_box">
-                            <i class="pull-left fa fa-plus-circle icon-rounded"></i>
-                            <div class="stats">
-                            </div>
-                        </div>
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-success warning_2" onclick="rmItem(null)">Remover</button>
                     </div>
-                    <div class="col-md-3 widget widget1">
-                        <div class="r3_counter_box">
-                            <i class="pull-left fa fa-plus-circle icon-rounded"></i>
-                            <div class="stats">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 widget widget1">
-                        <div class="r3_counter_box">
-                            <i class="pull-left fa fa-plus-circle icon-rounded"></i>
-                            <div class="stats">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </div> 
                 
                 <div class="panel-footer">
                     <div class="row">
@@ -46,8 +132,9 @@
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="it" name="it" value="abertura_terminais" />                
+                <input type="hidden" id="it" name="it" value="config_estatisticas" />                
                 <input type="hidden" id="id" name="id" value="0" />
+                <input type="hidden" id="num_linhas" name="num_linhas" value="0" />
             </form>
         </div>
     </div>	
