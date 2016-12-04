@@ -354,6 +354,10 @@ function limpa(){
     buscaConteudoTela(document.getElementById("it").value);
 }
 
+function enviaImagens(){
+    $('#modal_upload').modal('show');    
+}
+
 $(document).on("submit", '#form_dados', function(event) { 
     $('#modal_carregando').modal('show');
     event.preventDefault();  

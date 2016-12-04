@@ -7,6 +7,11 @@ function configWidget(linha,coluna){
 function acaoSelectTipo(){
 }
 
+function acaoBtnUp(){
+    
+    $('#modal_upload').modal('show'); 
+}
+
 function selectEstilo(){
     $('#modal_widgets').modal('show'); 
     $("#tamanho_widget").width(500);

@@ -40,6 +40,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="templates/js/jquery.maskMoney.js"></script>
 <script src="tesseract/worker.js"></script>
 <script src="tesseract/tesseract.js"></script>
+<script src="manipulador_imagens/trata_imagens.js"></script>
+
 <body>
 <div class="modal fade" id="modal_avisos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
     <div class="modal-dialog">
@@ -58,7 +60,31 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
-<div class="modal fade" id="modal_carregando" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+
+<div class="modal fade" id="modal_upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                    
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h2 class="modal-title" id="titulo_upload">Imagens</h2>
+            </div>
+            <div class="modal-body"  >
+                <div id="corpo_upload" class="alert alert-success" role="alert"  style="display: flex;  justify-content: center; height: 400px">
+                    <strong>Arraste e solte suas imagens aqui</strong>
+                    <div id="div-original-image" style="display: none; "> <img id="original-image" style="width: 250px" src="" ></div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<script src="manipulador_imagens/envia_dados.js"></script>
+    $popup
+<div class="modal fade" id="modal_carregando" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; z-index: +99999">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -72,7 +98,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
-    $popup  
 <div id="wrapper">
      <!-- Navigation -->
         <nav class="top1 navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
@@ -266,6 +291,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <!-- /#wrapper -->
     <!-- Bootstrap Core JavaScript -->
     <script src="templates/Modern/js/bootstrap.min.js"></script>
-      
+   
 </body>
 </html>

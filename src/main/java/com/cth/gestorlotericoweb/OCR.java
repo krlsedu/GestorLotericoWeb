@@ -5,6 +5,7 @@
  */
 package com.cth.gestorlotericoweb;
 
+import com.cth.gestorlotericoweb.utils.DadosOcr;
 import com.google.api.services.vision.v1.Vision;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -26,8 +27,10 @@ public class OCR {
         this.request = request;
         try {
             output = postingtogoogle();
+            DadosOcr dadosOcr = new DadosOcr(output, request);
+            output = dadosOcr.getPilhaKeyNames().toString();
         } catch (Exception ex) {
-            output = request.getParameter("img_str").split(",")[1];
+            output = ex.getMessage()+output;
         }
     }
     
