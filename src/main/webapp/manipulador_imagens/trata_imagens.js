@@ -86,7 +86,7 @@ function  postarParaOcr(txt){
         data: {"img_str":txt},
         success: function (data) {    
             $('#modal_carregando').modal('hide');
-            //document.getElementById("corpo_upload").innerHTML = data;
+            document.getElementById("corpo_upload").innerHTML = data;
             alert(data);
             
         }, 
@@ -118,7 +118,7 @@ function redimensionaTrataEEnviaImagem(width) {
                 var origBits = octx.getImageData(0, 0, oc.width, oc.height);
                 //saturate(origBits,0);
                 //brilho(origBits,1.10 );
-                bw(origBits, 210);
+                //bw(origBits, 210);
                 //contrastImage(origBits,.8);
                 octx.putImageData(origBits, 0, 0);
                 document.getElementById('great-image').src = oc.toDataURL();

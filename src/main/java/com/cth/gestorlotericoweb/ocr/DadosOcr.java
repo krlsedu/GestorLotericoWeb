@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.cth.gestorlotericoweb.utils;
+package com.cth.gestorlotericoweb.ocr;
 
 import com.cth.gestorlotericoweb.LogError;
 import com.google.gson.JsonSyntaxException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Stack;
@@ -29,14 +31,39 @@ public class DadosOcr {
     JSONArray jsonArray;
     Set<String> keySet = new HashSet<>();
     Stack<String> pilhaKeyNames = new Stack<>();
+    Map<String,Integer> arraysCont;
+    public PosicoesObjetos objetos;
 
     public DadosOcr(String txtJson,HttpServletRequest request) {
+        arraysCont = new HashMap<>();
         this.txtJson = txtJson;
         this.request = request;
         jsonObject = new JSONObject(txtJson);
         jsonArray = new JSONArray(jsonObject.get("responses").toString());
-        setKeyNames(jsonArray,"");
+        //setKeyNames(jsonArray,"");
+        posiciona(jsonObject.getJSONArray("responses"));
     }    
+    
+    private void posiciona(JSONArray arr){
+        objetos = new PosicoesObjetos();
+        for (int i=0; i<arr.length(); i++) {
+            JSONObject jso = arr.getJSONObject(i);
+            JSONArray jsa = jso.getJSONArray("textAnnotations");
+            //pilhaKeyNames.add(jsa.length()+"");
+            for (int j=1; j<jsa.length(); j++) {
+                JSONObject jsot = jsa.getJSONObject(j);
+                if(!jsot.has("locale")){
+                    ObjetosOCR objetosOCR = new ObjetosOCR(jsot.getString("description"), jsot.getJSONObject("boundingPoly").getJSONArray("vertices"));
+                    try{
+                        objetos.posiciona(objetosOCR);
+                        pilhaKeyNames.add(jsot.getString("description"));
+                    }catch(Exception e){
+                        pilhaKeyNames.add(e.getLocalizedMessage());
+                    }
+                }
+            }
+        }
+    }
     
     private void setJsonObj(JSONObject js){
         jsonObject = js;
@@ -155,9 +182,12 @@ public class DadosOcr {
                 setKeyNames(new JSONObject(arr.get(i).toString()),pref+i+".");                
             }catch(Exception e){
                 try{
-                    setKeyNames(new JSONArray(arr.get(i).toString()), pref+i+".");                
+                    setKeyNames(new JSONArray(arr.get(i).toString()), pref+i+"."); 
+                    if(!pref.trim().equals("")){
+                        arraysCont.put(pref, i);
+                    }               
                 }catch(Exception ex){
-                    pilhaKeyNames.add(pref+i);                    
+                    pilhaKeyNames.add(pref+i);
                 }
             }
         }

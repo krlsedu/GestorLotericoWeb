@@ -11,6 +11,7 @@ dropZone.addEventListener('dragover', function(e) {
 // Get file data on drop
 dropZone.addEventListener('drop', function(e) {
     $('#modal_carregando').modal('show');
+    var tamanho = 2000;
     e.stopPropagation();
     e.preventDefault();
     var files = e.dataTransfer.files; // Array of all files
@@ -25,12 +26,12 @@ dropZone.addEventListener('drop', function(e) {
                     oc.width = img.width;
                     oc.height = img.height;
                     octx.drawImage(img, 0, 0);
-                    while (oc.width * 0.5 > width) {
+                    while (oc.width * 0.5 > tamanho) {
                       oc.width *= 0.5;
                       oc.height *= 0.5;
                       octx.drawImage(oc, 0, 0, oc.width, oc.height);
                     }
-                    oc.width = width;
+                    oc.width = tamanho;
                     oc.height = oc.width * img.height / img.width;
                     octx.drawImage(img, 0, 0, oc.width, oc.height);
                     var origBits = octx.getImageData(0, 0, oc.width, oc.height);
