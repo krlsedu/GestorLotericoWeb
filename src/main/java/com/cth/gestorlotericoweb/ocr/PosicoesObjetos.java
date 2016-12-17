@@ -5,19 +5,20 @@
  */
 package com.cth.gestorlotericoweb.ocr;
 
-import java.awt.Polygon;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
  * @author CarlosEduardo
  */
 public class PosicoesObjetos {
-    Integer LARGURA = 1000;
-    Map<Integer,List<ObjetosOCR>> mapaLinhasObj;
+    Integer LARGURA = 100000;
+    Map<Integer,Map<Integer,ObjetosOCR>> mapaLinhasObj;
     public Integer numLinhas = 0;
     Map<Integer,PosicoesObjetos> areasLinhas;
     Map<Integer,String> linhasTxt;
@@ -47,9 +48,9 @@ public class PosicoesObjetos {
     public void posiciona(ObjetosOCR objetosOCR){
         if(mapaLinhasObj.isEmpty()){
             numLinhas ++;
-            List<ObjetosOCR> lo = new ArrayList<>();
-            lo.add(objetosOCR);
-            mapaLinhasObj.put(numLinhas, lo);   
+            Map<Integer,ObjetosOCR> m = new HashMap<>();
+            m.put(objetosOCR.xte, objetosOCR);
+            mapaLinhasObj.put(numLinhas, m);   
             linhasTxt.put(numLinhas, objetosOCR.descricao);
             
             this.xte = objetosOCR.xte;
@@ -61,31 +62,21 @@ public class PosicoesObjetos {
             this.xbd = objetosOCR.xbd;
             this.ybd = objetosOCR.ybd;
             
-            if((xtd-xte)!=0){
-                /*double inc = (ytd-yte)/(xtd-xte);
-                yte += (int) (xtd*inc);
-                ybe += (int) (xbd*inc);
-                
-                ytd += (int) ((10000-xtd)*inc);
-                ybd += (int) ((10000-xbd)*inc);*/          
+            if((xtd-xte)!=0){       
                 nyte = getY(xte,xtd,yte,ytd,0);
                 nybe = getY(xbe,xbd,ybe,ybd,0);
                 nytd = getY(xte,xtd,yte,ytd,1000);
                 nybd = getY(xbe,xbd,ybe,ybd,1000);
-                
-                
             }
-            int[] xs = new int[] {0,0,LARGURA,LARGURA};
-            int[] ys = new int[] {nyte,nybe-3,nytd,nybd-3};
             PosicoesObjetos posicoesObjetos = new PosicoesObjetos(nyte, nybe, nytd, nybd, LARGURA);
             areasLinhas.put(numLinhas, posicoesObjetos);
         }else{
             boolean nln = true;
             for(Integer l:areasLinhas.keySet()){
                 if(naLinha(areasLinhas.get(l), objetosOCR)){
-                    List lob = mapaLinhasObj.get(l);
-                    lob.add(objetosOCR);
-                    mapaLinhasObj.put(l, lob);
+                    Map<Integer,ObjetosOCR> m = mapaLinhasObj.get(l);
+                    m.put(objetosOCR.xte, objetosOCR);
+                    mapaLinhasObj.put(l, m);
                     nln = false;
                     linhasTxt.put(numLinhas, linhasTxt.get(numLinhas)+"--+--"+objetosOCR.descricao);
                 }
@@ -94,9 +85,9 @@ public class PosicoesObjetos {
                 numLinhas++;
                 linhasTxt.put(numLinhas, objetosOCR.descricao);
                 lobj.add("\nF"+numLinhas+objetosOCR.descricao);
-                List<ObjetosOCR> lo = new ArrayList<>();
-                lo.add(objetosOCR);
-                mapaLinhasObj.put(numLinhas, lo);   
+                Map<Integer,ObjetosOCR> m = new HashMap<>();
+                m.put(objetosOCR.xte, objetosOCR);
+                mapaLinhasObj.put(numLinhas, m);    
 
                 this.xte = objetosOCR.xte;
                 this.yte = objetosOCR.yte;
@@ -108,20 +99,11 @@ public class PosicoesObjetos {
                 this.ybd = objetosOCR.ybd;
 
                 if((xtd-xte)!=0){
-                    /*double inc = (ytd-yte)/(xtd-xte);
-                    yte += (int) (xtd*inc);
-                    ybe += (int) (xbd*inc);
-
-                    ytd += (int) ((10000-xtd)*inc);
-                    ybd += (int) ((10000-xbd)*inc);*/ 
                     nyte = getY(xte,xtd,yte,ytd,0);
                     nybe = getY(xbe,xbd,ybe,ybd,0);
                     nytd = getY(xte,xtd,yte,ytd,LARGURA);
                     nybd = getY(xbe,xbd,ybe,ybd,LARGURA);
                 }
-                int[] xs = new int[] {0,0,LARGURA,LARGURA};
-                int[] ys = new int[] {nyte,nybe,nytd,nybd};
-                Polygon linha = new Polygon(xs, ys, 4);
                 PosicoesObjetos posicoesObjetos = new PosicoesObjetos(nyte, nybe, nytd, nybd, LARGURA);
                 areasLinhas.put(numLinhas, posicoesObjetos);
             }
@@ -140,13 +122,42 @@ public class PosicoesObjetos {
     }
     
     private boolean naLinha(PosicoesObjetos po,ObjetosOCR objetosOCR){
-        // aqui deve ser feita a comparação.
-        return false;
+        int yt,yb,meio;
+        boolean dentro = false;
+        
+        yt = getY(po.yte, po.ytd, objetosOCR.xte);
+        yb = getY(po.ybe, po.ybd, objetosOCR.xte);
+        meio = (yt+yb)/2;
+        if(meio >= objetosOCR.yte && meio <= objetosOCR.ybe){
+            dentro = true;
+        }        
+        
+        yt = getY(po.yte, po.ytd, objetosOCR.xtd);
+        yb = getY(po.ybe, po.ybd, objetosOCR.xtd);
+        meio = (yt+yb)/2;
+        if(meio >= objetosOCR.ytd && meio <= objetosOCR.ybd){
+            dentro = true;
+        }   
+        return dentro;
     }
 
     @Override
     public String toString() {
-        return linhasTxt.values().toString();
+        Set<Integer> s = mapaLinhasObj.keySet();
+        List<Integer> l = new ArrayList(s);
+        Collections.sort(l);
+        StringBuilder sb = new StringBuilder();
+        for(Integer i:l){
+            sb.append("\n").append(i);
+            Map<Integer,ObjetosOCR> m = mapaLinhasObj.get(i);
+            Set s2 = m.keySet();
+            List<Integer> l2 = new ArrayList<>(s2);
+            Collections.sort(l2);
+            for(Integer j:l2){
+                sb.append("-+-").append(m.get(j));
+            }
+        }
+        return sb.toString();
     }
 
     

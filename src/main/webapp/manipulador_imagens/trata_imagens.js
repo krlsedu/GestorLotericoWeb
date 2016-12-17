@@ -86,7 +86,6 @@ function  postarParaOcr(txt){
         data: {"img_str":txt},
         success: function (data) {    
             $('#modal_carregando').modal('hide');
-            document.getElementById("corpo_upload").innerHTML = data;
             alert(data);
             
         }, 
