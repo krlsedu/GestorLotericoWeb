@@ -7,14 +7,15 @@ package com.cth.gestorlotericoweb.dados;
 
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
+import org.apache.commons.lang.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -28,6 +29,7 @@ public class ColunasTabelas {
     public Map<String,String> mTabColsSelBusca;
     public Map<String,String> mTabColsSelDados;
     public Map<String,List<String>> mTabOpts;
+    public Map<String,Boolean> mTabIEntidade;
     final HttpServletRequest request;
     
     public ColunasTabelas(HttpServletRequest request){
@@ -38,6 +40,7 @@ public class ColunasTabelas {
         mTabColsSelDados = new HashMap<>();
         mTabOpts = new HashMap<>();
         mColNome = new HashMap<>();
+        mTabIEntidade = new HashMap<>();
         this.request = request;
         carregaTabOpts();
         setColTab();
@@ -45,7 +48,13 @@ public class ColunasTabelas {
         carregaTabColsBusca();
         carregaTabColsDados();
         carregaColNome();
+        setmTabIEntidade();
     }
+    
+    private void setmTabIEntidade(){
+        mTabIEntidade.put("componentes",false);
+    }
+    
     private void setColTab(){
         try {
             ResultSet rs = Parametros.getConexao().getRs("select * from cols_descri");
@@ -61,6 +70,8 @@ public class ColunasTabelas {
         putMs("id_operacao", "Código da Operação (Sistema)");
         putMs("id_cofre", "Código do Cofre (Sistema)");
         putMs("id_conta", "Código da Conta (Sistema)");
+        putMs("id_componente", "Código do Componente");
+        putMs("nome_componente", "Nome do Componente");
     }
     
     private void putMs(String coluna,String descri){
@@ -91,6 +102,7 @@ public class ColunasTabelas {
         mTabelas.put("movimentos_cofres", "movimentos_cofres");
         mTabelas.put("movimentos_contas", "movimentos_contas");
         mTabelas.put("operacoes_diarias", "operacoes_diarias");
+        mTabelas.put("componentes", "componentes");
     }
     
     private void carregaColNome(){
@@ -100,6 +112,7 @@ public class ColunasTabelas {
         mColNome.put("contas", "nome_conta");
         mColNome.put("operacoes", "nome_oper");
         mColNome.put("cofres", "nome_cofre");
+        mColNome.put("componentes", "nome_componente");
     }
     
     public String getColNome(String tabela){
@@ -122,6 +135,7 @@ public class ColunasTabelas {
         mTabColsSelBusca.put("movimentos_cofres", "id, id_cofre, data_hora_mov");
         mTabColsSelBusca.put("movimentos_contas", "id, id_conta, data_hora_mov");
         mTabColsSelBusca.put("operacoes_diarias", "id, id_terminal, id_funcionario, data_operacoes");
+        mTabColsSelBusca.put("componentes", "id, nome_componente");
     }
     private void carregaTabColsDados(){
         mTabColsSelDados.put("lotericas", "codigo_caixa,nome");
@@ -139,6 +153,7 @@ public class ColunasTabelas {
         mTabColsSelDados.put("movimentos_contas", "id_conta, id_cofre, tipo_movimento_conta,forma_deposito, data_hora_mov, valor_movimentado, numero_volumes, observacoes");   
         mTabColsSelDados.put("operacoes_diarias", "id_terminal, id_funcionario, data_operacoes, observacoes");
         mTabColsSelDados.put("operacoes_diarias_det", "id , id_operacao, quantidade");
+        mTabColsSelDados.put("operacoes_diarias_det", "nome_componente");
     }
     private void carregaTabOpts(){
         List<String> lOpts = new ArrayList<>();
@@ -204,6 +219,9 @@ public class ColunasTabelas {
         lOpts.add("<option>Código do Terminal (Sistema)</option>");
         lOpts.add("<option>Código do Funcionário (Sistema)</option>");
         mTabOpts.put("operacoes_diarias", lOpts);
+        lOpts = new ArrayList<>();
+        lOpts.add("<option>Nome do Componente</option>");
+        mTabOpts.put("componentes", lOpts);
     }
     
     public String getOpts(String tabela){
@@ -233,4 +251,11 @@ public class ColunasTabelas {
         return mTabColsSelDados.get(tabela);
     }
     
+    public Boolean getPossuiIEntidades(String tabela){
+        if(mTabIEntidade.get(tabela)!=null){
+            return mTabIEntidade.get(tabela);
+        }else{
+            return true;
+        }
+    }
 }

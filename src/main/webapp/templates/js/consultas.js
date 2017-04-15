@@ -335,6 +335,24 @@ function deletarDados(){
     );
 }
 
+
+function sair(tela){
+    $('#modal_carregando').modal('show');
+    $.ajax(
+        {
+            type: "POST",
+            url:  "logout",
+            success: function (data) {
+                $(location).attr('href',"index.jsp");
+            },
+            error: function (jXHR, textStatus, errorThrown) {
+                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
+                $('#modal_avisos').modal('show');
+            }
+        }
+    );
+}
+
 function setaIdFk(id,campo,nome){
     document.getElementById(campo).value = id;
     document.getElementById('label_'+campo).innerHTML = nome;

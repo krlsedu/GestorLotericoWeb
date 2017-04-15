@@ -9,14 +9,15 @@ import com.cth.gestorlotericoweb.dados.ColunasTabelas;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.FechamentoTerminal;
 import com.cth.gestorlotericoweb.utils.Parser;
+import org.apache.commons.lang.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -220,7 +221,13 @@ public class Consulta {
         String coluna = colunasTabelas.getColuna(request.getParameter("coluna"));
         String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
         if(coluna!=null && tabela !=null){
-            String sql = "select "+colunasTabelas.getTabColsBusca(tabela)+" from "+tabela+" where id_entidade = ? and lower(CAST( "+coluna+" AS text )) like lower(?) order by "+coluna;
+            String sql;
+            if(colunasTabelas.getPossuiIEntidades(tabela)){
+                sql = "select "+colunasTabelas.getTabColsBusca(tabela)+" from "+tabela+" where id_entidade = ? and lower(CAST( "+coluna+" AS text )) like lower(?) order by "+coluna;
+                
+            }else{
+                sql = "select "+colunasTabelas.getTabColsBusca(tabela)+" from "+tabela+" where lower(CAST( "+coluna+" AS text )) like lower(?) order by "+coluna;
+            }
             try {
                 PreparedStatement ps = Parametros.getConexao(request).getPst(sql, false);
                 ps.setInt(1, Parametros.idEntidade);
