@@ -223,15 +223,15 @@ public class Consulta {
         if(coluna!=null && tabela !=null){
             String sql;
             if(colunasTabelas.getPossuiIEntidades(tabela)){
-                sql = "select "+colunasTabelas.getTabColsBusca(tabela)+" from "+tabela+" where id_entidade = ? and lower(CAST( "+coluna+" AS text )) like lower(?) order by "+coluna;
+                sql = "select "+colunasTabelas.getTabColsBusca(tabela)+" from "+tabela+" where lower(CAST( "+coluna+" AS text )) like lower(?) and id_entidade = ? order by "+coluna;
                 
             }else{
                 sql = "select "+colunasTabelas.getTabColsBusca(tabela)+" from "+tabela+" where lower(CAST( "+coluna+" AS text )) like lower(?) order by "+coluna;
             }
             try {
                 PreparedStatement ps = Parametros.getConexao(request).getPst(sql, false);
-                ps.setInt(1, Parametros.idEntidade);
-                ps.setString(2, "%"+request.getParameter("id")+"%");
+                ps.setString(1, "%"+request.getParameter("id")+"%");
+                if (colunasTabelas.getPossuiIEntidades(tabela)) ps.setInt(2, Parametros.idEntidade);
                 ResultSet rs = ps.executeQuery();
                 List lCols = new ArrayList();
                 List lLinhas = new ArrayList();
