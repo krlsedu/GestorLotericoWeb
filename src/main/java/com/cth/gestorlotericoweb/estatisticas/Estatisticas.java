@@ -6,15 +6,16 @@
 package com.cth.gestorlotericoweb.estatisticas;
 
 import com.cth.gestorlotericoweb.saldos.SaldoCofre;
-import java.io.StringWriter;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.StringWriter;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *

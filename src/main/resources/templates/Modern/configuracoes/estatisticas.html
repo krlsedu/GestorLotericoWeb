@@ -9,8 +9,8 @@
             </div>
             <div class="modal-body" id="corpo_edit_configs" style="display: flex;  justify-content: center;">
                 <div class="tab-content">
-                    <div class="tab-pane active" id="horizontal-form">                        
-                        <form class="form-horizontal" id="form_dados"> 
+                    <div class="tab-pane active" id="horizontal-form-estatisticas">
+                        <form class="form-horizontal" id="form_estatisticas">
                             <div class="form-group">
                                     <label for="selector1" class="col-sm-2 control-label">Tipo</label>
                                     <div class="col-sm-4">
@@ -30,7 +30,7 @@
                                             </div>
                                             <input  name="id_componente" type="text" class="form-control1 input-lg" id="id_componente"
                                                     placeholder="Cód Componente" 
-                                                    onchange="buscaNome('componentes','id_componente')"
+                                                    onchange="buscaNomeComponente('componentes','id_componente')"
                                                     required>                        
                                         </div>
                                     </div> 
@@ -39,6 +39,26 @@
                                         </div>
                                     </div>
                             </div>
+
+
+                            <div class="form-group mb">
+                                <label id="label_item_componente" for="smallinput" class="col-sm-2 control-label label-input-sm">Item</label>
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                        <div id="item_buscar_componente" class="input-group-addon" onclick="ativaPopUp('lotericas','id_loterica','Consulta código Lotérica')">
+                                            <i class="i_botao_buscar fa fa-search" ></i>
+                                        </div>
+                                        <input  name="id_item_componente" type="text" class="form-control1 input-lg" id="id_item_componente" placeholder=""
+                                                onchange="buscaNome('lotericas','id_item_componente')"
+                                                required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="well-sm" id="label_id_item_componente">
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="form-group mb-n">
                                 <label for="smallinput" class="col-sm-2 control-label label-input-sm">Estilo</label>
                                 <div class="col-sm-8" id="estilo_widget" >                                    
@@ -54,7 +74,7 @@
                                 </div>
                             </div>
                             <div class="form-group mb">
-                                    <label for="smallinput" class="col-sm-2 control-label label-input-sm">Item</label>
+                                    <label for="smallinput" class="col-sm-2 control-label label-input-sm">Lotérica </label>
                                     <div class="col-sm-3">
                                         <div class="input-group">
                                             <div id="item_buscar" class="input-group-addon" onclick="ativaPopUp('lotericas','id_loterica','Consulta código Lotérica')">
@@ -73,13 +93,17 @@
                             <div class="form-group mb-n">
                                 <label for="txtarea1" class="col-sm-2 control-label">Html</label>
                                     <div class="col-sm-8">
-                                        <textarea name="observacoes" id="observacoes" cols="50" rows="4" class="form-control1" placeholder="Observações do Cofre" ></textarea>
+                                        <textarea name="html" id="html" cols="50" rows="4" class="form-control1" placeholder="Observações do Cofre" ></textarea>
                                     </div>
                             </div>
+                            <input type="hidden" id="it" name="it" value="itens_estatisticas" />
+                            <input type="hidden" id="linha" name="linha" value="0" />
+                            <input type="hidden" id="coluna" name="coluna" value="0" />
+                            <input type="hidden" id="id" name="id" value="0" />
                             <div class="panel-footer">
                                 <div class="row">
                                     <div class="col-sm-2 col-sm-offset-3">
-                                        <button type="button" class="btn btn-primary" id="botao-gravar">Gravar</button>
+                                        <button type="button" class="btn btn-primary" id="grava_config_estatisticas">Gravar</button>
                                     </div>
                                     <div class="col-sm-2">
                                         <button type="reset" class="btn botao-deletar" onclick="deletarDados()">Excluir</button>
@@ -165,21 +189,7 @@
                     <div class="col-sm-1">
                         <button type="button" class="btn btn-success warning_2" onclick="rmItem(null)">Remover</button>
                     </div>
-                </div> 
-                
-                <div class="panel-footer">
-                    <div class="row">
-                        <div class="col-sm-1 col-sm-offset-9">
-                            <button type="submit" class="btn btn-primary" id="botao-gravar">Gravar</button>
-                        </div>
-                        
-                        <div class="col-sm-1">
-                            <button type="reset" class="btn btn-default" onclick="limpa()">Limpar</button>
-                        </div>
-                    </div>
                 </div>
-                <input type="hidden" id="it" name="it" value="config_estatisticas" />                
-                <input type="hidden" id="id" name="id" value="0" />
                 <input type="hidden" id="num_linhas" name="num_linhas" value="0" />
             </form>
         </div>

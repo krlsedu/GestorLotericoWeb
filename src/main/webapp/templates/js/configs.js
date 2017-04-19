@@ -2,6 +2,8 @@
 function configWidget(linha,coluna){
     $('#modal_edit_configs').modal('show'); 
     $("#titulo_configs").html("Mostrador ("+linha+","+coluna+")");
+    $("#linha").val(linha);
+    $("#coluna").val(coluna);
 }
 
 function acaoSelectTipo(){

@@ -207,7 +207,7 @@
                             <changeLogFile>liquibase/db-changelog-master.xml</changeLogFile>
                             <diffChangeLogFile>db_versions/db-${buildNumber}-${current.time}-2.postgresql.sql</diffChangeLogFile>
                             <diffTypes>Data</diffTypes>
-                            <diffIncludeObjects>cols_descri,usuarios,entidades,usuarios_entidades</diffIncludeObjects>
+                            <diffIncludeObjects>cols_descri,usuarios,entidades,usuarios_entidades,componentes</diffIncludeObjects>
                         </configuration>
                         <phase>initialize</phase>                                                                                     
                         <goals>

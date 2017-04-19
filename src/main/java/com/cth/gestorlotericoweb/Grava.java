@@ -5,25 +5,14 @@
  */
 package com.cth.gestorlotericoweb;
 
-import com.cth.gestorlotericoweb.dados.Cofre;
-import com.cth.gestorlotericoweb.dados.ColunasTabelas;
-import com.cth.gestorlotericoweb.dados.Conta;
-import com.cth.gestorlotericoweb.dados.Funcionario;
-import com.cth.gestorlotericoweb.dados.Loterica;
-import com.cth.gestorlotericoweb.dados.Operacao;
-import com.cth.gestorlotericoweb.dados.TarifaOperacao;
-import com.cth.gestorlotericoweb.dados.Terminal;
+import com.cth.gestorlotericoweb.configuracoes.EstatisticasLinhas;
+import com.cth.gestorlotericoweb.dados.*;
 import com.cth.gestorlotericoweb.parametros.Parametros;
-import com.cth.gestorlotericoweb.processos.AberturaTerminal;
-import com.cth.gestorlotericoweb.processos.FechamentoTerminal;
-import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
-import com.cth.gestorlotericoweb.processos.MovimentoCofre;
-import com.cth.gestorlotericoweb.processos.MovimentoConta;
-import com.cth.gestorlotericoweb.processos.OperacoesDiarias;
-import com.cth.gestorlotericoweb.processos.OutroMovimento;
+import com.cth.gestorlotericoweb.processos.*;
+
+import javax.servlet.http.HttpServletRequest;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -201,6 +190,13 @@ public class Grava {
                     id = operacoesDiarias.getId();
                     break;
             //fim gravação processos
+            //inicio gravação configs
+                case "itens_estatisticas":
+                    EstatisticasLinhas estatisticasLinhas = new EstatisticasLinhas(request);
+                    estatisticasLinhas.setEstatisticasLinhas();
+                    estatisticasLinhas.grava();
+                    break;
+            //fim gravação configs
             default:
                 break;
         }

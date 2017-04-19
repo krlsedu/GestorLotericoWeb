@@ -54,10 +54,31 @@ public class Consulta {
             case "opt":
                 getOpt();
                 break;
+            case "item_componente":
+                getItemComponente();
+                break;
             default:
                 output ="definir o tipo de busca";
                 break;
         }
+    }
+    
+    private void getItemComponente(){
+            String sql = "select nome_componente_sistema||';'||nome_coluna_id_componente from componentes where id = ? ";
+            try {
+                String id = request.getParameter("id");
+                PreparedStatement ps = Parametros.getConexao(request).getPst(sql, false);
+                ps.setInt(1, Integer.valueOf(id));
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    output = rs.getString(1);
+                }else{
+                    output = "";
+                }
+            } catch (SQLException ex) {
+                output = ex.getMessage();
+                new LogError(ex.getMessage(), ex,request);
+            }
     }
     
     private void getNome(){
@@ -69,11 +90,16 @@ public class Consulta {
             if(col==null){
                 col = "*";
             }
-            String sql = "select "+col+" from "+tabela+" where id_entidade = ? and id = ? ";
+            String sql;
+            if(colunasTabelas.getPossuiIEntidades(tabela)) {
+                sql = "select " + col + " from " + tabela + " where id = ? and id_entidade = ? ";
+            }else{
+                sql = "select " + col + " from " + tabela + " where id = ? ";
+            }
             try {
                 PreparedStatement ps = Parametros.getConexao(request).getPst(sql, false);
-                ps.setInt(1, Parametros.idEntidade);
-                ps.setInt(2, Integer.valueOf(id));
+                ps.setInt(1, Integer.valueOf(id));
+                if(colunasTabelas.getPossuiIEntidades(tabela)) ps.setInt(2, Parametros.idEntidade);
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {                    
                     output = rs.getString(1);

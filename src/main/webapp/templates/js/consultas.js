@@ -274,6 +274,48 @@ function consultaCampoAuto(valorBuscar){
     )    
 }
 
+function buscaNomeComponente(tabela,campo) {
+    var id = document.getElementById(campo).value;
+    if(id.length===0){
+        id = 0;
+    }
+    $.ajax(
+        {
+            type: "POST",
+            url:  "consulta",
+            data:{"id":id,"tabela":tabela,"tipo":"nome"},
+            success: function (data) {
+                document.getElementById('label_'+campo).innerHTML = data;
+                setaOnclickIdComponente(id,data);
+            },
+            error: function (jXHR, textStatus, errorThrown) {
+                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
+                $('#modal_avisos').modal('show');
+            }
+        }
+    );
+}
+
+function setaOnclickIdComponente(id,nome) {
+    $.ajax(
+        {
+            type: "POST",
+            url:  "consulta",
+            data:{"id":id,"tipo":"item_componente"},
+            success: function (data) {
+                var dadoSplit = data.split(';');
+                document.getElementById('label_item_componente').innerHTML = nome;
+                document.getElementById('item_buscar_componente').setAttribute('onclick',"ativaPopUp('"+dadoSplit[0].trim()+"','id_item_componente' , 'Busca Id "+nome.trim()+"')");
+            },
+            error: function (jXHR, textStatus, errorThrown) {
+                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
+                $('#modal_avisos').modal('show');
+            }
+        }
+    );
+
+}
+
 function buscaNome(tabela,campo){
     var id = document.getElementById(campo).value;
     if(id.length===0){
@@ -356,6 +398,9 @@ function sair(tela){
 function setaIdFk(id,campo,nome){
     document.getElementById(campo).value = id;
     document.getElementById('label_'+campo).innerHTML = nome;
+    if(campo==='id_componente'){
+        setaOnclickIdComponente(id,nome);
+    }
     fechaPopUp();
 }
 
@@ -376,23 +421,46 @@ function enviaImagens(){
     $('#modal_upload').modal('show');    
 }
 
-$(document).on("submit", '#form_dados', function(event) { 
+$(document).on("submit", '#form_dados', function(event) {
     $('#modal_carregando').modal('show');
-    event.preventDefault();  
+    event.preventDefault();
     $.ajax({
         type: "POST",
         url:  "grava",
         data: $("#form_dados").serialize(),
-        success: function (data) {    
+        success: function (data) {
             //setaIdEBusca(data.trim());
             document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-success\" role=\"alert\" style=\"text-align: center\"> O registro foi gravado com sucesso! </div>";
-            setTimeout(function() {$('#modal_avisos').modal('show');}, 100);             
+            setTimeout(function() {$('#modal_avisos').modal('show');}, 100);
             limpa();
-        }, 
+        },
         error: function (jXHR, textStatus, errorThrown) {
             document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
-            setTimeout(function() {$('#modal_avisos').modal('show');}, 100);   
+            setTimeout(function() {$('#modal_avisos').modal('show');}, 100);
         }
-    });     
+    });
     $("#botao-gravar").off("click");
+});
+$(document).on("click", '#grava_config_estatisticas', function(event) {
+    $('#modal_carregando').modal('show');
+    event.preventDefault();
+    $.ajax({
+        type: "POST",
+        url:  "grava",
+        data: $("#form_estatisticas").serialize()+'&'+$.param({"estilo_widget":document.getElementById("estilo_widget").innerHTML}),
+        success: function (data) {
+            //setaIdEBusca(data.trim());
+            $('#modal_edit_configs').modal('hide');
+            $('#modal_carregando').modal('hide');
+            document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-success\" role=\"alert\" style=\"text-align: center\"> O registro foi gravado com sucesso! </div>";
+            setTimeout(function() {$('#modal_avisos').modal('show');}, 100);
+        },
+        error: function (jXHR, textStatus, errorThrown) {
+            $('#modal_edit_configs').modal('hide');
+            $('#modal_carregando').modal('hide');
+            document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
+            setTimeout(function() {$('#modal_avisos').modal('show');}, 100);
+        }
+    });
+    $("#grava_config_estatisticas").off("click");
 });
