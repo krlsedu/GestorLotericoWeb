@@ -477,7 +477,6 @@ $(document).on("click", '#login_interno_btn', function(event) {
             success: function (data) {
                 if(data.trim()!='False'){
                     $('#modal_avisos').modal('hide');
-                    alert(data);
                     buscaConteudoTela($("#it_sub").val())
                 }else{
                     alert('Fail....');
