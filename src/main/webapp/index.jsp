@@ -7,7 +7,7 @@
     //long tempoInativo = (date.getTime() - session.getLastAccessedTime())/1000;
     //if(tempoInativo>session.getMaxInactiveInterval()){
         Login h = new Login();
-        h.setLogin(request);    
+        h.setLogin(request,false);
         out.println(h.output);
         HttpSession sessionAt = request.getSession(false);
         sessionAt.invalidate();

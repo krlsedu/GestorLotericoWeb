@@ -4,6 +4,7 @@
     Author     : CarlosEduardo
 --%>
 <%@page import="com.cth.gestorlotericoweb.Consulta"%>
+<%@page import="com.cth.gestorlotericoweb.Login"%>
 <%
     request.setCharacterEncoding("UTF-8");
     response.setCharacterEncoding("UTF-8");
@@ -12,6 +13,11 @@
         Consulta c = new Consulta(request);
         out.println(c.output);        
     } else {
-        response.sendRedirect("/index.jsp");
+        Login h = new Login();
+        h.setLogin(request,true);
+        out.println(h.output);
+//response.sendRedirect("/index.jsp");
+        response.setStatus(401);
+        sessionAt.invalidate();
     }
 %>

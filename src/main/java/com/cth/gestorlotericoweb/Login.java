@@ -5,8 +5,6 @@
  */
 package com.cth.gestorlotericoweb;
 import com.cth.gestorlotericoweb.parametros.Parametros;
-import java.io.StringWriter;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -14,13 +12,16 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.StringWriter;
+
 /**
  *
  * @author CarlosEduardo
  */
 public class Login{
     public String output;
-    public void setLogin(HttpServletRequest request){
+    public void setLogin(HttpServletRequest request,Boolean interno){
         
         Parametros.initDb(request);
         
@@ -29,16 +30,18 @@ public class Login{
             ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
             ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
             ve.init();
-            /*  next, get the Template  */
-            Template t = ve.getTemplate( "templates/web/login.html" , "UTF-8");
-            /*  create a context and add data */
+            Template t;
             VelocityContext context = new VelocityContext();
-            context.put("var", "Bem Vindo ao Gestor Lotérico Web");
-            //context.put("path",ve.getProperty(output));
-            /* now render the template into a StringWriter */
+            if(interno) {
+                t = ve.getTemplate("templates/web/login_interno.html", "UTF-8");
+                context.put("it_r", "app");
+                context.put("it_sub", request.getParameter("it"));
+            }else {
+                t = ve.getTemplate("templates/web/login.html", "UTF-8");
+                context.put("var", "Bem Vindo ao Gestor Lotérico Web");
+            }
             StringWriter writer = new StringWriter();
             t.merge( context, writer );
-            /* show the World */
             output = writer.toString();
         
         }catch(ResourceNotFoundException e){

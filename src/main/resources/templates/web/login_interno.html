@@ -1,0 +1,40 @@
+
+
+    <script>
+        $(document).ready(function(){
+            $('#login').click(function()
+            {
+
+            });
+        });
+    </script>
+
+    <h3>Sua Sessão Expirou</h3>
+    <form class="form-horizontal" id="form_login">
+        <div class="tab-pane active">
+
+            <div class="form-group mb-n">
+                <label for="smallinput" class="col-sm-2 control-label label-input-sm">Usuário</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control1 input-lg" id="user" placeholder="Seu Usuário de acesso" name="user" required>
+                </div>
+            </div>
+            <div class="form-group mb-n">
+                <label for="smallinput" class="col-sm-2 control-label label-input-sm">Senha</label>
+                <div class="col-sm-4">
+                    <input type="password" class="form-control1 input-lg" id="pswId" placeholder="Senha" name="password" required>
+                </div>
+            </div>
+
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-sm-1 col-sm-offset-9">
+                        <div class="btn btn-primary" id="login_interno_btn">Entrar</button>
+                    </div>
+                </div>
+            </div>
+                <input type="hidden" name="it_redirect" id="it_redirect"  value="$it_r" />
+                <input type="hidden" name="it_sub" id="it_sub"  value="$it_sub" />
+            </div>
+    </form>
+</div>
