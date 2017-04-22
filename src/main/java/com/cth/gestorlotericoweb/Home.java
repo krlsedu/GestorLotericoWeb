@@ -41,6 +41,7 @@ public class Home {
 			Template templatePrinc = ve.getTemplate("templates/Modern/corpo.html", "UTF-8");
 			VelocityContext contextPrinc = new VelocityContext();
 			contextPrinc = ConteudoTelas.getConteudoTela(contextPrinc, ve, request);
+			contextPrinc.put("version", "?v="+Parametros.getVersion());
 			contextPrinc.put("entidadeNome", Parametros.getEntidadeNome());
 			StringWriter writer = new StringWriter();
 			templatePrinc.merge(contextPrinc, writer);

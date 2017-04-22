@@ -79,12 +79,44 @@ public class Login{
             context.put("it_sub", request.getParameter("tipo").trim());
             String params="";
             if (request.getParameterMap().keySet().size() > 0) {
-                params = "?";
                 List l = new ArrayList();
                 for (Object ob : request.getParameterMap().keySet()) {
                     l.add(ob.toString() + "=" + StringUtils.join(request.getParameterValues(ob.toString()), ','));
                 }
     
+                params += StringUtils.join(l, "&");
+            }
+            context.put("it_par",params);
+            Writer writer = new StringWriter();
+            t.merge( context, writer );
+            output = writer.toString();
+            
+        }catch(ResourceNotFoundException e){
+            new LogError(e.getMessage(), e,request);
+        }
+    }
+    
+    private void setLogin(Grava grava){
+        try{
+            VelocityEngine ve = new VelocityEngine();
+            ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+            ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+            ve.init();
+            Template t;
+            VelocityContext context = new VelocityContext();
+            t = ve.getTemplate("templates/web/login_interno.html", "UTF-8");
+            context.put("it_r", "grava");
+            if (request.getParameter("tipo")!=null) {
+                context.put("it_sub", request.getParameter("tipo").trim());
+            }else{
+                context.put("it_sub",null);
+            }
+            String params="";
+            if (request.getParameterMap().keySet().size() > 0) {
+                List l = new ArrayList();
+                for (Object ob : request.getParameterMap().keySet()) {
+                    l.add(ob.toString() + "=" + StringUtils.join(request.getParameterValues(ob.toString()), ','));
+                }
                 params += StringUtils.join(l, "&");
             }
             context.put("it_par",params);
@@ -110,7 +142,11 @@ public class Login{
     
     public Login(Consulta consulta){
         this.request = consulta.request;
-        Parametros.initDb(request);
         setLogin(consulta);
+    }
+    
+    public Login(Grava grava){
+        this.request = grava.request;
+        setLogin(grava);
     }
 }

@@ -36,7 +36,8 @@ public class ConteudoTelas {
         String input = request.getParameter("it");
         if(input == null){                
             Estatisticas estatisticas = new Estatisticas(request);
-            contextPrinc = estatisticas.getHtml(contextPrinc, ve, id);
+            //contextPrinc = estatisticas.getHtml(contextPrinc, ve, id);
+            contextPrinc = estatisticas.getHtml(contextPrinc, ve);
         }else{
             switch(input){
                 // inicio Cadastros

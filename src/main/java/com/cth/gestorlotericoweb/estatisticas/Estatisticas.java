@@ -5,15 +5,23 @@
  */
 package com.cth.gestorlotericoweb.estatisticas;
 
+import com.cth.gestorlotericoweb.LogError;
+import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.saldos.SaldoCofre;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.StringWriter;
 import java.math.BigDecimal;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +63,39 @@ public class Estatisticas {
         contextPrinc.put("conteudo", writerConteudo.toString());
         contextPrinc.put("popup", getSWPopup(ve,"movimentos_contas").toString());
         return contextPrinc;
-    }    
+    }
+    
+    public VelocityContext getHtml(VelocityContext contextPrinc,VelocityEngine ve){
+        Template templateConteudo;
+        VelocityContext contextConteudo;
+        StringWriter writerConteudo;
+        templateConteudo = ve.getTemplate( "templates/Modern/estatisticas_dinamico.html" , "UTF-8");
+        contextConteudo = new VelocityContext();
+        writerConteudo = new StringWriter();
+        
+        
+        
+        
+        
+//        Diarias movimentoDiario = new Diarias(request);
+//        contextConteudo.put("acm_dia",movimentoDiario.valorApresentar);
+//        Semanal movimentoSemanal = new Semanal(request,movimentoDiario);
+//        contextConteudo.put("acm_semana",movimentoSemanal.valorApresentar);
+//        Mensal movimentoMensal = new Mensal(request,movimentoDiario);
+//        contextConteudo.put("acm_mes",movimentoMensal.valorApresentar);
+//
+//        SaldoCofre saldoCofre1 = new SaldoCofre(1, request);
+//        SaldoCofre saldoCofre2 = new SaldoCofre(2, request);
+//        contextConteudo.put("saldo_cofre_1", saldoCofre1.getSaldoSt());
+//        contextConteudo.put("saldo_cofre_2", saldoCofre2.getSaldoSt());
+        contextConteudo.put("stats",getHtmlWidgets());
+        
+        templateConteudo.merge( contextConteudo, writerConteudo );
+        contextPrinc.put("conteudo", writerConteudo.toString());
+        contextPrinc.put("popup", getSWPopup(ve,"movimentos_contas").toString());
+        return contextPrinc;
+    }
+    
     public StringWriter getSWPopup(VelocityEngine ve,String tipo){
         Template templatePopup;
         VelocityContext contextPopup;
@@ -68,6 +108,55 @@ public class Estatisticas {
         contextPopup.put("opt", StringUtils.join(lOpts, '\n'));
         templatePopup.merge(contextPopup, writerPopup);
         return writerPopup;
+    }
+    
+    private String getHtmlWidgets(){
+        String abreLinha = "<div class=\"col_3\">";
+        String fechaLinha = "</div>";
+        StringBuilder sbWidgets= new StringBuilder();
+        sbWidgets.append(abreLinha);
+        Integer linhaAtu = 0;
+        String sql = "SELECT * from itens_estatisticas where id_entidade = ? ORDER BY linha,coluna";
+        try {
+            PreparedStatement ps = Parametros.getConexao().getPst(sql,false);
+            ps.setInt(1,Parametros.idEntidade);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                Integer linha = rs.getInt("linha");
+                if(linhaAtu>0&&linha!=linhaAtu){
+                    sbWidgets.append(fechaLinha).append(abreLinha);
+                }
+                sbWidgets.append(getDadosWidget(rs));
+            }
+            sbWidgets.append(fechaLinha);
+        } catch (SQLException e) {
+            new LogError(e.getMessage(), e,request);
+        }
+        return sbWidgets.toString();
+    }
+    
+    private String getDadosWidget(ResultSet rs)throws SQLException{
+        Integer idComponente = rs.getInt("id_componente");
+        Integer idItemComponente = rs.getInt("id_item_componente");
+        Integer linha = rs.getInt("linha");
+        Integer coluna = rs.getInt("coluna");
+        String htmlWidget  = rs.getString("estilo_widget");
+        htmlWidget = htmlWidget.replace("col-md-5","col-md-3");
+        Document document = Jsoup.parse(htmlWidget);
+        Element nomeTpeWidget = document.getElementById("nome_tipo_widget");
+        switch (nomeTpeWidget.val()){
+            case "widget_valor_rs":
+                Element div= document.getElementById(nomeTpeWidget.val());
+                div.attr("id",nomeTpeWidget.val()+"_"+linha+"_"+coluna);
+                Element valor = div.getElementById("valor_rs");
+                valor.attr("id","valor_rs"+"_"+linha+"_"+coluna);
+                valor.html("teste");
+                Element nome = div.getElementById("nome_valor_rs");
+                nome.attr("id","nome_valor_rs"+"_"+linha+"_"+coluna);
+                valor.html("Nome teste");
+                break;
+        }
+        return document.outerHtml();
     }
     
 }

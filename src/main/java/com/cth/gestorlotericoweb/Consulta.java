@@ -180,7 +180,7 @@ public class Consulta {
             try {
                 PreparedStatement ps = Parametros.getConexao(request).getPst(sql, false);
                 ps.setInt(1, Parametros.idEntidade);
-                ps.setInt(2, Integer.valueOf(request.getParameter("id")));
+                ps.setInt(2, Integer.valueOf(request.getParameter("id").trim()));
                 ResultSet rs = ps.executeQuery();
                 List<String> lInputs = new ArrayList<>();
                 if (rs.next()) {

@@ -25,9 +25,11 @@ public class Parametros {
 	public static Integer idUsuario;
 	public static Integer idEntidade;
 	public static String entidadeNome;
+	public static String version;
 	
 	public static void initDb(HttpServletRequest request) {
 		conexao = new Conexao(request);
+		setVersion();
 	}
 	
 	public static Conexao getConexao(HttpServletRequest request) {
@@ -125,6 +127,22 @@ public class Parametros {
 			ps.execute();
 		} catch (SQLException ex) {
 			new LogError(ex.getMessage(), ex, request);
+		}
+	}
+	
+	public static String getVersion() {
+		return version;
+	}
+	
+	public static void setVersion() {
+		String sql = "select * from db_version ORDER BY id DESC LIMIT 1";
+		try {
+			ResultSet resultSet = conexao.getRs(sql);
+			if (resultSet.next()) {
+				Parametros.version=resultSet.getString(3)+"-"+resultSet.getString(4)+"("+resultSet.getString(5)+")";
+			}
+		} catch (SQLException e) {
+			Parametros.version = "";
 		}
 	}
 }

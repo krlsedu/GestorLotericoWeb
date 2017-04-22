@@ -25,6 +25,9 @@ public class Grava {
 
     public Grava(HttpServletRequest request) {
         this.request = request;
+    }
+    
+    public void exec(){
         if(request.getParameter("tipo")!=null){
             deleta();
         }else{

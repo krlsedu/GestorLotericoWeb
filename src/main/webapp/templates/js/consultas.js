@@ -432,12 +432,24 @@ function acoesConsulta(it_sub,it_par) {
     $.ajax(
         {
             type: "POST",
-            url: "auth",
-            data: "?" + it_par,
+            url: "consulta",
+            data: it_par,
             success: function (data) {
                 switch (it_sub){
                     case "id":
                         setaIdEBusca(data);
+                        break;
+                    case "busca":
+                        consultaDadosBusca();
+                        break;
+                    case "opt":
+                        var tipo = document.getElementById("tipo_busca").value;
+                        if(tipo === 'id'){
+                            var tabela = document.getElementById("it").value;
+                            buscaOpcoesCBPopUp(tabela);
+                        }else{
+                            buscaOpcoesCBPopUp(tipo);
+                        }
                         break;
                     default:
                         alert(it_sub + " não implementado");
@@ -451,6 +463,26 @@ function acoesConsulta(it_sub,it_par) {
     )
 }
 
+function avisaOk() {
+    document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-success\" role=\"alert\" style=\"text-align: center\"> O registro foi gravado com sucesso! </div>";
+    setTimeout(function() {$('#modal_avisos').modal('show');}, 300);
+    limpa();
+}
+
+function gravaRelogin(it_par) {
+    $.ajax({
+        type: "POST",
+        url:  "grava",
+        data: it_par,
+        success: function (data) {
+            avisaOk();
+        },
+        error: function (jXHR, textStatus, errorThrown) {
+            avisoErrosCTimeOut(jXHR,textStatus,errorThrown);
+        }
+    });
+}
+
 $(document).on("submit", '#form_dados', function(event) {
     $('#modal_carregando').modal('show');
     event.preventDefault();
@@ -459,10 +491,7 @@ $(document).on("submit", '#form_dados', function(event) {
         url:  "grava",
         data: $("#form_dados").serialize(),
         success: function (data) {
-            //setaIdEBusca(data.trim());
-            document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-success\" role=\"alert\" style=\"text-align: center\"> O registro foi gravado com sucesso! </div>";
-            setTimeout(function() {$('#modal_avisos').modal('show');}, 100);
-            limpa();
+            avisaOk();
         },
         error: function (jXHR, textStatus, errorThrown) {
             avisoErrosCTimeOut(jXHR,textStatus,errorThrown);
@@ -482,8 +511,7 @@ $(document).on("click", '#grava_config_estatisticas', function(event) {
             //setaIdEBusca(data.trim());
             $('#modal_edit_configs').modal('hide');
             $('#modal_carregando').modal('hide');
-            document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-success\" role=\"alert\" style=\"text-align: center\"> O registro foi gravado com sucesso! </div>";
-            setTimeout(function() {$('#modal_avisos').modal('show');}, 100);
+            avisaOk();
         },
         error: function (jXHR, textStatus, errorThrown) {
             $('#modal_edit_configs').modal('hide');
@@ -513,6 +541,9 @@ $(document).on("click", '#login_interno_btn', function(event) {
                             break;
                         case "consulta":
                             acoesConsulta(it,it_par);
+                            break;
+                        case "grava":
+                            gravaRelogin(it_par);
                             break;
                     }
                 }else{
