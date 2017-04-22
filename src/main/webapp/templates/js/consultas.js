@@ -41,8 +41,7 @@ function buscaOpcoesCBPopUp(tabela){
                 document.getElementById("selector1").innerHTML = data;
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
-                $('#modal_avisos').modal('show');   
+                avisoErros(jXHR,textStatus,errorThrown);
             }             
         }
     );
@@ -71,8 +70,7 @@ function consultaDadosBuscaId(tabela){
                 document.getElementById("tab_dados").innerHTML = data;
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
-                $('#modal_avisos').modal('show');   
+                avisoErros(jXHR,textStatus,errorThrown);
             }             
         }
     );
@@ -90,9 +88,7 @@ function buscaConteudoTela(tela){
                 $('#modal_carregando').modal('hide');
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                $('#modal_carregando').modal('hide');
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
-                $('#modal_avisos').modal('show');   
+                avisoErros(jXHR,textStatus,errorThrown);
             }
         }
     );
@@ -111,8 +107,7 @@ function addItem(tela){
                 $("#btns-add-rm-linhas").before(data);
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
-                $('#modal_avisos').modal('show');   
+                avisoErros(jXHR,textStatus,errorThrown);
             }             
         }
     );
@@ -164,8 +159,7 @@ function consultaDadosFk(tabela,colunaBuscar){
                 document.getElementById("tab_dados").innerHTML = data;
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
-                $('#modal_avisos').modal('show');   
+                avisoErros(jXHR,textStatus,errorThrown);
             }             
         }
     );
@@ -208,8 +202,7 @@ function buscaDadosN(tabela){
                 }
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
-                $('#modal_avisos').modal('show');   
+                avisoErros(jXHR,textStatus,errorThrown);
             }             
         }
     );
@@ -268,8 +261,7 @@ function consultaCampoAuto(valorBuscar){
                     }  
                 }, 
                 error: function (jXHR, textStatus, errorThrown) {
-                    document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
-                    $('#modal_avisos').modal('show');   
+                    avisoErros(jXHR,textStatus,errorThrown);
                 }
             }
     )    
@@ -290,8 +282,7 @@ function buscaNomeComponente(tabela,campo) {
                 setaOnclickIdComponente(id,data);
             },
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
-                $('#modal_avisos').modal('show');
+                avisoErros(jXHR,textStatus,errorThrown);
             }
         }
     );
@@ -309,8 +300,7 @@ function setaOnclickIdComponente(id,nome) {
                 document.getElementById('item_buscar_componente').setAttribute('onclick',"ativaPopUp('"+dadoSplit[0].trim()+"','id_item_componente' , 'Busca Id "+nome.trim()+"')");
             },
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
-                $('#modal_avisos').modal('show');
+                avisoErros(jXHR,textStatus,errorThrown);
             }
         }
     );
@@ -331,8 +321,7 @@ function buscaNome(tabela,campo){
                 document.getElementById('label_'+campo).innerHTML = data;
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
-                $('#modal_avisos').modal('show');   
+                avisoErros(jXHR,textStatus,errorThrown);
             }             
         }
     );
@@ -350,8 +339,7 @@ function btnsPercorrer(btn){
                 setaIdEBusca(data.trim());
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
-                $('#modal_avisos').modal('show');   
+                avisoErros(jXHR,textStatus,errorThrown);
             }            
         }
     );
@@ -371,8 +359,7 @@ function deletarDados(){
                 limpa();
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
-                $('#modal_avisos').modal('show');       
+                avisoErros(jXHR,textStatus,errorThrown);
             } 
         }
     );
@@ -389,8 +376,7 @@ function sair(tela){
                 $(location).attr('href',"index.jsp");
             },
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
-                $('#modal_avisos').modal('show');
+                avisoErros(jXHR,textStatus,errorThrown);
             }
         }
     );
@@ -422,6 +408,49 @@ function enviaImagens(){
     $('#modal_upload').modal('show');    
 }
 
+function avisoErros(jXHR, textStatus, errorThrown) {
+    $('#modal_carregando').modal('hide');
+    if(jXHR.status===401){
+        document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-success\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
+    }else{
+        document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
+    }
+    $('#modal_avisos').modal('show');
+}
+
+function avisoErrosCTimeOut(jXHR, textStatus, errorThrown) {
+    $('#modal_carregando').modal('hide');
+    if(jXHR.status===401){
+        document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-success\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
+    }else{
+        document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
+    }
+    setTimeout(function() {$('#modal_avisos').modal('show');}, 100);
+}
+
+function acoesConsulta(it_sub,it_par) {
+    $.ajax(
+        {
+            type: "POST",
+            url: "auth",
+            data: "?" + it_par,
+            success: function (data) {
+                switch (it_sub){
+                    case "id":
+                        setaIdEBusca(data);
+                        break;
+                    default:
+                        alert(it_sub + " não implementado");
+                        break;
+                }
+            },
+            error: function (jXHR, textStatus, errorThrown) {
+                avisoErros(jXHR,textStatus,errorThrown);
+            }
+        }
+    )
+}
+
 $(document).on("submit", '#form_dados', function(event) {
     $('#modal_carregando').modal('show');
     event.preventDefault();
@@ -436,12 +465,12 @@ $(document).on("submit", '#form_dados', function(event) {
             limpa();
         },
         error: function (jXHR, textStatus, errorThrown) {
-            document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
-            setTimeout(function() {$('#modal_avisos').modal('show');}, 100);
+            avisoErrosCTimeOut(jXHR,textStatus,errorThrown);
         }
     });
     $("#botao-gravar").off("click");
 });
+
 $(document).on("click", '#grava_config_estatisticas', function(event) {
     $('#modal_carregando').modal('show');
     event.preventDefault();
@@ -458,9 +487,7 @@ $(document).on("click", '#grava_config_estatisticas', function(event) {
         },
         error: function (jXHR, textStatus, errorThrown) {
             $('#modal_edit_configs').modal('hide');
-            $('#modal_carregando').modal('hide');
-            document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
-            setTimeout(function() {$('#modal_avisos').modal('show');}, 100);
+            avisoErrosCTimeOut(jXHR,textStatus,errorThrown);
         }
     });
     $("#grava_config_estatisticas").off("click");
@@ -469,6 +496,9 @@ $(document).on("click", '#grava_config_estatisticas', function(event) {
 $(document).on("click", '#login_interno_btn', function(event) {
     var user=$('#userId').val();
     var pwd=$('#pswId').val();
+    var it=$('#it_sub').val();
+    var it_redirect=$('#it_redirect').val();
+    var it_par=$('#it_par').val();
     $.ajax(
         {
             type: "POST",
@@ -477,15 +507,20 @@ $(document).on("click", '#login_interno_btn', function(event) {
             success: function (data) {
                 if(data.trim()!='False'){
                     $('#modal_avisos').modal('hide');
-                    buscaConteudoTela($("#it_sub").val())
+                    switch (it_redirect){
+                        case "app":
+                            buscaConteudoTela(it);
+                            break;
+                        case "consulta":
+                            acoesConsulta(it,it_par);
+                            break;
+                    }
                 }else{
                     alert('Fail....');
                 }
             },
             error: function (jXHR, textStatus, errorThrown) {
-                alert(jXHR.responseText)
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
-                setTimeout(function() {$('#modal_avisos').modal('show');}, 100);
+                avisoErros(jXHR,textStatus,errorThrown);
             }
         });
     $("#login_interno_btn").off("click");

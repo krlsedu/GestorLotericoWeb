@@ -35,19 +35,23 @@ public class Consulta {
 
     public Consulta(HttpServletRequest request) {
         this.request = request;
+        setConsulta();
+    }
+    
+    public void setConsulta(){
         switch(request.getParameter("tipo").trim()){
             case "busca":
                 geraTabelaPopUp(request.getParameter("coluna_buscar"));
                 break;
             case "dado":
                 buscaDado();
-                break;  
+                break;
             case "dados":
                 geraTabelaDados();
-                break;                
+                break;
             case "id":
                 getId();
-                break;               
+                break;
             case "nome":
                 getNome();
                 break;

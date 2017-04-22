@@ -6,25 +6,10 @@
 package com.cth.gestorlotericoweb;
 
 import com.cth.gestorlotericoweb.configuracoes.EstatisticasLinhas;
-import com.cth.gestorlotericoweb.dados.Cofre;
-import com.cth.gestorlotericoweb.dados.Conta;
-import com.cth.gestorlotericoweb.dados.Funcionario;
-import com.cth.gestorlotericoweb.dados.Loterica;
-import com.cth.gestorlotericoweb.dados.Operacao;
-import com.cth.gestorlotericoweb.dados.TarifaOperacao;
-import com.cth.gestorlotericoweb.dados.Terminal;
+import com.cth.gestorlotericoweb.dados.*;
 import com.cth.gestorlotericoweb.estatisticas.Estatisticas;
 import com.cth.gestorlotericoweb.parametros.Parametros;
-import com.cth.gestorlotericoweb.processos.AberturaTerminal;
-import com.cth.gestorlotericoweb.processos.FechamentoTerminal;
-import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
-import com.cth.gestorlotericoweb.processos.MovimentoCofre;
-import com.cth.gestorlotericoweb.processos.MovimentoConta;
-import com.cth.gestorlotericoweb.processos.OperacoesDiarias;
-import com.cth.gestorlotericoweb.processos.OperacoesDiariasLinhas;
-import com.cth.gestorlotericoweb.processos.OutroMovimento;
-import java.io.StringWriter;
-import javax.servlet.http.HttpServletRequest;
+import com.cth.gestorlotericoweb.processos.*;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -34,11 +19,18 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.StringWriter;
+
 /**
  *
  * @author CarlosEduardo
  */
 public class ConteudoTelas {
+    public HttpServletRequest request;
+    public ConteudoTelas(HttpServletRequest request){
+        this.request = request;
+    }
     public static VelocityContext getConteudoTela(VelocityContext contextPrinc,VelocityEngine ve,HttpServletRequest request){
         String id = request.getParameter("id");
         String input = request.getParameter("it");

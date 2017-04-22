@@ -9,12 +9,11 @@
     request.setCharacterEncoding("UTF-8");
     response.setCharacterEncoding("UTF-8");
     HttpSession sessionAt = request.getSession(false);
+    Consulta consulta = new Consulta(request);
     if(sessionAt != null && !sessionAt.isNew()) {
-        Consulta c = new Consulta(request);
-        out.println(c.output);        
+        out.println(consulta.output);
     } else {
-        Login h = new Login();
-        h.setLogin(request,true);
+        Login h = new Login(consulta);
         out.println(h.output);
 //response.sendRedirect("/index.jsp");
         response.setStatus(401);

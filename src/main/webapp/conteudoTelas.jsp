@@ -12,9 +12,9 @@
     if(sessionAt != null && !sessionAt.isNew()) {
         out.println(ConteudoTelas.getHtmlTela(request));
     } else {
-        Login h = new Login();
-        h.setLogin(request,true);
-        out.println(h.output);
+        ConteudoTelas conteudoTelas = new ConteudoTelas(request);
+        Login login = new Login(conteudoTelas);
+        out.println(login.output);
 //response.sendRedirect("/index.jsp");
         response.setStatus(401);
         sessionAt.invalidate();
