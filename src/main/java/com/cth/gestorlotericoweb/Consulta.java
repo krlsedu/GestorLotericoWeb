@@ -82,38 +82,44 @@ public class Consulta {
             } catch (SQLException ex) {
                 output = ex.getMessage();
                 new LogError(ex.getMessage(), ex,request);
+            } catch (Exception ex) {
+                new LogError(ex.getMessage(), ex,request);
             }
     }
     
     private void getNome(){
-        ColunasTabelas colunasTabelas = new ColunasTabelas(request);
-        String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
-        if(tabela !=null){         
-            String id = request.getParameter("id");
-            String col = colunasTabelas.getColNome(tabela);
-            if(col==null){
-                col = "*";
-            }
-            String sql;
-            if(colunasTabelas.getPossuiIEntidades(tabela)) {
-                sql = "select " + col + " from " + tabela + " where id = ? and id_entidade = ? ";
-            }else{
-                sql = "select " + col + " from " + tabela + " where id = ? ";
-            }
-            try {
-                PreparedStatement ps = Parametros.getConexao(request).getPst(sql, false);
-                ps.setInt(1, Integer.valueOf(id));
-                if(colunasTabelas.getPossuiIEntidades(tabela)) ps.setInt(2, Parametros.idEntidade);
-                ResultSet rs = ps.executeQuery();
-                if (rs.next()) {                    
-                    output = rs.getString(1);
-                }else{
-                    output = "";
+        try {
+            ColunasTabelas colunasTabelas = new ColunasTabelas(request);
+            String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
+            if (tabela != null) {
+                String id = request.getParameter("id");
+                String col = colunasTabelas.getColNome(tabela);
+                if (col == null) {
+                    col = "*";
                 }
-            } catch (SQLException ex) {
-                output = ex.getMessage();
-                new LogError(ex.getMessage(), ex,request);
+                String sql;
+                if (colunasTabelas.getPossuiIEntidades(tabela)) {
+                    sql = "select " + col + " from " + tabela + " where id = ? and id_entidade = ? ";
+                } else {
+                    sql = "select " + col + " from " + tabela + " where id = ? ";
+                }
+                try {
+                    PreparedStatement ps = Parametros.getConexao(request).getPst(sql, false);
+                    ps.setInt(1, Integer.valueOf(id));
+                    if (colunasTabelas.getPossuiIEntidades(tabela)) ps.setInt(2, Parametros.idEntidade);
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next()) {
+                        output = rs.getString(1);
+                    } else {
+                        output = "";
+                    }
+                } catch (SQLException ex) {
+                    output = ex.getMessage();
+                    new LogError(ex.getMessage(), ex, request);
+                }
             }
+        } catch (Exception ex) {
+            new LogError(ex.getMessage(), ex,request);
         }
     }
     private void getOpt(){        
@@ -128,7 +134,7 @@ public class Consulta {
         ColunasTabelas colunasTabelas = new ColunasTabelas(request);
         String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
         if(tabela !=null){
-            String btn = request.getParameter("btn");            
+            String btn = request.getParameter("btn");
             String id = request.getParameter("id");
             String col;
             String order;
@@ -140,11 +146,11 @@ public class Consulta {
                 case "a":
                     col = " and id < "+id;
                     order = "desc";
-                    break;                
+                    break;
                 case "p":
                     col = " and id > "+id;
                     order = "asc";
-                    break;                  
+                    break;
                 case "f":
                     col = "";
                     order = "desc";
@@ -171,7 +177,7 @@ public class Consulta {
         }
     }
     
-    private void geraTabelaDados(){        
+    private void geraTabelaDados(){
         ColunasTabelas colunasTabelas = new ColunasTabelas(request);
         String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
         Integer colCount = 0;
@@ -185,7 +191,7 @@ public class Consulta {
                 List<String> lInputs = new ArrayList<>();
                 if (rs.next()) {
                     colCount = rs.getMetaData().getColumnCount();
-                    for(int i = 1; i<=rs.getMetaData().getColumnCount();i++){  
+                    for(int i = 1; i<=rs.getMetaData().getColumnCount();i++){
                         lInputs.add("<input type=\"text\" id=\"nome_coluna_"+i+"\" value=\""+rs.getMetaData().getColumnName(i)+"\" readonly>");
                         if(rs.getString(i)!=null){
                             switch(rs.getMetaData().getColumnType(i)){
@@ -210,9 +216,9 @@ public class Consulta {
                             psDet.setInt(1, Integer.valueOf(request.getParameter("id")));
                             ResultSet rsDet = psDet.executeQuery();
                             Integer nLinhas = 0;
-                            while (rsDet.next()) {                                
+                            while (rsDet.next()) {
                                 nLinhas++;
-                                for(int i = 1; i<=rsDet.getMetaData().getColumnCount();i++){  
+                                for(int i = 1; i<=rsDet.getMetaData().getColumnCount();i++){
                                     Integer nCol = i+colCount;
                                     lInputs.add("<input type=\"text\" id=\"nome_coluna_"+nCol+"\" value=\""+rsDet.getMetaData().getColumnName(i)+"_"+nLinhas+"\" readonly>");
                                     if(rsDet.getString(i)!=null){

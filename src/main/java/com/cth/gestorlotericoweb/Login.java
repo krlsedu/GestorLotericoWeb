@@ -42,6 +42,8 @@ public class Login{
         
         }catch(ResourceNotFoundException e){
             new LogError(e.getMessage(), e,request);
+        } catch (Exception ex) {
+            new LogError(ex.getMessage(), ex,request);
         }
     }
     
@@ -63,6 +65,8 @@ public class Login{
             
         }catch(ResourceNotFoundException e){
             new LogError(e.getMessage(), e,request);
+        } catch (Exception ex) {
+            new LogError(ex.getMessage(), ex,request);
         }
     }
     
@@ -93,6 +97,8 @@ public class Login{
             
         }catch(ResourceNotFoundException e){
             new LogError(e.getMessage(), e,request);
+        } catch (Exception ex) {
+            new LogError(ex.getMessage(), ex,request);
         }
     }
     
@@ -126,6 +132,8 @@ public class Login{
             
         }catch(ResourceNotFoundException e){
             new LogError(e.getMessage(), e,request);
+        } catch (Exception ex) {
+            new LogError(ex.getMessage(), ex,request);
         }
     }
     

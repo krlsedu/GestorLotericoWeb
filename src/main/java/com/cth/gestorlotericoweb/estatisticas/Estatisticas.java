@@ -6,6 +6,7 @@
 package com.cth.gestorlotericoweb.estatisticas;
 
 import com.cth.gestorlotericoweb.LogError;
+import com.cth.gestorlotericoweb.dados.Cofre;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.saldos.SaldoCofre;
 import org.apache.commons.lang.StringUtils;
@@ -115,7 +116,7 @@ public class Estatisticas {
         String fechaLinha = "</div>";
         StringBuilder sbWidgets= new StringBuilder();
         sbWidgets.append(abreLinha);
-        Integer linhaAtu = 0;
+        Integer linhaAtu = 1;
         String sql = "SELECT * from itens_estatisticas where id_entidade = ? ORDER BY linha,coluna";
         try {
             PreparedStatement ps = Parametros.getConexao().getPst(sql,false);
@@ -123,9 +124,10 @@ public class Estatisticas {
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 Integer linha = rs.getInt("linha");
-                if(linhaAtu>0&&linha!=linhaAtu){
+                if(linha!=linhaAtu){
                     sbWidgets.append(fechaLinha).append(abreLinha);
                 }
+                linhaAtu = linha;
                 sbWidgets.append(getDadosWidget(rs));
             }
             sbWidgets.append(fechaLinha);
@@ -136,6 +138,7 @@ public class Estatisticas {
     }
     
     private String getDadosWidget(ResultSet rs)throws SQLException{
+        Integer tipoValWidget = rs.getInt("tipo_widget");
         Integer idComponente = rs.getInt("id_componente");
         Integer idItemComponente = rs.getInt("id_item_componente");
         Integer linha = rs.getInt("linha");
@@ -150,13 +153,42 @@ public class Estatisticas {
                 div.attr("id",nomeTpeWidget.val()+"_"+linha+"_"+coluna);
                 Element valor = div.getElementById("valor_rs");
                 valor.attr("id","valor_rs"+"_"+linha+"_"+coluna);
-                valor.html("teste");
+                valor.html(getValWidget(tipoValWidget,idComponente,idItemComponente));
                 Element nome = div.getElementById("nome_valor_rs");
                 nome.attr("id","nome_valor_rs"+"_"+linha+"_"+coluna);
-                valor.html("Nome teste");
+                nome.html(getNomeItemComponente(idComponente,idItemComponente));
+                nomeTpeWidget.remove();
                 break;
         }
         return document.outerHtml();
+    }
+    
+    private String getNomeItemComponente( Integer componente, Integer itemComponente){
+        switch (componente){
+            case 1://Cofre
+                Cofre cofre = new Cofre(itemComponente,request);
+                return cofre.getNomeCofre();
+            default:
+                return "Não existe";
+        }
+    }
+    
+    private String getValWidget(Integer tipo, Integer componente, Integer itemComponente){
+        switch (tipo){
+            case 1: //saldo
+                switch (componente){
+                    case 1://Cofre
+                        SaldoCofre saldoCofre = new SaldoCofre(itemComponente,request);
+                        return saldoCofre.getSaldoSt();
+                    default:
+                        return "Não existe";
+                }
+            case 2: //Quantidades
+                break;
+            default:
+                return "Não disponivel";
+        }
+        return "";
     }
     
 }

@@ -7,12 +7,13 @@ package com.cth.gestorlotericoweb;
 
 import com.cth.gestorlotericoweb.ocr.DadosOcr;
 import com.google.api.services.vision.v1.Vision;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import javax.net.ssl.HttpsURLConnection;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -30,7 +31,7 @@ public class OCR {
             DadosOcr dadosOcr = new DadosOcr(output, request);
             output = dadosOcr.objetos.toString();
         } catch (Exception ex) {
-            output = "Aqui "+ex.getMessage();
+            new LogError(ex.getMessage(), ex,request);
         }
     }
     

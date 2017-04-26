@@ -7,15 +7,16 @@ package com.cth.gestorlotericoweb.dados;
 
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.StringWriter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
 
 /**
  *
@@ -142,4 +143,7 @@ public class Cofre extends Cadastros{
         return id;
     }
     
+    public String getNomeCofre() {
+        return nomeCofre;
+    }
 }

@@ -5,8 +5,9 @@
  */
 package com.cth.gestorlotericoweb;
 
-import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -14,7 +15,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class LogError{
     public LogError(String message, Throwable cause,HttpServletRequest request) {
-        new  Erros(request, message, StringUtils.join(cause.getStackTrace(),';'));
+        new  Erros(request, cause.getMessage(), StringUtils.join(cause.getStackTrace(),';'));
         throw new RuntimeException(message, cause);
     }    
 }

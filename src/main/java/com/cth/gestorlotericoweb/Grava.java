@@ -64,92 +64,95 @@ public class Grava {
             }         
         } catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);
+        } catch (Exception ex) {
+            new LogError(ex.getMessage(), ex,request);
         }
     }
     
     private void grava(){
-        String input = request.getParameter("it");
-        switch(input){
-            //inicio gravação cadastros;
+        try {
+            String input = request.getParameter("it");
+            switch (input) {
+                //inicio gravação cadastros;
                 case "cofres":
                     Cofre cofre = new Cofre(request.getParameter("nome_cofre"), request.getParameter("tipo_cofre"), request.getParameter("id_loterica"), request.getParameter("observacoes"), request);
-                    if("0".equals(request.getParameter("id"))){
+                    if ("0".equals(request.getParameter("id"))) {
                         cofre.insere();
-                    }else{
+                    } else {
                         cofre.altera(request.getParameter("id"));
                     }
                     id = cofre.getId();
                     break;
                 case "contas":
                     Conta conta = new Conta(request.getParameter("nome_conta"), request.getParameter("agencia"), request.getParameter("operacao"), request.getParameter("conta_corrente"), request.getParameter("dv"), request.getParameter("telefone"), request.getParameter("gerente"), request.getParameter("observacoes"), Integer.valueOf(request.getParameter("id_loterica")), request);
-                    if("0".equals(request.getParameter("id"))){
+                    if ("0".equals(request.getParameter("id"))) {
                         conta.insere();
-                    }else{
+                    } else {
                         conta.altera(request.getParameter("id"));
                     }
                     id = conta.getId();
                     break;
-                case "funcionarios":       
+                case "funcionarios":
                     Funcionario funcionario = new Funcionario(request.getParameter("codigo_caixa"), request.getParameter("nome"), request.getParameter("cpf"), Integer.valueOf(request.getParameter("tipo_func")), request.getParameter("observacoes"), request);
-                    if("0".equals(request.getParameter("id"))){
+                    if ("0".equals(request.getParameter("id"))) {
                         funcionario.insere();
-                    }else{
+                    } else {
                         funcionario.altera(request.getParameter("id"));
                     }
                     id = funcionario.getId();
                     break;
-                case "lotericas":     
-                    Loterica loterica = new Loterica(request.getParameter("codigo_caixa"), request.getParameter("nome"),request);
-                    if("0".equals(request.getParameter("id"))){
+                case "lotericas":
+                    Loterica loterica = new Loterica(request.getParameter("codigo_caixa"), request.getParameter("nome"), request);
+                    if ("0".equals(request.getParameter("id"))) {
                         loterica.insere();
-                    }else{
+                    } else {
                         loterica.altera(request.getParameter("id"));
                     }
                     id = loterica.getId();
                     break;
                 case "operacoes":
                     Operacao operacao = new Operacao(request);
-                    if("0".equals(request.getParameter("id"))){
+                    if ("0".equals(request.getParameter("id"))) {
                         operacao.insere();
-                    }else{
+                    } else {
                         operacao.altera(request.getParameter("id"));
                     }
                     id = operacao.getId();
                     break;
                 case "tarifas_operacoes":
                     TarifaOperacao tarifaOperacao = new TarifaOperacao(request);
-                    if("0".equals(request.getParameter("id"))){
+                    if ("0".equals(request.getParameter("id"))) {
                         tarifaOperacao.insere();
-                    }else{
+                    } else {
                         tarifaOperacao.altera(request.getParameter("id"));
                     }
                     id = tarifaOperacao.getId();
                     break;
-                case "terminais":       
+                case "terminais":
                     Terminal terminal = new Terminal(request);
-                    if("0".equals(request.getParameter("id"))){
+                    if ("0".equals(request.getParameter("id"))) {
                         terminal.insere();
-                    }else{
+                    } else {
                         terminal.altera(request.getParameter("id"));
                     }
                     id = terminal.getId();
                     break;
-            //fim gravação cadastros;
-            //inicio gravação processos
+                //fim gravação cadastros;
+                //inicio gravação processos
                 case "abertura_terminais":
                     AberturaTerminal aberturaTerminal = new AberturaTerminal(request);
-                    if("0".equals(request.getParameter("id"))){
+                    if ("0".equals(request.getParameter("id"))) {
                         aberturaTerminal.insere();
-                    }else{
+                    } else {
                         aberturaTerminal.altera();
                     }
                     id = aberturaTerminal.getId();
                     break;
                 case "movimentos_caixas":
                     MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request);
-                    if("0".equals(request.getParameter("id"))){
+                    if ("0".equals(request.getParameter("id"))) {
                         movimentoCaixa.insere();
-                    }else{
+                    } else {
                         movimentoCaixa.altera();
                     }
                     id = movimentoCaixa.getId();
@@ -161,27 +164,27 @@ public class Grava {
                     break;
                 case "movimentos_contas":
                     MovimentoConta movimentoConta = new MovimentoConta(request);
-                    if("0".equals(request.getParameter("id"))){
+                    if ("0".equals(request.getParameter("id"))) {
                         movimentoConta.insere();
-                    }else{
+                    } else {
                         movimentoConta.altera();
                     }
                     id = movimentoConta.getId();
                     break;
                 case "outros_movimentos":
                     OutroMovimento outroMovimento = new OutroMovimento(request);
-                    if("0".equals(request.getParameter("id"))){
+                    if ("0".equals(request.getParameter("id"))) {
                         outroMovimento.insere();
-                    }else{
+                    } else {
                         outroMovimento.altera();
                     }
                     id = outroMovimento.getId();
                     break;
                 case "fechamento_terminais":
                     FechamentoTerminal fechamentoTerminal = new FechamentoTerminal(request);
-                    if("0".equals(request.getParameter("id"))){
+                    if ("0".equals(request.getParameter("id"))) {
                         fechamentoTerminal.insere();
-                    }else{
+                    } else {
                         fechamentoTerminal.altera();
                     }
                     id = fechamentoTerminal.getId();
@@ -192,16 +195,19 @@ public class Grava {
                     operacoesDiarias.grava();
                     id = operacoesDiarias.getId();
                     break;
-            //fim gravação processos
-            //inicio gravação configs
+                //fim gravação processos
+                //inicio gravação configs
                 case "itens_estatisticas":
                     EstatisticasLinhas estatisticasLinhas = new EstatisticasLinhas(request);
                     estatisticasLinhas.setEstatisticasLinhas();
                     estatisticasLinhas.grava();
                     break;
-            //fim gravação configs
-            default:
-                break;
+                //fim gravação configs
+                default:
+                    break;
+            }
+        }catch (Exception ex){
+            new LogError(ex.getMessage(),ex,request);
         }
     }
 }

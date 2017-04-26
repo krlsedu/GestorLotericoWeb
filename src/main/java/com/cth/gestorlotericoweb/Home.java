@@ -49,6 +49,8 @@ public class Home {
 			output = writer.toString();
 		} catch (ResourceNotFoundException | MethodInvocationException | ParseErrorException ex) {
 			new LogError(ex.getMessage(), ex, request);
+		} catch (Exception ex) {
+			new LogError(ex.getMessage(), ex,request);
 		}
 	}
 }

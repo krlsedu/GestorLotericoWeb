@@ -23,24 +23,28 @@ public class Auth {
 	}
 	
 	public void auth() {
-		Usuario usuario = new Usuario(request);
-		if (usuario.getIdUsuario() > 0) {
-			Parametros.setIdUsuario(usuario.getIdUsuario());
-			if (usuario.getQtdEntidades() == 1) {
-				output = "app";
-				Parametros.setIdEntidade(usuario.getlEntidadesUsuario().get(0));
-			} else {
-				if (usuario.getQtdEntidades() != 0) {
-					output = "entidades";
+		try {
+			Usuario usuario = new Usuario(request);
+			if (usuario.getIdUsuario() > 0) {
+				Parametros.setIdUsuario(usuario.getIdUsuario());
+				if (usuario.getQtdEntidades() == 1) {
+					output = "app";
+					Parametros.setIdEntidade(usuario.getlEntidadesUsuario().get(0));
 				} else {
-					output = "entidades";
+					if (usuario.getQtdEntidades() != 0) {
+						output = "entidades";
+					} else {
+						output = "entidades";
+					}
 				}
+				Parametros.gravaLogin(request.getParameter("user"), request.getRemoteAddr(), request.getRemoteHost(), "S", request);
+			} else {
+				output = "False";
+				Parametros.gravaLogin(request.getParameter("user"), request.getRemoteAddr(), request.getRemoteHost(), "N", request);
+				request.getSession(false).invalidate();
 			}
-			Parametros.gravaLogin(request.getParameter("user"), request.getRemoteAddr(), request.getRemoteHost(), "S", request);
-		} else {
-			output = "False";
-			Parametros.gravaLogin(request.getParameter("user"), request.getRemoteAddr(), request.getRemoteHost(), "N", request);
-			request.getSession(false).invalidate();
+		} catch (Exception ex) {
+			new LogError(ex.getMessage(), ex,request);
 		}
 	}
 }
