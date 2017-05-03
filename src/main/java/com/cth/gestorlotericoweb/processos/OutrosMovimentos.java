@@ -22,7 +22,7 @@ import org.apache.velocity.app.VelocityEngine;
  *
  * @author CarlosEduardo
  */
-public class OutroMovimento extends Processos{
+public class OutrosMovimentos extends Processos{
     String idTerminal;
     String idFuncionario;
     String dataHoraMov;
@@ -30,7 +30,7 @@ public class OutroMovimento extends Processos{
     String tipoOperacao;
     String observacoes;
     
-    public OutroMovimento(HttpServletRequest request) {
+    public OutrosMovimentos(HttpServletRequest request) {
         super(request);
         setOutrosMovimentos();
     }
@@ -42,7 +42,7 @@ public class OutroMovimento extends Processos{
         this.tipoOperacao = request.getParameter("tipo_operacao_caixa");
         this.observacoes = request.getParameter("observacoes");
     }
-    public OutroMovimento(Integer id,HttpServletRequest request) {
+    public OutrosMovimentos(Integer id, HttpServletRequest request) {
         super(request, id);
         getDados();
     }
@@ -80,8 +80,8 @@ public class OutroMovimento extends Processos{
             PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.outros_movimentos(\n" +
 "            tipo_operacao_caixa, id_terminal, id_funcionario, data_hora_mov, \n" +
 "            valor_movimentado, observacoes, id_entidade)\n" +
-"    VALUES (?, ?, ?, ?, \n" +
-"            ?, ?, ?);");
+"    VALUES ( ?, ?, ?, ?, \n" +
+"            ?, ?, ? );");
             ps.setInt(1, Integer.valueOf(tipoOperacao));
             if(idTerminal == null||idTerminal.trim().equals("")){
                 ps.setNull(2, java.sql.Types.BIGINT);
