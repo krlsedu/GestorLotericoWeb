@@ -7,6 +7,7 @@ package com.cth.gestorlotericoweb;
 
 import com.cth.gestorlotericoweb.dados.ColunasTabelas;
 import com.cth.gestorlotericoweb.parametros.Parametros;
+import com.cth.gestorlotericoweb.processos.AberturaTerminal;
 import com.cth.gestorlotericoweb.processos.FechamentoTerminal;
 import com.cth.gestorlotericoweb.utils.Parser;
 import org.apache.commons.lang.StringUtils;
@@ -330,6 +331,16 @@ public class Consulta {
                         case "data_encerramento":    
                             lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
                             lInputs.add("<input type=\"text\" id=\"valor\" value=\""+fechamentoTerminal.getDataFechar()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                    }
+                    break;
+                case "abertura_terminais":
+                    AberturaTerminal aberturaTerminal = new AberturaTerminal(request);
+                    switch (valorBuscar){
+                        case "troco_dia_anterior":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+aberturaTerminal.getTrocoDiaAnterior()+"\" readonly>");
                             output = StringUtils.join(lInputs,'\n');
                             break;
                     }

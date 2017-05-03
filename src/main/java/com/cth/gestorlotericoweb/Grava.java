@@ -172,13 +172,13 @@ public class Grava {
                     id = movimentoConta.getId();
                     break;
                 case "outros_movimentos":
-                    OutroMovimento outroMovimento = new OutroMovimento(request);
+                    OutrosMovimentos outrosMovimentos = new OutrosMovimentos(request);
                     if ("0".equals(request.getParameter("id"))) {
-                        outroMovimento.insere();
+                        outrosMovimentos.insere();
                     } else {
-                        outroMovimento.altera();
+                        outrosMovimentos.altera();
                     }
-                    id = outroMovimento.getId();
+                    id = outrosMovimentos.getId();
                     break;
                 case "fechamento_terminais":
                     FechamentoTerminal fechamentoTerminal = new FechamentoTerminal(request);

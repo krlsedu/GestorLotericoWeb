@@ -99,8 +99,8 @@ public class ConteudoTelas {
                         break;
             
                     case "outros_movimentos":
-                        OutroMovimento outroMovimento = new OutroMovimento(request);
-                        contextPrinc = outroMovimento.getHtml(contextPrinc, ve, id);
+                        OutrosMovimentos outrosMovimentos = new OutrosMovimentos(request);
+                        contextPrinc = outrosMovimentos.getHtml(contextPrinc, ve, id);
                         break;
             
                     case "operacoes_diarias":

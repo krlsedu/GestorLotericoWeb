@@ -9,14 +9,15 @@ import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.utils.Parser;
 import com.cth.gestorlotericoweb.utils.Seter;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.StringWriter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.servlet.http.HttpServletRequest;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
 
 /**
  *
@@ -142,5 +143,10 @@ public class AberturaTerminal extends Processos{
         contextPrinc.put("conteudo", writerConteudo.toString());
         contextPrinc.put("popup", getSWPopup(ve,"abertura_terminais").toString());
         return contextPrinc;
+    }
+    
+    public String getTrocoDiaAnterior(){
+        FechamentoTerminal fechamentoTerminal = new FechamentoTerminal(request);
+        return fechamentoTerminal.getRestoCaixaDiaAnterior();
     }
 }

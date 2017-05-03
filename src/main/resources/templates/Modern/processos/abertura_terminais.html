@@ -53,7 +53,9 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input name="data_abertura" id="data_abertura" type="date" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.date">
+                                <input name="data_abertura" id="data_abertura" type="date" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.date"
+
+                                       onkeyup="consultaCampoAuto('troco_dia_anterior');" >
                             </div>
                         </div>
                 </div>
