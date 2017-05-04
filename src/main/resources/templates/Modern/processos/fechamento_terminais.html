@@ -26,7 +26,7 @@
                                 </div>
                                 <input  name="id_terminal" type="text" class="form-control1 input-lg" id="id_terminal" placeholder="Cód Terminal"  
                                         onchange="buscaNome('terminais','id_terminal');" 
-                                        onkeyup="consultaCampoAuto('total_movimentos_dia');consultaCampoAuto('data_encerramento');"
+                                        onkeyup="consultaCampoAt('id_funcionario',false);consultaCampoAuto('total_movimentos_dia');consultaCampoAuto('data_encerramento');buscaNome('terminais','id_terminal');"
                                         required>                        
                             </div>
                         </div> 
@@ -44,7 +44,7 @@
                                 </div>
                                 <input name="id_funcionario" type="text" class="form-control1 input-lg" id="id_funcionario" placeholder="Cód Funcionário"  
                                         onchange="buscaNome('funcionarios','id_funcionario');" 
-                                        onkeyup="consultaCampoAuto('total_movimentos_dia');consultaCampoAuto('data_encerramento');" 
+                                        onkeyup="consultaCampoAutoLoopCheck('id_terminal',false);consultaCampoAuto('total_movimentos_dia');consultaCampoAuto('data_encerramento');buscaNome('funcionarios','id_funcionario');"
                                         required>  
                             </div>
                         </div>

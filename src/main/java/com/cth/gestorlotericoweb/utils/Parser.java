@@ -37,6 +37,14 @@ public class Parser {
                 Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
                 return timestamp;
             } catch (ParseException ex) {
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    java.util.Date parsedDate = dateFormat.parse(dataString.replace("T", ""));
+                    Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+                    return timestamp;
+                }catch (ParseException e){
+                
+                }
             }
         return null;
     }

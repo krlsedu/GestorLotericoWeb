@@ -26,6 +26,7 @@ import org.apache.velocity.app.VelocityEngine;
 public class MovimentoCofre extends Processos{
     Integer idMovimentoCaixa;
     Integer idMovimentoConta;
+    Integer idAberturaTerminal;
     String idCofre;
     String dataHoraMov;
     public String valorMovimentado;
@@ -68,6 +69,17 @@ public class MovimentoCofre extends Processos{
         this.numeroVolumes = "1";
     }
     
+    public MovimentoCofre(HttpServletRequest request,AberturaTerminal aberturaTerminal) {
+        super(request);
+        this.id = getIdMovimentoCofre(aberturaTerminal);
+        this.idCofre = aberturaTerminal.idCofre;
+        this.idAberturaTerminal = aberturaTerminal.id;
+        this.dataHoraMov = aberturaTerminal.dataAbertura;
+        this.valorMovimentado = aberturaTerminal.trocoDia;
+        this.tipoOperacao = "1";
+        this.numeroVolumes = "1";
+    }
+    
     public MovimentoCofre(HttpServletRequest request,MovimentoConta movimentoConta) {
         super(request);
         this.id = getIdMovimentoCofre(movimentoConta);
@@ -90,6 +102,21 @@ public class MovimentoCofre extends Processos{
             }
         }catch(SQLException ex){
             new LogError(ex.getMessage(), ex,request);            
+        }
+        return 0;
+    }
+    
+    private Integer getIdMovimentoCofre(AberturaTerminal aberturaTerminal){
+        try{
+            PreparedStatement ps = Parametros.getConexao().getPst("select id from movimentos_cofres where id_abertura_terminal = ? and id_entidade = ?",false);
+            ps.setInt(1, aberturaTerminal.id);
+            ps.setInt(2, Parametros.idEntidade);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }catch(SQLException ex){
+            new LogError(ex.getMessage(), ex,request);
         }
         return 0;
     }
@@ -209,10 +236,10 @@ public class MovimentoCofre extends Processos{
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.movimentos_cofres(\n" +
 "             id_cofre, id_movimento_caixa, data_hora_mov, \n" +
-"            valor_movimentado, tipo_movimento_cofre, observacoes, id_movimento_conta, \n" +
+"            valor_movimentado, tipo_movimento_cofre, observacoes, id_movimento_conta, id_abertura_terminal, \n" +
 "            id_entidade)\n" +
 "    VALUES ( ?, ?, ?, \n" +
-"            ?, ?, ?,?,  \n" +
+"            ?, ?, ?, ?, ?, \n" +
 "            ?);");
             ps.setInt(1, Integer.valueOf(idCofre));
             ps = Seter.set(ps, 2, idMovimentoCaixa);
@@ -221,7 +248,8 @@ public class MovimentoCofre extends Processos{
             ps.setInt(5, Integer.valueOf(tipoOperacao));
             ps = Seter.set(ps, 6, observacoes);
             ps = Seter.set(ps, 7, idMovimentoConta);
-            ps.setInt(8, Parametros.idEntidade);
+            ps = Seter.set(ps, 8, idAberturaTerminal);
+            ps.setInt(9, Parametros.idEntidade);
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()){
@@ -273,7 +301,7 @@ public class MovimentoCofre extends Processos{
         return contextPrinc;
     }
 
-    public String getIdCofre() {
+    public String getIdTerminal() {
         return idCofre;
     }
 

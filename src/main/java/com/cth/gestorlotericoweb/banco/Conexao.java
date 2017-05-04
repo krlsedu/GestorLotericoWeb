@@ -4,17 +4,13 @@
  * and open the template in the editor.
  */
 package com.cth.gestorlotericoweb.banco;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import static java.sql.DriverManager.getConnection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Properties;
-import javax.servlet.http.HttpServletRequest;
+
+import static java.sql.DriverManager.getConnection;
 
 /**
  *
@@ -43,6 +39,7 @@ public class Conexao {
             String bancoPg = lerPropriedade("banco");
             String url ="jdbc:postgresql://"+ipPg+":"+portaPg+"/"+bancoPg;
             Con = getConnection(url,usuarioPg, senhaPg);
+            Con.setAutoCommit(true);
             st = Con.createStatement();
         }catch(ClassNotFoundException|SQLException ex){
             throw new RuntimeException(ex.getMessage(), ex);

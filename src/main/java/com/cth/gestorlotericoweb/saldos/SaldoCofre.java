@@ -64,7 +64,7 @@ public class SaldoCofre extends Saldos{
                     "            id_cofre, data_saldo, saldo, id_movimento_cofre, id_entidade )\n" +
                     "    VALUES (?, ?, ?, ?, ?);",false);
             PreparedStatement psRs = Parametros.getConexao().getPst("select saldo from saldos_cofres where id_cofre = ? and id_entidade = ? order by data_hora_movimento desc limit 1",false);
-            psRs.setInt(1, Integer.valueOf(movimentoCofre.getIdCofre()));
+            psRs.setInt(1, Integer.valueOf(movimentoCofre.getIdTerminal()));
             psRs.setInt(2, Parametros.idEntidade);
             ResultSet rs = psRs.executeQuery();
             BigDecimal saldoAtual;
@@ -80,7 +80,7 @@ public class SaldoCofre extends Saldos{
                 BigDecimal valorSomar = Parser.toBigDecimalFromHtml(movimentoCofre.valorMovimentado).multiply(Parser.toBigDecimalFromHtml(movimentoCofre.numeroVolumes));
                 saldo = saldoAtual.add(valorSomar);
             }
-            ps.setInt(1,Integer.valueOf(movimentoCofre.getIdCofre()));
+            ps.setInt(1,Integer.valueOf(movimentoCofre.getIdTerminal()));
             ps.setDate(2, Parser.toDbDate(movimentoCofre.getDataHoraMov()));
             ps.setBigDecimal(3, saldo);
             ps.setInt(4, movimentoCofre.getId());
@@ -95,7 +95,7 @@ public class SaldoCofre extends Saldos{
     private void update(MovimentoCofre movimentoCofre){
         try{
             PreparedStatement psRs = Parametros.getConexao().getPst("select saldo from saldos_cofres where id_cofre = ? and id < ?  and id_entidade = ? order by data_hora_movimento desc limit 1",false);
-            psRs.setInt(1, Integer.valueOf(movimentoCofre.getIdCofre()));
+            psRs.setInt(1, Integer.valueOf(movimentoCofre.getIdTerminal()));
             psRs.setInt(2, id);
             psRs.setInt(3, Parametros.idEntidade);
             ResultSet rs = psRs.executeQuery();

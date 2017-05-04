@@ -33,6 +33,10 @@ public class Grava {
         }else{
             grava();
         }
+        try {
+            Parametros.getConexao().commit();
+        } catch (SQLException e) {
+        }
     }
     
     private void deleta(){
@@ -66,6 +70,10 @@ public class Grava {
             new LogError(ex.getMessage(), ex,request);
         } catch (Exception ex) {
             new LogError(ex.getMessage(), ex,request);
+        }
+        try {
+            Parametros.getConexao().commit();
+        } catch (SQLException e) {
         }
     }
     
@@ -208,6 +216,10 @@ public class Grava {
             }
         }catch (Exception ex){
             new LogError(ex.getMessage(),ex,request);
+        }
+        try {
+            Parametros.getConexao().commit();
+        } catch (SQLException e) {
         }
     }
 }

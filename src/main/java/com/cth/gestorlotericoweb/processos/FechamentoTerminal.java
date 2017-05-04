@@ -288,32 +288,6 @@ public class FechamentoTerminal extends Processos{
       return Parser.toHtmlBigDecimal(valor);
     };
     
-    public String getDataFechar(){
-        String sql = "SELECT at.data_abertura FROM\n" +
-                        "	abertura_terminais at\n" +
-                        "where\n" +
-                        "	not EXISTS (SELECT 1 FROM fechamento_terminais ft where ft.id_terminal = at.id_terminal and ft.id_funcionario = at.id_funcionario and at.data_abertura = ft.data_encerramento and at.id_entidade = ft.id_entidade) and \n" +
-                        "	at.id_terminal = ? and\n" +
-                        "	at.id_funcionario = ? and " +
-                "           at.id_entidade = ?\n" +
-                        "order by\n" +
-                        "	at.data_abertura desc\n" +
-                        "limit 1";
-        try{
-            PreparedStatement ps = Parametros.getConexao().getPst(sql, false);
-            ps.setInt(1, Parser.toInteger(idTerminal));
-            ps.setInt(2, Parser.toInteger(idFuncionario));
-            ps.setInt(3, Parametros.idEntidade);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                return rs.getString(1);
-            }
-        }catch(SQLException e){
-            new LogError(e.getMessage()+" - "+sql, e, request);
-        }
-        return null;
-    }
-    
     public String getRestoCaixaDiaAnterior(){
         BigDecimal valor = BigDecimal.ZERO;
         //language=PostgreSQL

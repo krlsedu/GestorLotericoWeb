@@ -144,7 +144,7 @@ public class ColunasTabelas {
         mTabColsSelDados.put("contas", "conta_corrente, dv, nome_conta, operacao, agencia, telefone, gerente, id_loterica, observacoes");
         mTabColsSelDados.put("operacoes", "nome_oper_caixa, nome_oper, tipo_oper, observacoes");
         mTabColsSelDados.put("cofres", "nome_cofre, tipo_cofre, observacoes, id_loterica");
-        mTabColsSelDados.put("abertura_terminais", " id_terminal, id_funcionario, data_abertura, troco_dia_anterior, troco_dia, observacoes");
+        mTabColsSelDados.put("abertura_terminais", " id_terminal, id_funcionario, data_abertura, troco_dia_anterior, troco_dia, observacoes, id_cofre");
         mTabColsSelDados.put("movimentos_caixas", "tipo_operacao_caixa, id_terminal, id_funcionario, data_hora_mov, valor_movimentado, observacoes, id_cofre");
         mTabColsSelDados.put("outros_movimentos", "tipo_operacao_caixa, id_terminal, id_funcionario, data_hora_mov, valor_movimentado, observacoes");
         mTabColsSelDados.put("fechamento_terminais", "id_terminal, id_funcionario, data_encerramento,resto_caixa, total_movimentos_dia, total_creditos_terminal, total_debitos_terminal,saldo_terminal, diferenca_caixa, observacoes");

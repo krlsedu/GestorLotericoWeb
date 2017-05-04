@@ -30,6 +30,7 @@ public class AberturaTerminal extends Processos{
     String trocoDiaAnterior;
     String trocoDia;
     String observacoes;
+    String idCofre;
     
     public AberturaTerminal(HttpServletRequest request) {
         super(request);
@@ -43,6 +44,7 @@ public class AberturaTerminal extends Processos{
         this.trocoDiaAnterior = request.getParameter("troco_dia_anterior");
         this.trocoDia = request.getParameter("troco_dia");
         this.observacoes = request.getParameter("observacoes");
+        this.idCofre = request.getParameter("id_cofre");
     }
 
     
@@ -55,7 +57,7 @@ public class AberturaTerminal extends Processos{
     private void getDados(){
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("select  id_terminal, id_funcionario, data_abertura, \n" +
-            "        troco_dia_anterior, troco_dia, observacoes \n" +
+            "        troco_dia_anterior, troco_dia, observacoes, id_cofre \n" +
             "        \n" +
             "  FROM abertura_terminais where id = ? and id_entidade = ? ",false);
             ps.setInt(1, id);
@@ -68,6 +70,7 @@ public class AberturaTerminal extends Processos{
                 trocoDiaAnterior = Parser.toBigDecimalSt(rs.getString(4));
                 trocoDia = Parser.toBigDecimalSt(rs.getString(5));
                 idTerminal = rs.getString(6);
+                idCofre = rs.getString(7);
             }else{
                 idTerminal = "";
                 idFuncionario = "";
@@ -75,6 +78,7 @@ public class AberturaTerminal extends Processos{
                 trocoDiaAnterior = "";
                 trocoDia = "";
                 idTerminal = "";
+                idCofre = "";
             }
         } catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);
@@ -85,20 +89,29 @@ public class AberturaTerminal extends Processos{
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO abertura_terminais(\n" +
             "             id_terminal, id_funcionario, data_abertura, \n" +
-            "            troco_dia_anterior, troco_dia, observacoes, id_entidade)\n" +
+            "            troco_dia_anterior, troco_dia, observacoes, id_cofre ,id_entidade)\n" +
             "    VALUES ( ?, ?, ?, \n" +
-            "            ?, ?, ?, ?);");
+            "            ?, ?, ?, ?, ?);");
             ps.setInt(1, Integer.valueOf(idTerminal));
             ps.setInt(2, Integer.valueOf(idFuncionario));       
             ps.setDate(3, Parser.toDbDate(dataAbertura));            
             ps.setBigDecimal(4, Parser.toBigDecimalFromHtml(trocoDiaAnterior));
             ps.setBigDecimal(5, Parser.toBigDecimalFromHtml(trocoDia));
             ps = Seter.set(ps,6, observacoes);
-            ps.setInt(7, Parametros.idEntidade);
+            ps.setInt(7,Integer.valueOf(idCofre));
+            ps.setInt(8, Parametros.idEntidade);
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()){
                 id = rs.getInt(1);
+                if(this.id!=null){
+                    try{
+                        MovimentoCofre movimentoCofre = new MovimentoCofre(request, this);
+                        movimentoCofre.gravaAutoMov();
+                    }catch(Exception e){
+                        new LogError(e.getMessage(),e,request);
+                    }
+                }
             }
             
         } catch (SQLException ex) {
@@ -111,20 +124,30 @@ public class AberturaTerminal extends Processos{
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE abertura_terminais\n" +
         "   SET id_terminal=?, id_funcionario=?, data_abertura=?, \n" +
-        "       troco_dia_anterior=?, troco_dia=?, observacoes=?\n" 
+        "       troco_dia_anterior=?, troco_dia=?, observacoes=?, id_cofre = ?\n"
                     + " where id = ? and id_entidade = ? ", false);
             ps.setInt(1, Integer.valueOf(idTerminal));
             ps.setInt(2, Integer.valueOf(idFuncionario));            
             ps.setDate(3, Parser.toDbDate(dataAbertura));            
             ps.setBigDecimal(4, Parser.toBigDecimalFromHtml(trocoDiaAnterior));
             ps.setBigDecimal(5, Parser.toBigDecimalFromHtml(trocoDia));
+            ps.setInt(7,Integer.valueOf(idCofre));
             ps = Seter.set(ps,6, observacoes);
             
+            
             id = Integer.valueOf(idL);
-            ps.setInt(7, id);
-            ps.setInt(8, Parametros.idEntidade);
+            ps.setInt(8, id);
+            ps.setInt(9, Parametros.idEntidade);
             
             ps.execute();
+            if(this.id!=null){
+                try{
+                    MovimentoCofre movimentoCofre = new MovimentoCofre(request, this);
+                    movimentoCofre.gravaAutoMov();
+                }catch(Exception e){
+                    new LogError(e.getMessage(),e,request);
+                }
+            }
         } catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);
         }

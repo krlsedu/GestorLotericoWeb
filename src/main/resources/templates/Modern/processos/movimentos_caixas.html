@@ -30,7 +30,8 @@
                                     <i class="i_botao_buscar fa fa-search" ></i>
                                 </div>
                                 <input  name="id_terminal" type="text" class="form-control1 input-lg" id="id_terminal" placeholder="Cód Terminal"  
-                                        onchange="buscaNome('terminais','id_terminal')" 
+                                        onchange="buscaNome('terminais','id_terminal')"
+                                        onkeyup="consultaCampoAutoLoopCheck('id_funcionario',false);consultaCampoAuto('data_hora_mov');buscaNome('terminais','id_terminal');"
                                         >                        
                             </div>
                         </div> 
@@ -47,7 +48,8 @@
                                     <i class="i_botao_buscar fa fa-search" ></i>
                                 </div>
                                 <input name="id_funcionario" type="text" class="form-control1 input-lg" id="id_funcionario" placeholder="Cód Funcionário"  
-                                        onchange="buscaNome('funcionarios','id_funcionario')" 
+                                        onchange="buscaNome('funcionarios','id_funcionario')"
+                                       onkeyup="consultaCampoAutoLoopCheck('id_terminal',false);consultaCampoAuto('data_hora_mov');buscaNome('funcionarios','id_funcionario');"
                                         required>  
                             </div>
                         </div>
@@ -64,8 +66,8 @@
                                     <i class="i_botao_buscar fa fa-search" ></i>
                                 </div>
                                 <input  name="id_cofre" type="text" class="form-control1 input-lg" id="id_cofre" placeholder="Cód Codfre"  
-                                        onchange="buscaNome('cofres','id_cofre')" 
-                                        >                        
+                                        onchange="buscaNome('cofres','id_cofre')"
+                                >
                             </div>
                         </div> 
                         <div class="col-sm-6">

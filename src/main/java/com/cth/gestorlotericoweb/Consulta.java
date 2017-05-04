@@ -9,6 +9,8 @@ import com.cth.gestorlotericoweb.dados.ColunasTabelas;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.AberturaTerminal;
 import com.cth.gestorlotericoweb.processos.FechamentoTerminal;
+import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
+import com.cth.gestorlotericoweb.processos.OutrosMovimentos;
 import com.cth.gestorlotericoweb.utils.Parser;
 import org.apache.commons.lang.StringUtils;
 
@@ -306,6 +308,7 @@ public class Consulta {
     
     private void buscaDado(){
         String tabela = request.getParameter("tabela");
+        Parametros.gravaLogSessao(request);
         String valorBuscar = request.getParameter("valor_buscar");
         List<String> lInputs = new ArrayList<>();
         if(valorBuscar!=null){
@@ -313,6 +316,16 @@ public class Consulta {
                 case "fechamento_terminais":
                     FechamentoTerminal fechamentoTerminal = new FechamentoTerminal(request);
                     switch(valorBuscar){
+                        case "id_terminal":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+fechamentoTerminal.getIdTerminal()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "id_funcionario":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+fechamentoTerminal.getIdFuncionario()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
                         case "total_movimentos_dia":
                             lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
                             lInputs.add("<input type=\"text\" id=\"valor\" value=\""+fechamentoTerminal.getTotalMovimentosDia()+"\" readonly>");
@@ -341,6 +354,47 @@ public class Consulta {
                         case "troco_dia_anterior":
                             lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
                             lInputs.add("<input type=\"text\" id=\"valor\" value=\""+aberturaTerminal.getTrocoDiaAnterior()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                    }
+                    break;
+                case "movimentos_caixas":
+                    MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request);
+                    switch (valorBuscar){
+                        case "id_terminal":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoCaixa.getIdTerminal()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "id_funcionario":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoCaixa.getIdFuncionario()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "data_hora_mov":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoCaixa.getDataHoraMov()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                    }
+                    break;
+    
+                case "outros_movimentos":
+                    OutrosMovimentos outrosMovimentos = new OutrosMovimentos(request);
+                    switch (valorBuscar){
+                        case "id_terminal":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+outrosMovimentos.getIdTerminal()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "id_funcionario":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+outrosMovimentos.getIdFuncionario()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "data_hora_mov":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+outrosMovimentos.getDataHoraMov()+"\" readonly>");
                             output = StringUtils.join(lInputs,'\n');
                             break;
                     }
