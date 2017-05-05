@@ -145,5 +145,45 @@ public class Processos {
             }
         }
     }
+    
+    public String getIdCofre(){
+        String sql = "SELECT count(*) from cofres WHERE id_entidade = ?";
+        try {
+            PreparedStatement ps = Parametros.getConexao().getPst(sql,false);
+            ps.setInt(1,Parametros.idEntidade);
+            ResultSet resultSet = ps.executeQuery();
+            if (resultSet.next()){
+                if (resultSet.getInt(1)==1){
+                    sql = "SELECT id from cofres WHERE id_entidade = ?";
+                    ps = Parametros.getConexao().getPst(sql,false);
+                    ps.setInt(1,Parametros.idEntidade);
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next()){
+                        return rs.getString(1);
+                    }
+                }else{
+                    return getIdCofreUsado();
+                }
+            }
+        } catch (SQLException e) {
+            new LogError(e.getMessage(),e,request);
+        }
+        return getIdCofreUsado();
+    }
+    
+    private String getIdCofreUsado(){
+        String sql = "SELECT id_cofre FROM movimentos_cofres WHERE id_entidade = ? ORDER BY data_hora_mov DESC LIMIT 1";
+        try {
+            PreparedStatement ps = Parametros.getConexao().getPst(sql,false);
+            ps.setInt(1,Parametros.idEntidade);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString(1);
+            }
+        } catch (SQLException e) {
+            new LogError(e.getMessage(),e,request);
+        }
+        return "";
+    }
 
 }

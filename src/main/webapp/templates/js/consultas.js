@@ -263,7 +263,7 @@ function consultaCampoAutoLoopCheck(valorBuscar,loop){
                     if (!(valr === null || valr === 'null')) {
                         $('input#' + nomeCol).val(valr).trigger('mask.maskMoney');
                         try {
-                            if (tabela === 'movimentos_caixas') {
+                            if (tabela === 'movimentos_caixas'||tabela==='abertura_terminais'||!loop) {
                                 document.getElementById(nomeCol).onchange();
                             }
                             document.getElementById(nomeCol).onkeyup();

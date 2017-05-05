@@ -31,7 +31,7 @@
                                 </div>
                                 <input  name="id_terminal" type="text" class="form-control1 input-lg" id="id_terminal" placeholder="Cód Terminal"  
                                         onchange="buscaNome('terminais','id_terminal')"
-                                        onkeyup="consultaCampoAutoLoopCheck('id_funcionario',false);consultaCampoAuto('data_hora_mov');buscaNome('terminais','id_terminal');"
+                                        onkeyup="consultaCampoAutoLoopCheck('id_funcionario',false);consultaCampoAuto('data_hora_mov');consultaCampoAutoLoopCheck('id_cofre',false);buscaNome('terminais','id_terminal');"
                                         >                        
                             </div>
                         </div> 
@@ -49,7 +49,7 @@
                                 </div>
                                 <input name="id_funcionario" type="text" class="form-control1 input-lg" id="id_funcionario" placeholder="Cód Funcionário"  
                                         onchange="buscaNome('funcionarios','id_funcionario')"
-                                       onkeyup="consultaCampoAutoLoopCheck('id_terminal',false);consultaCampoAuto('data_hora_mov');buscaNome('funcionarios','id_funcionario');"
+                                       onkeyup="consultaCampoAutoLoopCheck('id_terminal',false);consultaCampoAuto('data_hora_mov');consultaCampoAutoLoopCheck('id_cofre',false);buscaNome('funcionarios','id_funcionario');"
                                         required>  
                             </div>
                         </div>
@@ -67,6 +67,7 @@
                                 </div>
                                 <input  name="id_cofre" type="text" class="form-control1 input-lg" id="id_cofre" placeholder="Cód Codfre"  
                                         onchange="buscaNome('cofres','id_cofre')"
+                                        onfocus="consultaCampoAutoLoopCheck('id_cofre',false)"
                                 >
                             </div>
                         </div> 

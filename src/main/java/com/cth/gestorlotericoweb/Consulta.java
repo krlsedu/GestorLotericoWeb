@@ -7,10 +7,7 @@ package com.cth.gestorlotericoweb;
 
 import com.cth.gestorlotericoweb.dados.ColunasTabelas;
 import com.cth.gestorlotericoweb.parametros.Parametros;
-import com.cth.gestorlotericoweb.processos.AberturaTerminal;
-import com.cth.gestorlotericoweb.processos.FechamentoTerminal;
-import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
-import com.cth.gestorlotericoweb.processos.OutrosMovimentos;
+import com.cth.gestorlotericoweb.processos.*;
 import com.cth.gestorlotericoweb.utils.Parser;
 import org.apache.commons.lang.StringUtils;
 
@@ -356,6 +353,21 @@ public class Consulta {
                             lInputs.add("<input type=\"text\" id=\"valor\" value=\""+aberturaTerminal.getTrocoDiaAnterior()+"\" readonly>");
                             output = StringUtils.join(lInputs,'\n');
                             break;
+                        case "id_cofre":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+aberturaTerminal.getIdCofre()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "id_terminal":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+aberturaTerminal.getIdTerminal()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "id_funcionario":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+aberturaTerminal.getIdFuncionario()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
                     }
                     break;
                 case "movimentos_caixas":
@@ -374,6 +386,11 @@ public class Consulta {
                         case "data_hora_mov":
                             lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
                             lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoCaixa.getDataHoraMov()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "id_cofre":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoCaixa.getIdCofre()+"\" readonly>");
                             output = StringUtils.join(lInputs,'\n');
                             break;
                     }
@@ -399,6 +416,25 @@ public class Consulta {
                             break;
                     }
                     break;
+                case "movimentos_cofres":
+                    MovimentoCofre movimentoCofre = new MovimentoCofre(request);
+                    switch (valorBuscar){
+                        case "id_cofre":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoCofre.getIdCofre()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                    }
+    
+                case "movimentos_contas":
+                    MovimentoConta movimentoConta = new MovimentoConta(request);
+                    switch (valorBuscar){
+                        case "id_cofre":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoConta.getIdCofre()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                    }
             }
         }
     }
