@@ -251,7 +251,7 @@ public class FechamentoTerminal extends Processos{
     public BigDecimal getSaldoOutrosMovimentos(){
         BigDecimal valor = BigDecimal.ZERO;
         String sql = "SELECT \n" +
-                "	sum(case when tipo_operacao_caixa in (1,3,4,6) then valor_movimentado else valor_movimentado * (-1) end)\n" +
+                "	sum(case when tipo_operacao_caixa in (1,4,6) then valor_movimentado else valor_movimentado * (-1) end)\n" +
                 "FROM \n" +
                 "	outros_movimentos \n" +
                                 "where\n" +
