@@ -397,6 +397,11 @@ function sair(tela){
 
 function setaIdFk(id,campo,nome){
     document.getElementById(campo).value = id;
+    try {
+        document.getElementById(campo).onkeyup();
+    } catch (e) {
+
+    }
     document.getElementById('label_'+campo).innerHTML = nome;
     if(campo==='id_componente'){
         setaOnclickIdComponente(id,nome);
