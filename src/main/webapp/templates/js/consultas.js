@@ -239,44 +239,46 @@ function insereDados(htmlDoc){
     $('#modal_carregando').modal('hide');   
 }
 
-function  consultaCampoAuto(valorBuscar) {
-    consultaCampoAutoLoopCheck(valorBuscar,true);
+function  consultaCampoAuto(valorBuscar,element) {
+    consultaCampoAutoLoopCheck(valorBuscar,true,element);
 }
 
-function consultaCampoAutoLoopCheck(valorBuscar,loop){
-    var tabela = document.getElementById("it").value;
-    if(loop||document.getElementById(valorBuscar).value==="") {
-        $.ajax(
-            {
-                type: "POST",
-                url: "consulta",
-                data: $("#form_dados").serialize() + '&' + $.param({
-                    "valor_buscar": valorBuscar,
-                    "tabela": tabela,
-                    "tipo": "dado"
-                }),
-                success: function (data) {
-                    var parser = new DOMParser();
-                    var htmlDoc = parser.parseFromString(data, "text/html");
-                    var nomeCol = htmlDoc.getElementById("nome_coluna").value;
-                    var valr = htmlDoc.getElementById("valor").value;
-                    if (!(valr === null || valr === 'null')) {
-                        $('input#' + nomeCol).val(valr).trigger('mask.maskMoney');
-                        try {
-                            if (tabela === 'movimentos_caixas'||tabela==='abertura_terminais'||!loop) {
-                                document.getElementById(nomeCol).onchange();
-                            }
-                            document.getElementById(nomeCol).onkeyup();
-                        } catch (e) {
+function consultaCampoAutoLoopCheck(valorBuscar,loop,element){
+    if(!element.value === "") {
+        var tabela = document.getElementById("it").value;
+        if (loop || document.getElementById(valorBuscar).value === "") {
+            $.ajax(
+                {
+                    type: "POST",
+                    url: "consulta",
+                    data: $("#form_dados").serialize() + '&' + $.param({
+                        "valor_buscar": valorBuscar,
+                        "tabela": tabela,
+                        "tipo": "dado"
+                    }),
+                    success: function (data) {
+                        var parser = new DOMParser();
+                        var htmlDoc = parser.parseFromString(data, "text/html");
+                        var nomeCol = htmlDoc.getElementById("nome_coluna").value;
+                        var valr = htmlDoc.getElementById("valor").value;
+                        if (!(valr === null || valr === 'null')) {
+                            $('input#' + nomeCol).val(valr).trigger('mask.maskMoney');
+                            try {
+                                if (tabela === 'movimentos_caixas' || tabela === 'abertura_terminais' || !loop) {
+                                    document.getElementById(nomeCol).onchange();
+                                }
+                                document.getElementById(nomeCol).onkeyup();
+                            } catch (e) {
 
+                            }
                         }
+                    },
+                    error: function (jXHR, textStatus, errorThrown) {
+                        avisoErros(jXHR, textStatus, errorThrown);
                     }
-                },
-                error: function (jXHR, textStatus, errorThrown) {
-                    avisoErros(jXHR, textStatus, errorThrown);
                 }
-            }
-        )
+            )
+        }
     }
 }
 

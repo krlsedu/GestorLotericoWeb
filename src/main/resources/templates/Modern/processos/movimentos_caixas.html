@@ -31,7 +31,7 @@
                                 </div>
                                 <input  name="id_terminal" type="text" class="form-control1 input-lg" id="id_terminal" placeholder="Cód Terminal"  
                                         onchange="buscaNome('terminais','id_terminal')"
-                                        onkeyup="consultaCampoAutoLoopCheck('id_funcionario',false);consultaCampoAuto('data_hora_mov');consultaCampoAutoLoopCheck('id_cofre',false);buscaNome('terminais','id_terminal');"
+                                        onkeyup="consultaCampoAutoLoopCheck('id_funcionario',false,this);consultaCampoAuto('data_hora_mov',this);consultaCampoAutoLoopCheck('id_cofre',false,this);buscaNome('terminais','id_terminal');"
                                         >                        
                             </div>
                         </div> 
@@ -67,7 +67,7 @@
                                 </div>
                                 <input  name="id_cofre" type="text" class="form-control1 input-lg" id="id_cofre" placeholder="Cód Codfre"  
                                         onchange="buscaNome('cofres','id_cofre')"
-                                        onfocus="consultaCampoAutoLoopCheck('id_cofre',false)"
+                                        onfocus="consultaCampoAutoLoopCheck('id_cofre',false,this)"
                                 >
                             </div>
                         </div> 
