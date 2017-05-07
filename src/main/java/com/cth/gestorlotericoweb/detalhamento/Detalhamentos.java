@@ -1,5 +1,7 @@
 package com.cth.gestorlotericoweb.detalhamento;
 
+import org.apache.commons.lang.StringUtils;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -28,5 +30,22 @@ public class Detalhamentos {
 		}
 		linhas.add(linha);
 		return linhas;
+	}
+	
+	public String getTabela(List<String> lLinhas){
+		String tabela = "<table class=\"table\">\n" +
+				"      <thead>\n" +
+				"        <tr>\n" +
+				"          <th>Tipo</th>\n" +
+				"          <th>Descrição</th>\n" +
+				"          <th>Valor</th>\n" +
+				"          <th>Observação</th>\n" +
+				"        </tr>\n" +
+				"      </thead>\n" +
+				"      <tbody>\n" +
+						StringUtils.join(lLinhas,"\n")+
+				"      </tbody>\n" +
+				"    </table>";
+		return tabela;
 	}
 }

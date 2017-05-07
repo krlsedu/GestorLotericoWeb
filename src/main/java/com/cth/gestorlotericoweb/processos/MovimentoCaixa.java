@@ -37,6 +37,18 @@ public class MovimentoCaixa extends Processos{
         super(request);
         setMovimentosCaixas();
     }
+    
+    public MovimentoCaixa(HttpServletRequest request, ResultSet rs) throws SQLException {
+        super(request);
+        tipoOperacao = rs.getString(1);
+        idTerminal = rs.getString(2);
+        idFuncionario = rs.getString(3);
+        dataHoraMov = rs.getString(4);
+        valorMovimentado = Parser.toBigDecimalSt(rs.getString(5));
+        observacoes = rs.getString(6);
+        idCofre = rs.getString(7);
+    }
+    
     private void setMovimentosCaixas() {
         this.idTerminal = request.getParameter("id_terminal");
         this.idFuncionario = request.getParameter("id_funcionario");
@@ -113,14 +125,8 @@ public class MovimentoCaixa extends Processos{
             ps.setInt(4, Parametros.idEntidade);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
-                tipoOperacao = rs.getString(1);
-                idTerminal = rs.getString(2);
-                idFuncionario = rs.getString(3);
-                dataHoraMov = rs.getString(4);
-                valorMovimentado = Parser.toBigDecimalSt(rs.getString(5));
-                observacoes = rs.getString(6);
-                idCofre = rs.getString(7);
-                movimentoCaixaList.add(this);
+                MovimentoCaixa mc = new MovimentoCaixa(request,rs);
+                movimentoCaixaList.add(mc);
             }
             return movimentoCaixaList;
         } catch (SQLException ex) {

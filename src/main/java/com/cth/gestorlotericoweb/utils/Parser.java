@@ -80,6 +80,26 @@ public class Parser {
             return e.getMessage();
         }
     }
+    public static String formataComMascara(BigDecimal valor,String pref){
+        try{
+            DecimalFormat df = new DecimalFormat("#,##0.00");
+            DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+            dfs.setDecimalSeparator(',');
+            dfs.setMonetaryDecimalSeparator('.');
+            df.setDecimalFormatSymbols(dfs);
+            return pref+df.format((valor));
+        }catch(Exception e){
+            return e.getMessage();
+        }
+    }
+    public static BigDecimal toBigDecimalFromSt(String valor){
+        String st = valor;
+        try{
+            return new BigDecimal(st);
+        }catch(Exception e){
+            return BigDecimal.ZERO;
+        }
+    }
     
     public static BigDecimal toBigDecimalFromHtml(String valor){
         String st = valor;
@@ -91,7 +111,6 @@ public class Parser {
             return BigDecimal.ZERO;
         }
     }
-    
     public static String toBigDecimalSt(String valor){
         String st = valor;
         st = st.replace(".", "x");

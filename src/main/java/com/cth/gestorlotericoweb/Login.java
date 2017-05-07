@@ -47,6 +47,29 @@ public class Login{
         }
     }
     
+    private void setLogin(Relatorios c){
+        try{
+            VelocityEngine ve = new VelocityEngine();
+            ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+            ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+            ve.init();
+            Template t;
+            VelocityContext context = new VelocityContext();
+            t = ve.getTemplate("templates/web/login_interno.html", "UTF-8");
+            context.put("it_r", "app");
+            context.put("it_sub", request.getParameter("it"));
+            context.put("it_par", "");
+            Writer writer = new StringWriter();
+            t.merge( context, writer );
+            output = writer.toString();
+            
+        }catch(ResourceNotFoundException e){
+            new LogError(e.getMessage(), e,request);
+        } catch (Exception ex) {
+            new LogError(ex.getMessage(), ex,request);
+        }
+    }
+    
     private void setLogin(ConteudoTelas c){
         try{
             VelocityEngine ve = new VelocityEngine();
@@ -151,6 +174,11 @@ public class Login{
     public Login(Consulta consulta){
         this.request = consulta.request;
         setLogin(consulta);
+    }
+    
+    public Login(Relatorios relatorios){
+        this.request = relatorios.request;
+        setLogin(relatorios);
     }
     
     public Login(Grava grava){

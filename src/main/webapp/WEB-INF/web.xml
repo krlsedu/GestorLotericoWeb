@@ -81,6 +81,14 @@
         <servlet-name>Logout</servlet-name>
         <jsp-file>/logout.jsp</jsp-file>
     </servlet>
+    <servlet>
+        <servlet-name>Relatorio</servlet-name>
+        <jsp-file>/relatorio.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Relatorio</servlet-name>
+        <url-pattern>/relatorio</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>App</servlet-name>
         <url-pattern>/app</url-pattern>

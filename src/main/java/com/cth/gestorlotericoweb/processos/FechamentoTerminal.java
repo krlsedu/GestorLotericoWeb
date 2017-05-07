@@ -15,7 +15,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.persistence.criteria.CriteriaBuilder;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -60,15 +61,15 @@ public class FechamentoTerminal extends Processos{
 
     public FechamentoTerminal(HttpServletRequest request, Integer id) {
         super(request, id);
-        getDados();
+        getDadosPorId();
     }
     
     public FechamentoTerminal(Integer id,HttpServletRequest request) {
         super(request, id);
-        getDados();
+        getDadosPorId();
     }
     
-    private void getDados(){
+    private void getDadosPorId(){
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT  id_terminal, id_funcionario, data_encerramento, \n" +
 "       resto_caixa, total_movimentos_dia, total_creditos_terminal, total_debitos_terminal, \n" +
@@ -103,7 +104,39 @@ public class FechamentoTerminal extends Processos{
         } catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);
         }
-    }     
+    }
+    
+    public List<FechamentoTerminal> getDadosPorTerminalFuncionarioData(){
+        List<FechamentoTerminal> fechamentoTerminalList = new ArrayList<>();
+        try {
+            PreparedStatement ps = Parametros.getConexao().getPst("SELECT  id_terminal, id_funcionario, data_encerramento, \n" +
+                    "       resto_caixa, total_movimentos_dia, total_creditos_terminal, total_debitos_terminal, \n" +
+                    "       saldo_terminal, diferenca_caixa, observacoes " +
+                    "  FROM public.fechamento_terminais where id_terminal = ? and id_funcionario = ? and data_encerramento = ? and id_entidade = ? ",false);
+            ps.setInt(1, Integer.valueOf(request.getParameter("id_terminal")));
+            ps.setInt(2, Integer.valueOf(request.getParameter("id_funcionario")));
+            ps.setDate(3, Parser.toDbDate(request.getParameter("data_movs")));
+            ps.setInt(4, Parametros.idEntidade);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                idTerminal = rs.getString(1);
+                idFuncionario = rs.getString(2);
+                dataEncerramento = rs.getString(3);
+                restoCaixa =Parser.toBigDecimalSt(rs.getString(4));
+                totalMovimentosDia = Parser.toBigDecimalSt(rs.getString(5));
+                totalCreditosTerminal =  Parser.toBigDecimalSt(rs.getString(6));
+                totalDebitosTerminal = Parser.toBigDecimalSt(rs.getString(7));
+                saldoTerminal = Parser.toBigDecimalSt(rs.getString(8));
+                diferencaCaixa = Parser.toBigDecimalSt(rs.getString(9));
+                observacoes = rs.getString(10);
+                fechamentoTerminalList.add(this);
+            }
+        } catch (SQLException ex) {
+            new LogError(ex.getMessage(), ex,request);
+        }
+        return fechamentoTerminalList;
+    }
+    
     
     public void insere(){
         try {
@@ -183,6 +216,10 @@ public class FechamentoTerminal extends Processos{
     }
     
     public String getTotalMovimentosDia(){
+        return Parser.toHtmlBigDecimal(getTotalMovimentosDiaBigDecimal());
+    }
+    
+    public BigDecimal getTotalMovimentosDiaBigDecimal(){
         BigDecimal totalMovimentosDiaL = BigDecimal.ZERO;
         String sql = "select \n" +
                     "	sum(case when tipo_operacao_caixa in (1) then valor_movimentado else valor_movimentado * (-1) end) \n" +
@@ -218,7 +255,7 @@ public class FechamentoTerminal extends Processos{
         } catch (SQLException ex) {
             new LogError(ex.getMessage()+sql, ex, request);
         }        
-        return Parser.toHtmlBigDecimal(totalMovimentosDiaL);
+        return totalMovimentosDiaL;
     }
     
     public BigDecimal getSaldoAbertura(){
@@ -279,16 +316,26 @@ public class FechamentoTerminal extends Processos{
     }
     
     public String getSaldoTerminal(){
-      BigDecimal valor = Parser.toBigDecimalFromHtml(totalCreditosTerminal).subtract(Parser.toBigDecimalFromHtml(totalDebitosTerminal));
-      return Parser.toHtmlBigDecimal(valor);
+        return Parser.toHtmlBigDecimal(getSaldoTerminalBigDecimal());
+    }
+    
+    public BigDecimal getSaldoTerminalBigDecimal(){
+        return Parser.toBigDecimalFromHtml(totalCreditosTerminal).subtract(Parser.toBigDecimalFromHtml(totalDebitosTerminal));
     };
     
     public String getDiferencaCaixa(){
-      BigDecimal valor = Parser.toBigDecimalFromHtml(totalMovimentosDia).subtract(Parser.toBigDecimalFromHtml(saldoTerminal));
-      return Parser.toHtmlBigDecimal(valor);
+        return Parser.toHtmlBigDecimal(getDiferencaCaixaBigDec());
+    }
+    
+    public BigDecimal getDiferencaCaixaBigDec(){
+      return Parser.toBigDecimalFromHtml(totalMovimentosDia).subtract(Parser.toBigDecimalFromHtml(saldoTerminal));
     };
     
     public String getRestoCaixaDiaAnterior(){
+        return Parser.toHtmlBigDecimal(getRestoCaixaDiaAnt());
+    }
+    
+    public BigDecimal getRestoCaixaDiaAnt(){
         BigDecimal valor = BigDecimal.ZERO;
         //language=PostgreSQL
         String sql = "Select resto_caixa from fechamento_terminais " +
@@ -312,7 +359,14 @@ public class FechamentoTerminal extends Processos{
         }catch(SQLException e){
             new LogError(e.getMessage()+" - "+sql, e, request);
         }
-        return Parser.toHtmlBigDecimal(valor);
-    };
+        return valor;
+    }
     
+    public String getRestoCaixa() {
+        return Parser.toBigDecimalSt(restoCaixa);
+    }
+    
+    public String getObservacoes() {
+        return observacoes;
+    }
 }

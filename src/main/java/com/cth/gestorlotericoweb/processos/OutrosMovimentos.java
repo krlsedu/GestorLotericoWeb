@@ -9,14 +9,17 @@ import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.utils.Parser;
 import com.cth.gestorlotericoweb.utils.Seter;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.StringWriter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.servlet.http.HttpServletRequest;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -34,6 +37,15 @@ public class OutrosMovimentos extends Processos{
         super(request);
         setOutrosMovimentos();
     }
+    public OutrosMovimentos(HttpServletRequest request,ResultSet rs) throws SQLException {
+        super(request);
+        tipoOperacao = rs.getString(1);
+        idTerminal = rs.getString(2);
+        idFuncionario = rs.getString(3);
+        dataHoraMov = rs.getString(4);
+        valorMovimentado = Parser.toBigDecimalSt(rs.getString(5));
+        observacoes = rs.getString(6);
+    }
     private void setOutrosMovimentos() {
         this.idTerminal = request.getParameter("id_terminal");
         this.idFuncionario = request.getParameter("id_funcionario");
@@ -46,6 +58,27 @@ public class OutrosMovimentos extends Processos{
     public OutrosMovimentos(Integer id, HttpServletRequest request) {
         super(request, id);
         getDados();
+    }
+    
+    public List<OutrosMovimentos> getDadosPorTerminalFuncionarioData(){
+        List<OutrosMovimentos> outrosMovimentos = new ArrayList<>();
+        try {
+            PreparedStatement ps = Parametros.getConexao().getPst("SELECT  tipo_operacao_caixa,id_terminal, id_funcionario, data_hora_mov, \n" +
+                    "       valor_movimentado, observacoes\n" +
+                    "  FROM public.outros_movimentos where id_terminal = ? and id_funcionario = ? and date( data_hora_mov) = ?  and  id_entidade = ? ",false);
+            ps.setInt(1, Integer.valueOf(request.getParameter("id_terminal")));
+            ps.setInt(2, Integer.valueOf(request.getParameter("id_funcionario")));
+            ps.setDate(3, Parser.toDbDate(request.getParameter("data_movs")));
+            ps.setInt(4, Parametros.idEntidade);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                OutrosMovimentos om = new OutrosMovimentos(request,rs);
+                outrosMovimentos.add(om);
+            }
+        } catch (SQLException ex) {
+            new LogError(ex.getMessage(), ex,request);
+        }
+        return outrosMovimentos;
     }
     
     private void getDados(){
@@ -146,5 +179,17 @@ public class OutrosMovimentos extends Processos{
         contextPrinc.put("conteudo", writerConteudo.toString());
         contextPrinc.put("popup", getSWPopup(ve,"outros_movimentos").toString());
         return contextPrinc;
+    }
+    
+    public String getValorMovimentado() {
+        return Parser.toBigDecimalSt(valorMovimentado);
+    }
+    
+    public String getTipoOperacao() {
+        return tipoOperacao;
+    }
+    
+    public String getObservacoes() {
+        return observacoes;
     }
 }

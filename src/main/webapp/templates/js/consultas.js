@@ -588,3 +588,28 @@ $(document).on('hidden.bs.modal', '#modal_avisos', function() {
 $(document).on('hidden.bs.modal', '#modal_carregando', function() {
     $("#id_terminal").focus();
 });
+
+
+
+function buscaRel(campoData,tipo,modelo) {
+    event.preventDefault();
+    var dataBase = $('#'+campoData).val();
+    if(dataBase!=="") {
+        $('#modal_carregando').modal('show');
+        $.ajax({
+            type: "POST",
+            url: "relatorio",
+            data: $("#form_dados").serialize() + '&' + $.param({"tipo": tipo, "modelo": modelo, "data_movs":dataBase}),
+            success: function (data) {
+                //setaIdEBusca(data.trim());
+                document.getElementById('corpo_relatorio').innerHTML = data;
+                $('#modal_carregando').modal('hide');
+                $('#modal_relatorio').modal('show');
+            },
+            error: function (jXHR, textStatus, errorThrown) {
+                $('#modal_carregandos').modal('hide');
+                avisoErrosCTimeOut(jXHR, textStatus, errorThrown);
+            }
+        });
+    }
+}
