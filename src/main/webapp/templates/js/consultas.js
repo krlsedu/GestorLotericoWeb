@@ -244,7 +244,7 @@ function  consultaCampoAuto(valorBuscar,element) {
 }
 
 function consultaCampoAutoLoopCheck(valorBuscar,loop,element){
-    if(!element.value === "") {
+    if(element.value !== "") {
         var tabela = document.getElementById("it").value;
         if (loop || document.getElementById(valorBuscar).value === "") {
             $.ajax(

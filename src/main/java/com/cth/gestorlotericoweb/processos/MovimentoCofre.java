@@ -262,7 +262,12 @@ public class MovimentoCofre extends Processos{
     }
     
     private void altera(){
-        String idL = request.getParameter("id");
+        String idL;
+        if(this.id==null) {
+            idL = request.getParameter("id");
+        }else{
+            idL = this.id.toString();
+        }
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.movimentos_cofres\n" +
                         "   SET id_cofre=?, id_movimento_caixa=?, data_hora_mov=?, \n" +
