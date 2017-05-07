@@ -31,8 +31,12 @@
                                 </div>
                                 <input  name="id_terminal" type="text" class="form-control1 input-lg" id="id_terminal" placeholder="Cód Terminal"  
                                         onchange="buscaNome('terminais','id_terminal')"
-                                        onkeyup="consultaCampoAutoLoopCheck('id_funcionario',false,this);consultaCampoAuto('data_hora_mov',this);consultaCampoAutoLoopCheck('id_cofre',false,this);buscaNome('terminais','id_terminal');"
-                                        >                        
+                                        onkeyup="consultaCampoAutoLoopCheck('id_funcionario',false,this);
+                                                setTimeout(function() {
+                                                  consultaCampoAuto('data_hora_mov',this);
+                                                  consultaCampoAutoLoopCheck('id_cofre',false,this);buscaNome('terminais','id_terminal');
+                                                }, 100);"
+                                        >
                             </div>
                         </div> 
                         <div class="col-sm-6">
@@ -49,7 +53,10 @@
                                 </div>
                                 <input name="id_funcionario" type="text" class="form-control1 input-lg" id="id_funcionario" placeholder="Cód Funcionário"  
                                         onchange="buscaNome('funcionarios','id_funcionario')"
-                                       onkeyup="consultaCampoAutoLoopCheck('id_terminal',false);consultaCampoAuto('data_hora_mov');consultaCampoAutoLoopCheck('id_cofre',false);buscaNome('funcionarios','id_funcionario');"
+                                       onkeyup="consultaCampoAutoLoopCheck('id_terminal',false);
+                                       setTimeout(function() {
+                                           consultaCampoAuto('data_hora_mov');consultaCampoAutoLoopCheck('id_cofre',false);buscaNome('funcionarios','id_funcionario');
+                                        }, 100);"
                                         required>  
                             </div>
                         </div>

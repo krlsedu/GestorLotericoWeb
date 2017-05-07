@@ -86,6 +86,11 @@ function buscaConteudoTela(tela){
             success: function (data) {   
                 $("#conteudo_telas").html(data);
                 $('#modal_carregando').modal('hide');
+                try{
+                    $('#id_terminal').focus();
+
+                }catch (e){
+                }
             }, 
             error: function (jXHR, textStatus, errorThrown) {
                 avisoErros(jXHR,textStatus,errorThrown);
@@ -577,3 +582,9 @@ $(document).on("click", '#login_interno_btn', function(event) {
     $("#login_interno_btn").off("click");
 });
 
+$(document).on('hidden.bs.modal', '#modal_avisos', function() {
+    $("#id_terminal").focus();
+});
+$(document).on('hidden.bs.modal', '#modal_carregando', function() {
+    $("#id_terminal").focus();
+});

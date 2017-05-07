@@ -126,20 +126,22 @@ public class Processos {
             ps.setInt(3, Parametros.idEntidade);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                return rs.getString(1);
+                return rs.getString(1)+"T00:00";
+            }else{
+                return request.getParameter("data_hora_mov");
             }
         }catch(SQLException e){
             new LogError(e.getMessage()+" - "+sql, e, request);
         }
-        return null;
+        return request.getParameter("data_hora_mov");
     }
     
     public String getDataHoraMov(){
         if(request.getParameter("data_hora_mov")==null) {
-            return getDataFechar()+"T00:00";
+            return getDataFechar();
         }else{
             if(request.getParameter("data_hora_mov").trim().equals("")){
-                return getDataFechar()+"T00:00";
+                return getDataFechar();
             }else {
                 return request.getParameter("data_hora_mov");
             }
