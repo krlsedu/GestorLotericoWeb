@@ -295,7 +295,6 @@ public class FechamentoTerminal extends Processos{
                 " where " +
                 "   data_encerramento < ? AND " +
                 "   id_terminal = ? AND " +
-                "   id_funcionario = ? AND " +
                 "   id_entidade = ? " +
                 " ORDER BY " +
                 "   data_encerramento DESC " +
@@ -305,8 +304,7 @@ public class FechamentoTerminal extends Processos{
             dataAberturaDt = Parser.toDbDate(dataAbertura);
             preparedStatement.setDate(1,dataAberturaDt);
             preparedStatement.setInt(2, Integer.valueOf(idTerminal));
-            preparedStatement.setInt(3, Integer.valueOf(idFuncionario));
-            preparedStatement.setInt(4,Parametros.idEntidade);
+            preparedStatement.setInt(3,Parametros.idEntidade);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 valor = resultSet.getBigDecimal(1);
