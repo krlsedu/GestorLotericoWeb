@@ -46,15 +46,46 @@ public class AberturaTerminal extends Processos{
         this.observacoes = request.getParameter("observacoes");
         this.idCofre = request.getParameter("id_cofre");
     }
-
-    
     
     public AberturaTerminal(Integer id,HttpServletRequest request) {
         super(request, id);
-        getDados();
+        getDadosPorId();
     }
     
-    private void getDados(){
+    public void getDadosPorTerminalFuncionarioEData(){
+        try {
+            PreparedStatement ps = Parametros.getConexao().getPst("select  id_terminal, id_funcionario, data_abertura, \n" +
+                    "        troco_dia_anterior, troco_dia, observacoes, id_cofre \n" +
+                    "        \n" +
+                    "  FROM abertura_terminais where id_terminal = ? and id_funcionario = ? and data_abertura = ? and id_entidade = ? ",false);
+            ps.setInt(1, Integer.valueOf(request.getParameter("id_terminal")));
+            ps.setInt(2, Integer.valueOf(request.getParameter("id_funcionario")));
+            ps.setDate(3, Parser.toDbDate(request.getParameter("data_movs")));
+            ps.setInt(4, Parametros.idEntidade);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                idTerminal = rs.getString(1);
+                idFuncionario = rs.getString(2);
+                dataAbertura = rs.getString(3);
+                trocoDiaAnterior = Parser.toBigDecimalSt(rs.getString(4));
+                trocoDia = Parser.toBigDecimalSt(rs.getString(5));
+                idTerminal = rs.getString(6);
+                idCofre = rs.getString(7);
+            }else{
+                idTerminal = "";
+                idFuncionario = "";
+                dataAbertura = "";
+                trocoDiaAnterior = "";
+                trocoDia = "";
+                idTerminal = "";
+                idCofre = "";
+            }
+        } catch (SQLException ex) {
+            new LogError(ex.getMessage(), ex,request);
+        }
+    }
+    
+    private void getDadosPorId(){
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("select  id_terminal, id_funcionario, data_abertura, \n" +
             "        troco_dia_anterior, troco_dia, observacoes, id_cofre \n" +
@@ -168,8 +199,20 @@ public class AberturaTerminal extends Processos{
         return contextPrinc;
     }
     
-    public String getTrocoDiaAnterior(){
+    public String getTrocoDiaAnteriorAbertura(){
         FechamentoTerminal fechamentoTerminal = new FechamentoTerminal(request);
         return fechamentoTerminal.getRestoCaixaDiaAnterior();
+    }
+    
+    public String getTrocoDiaAnterior() {
+        return Parser.toBigDecimalSt(trocoDiaAnterior);
+    }
+    
+    public String getTrocoDia() {
+        return Parser.toBigDecimalSt(trocoDia);
+    }
+    
+    public String getObservacoes() {
+        return observacoes;
     }
 }

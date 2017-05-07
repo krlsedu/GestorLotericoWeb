@@ -350,7 +350,7 @@ public class Consulta {
                     switch (valorBuscar){
                         case "troco_dia_anterior":
                             lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
-                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+aberturaTerminal.getTrocoDiaAnterior()+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+aberturaTerminal.getTrocoDiaAnteriorAbertura()+"\" readonly>");
                             output = StringUtils.join(lInputs,'\n');
                             break;
                         case "id_cofre":

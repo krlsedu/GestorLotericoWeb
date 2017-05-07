@@ -13,6 +13,8 @@ import java.io.StringWriter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -44,15 +46,17 @@ public class MovimentoCaixa extends Processos{
         this.tipoOperacao = request.getParameter("tipo_operacao_caixa");
         this.observacoes = request.getParameter("observacoes");
     }
+    
     public MovimentoCaixa(Integer id,HttpServletRequest request) {
         super(request, id);
-        getDados();
+        getDadosPorId();
     }
-    private void getDados(){
+    
+    private void getDadosPorId(){
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT  tipo_operacao_caixa,id_terminal, id_funcionario, data_hora_mov, \n" +
-            "       valor_movimentado, observacoes, id_cofre \n" +
-            "  FROM public.movimentos_caixas where id = ? and id_entidade = ? ",false);
+                    "       valor_movimentado, observacoes, id_cofre \n" +
+                    "  FROM public.movimentos_caixas where id = ? and id_entidade = ? ",false);
             ps.setInt(1, id);
             ps.setInt(2, Parametros.idEntidade);
             ResultSet rs = ps.executeQuery();
@@ -95,6 +99,34 @@ public class MovimentoCaixa extends Processos{
         }catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);
         }
+    }
+    
+    public List<MovimentoCaixa> getDadosPorTerminalFuncionarioData(){
+        try {
+            List<MovimentoCaixa> movimentoCaixaList = new ArrayList<>();
+            PreparedStatement ps = Parametros.getConexao().getPst("SELECT  tipo_operacao_caixa,id_terminal, id_funcionario, data_hora_mov, \n" +
+                    "       valor_movimentado, observacoes, id_cofre \n" +
+                    "  FROM public.movimentos_caixas where id_terminal = ? and id_funcionario = ? and date( data_hora_mov) = ?  and id_entidade = ? ",false);
+            ps.setInt(1, Integer.valueOf(request.getParameter("id_terminal")));
+            ps.setInt(2, Integer.valueOf(request.getParameter("id_funcionario")));
+            ps.setDate(3, Parser.toDbDate(request.getParameter("data_movs")));
+            ps.setInt(4, Parametros.idEntidade);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                tipoOperacao = rs.getString(1);
+                idTerminal = rs.getString(2);
+                idFuncionario = rs.getString(3);
+                dataHoraMov = rs.getString(4);
+                valorMovimentado = Parser.toBigDecimalSt(rs.getString(5));
+                observacoes = rs.getString(6);
+                idCofre = rs.getString(7);
+                movimentoCaixaList.add(this);
+            }
+            return movimentoCaixaList;
+        } catch (SQLException ex) {
+            new LogError(ex.getMessage(), ex,request);
+        }
+        return new ArrayList<>();
     }
     
     public void insere(){
@@ -185,5 +217,17 @@ public class MovimentoCaixa extends Processos{
         contextPrinc.put("conteudo", writerConteudo.toString());
         contextPrinc.put("popup", getSWPopup(ve,"movimentos_caixas").toString());
         return contextPrinc;
+    }
+    
+    public String getTipoOperacao() {
+        return tipoOperacao;
+    }
+    
+    public String getValorMovimentado() {
+        return Parser.toBigDecimalSt(valorMovimentado);
+    }
+    
+    public String getObservacoes() {
+        return observacoes;
     }
 }
