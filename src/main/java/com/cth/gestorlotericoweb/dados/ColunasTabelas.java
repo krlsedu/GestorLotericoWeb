@@ -72,6 +72,12 @@ public class ColunasTabelas {
         putMs("id_conta", "Código da Conta (Sistema)");
         putMs("id_componente", "Código do Componente");
         putMs("nome_componente", "Nome do Componente");
+        putMs("(select nome from funcionarios WHERE funcionarios.id = nome_tabela.id_funcionario)","Nome do Funcionário");
+        putMs("dt_encerr","Data de Encerramento");
+        putMs("dt_abert","Data de Abertura");
+        putMs("dt_h","Data e hora da Movimentação");
+        putMs("dt_oper","Data da Operação");
+        putMs("dt_base","Data Base");
     }
     
     private void putMs(String coluna,String descri){
@@ -127,18 +133,18 @@ public class ColunasTabelas {
         mTabColsSelBusca.put("contas", "id, nome_conta, conta_corrente, dv,  operacao, agencia");
         mTabColsSelBusca.put("operacoes", "id, nome_oper_caixa, nome_oper, tipo_oper");
         mTabColsSelBusca.put("cofres", "id, nome_cofre, tipo_cofre, id_loterica");
-        mTabColsSelBusca.put("abertura_terminais", "id, id_terminal, id_funcionario, data_abertura");
-        mTabColsSelBusca.put("movimentos_caixas", "id, id_terminal, id_funcionario, tipo_operacao_caixa, data_hora_mov");
-        mTabColsSelBusca.put("outros_movimentos", "id, id_terminal, id_funcionario, tipo_operacao_caixa,data_hora_mov");
-        mTabColsSelBusca.put("fechamento_terminais", "id, id_terminal, id_funcionario, data_encerramento");
-        mTabColsSelBusca.put("tarifas_operacoes", "id, id_operacao, data_base");
-        mTabColsSelBusca.put("movimentos_cofres", "id, id_cofre, data_hora_mov");
-        mTabColsSelBusca.put("movimentos_contas", "id, id_conta, data_hora_mov");
-        mTabColsSelBusca.put("operacoes_diarias", "id, id_terminal, id_funcionario, data_operacoes");
+        mTabColsSelBusca.put("abertura_terminais", "id, id_terminal, (select nome from funcionarios WHERE funcionarios.id = abertura_terminais.id_funcionario),  to_char(data_abertura, 'DD/MM/YYYY') as dt_abert");
+        mTabColsSelBusca.put("movimentos_caixas", "id, id_terminal, (select nome from funcionarios WHERE funcionarios.id = movimentos_caixas.id_funcionario), tipo_operacao_caixa, to_char(data_hora_mov, 'DD/MM/YYYY HH24:MI') as dt_h");
+        mTabColsSelBusca.put("outros_movimentos", "id, id_terminal, (select nome from funcionarios WHERE funcionarios.id = outros_movimentos.id_funcionario), tipo_operacao_caixa,to_char(data_hora_mov, 'DD/MM/YYYY HH24:MI') as dt_h");
+        mTabColsSelBusca.put("fechamento_terminais", "id, id_terminal, (select nome from funcionarios WHERE funcionarios.id = fechamento_terminais.id_funcionario), to_char(data_encerramento, 'DD/MM/YYYY') as dt_encerr");
+        mTabColsSelBusca.put("tarifas_operacoes", "id, id_operacao, to_char(data_base, 'DD/MM/YYYY') as dt_base");
+        mTabColsSelBusca.put("movimentos_cofres", "id, id_cofre, to_char(data_hora_mov, 'DD/MM/YYYY HH24:MI') as dt_h");
+        mTabColsSelBusca.put("movimentos_contas", "id, id_conta, to_char(data_hora_mov, 'DD/MM/YYYY HH24:MI') as dt_h");
+        mTabColsSelBusca.put("operacoes_diarias", "id, id_terminal, (select nome from funcionarios WHERE funcionarios.id = operacoes_diarias.id_funcionario), to_char(data_operacoes, 'DD/MM/YYYY') as dt_oper");
         mTabColsSelBusca.put("componentes", "id, nome_componente");
     }
     private void carregaTabColsDados(){
-        mTabColsSelDados.put("lotericas", "codigo_caixa,nome");
+        mTabColsSelDados.put("lotericas", "codigo_caixa, nome");
         mTabColsSelDados.put("terminais", "codigo_caixa, nome, marca, modelo, observacoes, id_loterica");
         mTabColsSelDados.put("funcionarios", "codigo_caixa, nome, cpf, tipo_func, observacoes");
         mTabColsSelDados.put("contas", "conta_corrente, dv, nome_conta, operacao, agencia, telefone, gerente, id_loterica, observacoes");
@@ -160,6 +166,7 @@ public class ColunasTabelas {
         lOpts.add("<option>Código na Caixa</option>");
         lOpts.add("<option>Nome</option>");
         mTabOpts.put("lotericas", lOpts);
+        
         lOpts = new ArrayList<>();
         lOpts.add("<option>Código na Caixa</option>");
         lOpts.add("<option>Lotérica</option>");
@@ -167,58 +174,76 @@ public class ColunasTabelas {
         lOpts.add("<option>Modelo</option>");
         lOpts.add("<option>Nome</option>");
         mTabOpts.put("terminais", lOpts);
+        
         lOpts = new ArrayList<>();
         lOpts.add("<option>Código na Caixa</option>");
         lOpts.add("<option>CPF</option>");
         lOpts.add("<option>Nome</option>");
         lOpts.add("<option>Tipo Funcionário</option>");
         mTabOpts.put("funcionarios", lOpts);
+        
         lOpts = new ArrayList<>();
         lOpts.add("<option>Nome da conta</option>");
         lOpts.add("<option>Número da Conta</option>");
         lOpts.add("<option>Operação</option>");
         mTabOpts.put("contas", lOpts);
+        
         lOpts = new ArrayList<>();
         lOpts.add("<option>Nome da Operação (Caixa)</option>");
         lOpts.add("<option>Nome da Operação</option>");
         lOpts.add("<option>Tipo Operação</option>");
         mTabOpts.put("operacoes", lOpts);
+        
         lOpts = new ArrayList<>();
         lOpts.add("<option>Código da lotérica (Sistema)</option>");
         lOpts.add("<option>Nome do Cofre</option>");
         lOpts.add("<option>Tipo Cofre</option>");
         mTabOpts.put("cofres", lOpts);
+        
         lOpts = new ArrayList<>();
+        lOpts.add("<option>Nome do Funcionário</option>");
         lOpts.add("<option>Código do Terminal (Sistema)</option>");
         lOpts.add("<option>Código do Funcionário (Sistema)</option>");
         mTabOpts.put("abertura_terminais", lOpts);
+        
         lOpts = new ArrayList<>();
+        lOpts.add("<option>Nome do Funcionário</option>");
         lOpts.add("<option>Código do Terminal (Sistema)</option>");
         lOpts.add("<option>Código do Funcionário (Sistema)</option>");
         lOpts.add("<option>Tipo de movimento caixa</option>");
         mTabOpts.put("movimentos_caixas", lOpts);
+        
         lOpts = new ArrayList<>();
+        lOpts.add("<option>Nome do Funcionário</option>");
         lOpts.add("<option>Código do Terminal (Sistema)</option>");
         lOpts.add("<option>Código do Funcionário (Sistema)</option>");
         lOpts.add("<option>Tipo de movimento caixa</option>");
         mTabOpts.put("outros_movimentos", lOpts);
+        
         lOpts = new ArrayList<>();
+        lOpts.add("<option>Nome do Funcionário</option>");
         lOpts.add("<option>Código do Terminal (Sistema)</option>");
         lOpts.add("<option>Código do Funcionário (Sistema)</option>");
         mTabOpts.put("fechamento_terminais", lOpts);
+        
         lOpts = new ArrayList<>();
         lOpts.add("<option>Código da Operação (Sistema)</option>");
         mTabOpts.put("tarifas_operacoes", lOpts);
+        
         lOpts = new ArrayList<>();
         lOpts.add("<option>Código do Cofre (Sistema)</option>");
         mTabOpts.put("movimentos_cofres", lOpts);
+        
         lOpts = new ArrayList<>();
         lOpts.add("<option>Código da Conta (Sistema)</option>");
         mTabOpts.put("movimentos_contas", lOpts);
+        
         lOpts = new ArrayList<>();
+        lOpts.add("<option>Nome do Funcionário</option>");
         lOpts.add("<option>Código do Terminal (Sistema)</option>");
         lOpts.add("<option>Código do Funcionário (Sistema)</option>");
         mTabOpts.put("operacoes_diarias", lOpts);
+        
         lOpts = new ArrayList<>();
         lOpts.add("<option>Nome do Componente</option>");
         mTabOpts.put("componentes", lOpts);

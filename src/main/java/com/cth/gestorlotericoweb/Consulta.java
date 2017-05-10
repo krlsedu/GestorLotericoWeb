@@ -257,6 +257,7 @@ public class Consulta {
         String coluna = colunasTabelas.getColuna(request.getParameter("coluna"));
         String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
         if(coluna!=null && tabela !=null){
+            coluna = coluna.replace("nome_tabela",tabela);
             String sql;
             if(colunasTabelas.getPossuiIEntidades(tabela)){
                 sql = "select "+colunasTabelas.getTabColsBusca(tabela)+" from "+tabela+" where lower(CAST( "+coluna+" AS text )) like lower(?) and id_entidade = ? order by "+coluna;

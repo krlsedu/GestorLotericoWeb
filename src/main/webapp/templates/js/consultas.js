@@ -46,6 +46,14 @@ function buscaOpcoesCBPopUp(tabela){
         }
     );
 }
+
+function enterBucar(event) {
+    if (event.keyCode == 13
+    ) {
+        consultaDadosBusca();
+    }
+}
+
 function consultaDadosBusca(){
     var tipo = document.getElementById("tipo_busca").value;
     var colunaBuscar = document.getElementById("col_buscar").value;
