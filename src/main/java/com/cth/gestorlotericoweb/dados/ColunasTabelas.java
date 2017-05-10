@@ -78,6 +78,7 @@ public class ColunasTabelas {
         putMs("dt_h","Data e hora da Movimentação");
         putMs("dt_oper","Data da Operação");
         putMs("dt_base","Data Base");
+        putMs("nome_func","Nome Funcionário");
     }
     
     private void putMs(String coluna,String descri){
@@ -133,14 +134,14 @@ public class ColunasTabelas {
         mTabColsSelBusca.put("contas", "id, nome_conta, conta_corrente, dv,  operacao, agencia");
         mTabColsSelBusca.put("operacoes", "id, nome_oper_caixa, nome_oper, tipo_oper");
         mTabColsSelBusca.put("cofres", "id, nome_cofre, tipo_cofre, id_loterica");
-        mTabColsSelBusca.put("abertura_terminais", "id, id_terminal, (select nome from funcionarios WHERE funcionarios.id = abertura_terminais.id_funcionario),  to_char(data_abertura, 'DD/MM/YYYY') as dt_abert");
-        mTabColsSelBusca.put("movimentos_caixas", "id, id_terminal, (select nome from funcionarios WHERE funcionarios.id = movimentos_caixas.id_funcionario), tipo_operacao_caixa, to_char(data_hora_mov, 'DD/MM/YYYY HH24:MI') as dt_h");
-        mTabColsSelBusca.put("outros_movimentos", "id, id_terminal, (select nome from funcionarios WHERE funcionarios.id = outros_movimentos.id_funcionario), tipo_operacao_caixa,to_char(data_hora_mov, 'DD/MM/YYYY HH24:MI') as dt_h");
-        mTabColsSelBusca.put("fechamento_terminais", "id, id_terminal, (select nome from funcionarios WHERE funcionarios.id = fechamento_terminais.id_funcionario), to_char(data_encerramento, 'DD/MM/YYYY') as dt_encerr");
+        mTabColsSelBusca.put("abertura_terminais", "id, id_terminal, (select nome from funcionarios WHERE funcionarios.id = abertura_terminais.id_funcionario) as nome_func,  to_char(data_abertura, 'DD/MM/YYYY') as dt_abert");
+        mTabColsSelBusca.put("movimentos_caixas", "id, id_terminal, (select nome from funcionarios WHERE funcionarios.id = movimentos_caixas.id_funcionario) as nome_func, tipo_operacao_caixa, to_char(data_hora_mov, 'DD/MM/YYYY HH24:MI') as dt_h");
+        mTabColsSelBusca.put("outros_movimentos", "id, id_terminal, (select nome from funcionarios WHERE funcionarios.id = outros_movimentos.id_funcionario) as nome_func, tipo_operacao_caixa,to_char(data_hora_mov, 'DD/MM/YYYY HH24:MI') as dt_h");
+        mTabColsSelBusca.put("fechamento_terminais", "id, id_terminal, (select nome from funcionarios WHERE funcionarios.id = fechamento_terminais.id_funcionario) as nome_func, to_char(data_encerramento, 'DD/MM/YYYY') as dt_encerr");
         mTabColsSelBusca.put("tarifas_operacoes", "id, id_operacao, to_char(data_base, 'DD/MM/YYYY') as dt_base");
         mTabColsSelBusca.put("movimentos_cofres", "id, id_cofre, to_char(data_hora_mov, 'DD/MM/YYYY HH24:MI') as dt_h");
         mTabColsSelBusca.put("movimentos_contas", "id, id_conta, to_char(data_hora_mov, 'DD/MM/YYYY HH24:MI') as dt_h");
-        mTabColsSelBusca.put("operacoes_diarias", "id, id_terminal, (select nome from funcionarios WHERE funcionarios.id = operacoes_diarias.id_funcionario), to_char(data_operacoes, 'DD/MM/YYYY') as dt_oper");
+        mTabColsSelBusca.put("operacoes_diarias", "id, id_terminal, (select nome from funcionarios WHERE funcionarios.id = operacoes_diarias.id_funcionario) as nome_func, to_char(data_operacoes, 'DD/MM/YYYY') as dt_oper");
         mTabColsSelBusca.put("componentes", "id, nome_componente");
     }
     private void carregaTabColsDados(){
