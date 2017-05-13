@@ -15,13 +15,13 @@
                 <div class="form-group mb-n">
                         <label for="smallinput" class="col-sm-2 control-label label-input-sm">Terminal</label>
                         <div class="col-sm-2">
-                            <div class="input-group">
+                            <div class="input-group" id="terminais">
                                 <div class="input-group-addon" onclick="ativaPopUp('terminais','id_terminal','Consulta código Terminal')">
                                     <i class="i_botao_buscar fa fa-search" ></i>
                                 </div>
                                 <input  name="id_terminal" type="text" class="form-control1 input-lg" id="id_terminal" placeholder="Cód Terminal"  
                                         onchange="buscaNome('terminais','id_terminal');consultaCampoAutoLoopCheck('id_cofre',false,this)"
-                                        onkeyup="consultaCampoAutoLoopCheck('id_funcionario',false,this);buscaNome('terminais','id_terminal');"
+                                        onkeyup="eventoOnKeyUp(this,'id_funcionario,id_cofre','false,true')"
                                         required>                        
                             </div>
                         </div> 
@@ -33,13 +33,13 @@
                 <div class="form-group mb-n">
                         <label for="smallinput" class="col-sm-2 control-label label-input-sm">Funcionário</label>
                         <div class="col-sm-2">
-                            <div class="input-group">
+                            <div class="input-group" id="funcionarios">
                                 <div class="input-group-addon" onclick="ativaPopUp('funcionarios','id_funcionario','Consulta código Funcionário')">
                                     <i class="i_botao_buscar fa fa-search" ></i>
                                 </div>
                                 <input name="id_funcionario" type="text" class="form-control1 input-lg" id="id_funcionario" placeholder="Cód Funcionário"  
-                                        onchange="buscaNome('funcionarios','id_funcionario');consultaCampoAutoLoopCheck('id_cofre',false,this);"
-                                        onkeyup="consultaCampoAutoLoopCheck('id_terminal',false,this);buscaNome('funcionarios','id_funcionario');"
+                                        onchange="buscaNome('funcionarios','id_funcionario');"
+                                        onkeyup="eventoOnKeyUp(this,'id_terminal,id_cofre','false,true')"
                                        required>
                             </div>
                         </div>
@@ -56,8 +56,8 @@
                                     <i class="fa fa-calendar"></i>
                                 </div>
                                 <input name="data_abertura" id="data_abertura" type="date" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.date"
-
-                                       onkeyup="consultaCampoAuto('troco_dia_anterior',this);" >
+                                    onkeyup="eventoOnKeyUp(this,'troco_dia_anterior','true',false)"
+                                    required>
                             </div>
                         </div>
                 </div>

@@ -252,66 +252,6 @@ function insereDados(htmlDoc){
     $('#modal_carregando').modal('hide');   
 }
 
-function  consultaCampoAutoCallBack(valorBuscar,element,callback) {
-    consultaCampoAutoLoopCheck(valorBuscar,true,element);
-    callback();
-}
-
-function  consultaCampoAuto(valorBuscar,element) {
-    consultaCampoAutoLoopCheck(valorBuscar,true,element);
-}
-
-function consultaCampoAutoLoopCheckCallBack(valorBuscar,loop,element,callback){
-
-    consultaCampoAutoLoopCheck(valorBuscar,loop,element);
-    callback();
-}
-
-function consultaCampoAutoLoopCheck(valorBuscar,loop,element){
-    var r = $.Deferred();
-    if(element.value !== "") {
-        var tabela = document.getElementById("it").value;
-        if (loop || document.getElementById(valorBuscar).value === "") {
-            $.ajax(
-                {
-                    type: "POST",
-                    url: "consulta",
-                    data: $("#form_dados").serialize() + '&' + $.param({
-                        "valor_buscar": valorBuscar,
-                        "tabela": tabela,
-                        "tipo": "dado"
-                    }),
-                    success: function (data) {
-                        var parser = new DOMParser();
-                        var htmlDoc = parser.parseFromString(data, "text/html");
-                        var nomeCol = htmlDoc.getElementById("nome_coluna").value;
-                        var valr = htmlDoc.getElementById("valor").value;
-                        if (!(valr === null || valr === 'null')) {
-                            $('input#' + nomeCol).val(valr).trigger('mask.maskMoney');
-                            try {
-                                if (tabela === 'movimentos_caixas' || tabela === 'abertura_terminais' || !loop) {
-                                    document.getElementById(nomeCol).onchange();
-                                }
-                                document.getElementById(nomeCol).onkeyup();
-                            } catch (e) {
-
-                            }
-                        }
-                        r.resolve();
-                    },
-                    error: function (jXHR, textStatus, errorThrown) {
-                        r.resolve();
-                        avisoErros(jXHR, textStatus, errorThrown);
-                    }
-                }
-            )
-        }
-    }else {
-        r.resolve();
-    }
-    return r;
-}
-
 function buscaNomeComponente(tabela,campo) {
     var id = document.getElementById(campo).value;
     if(id.length===0){

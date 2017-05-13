@@ -25,13 +25,13 @@
                 <div class="form-group mb-n">
                         <label for="smallinput" class="col-sm-2 control-label label-input-sm">Terminal</label>
                         <div class="col-sm-2">
-                            <div class="input-group">
+                            <div class="input-group" id="terminais">
                                 <div class="input-group-addon" onclick="ativaPopUp('terminais','id_terminal','Consulta código Terminal')">
                                     <i class="i_botao_buscar fa fa-search" ></i>
                                 </div>
                                 <input  name="id_terminal" type="text" class="form-control1 input-lg" id="id_terminal" placeholder="Cód Terminal"  
                                         onchange="buscaNome('terminais','id_terminal')"
-                                        onkeyup="campoIdTerminal(this);"
+                                        onkeyup="eventoOnKeyUp(this,'id_funcionario,data_hora_mov,id_cofre','false,true,false')"
                                         >
                             </div>
                         </div> 
@@ -43,13 +43,13 @@
                 <div class="form-group mb-n">
                         <label for="smallinput" class="col-sm-2 control-label label-input-sm">Funcionário</label>
                         <div class="col-sm-2">
-                            <div class="input-group">
+                            <div class="input-group" id="funcionarios">
                                 <div class="input-group-addon" onclick="ativaPopUp('funcionarios','id_funcionario','Consulta código Funcionário')">
                                     <i class="i_botao_buscar fa fa-search" ></i>
                                 </div>
-                                <input name="id_funcionario" type="text" class="form-control1 input-lg" id="id_funcionario" placeholder="Cód Funcionário"  
+                                <input name="id_funcionario" type="text" class="form-control1 input-lg" id="id_funcionario" placeholder="Cód Funcionário"
                                        onchange="buscaNome('funcionarios','id_funcionario')"
-                                       onkeyup="campoIdFuncionario(this)"
+                                       onkeyup="eventoOnKeyUp(this,'id_terminal,data_hora_mov,id_cofre','false,true,false')"
                                        required>
                             </div>
                         </div>
@@ -68,6 +68,7 @@
                                 <input  name="id_cofre" type="text" class="form-control1 input-lg" id="id_cofre" placeholder="Cód Codfre"  
                                         onchange="buscaNome('cofres','id_cofre')"
                                         onfocus="consultaCampoAutoLoopCheck('id_cofre',false,this)"
+                                        onkeyup="eventoOnKeyUp(this,'id_cofre','false')"
                                 >
                             </div>
                         </div> 
