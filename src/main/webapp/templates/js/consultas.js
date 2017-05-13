@@ -252,11 +252,23 @@ function insereDados(htmlDoc){
     $('#modal_carregando').modal('hide');   
 }
 
+function  consultaCampoAutoCallBack(valorBuscar,element,callback) {
+    consultaCampoAutoLoopCheck(valorBuscar,true,element);
+    callback();
+}
+
 function  consultaCampoAuto(valorBuscar,element) {
     consultaCampoAutoLoopCheck(valorBuscar,true,element);
 }
 
+function consultaCampoAutoLoopCheckCallBack(valorBuscar,loop,element,callback){
+
+    consultaCampoAutoLoopCheck(valorBuscar,loop,element);
+    callback();
+}
+
 function consultaCampoAutoLoopCheck(valorBuscar,loop,element){
+    var r = $.Deferred();
     if(element.value !== "") {
         var tabela = document.getElementById("it").value;
         if (loop || document.getElementById(valorBuscar).value === "") {
@@ -285,14 +297,19 @@ function consultaCampoAutoLoopCheck(valorBuscar,loop,element){
 
                             }
                         }
+                        r.resolve();
                     },
                     error: function (jXHR, textStatus, errorThrown) {
+                        r.resolve();
                         avisoErros(jXHR, textStatus, errorThrown);
                     }
                 }
             )
         }
+    }else {
+        r.resolve();
     }
+    return r;
 }
 
 function buscaNomeComponente(tabela,campo) {

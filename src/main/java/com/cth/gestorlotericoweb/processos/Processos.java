@@ -126,7 +126,7 @@ public class Processos {
             ps.setInt(3, Parametros.idEntidade);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                return rs.getString(1)+"T00:00";
+                return rs.getString(1);
             }else{
                 return request.getParameter("data_hora_mov");
             }
@@ -138,10 +138,10 @@ public class Processos {
     
     public String getDataHoraMov(){
         if(request.getParameter("data_hora_mov")==null) {
-            return getDataFechar();
+            return getDataFechar() + "T00:00";
         }else{
             if(request.getParameter("data_hora_mov").trim().equals("")){
-                return getDataFechar();
+                return getDataFechar()+ "T00:00";
             }else {
                 return request.getParameter("data_hora_mov");
             }

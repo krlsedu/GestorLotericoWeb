@@ -168,6 +168,8 @@ public class Estatisticas {
             case 1://Cofre
                 Cofre cofre = new Cofre(itemComponente,request);
                 return cofre.getNomeCofre();
+            case 2://Saldo de movimentações da conta da lotérica
+            
             default:
                 return "Não existe";
         }
