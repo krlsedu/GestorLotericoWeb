@@ -26,6 +26,8 @@ public class Parametros {
 	public static Integer idEntidade;
 	public static String entidadeNome;
 	public static String version;
+	public static String codificacao;
+	public static String patern;
 	
 	public static void initDb(HttpServletRequest request) {
 		conexao = new Conexao(request);
@@ -75,11 +77,13 @@ public class Parametros {
 	public static void setIdEntidade(Integer idEntidade) {
 		Parametros.idEntidade = idEntidade;
 		try {
-			PreparedStatement ps = conexao.getPst("select nome from entidades where id = ?", false);
+			PreparedStatement ps = conexao.getPst("select nome,codificacao,patern from entidades where id = ?", false);
 			ps.setInt(1, idEntidade);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				setEntidadeNome(rs.getString(1));
+				setCodificacao(rs.getString(2));
+				setPatern(rs.getString(3));
 			}
 		} catch (SQLException ex) {
 		
@@ -144,5 +148,21 @@ public class Parametros {
 		} catch (SQLException e) {
 			Parametros.version = "";
 		}
+	}
+	
+	public static String getCodificacao() {
+		return codificacao;
+	}
+	
+	public static void setCodificacao(String codificacao) {
+		Parametros.codificacao = codificacao;
+	}
+	
+	public static String getPatern() {
+		return patern;
+	}
+	
+	public static void setPatern(String patern) {
+		Parametros.patern = patern;
 	}
 }

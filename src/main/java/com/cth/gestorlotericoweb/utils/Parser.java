@@ -5,6 +5,8 @@
  */
 package com.cth.gestorlotericoweb.utils;
 
+import com.cth.gestorlotericoweb.parametros.Parametros;
+
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -69,23 +71,19 @@ public class Parser {
     }
     
     public static String formataComMascara(BigDecimal valor){
-        try{
-            DecimalFormat df = new DecimalFormat("#,##0.00");
-            DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-            dfs.setDecimalSeparator(',');
-            dfs.setMonetaryDecimalSeparator('.');
-            df.setDecimalFormatSymbols(dfs); 
-            return "R$ "+df.format((valor));
-        }catch(Exception e){
-            return e.getMessage();
-        }
+        return formataComMascara(valor,"");
     }
     public static String formataComMascara(BigDecimal valor,String pref){
         try{
-            DecimalFormat df = new DecimalFormat("#,##0.00");
+            DecimalFormat df = new DecimalFormat(Parametros.getPatern());
             DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-            dfs.setDecimalSeparator(',');
-            dfs.setMonetaryDecimalSeparator('.');
+            if(Parametros.getCodificacao().equals("PT-BR")) {
+                dfs.setDecimalSeparator(',');
+                dfs.setMonetaryDecimalSeparator('.');
+            }else {
+                dfs.setDecimalSeparator('.');
+                dfs.setMonetaryDecimalSeparator(',');
+            }
             df.setDecimalFormatSymbols(dfs);
             return pref+df.format((valor));
         }catch(Exception e){

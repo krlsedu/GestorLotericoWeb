@@ -32,7 +32,7 @@ public class SaldoCofre extends Saldos{
     }
     
     public String getSaldoSt(){
-        return Parser.formataComMascara(getSaldo());
+        return Parser.formataComMascara(getSaldo(),"R$ ");
     }
     
     private BigDecimal getSaldo(){
