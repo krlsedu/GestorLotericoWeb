@@ -114,5 +114,6 @@
     <orderEntry type="library" name="Maven: postgresql:postgresql:9.1-901-1.jdbc4" level="project" />
     <orderEntry type="library" name="Maven: org.liquibase:liquibase-core:3.5.0" level="project" />
     <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.13" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.16.16" level="project" />
   </component>
 </module>

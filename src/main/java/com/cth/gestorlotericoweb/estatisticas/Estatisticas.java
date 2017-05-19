@@ -8,7 +8,9 @@ package com.cth.gestorlotericoweb.estatisticas;
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.dados.Cofre;
 import com.cth.gestorlotericoweb.parametros.Parametros;
+import com.cth.gestorlotericoweb.saldos.ContaLoterica;
 import com.cth.gestorlotericoweb.saldos.SaldoCofre;
+import com.cth.gestorlotericoweb.utils.Parser;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -112,6 +114,7 @@ public class Estatisticas {
     }
     
     private String getHtmlWidgets(){
+        
         String abreLinha = "<div class=\"col_3\">";
         String fechaLinha = "</div>";
         StringBuilder sbWidgets= new StringBuilder();
@@ -151,12 +154,19 @@ public class Estatisticas {
             case "widget_valor_rs":
                 Element div= document.getElementById(nomeTpeWidget.val());
                 div.attr("id",nomeTpeWidget.val()+"_"+linha+"_"+coluna);
+                
                 Element valor = div.getElementById("valor_rs");
                 valor.attr("id","valor_rs"+"_"+linha+"_"+coluna);
                 valor.html(getValWidget(tipoValWidget,idComponente,idItemComponente));
+                
                 Element nome = div.getElementById("nome_valor_rs");
                 nome.attr("id","nome_valor_rs"+"_"+linha+"_"+coluna);
                 nome.html(getNomeItemComponente(idComponente,idItemComponente));
+    
+                Element nomeWidget = div.getElementById("nome_widget_show");
+                nomeWidget.attr("id","nome_widget_show"+"_"+linha+"_"+coluna);
+                nomeWidget.html(rs.getString(7));
+                
                 nomeTpeWidget.remove();
                 break;
         }
@@ -169,7 +179,8 @@ public class Estatisticas {
                 Cofre cofre = new Cofre(itemComponente,request);
                 return cofre.getNomeCofre();
             case 2://Saldo de movimentações da conta da lotérica
-            
+                ContaLoterica contaLoterica = new ContaLoterica(itemComponente,request);
+                return contaLoterica.getNomeLoterica();
             default:
                 return "Não existe";
         }
@@ -182,6 +193,10 @@ public class Estatisticas {
                     case 1://Cofre
                         SaldoCofre saldoCofre = new SaldoCofre(itemComponente,request);
                         return saldoCofre.getSaldoSt();
+                    case 2://ContaLotérica
+                        ContaLoterica contaLoterica = new ContaLoterica(itemComponente,request);
+                        contaLoterica.setDataIni(Parser.toDbDate("2017-01-01"));
+                        return contaLoterica.getSaldoMovsSt();
                     default:
                         return "Não existe";
                 }

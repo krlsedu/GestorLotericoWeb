@@ -32,7 +32,7 @@ public class ConteudoTelas {
         this.request = request;
     }
     public static VelocityContext getConteudoTela(VelocityContext contextPrinc,VelocityEngine ve,HttpServletRequest request){
-        try {
+//        try {
             String id = request.getParameter("id");
             String input = request.getParameter("it");
             if (input == null) {
@@ -135,9 +135,9 @@ public class ConteudoTelas {
                         break;
                 }
             }
-        }catch (Exception ex){
-            new LogError(ex.getMessage(),ex,request);
-        }
+//        }catch (Exception ex){
+//            new LogError(ex.getMessage(),ex,request);
+//        }
         return contextPrinc;
     }
     
