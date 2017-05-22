@@ -80,3 +80,23 @@ function consultaCampoAutoLoopCheck(valorBuscar,loop,element){
     }
     return r;
 }
+
+function calculaSaldo(campo1, campo2, destino) {
+    $("#"+campo1).trigger('mask.maskMoney');
+    var valSt = $("#"+campo1).val();
+    valSt = valSt.replace(".","").replace(",","");
+    if(valSt === null || valSt === "undefined"){
+        valSt = "0";
+    }
+    var valor1 = parseInt(valSt);
+    $("#"+campo2).trigger('mask.maskMoney');
+    valSt = $("#"+campo2).val();
+    valSt = valSt.replace(".","").replace(",","");
+    var valor2 = parseInt(valSt);
+
+    var saldo  = valor1-valor2;
+    console.log("valor1",valor1);
+    console.log("valor2",valor2);
+    console.log("saldo",saldo);
+    $("#"+destino).val(saldo).trigger('mask.maskMoney');
+}

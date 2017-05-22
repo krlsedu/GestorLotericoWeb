@@ -73,7 +73,8 @@
                             <span class="input-group-addon">R$</span>
                             <input name="resto_caixa" id="resto_caixa" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/"
 
-                                   onkeyup="eventoOnKeyUp(this,'total_movimentos_dia,saldo_terminal','true,true',false)"
+                                   onkeyup="eventoOnKeyUp(this,'total_movimentos_dia','true',false);
+                                            calculaSaldo('total_creditos_terminal','total_debitos_terminal','saldo_terminal')"
                                    required>
                         </div>
                     </div>
@@ -97,7 +98,8 @@
                         <div class="input-group">
                             <span class="input-group-addon">R$</span>
                             <input name="total_creditos_terminal" id="total_creditos_terminal" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/"
-                                   onkeyup="eventoOnKeyUp(this,'total_movimentos_dia,saldo_terminal','true,true',false)"
+                                   onkeyup="eventoOnKeyUp(this,'total_movimentos_dia','true',false);
+                                            calculaSaldo('total_creditos_terminal','total_debitos_terminal','saldo_terminal')"
                                    required>
                         </div>
                     </div>
@@ -109,7 +111,8 @@
                         <div class="input-group">
                             <span class="input-group-addon">R$</span>
                             <input name="total_debitos_terminal" id="total_debitos_terminal" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/"
-                                   onkeyup="eventoOnKeyUp(this,'total_movimentos_dia,saldo_terminal','true,true',false)"
+                                   onkeyup="eventoOnKeyUp(this,'total_movimentos_dia','true',false);
+                                            calculaSaldo('total_creditos_terminal','total_debitos_terminal','saldo_terminal')"
                                     required>
                         </div>
                     </div>

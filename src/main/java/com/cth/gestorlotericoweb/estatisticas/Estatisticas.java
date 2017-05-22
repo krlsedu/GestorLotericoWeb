@@ -195,7 +195,6 @@ public class Estatisticas {
                         return saldoCofre.getSaldoSt();
                     case 2://ContaLotérica
                         ContaLoterica contaLoterica = new ContaLoterica(itemComponente,request);
-                        contaLoterica.setDataIni(Parser.toDbDate("2017-01-01"));
                         return contaLoterica.getSaldoMovsSt();
                     default:
                         return "Não existe";

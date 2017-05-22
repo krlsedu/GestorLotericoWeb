@@ -24,6 +24,7 @@ public class Parametros {
 	public static Conexao conexao;
 	public static Integer idUsuario;
 	public static Integer idEntidade;
+	private static Integer idLoterica;
 	public static String entidadeNome;
 	public static String version;
 	public static String codificacao;
@@ -85,9 +86,23 @@ public class Parametros {
 				setCodificacao(rs.getString(2));
 				setPatern(rs.getString(3));
 			}
+			ps = conexao.getPst("SELECT id FROM lotericas WHERE id_entidade = ?");
+			ps.setInt(1,idEntidade);
+			rs = ps.executeQuery();
+			if (rs.next()){
+				setIdLoterica(rs.getInt(1));
+			}
 		} catch (SQLException ex) {
 		
 		}
+	}
+	
+	public static Integer getIdLoterica() {
+		return idLoterica;
+	}
+	
+	public static void setIdLoterica(Integer idLoterica) {
+		Parametros.idLoterica = idLoterica;
 	}
 	
 	public static String getEntidadeNome() {

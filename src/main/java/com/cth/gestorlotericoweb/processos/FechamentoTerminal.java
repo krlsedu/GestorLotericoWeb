@@ -144,11 +144,11 @@ public class FechamentoTerminal extends Processos{
 "            id_terminal, id_funcionario, data_encerramento, \n" +
 "            resto_caixa, total_movimentos_dia, total_creditos_terminal, total_debitos_terminal, \n" +
 "            saldo_terminal, diferenca_caixa, observacoes, \n" +
-"            id_entidade)\n" +
+"            id_entidade,id_loterica)\n" +
 "    VALUES (?, ?, ?, \n" +
 "            ?, ?, ?, ?, \n" +
 "            ?, ?, ?, \n" +
-"            ?)");
+"            ?, ?)");
             ps.setInt(1, Integer.valueOf(idTerminal));
             ps.setInt(2, Integer.valueOf(idFuncionario));            
             ps.setDate(3, Parser.toDbDate(dataEncerramento));
@@ -160,6 +160,7 @@ public class FechamentoTerminal extends Processos{
             ps.setBigDecimal(9, Parser.toBigDecimalFromHtml(diferencaCaixa));
             ps = Seter.set(ps, 10, observacoes);
             ps.setInt(11, Parametros.idEntidade);
+            ps.setInt(12, Parametros.getIdLoterica());
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()){
@@ -179,7 +180,7 @@ public class FechamentoTerminal extends Processos{
                     "       resto_caixa=?, total_movimentos_dia=?, total_creditos_terminal=?, \n" +
                     "       total_debitos_terminal=?, saldo_terminal=?, diferenca_caixa=?, \n" +
                     "       observacoes=? \n" 
-                    + " where id = ? and id_entidade = ? ", false);
+                    + " where id = ? and id_entidade = ? AND id_loterica = ?", false);
             ps.setInt(1, Integer.valueOf(idTerminal));
             ps.setInt(2, Integer.valueOf(idFuncionario));            
             ps.setDate(3, Parser.toDbDate(dataEncerramento));
@@ -193,6 +194,7 @@ public class FechamentoTerminal extends Processos{
             id = Integer.valueOf(idL);
             ps.setInt(11, id);
             ps.setInt(12, Parametros.idEntidade);
+            ps.setInt(13, Parametros.getIdLoterica());
             
             ps.execute();
         } catch (SQLException ex) {
