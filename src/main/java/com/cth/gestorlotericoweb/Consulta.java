@@ -435,6 +435,11 @@ public class Consulta {
                             lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoConta.getIdCofre()+"\" readonly>");
                             output = StringUtils.join(lInputs,'\n');
                             break;
+                        case "data_hora_mov":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoConta.getDataHoraMov()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
                     }
             }
         }

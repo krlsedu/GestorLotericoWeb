@@ -86,14 +86,14 @@ public class Parametros {
 				setCodificacao(rs.getString(2));
 				setPatern(rs.getString(3));
 			}
-			ps = conexao.getPst("SELECT id FROM lotericas WHERE id_entidade = ?");
+			ps = conexao.getPst("SELECT id FROM lotericas WHERE id_entidade = ?",false);
 			ps.setInt(1,idEntidade);
 			rs = ps.executeQuery();
 			if (rs.next()){
 				setIdLoterica(rs.getInt(1));
 			}
 		} catch (SQLException ex) {
-		
+			System.out.println(ex.getMessage());
 		}
 	}
 	

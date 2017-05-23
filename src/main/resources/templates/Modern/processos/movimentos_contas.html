@@ -33,13 +33,13 @@
                 <div class="form-group mb-n">
                         <label for="smallinput" class="col-sm-2 control-label label-input-sm">Conta</label>
                         <div class="col-sm-2">
-                            <div class="input-group">
+                            <div class="input-group" id="contas">
                                 <div class="input-group-addon" onclick="ativaPopUp('contas','id_conta','Consulta código Conta')">
                                     <i class="i_botao_buscar fa fa-search" ></i>
                                 </div>
                                 <input  name="id_conta" type="text" class="form-control1 input-lg" id="id_conta" placeholder="Cód Conta"  
-                                        onchange="buscaNome('contas','id_conta');consultaCampoAutoLoopCheck('id_cofre',false,this);"
-
+                                        onchange="buscaNome('contas','id_conta');"
+                                        onkeyup="eventoOnKeyUp(this,'id_cofre','data_hora_mov','false,true')"
                                 >
                             </div>
                         </div> 
@@ -51,13 +51,13 @@
                 <div class="form-group mb-n">
                         <label for="smallinput" class="col-sm-2 control-label label-input-sm">Cofre</label>
                         <div class="col-sm-2">
-                            <div class="input-group">
+                            <div class="input-group" id="cofres">
                                 <div class="input-group-addon" onclick="ativaPopUp('cofres','id_cofre','Consulta código Cofre')">
                                     <i class="i_botao_buscar fa fa-search" ></i>
                                 </div>
                                 <input  name="id_cofre" type="text" class="form-control1 input-lg" id="id_cofre" placeholder="Cód Codfre"  
                                         onchange="buscaNome('cofres','id_cofre')"
-                                        onfocus="consultaCampoAutoLoopCheck('id_cofre',false,this)"
+                                        onkeyup="eventoOnKeyUp(this,'data_hora_mov','true')"
                                         >                        
                             </div>
                         </div> 

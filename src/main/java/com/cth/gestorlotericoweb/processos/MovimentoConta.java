@@ -198,4 +198,21 @@ public class MovimentoConta extends Processos{
         contextPrinc.put("popup", getSWPopup(ve,"movimentos_contas").toString());
         return contextPrinc;
     }
+    
+    @Override
+    public String getDataHoraMov() {
+        String sql = "SELECT data_hora_mov from movimentos_contas where id_conta = ? and id_entidade = ? ORDER BY  data_hora_mov desc LIMIT 1";
+        try {
+            PreparedStatement ps = Parametros.getConexao().getPst(sql,false);
+            ps.setInt(1,Integer.valueOf(request.getParameter("id_conta")));
+            ps.setInt(2,Parametros.idEntidade);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return  rs.getString(1).trim().replace(" ", "T");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataHoraMov;
+    }
 }

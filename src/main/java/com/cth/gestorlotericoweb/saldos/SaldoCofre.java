@@ -37,7 +37,7 @@ public class SaldoCofre extends Saldos{
     
     private BigDecimal getSaldo(){
         try{
-            PreparedStatement ps = Parametros.getConexao().getPst("SELECT saldo FROM saldos_cofres where id_cofre = ? and id_entidade = ? order by data_saldo desc, data_hora_movimento desc limit 1", false);
+            PreparedStatement ps = Parametros.getConexao().getPst("SELECT saldo FROM saldos_cofres where id_cofre = ? and id_entidade = ? order by data_hora_movimento desc, data_saldo desc limit 1", false);
             ps.setInt(1, idCofre);
             ps.setInt(2, Parametros.idEntidade);
             ResultSet rs = ps.executeQuery();
