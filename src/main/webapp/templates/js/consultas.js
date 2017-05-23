@@ -578,5 +578,12 @@ function buscaRel(campoData,tipo,modelo) {
                 avisoErrosCTimeOut(jXHR, textStatus, errorThrown);
             }
         });
+    }else{
+        avisosErrosDiversos("Favor informar os campos, 'Terminal', 'Funcion&aacute;rio' e 'Data e hora'!")
     }
+}
+
+function avisosErrosDiversos(texto) {
+    document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+texto+"</div>";
+    $('#modal_avisos').modal('show');
 }
