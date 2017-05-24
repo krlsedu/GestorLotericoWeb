@@ -47,6 +47,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <script src="templates/Modern/js/d3.v3.js$version"></script>
     <script src="templates/Modern/js/rickshaw.js$version"></script>
     <script src="templates/js/consultas.js$version"></script>
+    <script src="templates/js/validacoes.js$version"></script>
     <script src="templates/js/consultas.automaticas.js$version"></script>
     <script src="templates/js/jquery.mask.js$version"></script>
     <script src="templates/js/jquery.maskMoney.js$version"></script>
@@ -322,14 +323,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                 <!--<div class="well">-->
                 <!--<div class="but_list">-->
             <!--<div id="aviso_caixas_abertos" class="alert alert-warning" role="alert" style="display: none">-->
-            <div class="breadcrumb" style="display: none">
-                <h4> Caixas Abertos:
-                    <span class="label label-primary">Primary</span>
-                    <span class="label label-success">Success</span>
-                    <span class="label label-info">Info</span>
-                    <span class="label label-warning">Warning</span>
-                    <span class="label label-danger">Danger</span>
-                </h4>
+            <div class="breadcrumb" style="display: none" id="caixas_abertos">
             </div>
                 <!--</div>-->
             <!--</div>-->
@@ -386,5 +380,10 @@ $popup
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
+<script>
+    $(document).ready(function() {
+        buscaTerminaisAbertos();
+    });
+</script>
 </body>
 </html>

@@ -9,6 +9,7 @@ import com.cth.gestorlotericoweb.dados.ColunasTabelas;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.*;
 import com.cth.gestorlotericoweb.utils.Parser;
+import com.cth.gestorlotericoweb.validacoes.Terminais;
 import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -60,6 +61,9 @@ public class Consulta {
                 break;
             case "item_componente":
                 getItemComponente();
+                break;
+            case "validacao":
+                getValidacoes();
                 break;
             default:
                 output ="definir o tipo de busca";
@@ -122,6 +126,7 @@ public class Consulta {
             new LogError(ex.getMessage(), ex,request);
         }
     }
+    
     private void getOpt(){        
         ColunasTabelas colunasTabelas = new ColunasTabelas(request);
         String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
@@ -445,4 +450,18 @@ public class Consulta {
         }
     }
     
+    private void getValidacoes(){
+        String item = request.getParameter("item");
+        Parametros.gravaLogSessao(request);
+        switch (item){
+            case "terminais_abertos":
+                Terminais terminais = new Terminais(request);
+                output = terminais.getTerminaisAbertos();
+                break;
+            case "existe_term_aberto":
+                Terminais terminais1 = new Terminais(request);
+                output = terminais1.existeTerminalAberto().toString();
+                break;
+        }
+    }
 }

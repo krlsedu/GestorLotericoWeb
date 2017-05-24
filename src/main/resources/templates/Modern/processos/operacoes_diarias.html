@@ -7,97 +7,103 @@
         });
 </script>
 <div class="xs">
-    <h3>Operações diárias</h3>
-    <div class="tab-content">
-        <div class="tab-pane active" id="horizontal-form">
-            <form class="form-horizontal" id="form_dados"> 
-                $btns_percorrer
-                <div class="form-group mb-n">
-                        <label for="smallinput" class="col-sm-2 control-label label-input-sm">Terminal</label>
-                        <div class="col-sm-2">
-                            <div class="input-group">
-                                <div class="input-group-addon" onclick="ativaPopUp('terminais','id_terminal','Consulta código Terminal')">
-                                    <i class="i_botao_buscar fa fa-search" ></i>
+    <form class="form-horizontal" id="form_dados">
+        <div class="panel panel-default">
+            <div class="panel-heading">Operações diárias</div>
+            <div class="panel-body">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="horizontal-form">
+                        $btns_percorrer
+                        <div class="form-group mb-n">
+                            <label for="smallinput" class="col-sm-2 control-label label-input-sm">Terminal</label>
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <div class="input-group-addon" onclick="ativaPopUp('terminais','id_terminal','Consulta código Terminal')">
+                                        <i class="i_botao_buscar fa fa-search" ></i>
+                                    </div>
+                                    <input  name="id_terminal" type="text" class="form-control1 input-lg" id="id_terminal" placeholder="Cód Terminal"
+                                            onchange="buscaNome('terminais','id_terminal')"
+                                            required>
                                 </div>
-                                <input  name="id_terminal" type="text" class="form-control1 input-lg" id="id_terminal" placeholder="Cód Terminal"  
-                                        onchange="buscaNome('terminais','id_terminal')" 
-                                        required>                        
                             </div>
-                        </div> 
-                        <div class="col-sm-6">
-                            <div class="well-sm" id="label_id_terminal">
-                            </div>
-                        </div>
-                </div>
-                <div class="form-group mb-n">
-                        <label for="smallinput" class="col-sm-2 control-label label-input-sm">Funcionário</label>
-                        <div class="col-sm-2">
-                            <div class="input-group">
-                                <div class="input-group-addon" onclick="ativaPopUp('funcionarios','id_funcionario','Consulta código Funcionário')">
-                                    <i class="i_botao_buscar fa fa-search" ></i>
+                            <div class="col-sm-6">
+                                <div class="well-sm" id="label_id_terminal">
                                 </div>
-                                <input name="id_funcionario" type="text" class="form-control1 input-lg" id="id_funcionario" placeholder="Cód Funcionário"  
-                                        onchange="buscaNome('funcionarios','id_funcionario')" 
-                                        required>  
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="well-sm" id="label_id_funcionario">
-                            </div>
-                        </div>
-                </div>
-                <div class="form-group mb-n">
-                    <label for="data_abertura" class="col-sm-2 control-label">Data Operações</label>
-                        <div class="col-sm-3">    
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
+                        <div class="form-group mb-n">
+                            <label for="smallinput" class="col-sm-2 control-label label-input-sm">Funcionário</label>
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <div class="input-group-addon" onclick="ativaPopUp('funcionarios','id_funcionario','Consulta código Funcionário')">
+                                        <i class="i_botao_buscar fa fa-search" ></i>
+                                    </div>
+                                    <input name="id_funcionario" type="text" class="form-control1 input-lg" id="id_funcionario" placeholder="Cód Funcionário"
+                                           onchange="buscaNome('funcionarios','id_funcionario')"
+                                           required>
                                 </div>
-                                <input name="data_operacoes" id="data_operacoes" type="date" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.date">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="well-sm" id="label_id_funcionario">
+                                </div>
                             </div>
                         </div>
-                </div>
-                
-                <div class="form-group mb-n">
-                    <label for="txtarea1" class="col-sm-2 control-label">Observações</label>
-                        <div class="col-sm-8">
-                            <textarea name="observacoes" id="observacoes" cols="50" rows="4" class="form-control1" placeholder="Observações das operações do dia" ></textarea>
+                        <div class="form-group mb-n">
+                            <label for="data_abertura" class="col-sm-2 control-label">Data Operações</label>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input name="data_operacoes" id="data_operacoes" type="date" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.date">
+                                </div>
+                            </div>
                         </div>
+
+                        <div class="form-group mb-n">
+                            <label for="txtarea1" class="col-sm-2 control-label">Observações</label>
+                            <div class="col-sm-8">
+                                <textarea name="observacoes" id="observacoes" cols="50" rows="4" class="form-control1" placeholder="Observações das operações do dia" ></textarea>
+                            </div>
+                        </div>
+                        $linhas_det
+                        <div class="form-group mb-n" id="btns-add-rm-linhas">
+                            <label for="txtarea1" class="col-sm-2 control-label">Itens</label>
+                            <div class="col-sm-8">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-info" onclick="addItem('operacoes_diarias_linhas')">Adicionar</button>
+                                </div>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-success warning_2" onclick="rmItem(null)">Remover</button>
+                                </div>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary" onclick="enviaImagens()">Enviar Imagens</button>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="it" name="it" value="operacoes_diarias" />
+                        <input type="hidden" id="id" name="id" value="0" />
+                        <input type="hidden" id="num_linhas" name="num_linhas" value="0" />
+                    </div>
                 </div>
-                $linhas_det
-                <div class="form-group mb-n" id="btns-add-rm-linhas">
-                    <label for="txtarea1" class="col-sm-2 control-label">Itens</label>
-                    <div class="col-sm-1">
-                        <button type="button" class="btn btn-info" onclick="addItem('operacoes_diarias_linhas')">Adicionar</button>
-                    </div>
-                    <div class="col-sm-1">
-                        <button type="button" class="btn btn-success warning_2" onclick="rmItem(null)">Remover</button>
-                    </div>
-                    <div class="col-sm-1">
-                        <button type="button" class="btn btn-primary" onclick="enviaImagens()">Enviar Imagens</button>
-                    </div>
-                </div> 
-                
-                <div class="panel-footer">
-                    <div class="row">
-                        <div class="col-sm-1 col-sm-offset-9">
+            </div>
+
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-sm-3 col-sm-offset-9">
+                        <div class="btn-group">
                             <button type="submit" class="btn btn-primary" id="botao-gravar">Gravar</button>
                         </div>
-                        <div class="col-sm-1">
+                        <div class="btn-group">
                             <button type="reset" class="btn botao-deletar" onclick="deletarDados()">Excluir</button>
                         </div>
-                        
-                        <div class="col-sm-1">
+                        <div class="btn-group">
                             <button type="reset" class="btn btn-default" onclick="limpa()">Limpar</button>
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="it" name="it" value="operacoes_diarias" />                
-                <input type="hidden" id="id" name="id" value="0" />            
-                <input type="hidden" id="num_linhas" name="num_linhas" value="0" />
-            </form>
+            </div>
         </div>
-    </div>	
 </div>
 
 

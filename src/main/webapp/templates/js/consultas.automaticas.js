@@ -1,44 +1,60 @@
 /**
  * Created by CarlosEduardo on 13/05/2017.
  */
+var timeout;
+
+function eventoOnKeyPress() {
+    if(timeout){ clearTimeout(timeout);}
+}
+
 function eventoOnKeyUp(element, camposCons, parsCampos, buscarNome) {
-    var campos = camposCons.split(",");
-    var pars = parsCampos.split(",");
-    if(( typeof(buscarNome) === "undefined" || buscarNome === null ) ){
-        buscarNome = true;
-    }
-    var dones = campos.length-1;
-    if(buscarNome) {
-        buscaNome($(element).parent().attr('id'), $(element).attr('id'));
-    }
-    if(campos.length>1) {
-        switch (dones) {
-            case 2:
-                consultaCampoAutoLoopCheck(campos[0], (pars[0].toLowerCase() === 'true'), element).done(function () {
-                    consultaCampoAutoLoopCheck(campos[1], (pars[1].toLowerCase() === 'true'), element);
-                }).done(function () {
-                    for (i = dones; i < campos.length; i++) {
-                        consultaCampoAutoLoopCheck(campos[i], (pars[i].toLowerCase() === 'true'), element);
-                    }
-                });
-                break;
-            default:
-                consultaCampoAutoLoopCheck(campos[0], (pars[0].toLowerCase() === 'true'), element).done(function () {
-                    for (i = 1; i < campos.length; i++) {
-                        consultaCampoAutoLoopCheck(campos[i], (pars[i].toLowerCase() === 'true'), element);
-                    }
-                });
+    timeout = setTimeout(function() {
+        var campos = camposCons.split(",");
+        var pars = parsCampos.split(",");
+        var tabela = document.getElementById("it").value;
+        if (( typeof(buscarNome) === "undefined" || buscarNome === null )) {
+            buscarNome = true;
         }
-    }else {
-        consultaCampoAutoLoopCheck(campos[0], (pars[0].toLowerCase() === 'true'), element);
-    }
+        var dones = campos.length - 1;
+        if (buscarNome) {
+            buscaNome($(element).parent().attr('id'), $(element).attr('id'));
+        }
+        if (campos.length > 1) {
+            switch (dones) {
+                case 2:
+                    consultaCampoAutoLoopCheck(campos[0], (pars[0].toLowerCase() === 'true'), element).done(function () {
+                        consultaCampoAutoLoopCheck(campos[1], (pars[1].toLowerCase() === 'true'), element);
+                    }).done(function () {
+                        for (i = dones; i < campos.length; i++) {
+                            consultaCampoAutoLoopCheck(campos[i], (pars[i].toLowerCase() === 'true'), element);
+                        }
+                        return $.Deferred().resolve();
+                    }).done(function () {
+                        existeTerminalAberto(tabela);
+                    });
+                    break;
+                default:
+                    consultaCampoAutoLoopCheck(campos[0], (pars[0].toLowerCase() === 'true'), element).done(function () {
+                        for (i = 1; i < campos.length; i++) {
+                            consultaCampoAutoLoopCheck(campos[i], (pars[i].toLowerCase() === 'true'), element);
+                        }
+                        return $.Deferred().resolve();
+                    }).done(function () {
+                        existeTerminalAberto(tabela);
+                    });
+            }
+        } else {
+            consultaCampoAutoLoopCheck(campos[0], (pars[0].toLowerCase() === 'true'), element);
+        }
+    },500);
 }
 
 function consultaCampoAutoLoopCheck(valorBuscar,loop,element){
     var r = $.Deferred();
+    var tabela = document.getElementById("it").value;
+    var vlb = $('#'+valorBuscar);
     if(element.value !== "") {
-        var tabela = document.getElementById("it").value;
-        if (loop || document.getElementById(valorBuscar).value === "") {
+        if (loop || vlb.val() === "" || vlb.val() === "0") {
             $.ajax(
                 {
                     type: "POST",

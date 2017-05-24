@@ -84,7 +84,8 @@ function consultaDadosBuscaId(tabela){
     );
 }
 
-function buscaConteudoTela(tela){     
+function buscaConteudoTela(tela){
+    var r = $.Deferred();
     $('#modal_carregando').modal('show');
     $.ajax(
         {
@@ -99,12 +100,17 @@ function buscaConteudoTela(tela){
                     $('#id_terminal').focus();
                 }catch (e){
                 }
+                r.resolve();
             }, 
             error: function (jXHR, textStatus, errorThrown) {
                 avisoErros(jXHR,textStatus,errorThrown);
+                r.resolve();
             }
         }
     );
+    buscaTerminaisAbertos();
+    existeTerminalAbertoConsTela(tela);
+    return r;
 }
 
 function addItem(tela){    
