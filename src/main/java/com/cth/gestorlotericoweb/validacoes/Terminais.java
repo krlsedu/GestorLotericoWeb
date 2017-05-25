@@ -2,6 +2,7 @@ package com.cth.gestorlotericoweb.validacoes;
 
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
+import com.cth.gestorlotericoweb.utils.Parser;
 import org.jsoup.nodes.Element;
 
 import javax.servlet.http.HttpServletRequest;
@@ -175,6 +176,54 @@ public class Terminais extends Validacoes {
 			ResultSet rs = ps.executeQuery();
 			return rs.next();
 		} catch (SQLException e) {
+			new LogError(e.getMessage(),e,request);
+		}
+		return false;
+	}
+	
+	public Boolean verificaSeFechado(){
+		String idTermial = request.getParameter("id_terminal");
+		String idFuncionario = request.getParameter("id_funcionario");
+		String it = request.getParameter("it");
+		String parDt;
+		switch (it){
+			case "operacoes_diarias":
+				parDt = "data_operacoes";
+				break;
+			case "abertura_terminais":
+				parDt = "data_abertura";
+				break;
+			default:
+				parDt = "data_hora_mov";
+				break;
+		}
+		String dataHoraMov = request.getParameter(parDt);
+		String sql = "SELECT 1 FROM\n" +
+				"  abertura_terminais a,\n" +
+				"  terminais t,\n" +
+				"  funcionarios func\n" +
+				"WHERE\n" +
+				"  func.id = a.id_funcionario and\n" +
+				"  t.id_entidade = a.id_entidade AND\n" +
+				"  t.id = a.id_terminal and\n" +
+				"  exists( SELECT * from\n" +
+				"                  fechamento_terminais f\n" +
+				"              WHERE\n" +
+				"                  f.id_terminal = a.id_terminal AND\n" +
+				"                  f.id_funcionario = a.id_funcionario AND\n" +
+				"                  f.data_encerramento = a.data_abertura AND\n" +
+				"                  f.id_entidade = a.id_entidade) AND\n" +
+				"    a.id_terminal = ? AND\n" +
+				"    a.id_funcionario = ? AND " +
+				"    date(a.data_abertura) = date(?)";
+		try {
+			PreparedStatement ps = Parametros.getConexao().getPst(sql, false);
+			ps.setInt(1, Integer.valueOf(idTermial));
+			ps.setInt(2, Integer.valueOf(idFuncionario));
+			ps.setDate(3, Parser.toDbDate(dataHoraMov));
+			ResultSet rs = ps.executeQuery();
+			return rs.next();
+		}catch (SQLException e){
 			new LogError(e.getMessage(),e,request);
 		}
 		return false;

@@ -462,6 +462,10 @@ public class Consulta {
                 Terminais terminais1 = new Terminais(request);
                 output = terminais1.existeTerminalAberto().toString();
                 break;
+            case "verifica_se_fechado":
+                Terminais terminais2 = new Terminais(request);
+                output = terminais2.verificaSeFechado().toString();
+                break;
         }
     }
 }

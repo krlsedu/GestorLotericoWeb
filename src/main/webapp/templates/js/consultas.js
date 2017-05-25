@@ -86,13 +86,25 @@ function consultaDadosBuscaId(tabela){
 
 function buscaConteudoTela(tela){
     var r = $.Deferred();
+    buscaConteudoTelasDef(tela).done(function () {
+        buscaTerminaisAbertos().done(function () {
+            existeTerminalAbertoConsTela(tela).done(function () {
+                r.resolve();
+            });
+        })
+    })
+    return r;
+}
+
+function buscaConteudoTelasDef(tela) {
+    var r = $.Deferred();
     $('#modal_carregando').modal('show');
     $.ajax(
         {
             type: "POST",
             url:  "conteudo_telas",
             data:{"it":tela},
-            success: function (data) {   
+            success: function (data) {
                 $("#conteudo_telas").html(data);
                 $('#modal_carregando').modal('hide');
                 try{
@@ -100,16 +112,16 @@ function buscaConteudoTela(tela){
                     $('#id_terminal').focus();
                 }catch (e){
                 }
-                r.resolve();
-            }, 
+                setTimeout(function() {
+                    r.resolve();
+                },500);
+            },
             error: function (jXHR, textStatus, errorThrown) {
                 avisoErros(jXHR,textStatus,errorThrown);
-                r.resolve();
+                r.reject();
             }
         }
     );
-    buscaTerminaisAbertos();
-    existeTerminalAbertoConsTela(tela);
     return r;
 }
 
@@ -229,8 +241,14 @@ function buscaDadosN(tabela){
 }
 
 function insereDados(htmlDoc){
+    insereDadosSinc(htmlDoc).done(function () {
+        verificaSeFechado();
+    })
+}
+
+function insereDadosSinc(htmlDoc) {
+    var r = $.Deferred();
     var ncols = htmlDoc.getElementById("num_cols").value;
-    
     for (i=1;i<=ncols;i++){
         try{
             var nomeCol = htmlDoc.getElementById("nome_coluna_"+i).value;
@@ -239,23 +257,27 @@ function insereDados(htmlDoc){
                 var tipo = document.getElementById(nomeCol).type;
                 if(!(valr===null||valr==='null')){
                     if(tipo==="select-one"||tipo==="textarea"){
-                            document.getElementById(nomeCol).value = valr;
+                        document.getElementById(nomeCol).value = valr;
                     }else{
-                            $('input#'+nomeCol).val(valr).trigger('mask.maskMoney');
-                    }                        
+                        $('input#'+nomeCol).val(valr).trigger('mask.maskMoney');
+                    }
                     try{
                         document.getElementById(nomeCol).onchange();
                     }catch (e){
                     }
                 }
             }catch (ex){
-                setTimeout(function() {insereDados(htmlDoc);}, 1000);                
+                setTimeout(function() {insereDados(htmlDoc);}, 1000);
             }
         }catch (e){
 
         }
+        if(i>=ncols){
+            r.resolve();
+        }
     }
-    $('#modal_carregando').modal('hide');   
+    $('#modal_carregando').modal('hide');
+    return r;
 }
 
 function buscaNomeComponente(tabela,campo) {
@@ -355,7 +377,6 @@ function deletarDados(){
         }
     );
 }
-
 
 function sair(tela){
     $('#modal_carregando').modal('show');
@@ -557,12 +578,11 @@ $(document).on('hidden.bs.modal', '#modal_avisos', function() {
     $("#id_conta").focus();
     $("#id_terminal").focus();
 });
+
 $(document).on('hidden.bs.modal', '#modal_carregando', function() {
     $("#id_conta").focus();
     $("#id_terminal").focus();
 });
-
-
 
 function buscaRel(campoData,tipo,modelo) {
     event.preventDefault();
