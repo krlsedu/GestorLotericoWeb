@@ -83,6 +83,28 @@ function existeTerminalAberto(tela) {
             }
         );
     }else {
+        if(tela === 'abertura_terminais'){
+            $.ajax(
+                {
+                    type: "POST",
+                    url:  "consulta",
+                    data:$("#form_dados").serialize()+ '&' + $.param({"tipo":"validacao","item":"existe_term_aberto"}),
+                    success: function (data) {
+                        if(data.trim() === 'true') {
+                            avisosErrosDiversos("O terminal "+$('#id_terminal').val()+" j&aacute; est&aacute; aberto para o funcion&aacute;rio "+ $('#id_funcionario').val()+"!");
+                            $('#botao-gravar').prop("disabled",true);
+                        }else {
+                            $('#botao-gravar').prop("disabled",false);
+                        }
+                        r.resolve();
+                    },
+                    error: function (jXHR, textStatus, errorThrown) {
+                        avisoErros(jXHR,textStatus,errorThrown);
+                        r.reject();
+                    }
+                }
+            );
+        }
         r.resolve();
     }
     return r;
