@@ -5,6 +5,8 @@
  */
 package com.cth.gestorlotericoweb.utils;
 
+import com.cth.gestorlotericoweb.parametros.Parametros;
+
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -37,6 +39,14 @@ public class Parser {
                 Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
                 return timestamp;
             } catch (ParseException ex) {
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    java.util.Date parsedDate = dateFormat.parse(dataString.replace("T", ""));
+                    Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+                    return timestamp;
+                }catch (ParseException e){
+                
+                }
             }
         return null;
     }
@@ -61,19 +71,46 @@ public class Parser {
     }
     
     public static String formataComMascara(BigDecimal valor){
+        return formataComMascara(valor,"");
+    }
+    public static String formataComMascara(BigDecimal valor,String pref){
         try{
-            DecimalFormat df = new DecimalFormat("#,##0.00");
+            DecimalFormat df = new DecimalFormat(Parametros.getPatern());
             DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-            dfs.setDecimalSeparator(',');
-            dfs.setMonetaryDecimalSeparator('.');
-            df.setDecimalFormatSymbols(dfs); 
-            return "R$ "+df.format((valor));
+            if(Parametros.getCodificacao().equals("PT-BR")) {
+                dfs.setDecimalSeparator(',');
+                dfs.setMonetaryDecimalSeparator('.');
+            }else {
+                dfs.setDecimalSeparator('.');
+                dfs.setMonetaryDecimalSeparator(',');
+            }
+            df.setDecimalFormatSymbols(dfs);
+            return pref+df.format((valor));
         }catch(Exception e){
             return e.getMessage();
         }
     }
+    public static BigDecimal toBigDecimalFromSt(String valor){
+        String st = valor;
+        try{
+            return new BigDecimal(st);
+        }catch(Exception e){
+            return BigDecimal.ZERO;
+        }
+    }
     
     public static BigDecimal toBigDecimalFromHtml(String valor){
+        String st = valor;
+        st = st.replace(".", "");
+        st = st.replace(",", ".");
+        try{
+            return new BigDecimal(st);
+        }catch(Exception e){
+            return BigDecimal.ZERO;
+        }
+    }
+    
+    public static BigDecimal toBigDecimalFromHtmlNull(String valor){
         String st = valor;
         st = st.replace(".", "");
         st = st.replace(",", ".");
@@ -93,6 +130,14 @@ public class Parser {
     }
     
     public static Integer toInteger(String valor){
+        try{
+            return Integer.valueOf(valor);
+        }catch(Exception e){
+            return 0;
+        }
+    }
+    
+    public static Integer toIntegerNull(String valor){
         try{
             return Integer.valueOf(valor);
         }catch(Exception e){

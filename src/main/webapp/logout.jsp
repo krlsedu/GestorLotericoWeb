@@ -1,0 +1,5 @@
+
+<%
+    request.getSession(false).invalidate();
+%>
+

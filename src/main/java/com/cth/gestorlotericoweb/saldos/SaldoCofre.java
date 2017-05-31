@@ -9,11 +9,12 @@ import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.MovimentoCofre;
 import com.cth.gestorlotericoweb.utils.Parser;
+
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -31,12 +32,12 @@ public class SaldoCofre extends Saldos{
     }
     
     public String getSaldoSt(){
-        return Parser.formataComMascara(getSaldo());
+        return Parser.formataComMascara(getSaldo(),"R$ ");
     }
     
     private BigDecimal getSaldo(){
         try{
-            PreparedStatement ps = Parametros.getConexao().getPst("SELECT saldo FROM saldos_cofres where id_cofre = ? and id_entidade = ? order by data_saldo desc, data_hora_movimento desc limit 1", false);
+            PreparedStatement ps = Parametros.getConexao().getPst("SELECT saldo FROM saldos_cofres where id_cofre = ? and id_entidade = ? order by data_hora_movimento desc, data_saldo desc limit 1", false);
             ps.setInt(1, idCofre);
             ps.setInt(2, Parametros.idEntidade);
             ResultSet rs = ps.executeQuery();
@@ -61,10 +62,10 @@ public class SaldoCofre extends Saldos{
     private void insere(MovimentoCofre movimentoCofre){
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("INSERT INTO public.saldos_cofres(\n" +
-                    "            id_cofre, data_saldo, saldo, id_movimento_cofre, id_entidade )\n" +
-                    "    VALUES (?, ?, ?, ?, ?);",false);
+                    "            id_cofre, data_saldo, saldo, id_movimento_cofre, id_entidade, valor_movimentado )\n" +
+                    "    VALUES (?, ?, ?, ?, ?, ?);",false);
             PreparedStatement psRs = Parametros.getConexao().getPst("select saldo from saldos_cofres where id_cofre = ? and id_entidade = ? order by data_hora_movimento desc limit 1",false);
-            psRs.setInt(1, Integer.valueOf(movimentoCofre.getIdCofre()));
+            psRs.setInt(1, Integer.valueOf(movimentoCofre.getIdTerminal()));
             psRs.setInt(2, Parametros.idEntidade);
             ResultSet rs = psRs.executeQuery();
             BigDecimal saldoAtual;
@@ -74,17 +75,20 @@ public class SaldoCofre extends Saldos{
                 saldoAtual = BigDecimal.ZERO;
             }
             BigDecimal saldo;
+            BigDecimal valorMov;
             if(movimentoCofre.tipoOperacao.equals("1")){
-                saldo = saldoAtual.subtract(Parser.toBigDecimalFromHtml(movimentoCofre.valorMovimentado).multiply(Parser.toBigDecimalFromHtml(movimentoCofre.numeroVolumes)));
+                valorMov = Parser.toBigDecimalFromHtml(movimentoCofre.valorMovimentado).multiply(Parser.toBigDecimalFromHtml(movimentoCofre.numeroVolumes));
+                saldo = saldoAtual.subtract(valorMov);
             }else{
-                BigDecimal valorSomar = Parser.toBigDecimalFromHtml(movimentoCofre.valorMovimentado).multiply(Parser.toBigDecimalFromHtml(movimentoCofre.numeroVolumes));
-                saldo = saldoAtual.add(valorSomar);
+                valorMov = Parser.toBigDecimalFromHtml(movimentoCofre.valorMovimentado).multiply(Parser.toBigDecimalFromHtml(movimentoCofre.numeroVolumes));
+                saldo = saldoAtual.add(valorMov);
             }
-            ps.setInt(1,Integer.valueOf(movimentoCofre.getIdCofre()));
+            ps.setInt(1,Integer.valueOf(movimentoCofre.getIdTerminal()));
             ps.setDate(2, Parser.toDbDate(movimentoCofre.getDataHoraMov()));
             ps.setBigDecimal(3, saldo);
             ps.setInt(4, movimentoCofre.getId());
             ps.setInt(5, Parametros.idEntidade);
+            ps.setBigDecimal(6, valorMov);
             ps.execute();
         } catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);  
@@ -94,18 +98,50 @@ public class SaldoCofre extends Saldos{
     
     private void update(MovimentoCofre movimentoCofre){
         try{
-            PreparedStatement psRs = Parametros.getConexao().getPst("select saldo from saldos_cofres where id_cofre = ? and id < ?  and id_entidade = ? order by data_hora_movimento desc limit 1",false);
-            psRs.setInt(1, Integer.valueOf(movimentoCofre.getIdCofre()));
+            PreparedStatement psRs = Parametros.getConexao().getPst("select valor_movimentado from saldos_cofres where id_cofre = ? and id = ?  and id_entidade = ? ",false);
+            psRs.setInt(1, Integer.valueOf(movimentoCofre.getIdTerminal()));
             psRs.setInt(2, id);
             psRs.setInt(3, Parametros.idEntidade);
             ResultSet rs = psRs.executeQuery();
-            BigDecimal saldoAtual;
+            BigDecimal saldoAtual = BigDecimal.ZERO;
+            BigDecimal valorMovAtu = BigDecimal.ZERO;
             if(rs.next()){
-                saldoAtual = rs.getBigDecimal(1);
-            }else{
-                saldoAtual = BigDecimal.ZERO;
+                valorMovAtu  = rs.getBigDecimal(1);
             }
-            BigDecimal saldo;
+            BigDecimal novoValor = Parser.toBigDecimalFromHtml(movimentoCofre.valorMovimentado).multiply(Parser.toBigDecimalFromHtml(movimentoCofre.numeroVolumes));
+            if(valorMovAtu.compareTo(novoValor)!=0) {
+                PreparedStatement psAlt = Parametros.getConexao().getPst("UPDATE saldos_cofres set valor_movimentado = ? where id_cofre = ? and id = ?  and id_entidade = ? ",false);
+                psAlt.setBigDecimal(1,novoValor);
+                psAlt.setInt(2, Integer.valueOf(movimentoCofre.getIdTerminal()));
+                psAlt.setInt(3, id);
+                psAlt.setInt(4, Parametros.idEntidade);
+                psAlt.execute();
+                BigDecimal difMov = novoValor.subtract(valorMovAtu);
+                PreparedStatement ps = Parametros.getConexao().getPst("INSERT INTO public.saldos_cofres(\n" +
+                        "            id_cofre, data_saldo, saldo, id_movimento_cofre, id_entidade, valor_movimentado )\n" +
+                        "    VALUES (?, ?, ?, ?, ?, ?);", false);
+                psRs = Parametros.getConexao().getPst("select saldo from saldos_cofres where id_cofre = ? and id_entidade = ? order by data_hora_movimento desc limit 1", false);
+                psRs.setInt(1, Integer.valueOf(movimentoCofre.getIdTerminal()));
+                psRs.setInt(2, Parametros.idEntidade);
+                rs = psRs.executeQuery();
+                if (rs.next()) {
+                    saldoAtual = rs.getBigDecimal(1);
+                }
+                BigDecimal saldo;
+                if (movimentoCofre.tipoOperacao.equals("1")) {
+                    saldo = saldoAtual.subtract(difMov);
+                } else {
+                    saldo = saldoAtual.add(difMov);
+                }
+                ps.setInt(1, Integer.valueOf(movimentoCofre.getIdTerminal()));
+                ps.setDate(2, Parser.toDbDate(movimentoCofre.getDataHoraMov()));
+                ps.setBigDecimal(3, saldo);
+                ps.setInt(4, movimentoCofre.getId());
+                ps.setInt(5, Parametros.idEntidade);
+                ps.setBigDecimal(6, difMov);
+                ps.execute();
+            }
+            /*BigDecimal saldo;
             if(movimentoCofre.tipoOperacao.equals("1")){
                 saldo = saldoAtual.subtract(Parser.toBigDecimalFromHtml(movimentoCofre.valorMovimentado).multiply(Parser.toBigDecimalFromHtml(movimentoCofre.numeroVolumes)));
             }else{
@@ -120,7 +156,8 @@ public class SaldoCofre extends Saldos{
             ps.setBigDecimal(1, saldo);
             ps.setInt(2, id);
             ps.setInt(3, Parametros.idEntidade);
-            ps.execute();
+            ps.execute();*/
+            
         }catch(SQLException ex) {
             new LogError(ex.getMessage(), ex,request);  
         }
@@ -128,7 +165,7 @@ public class SaldoCofre extends Saldos{
     
     private Integer getIdSaldo(MovimentoCofre movimentoCofre){
         try{
-            PreparedStatement ps = Parametros.getConexao().getPst("select id from saldos_cofres where id_movimento_cofre = ? and id_entidade = ?",false);
+            PreparedStatement ps = Parametros.getConexao().getPst("select id from saldos_cofres where id_movimento_cofre = ? and id_entidade = ? ORDER by id",false);
             ps.setInt(1, movimentoCofre.getId());
             ps.setInt(2, Parametros.idEntidade);
             ResultSet rs = ps.executeQuery();

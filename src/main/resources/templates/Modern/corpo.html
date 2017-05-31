@@ -7,253 +7,395 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Gestor Lotérico Web</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="Modern Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
-Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
-<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
- <!-- Bootstrap Core CSS -->
-<link href="templates/Modern/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
-<!-- Custom CSS -->
-<link href="templates/Modern/css/style.css" rel='stylesheet' type='text/css' />
-<link href="templates/Modern/css/meus_botoes.css" rel='stylesheet' type='text/css' />
-<link href="templates/Modern/css/meus_botoes_hover.css" rel='stylesheet' type='text/css' />
-<!-- Graph CSS -->
-<link href="templates/Modern/css/lines.css" rel='stylesheet' type='text/css' />
-<link href="templates/Modern/css/font-awesome.css" rel="stylesheet"> 
-<!-- jQuery -->
-<script src="templates/Modern/js/jquery.min.js"></script>
-<!----webfonts--->
-<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
-<!---//webfonts--->  
-<!-- Nav CSS -->
-<link href="templates/Modern/css/custom.css" rel="stylesheet">
-<!-- Metis Menu Plugin JavaScript -->
-<script src="templates/Modern/js/metisMenu.min.js"></script>
-<script src="templates/Modern/js/custom.js"></script>
-<!-- Graph JavaScript -->
-<script src="templates/Modern/js/d3.v3.js"></script>
-<script src="templates/Modern/js/rickshaw.js"></script>
-<script src="templates/js/consultas.js"></script>
-<script src="templates/js/jquery.mask.js"></script>
-<script src="templates/js/jquery.maskMoney.js"></script>
+    <title>Gestor Lotérico Web</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content="gestor lotérico, lotéricas, sistema lotéricas"/>
+    <script type="application/x-javascript"> addEventListener("load", function () {
+        setTimeout(hideURLbar, 0);
+    }, false);
+    function hideURLbar() {
+        window.scrollTo(0, 1);
+    } </script>
+
+
+    <link rel="shortcut icon" href="templates/Modern/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="templates/Modern/images/favicon.ico" type="image/x-icon">
+    <!-- Bootstrap Core CSS -->
+    <link href="templates/Modern/css/bootstrap.min.css?v=$version" rel='stylesheet' type='text/css'/>
+    <!-- Custom CSS -->
+    <link href="templates/Modern/css/style.css?v=$version" rel='stylesheet' type='text/css'/>
+    <link href="templates/Modern/css/meus_botoes.css?v=$version" rel='stylesheet' type='text/css'/>
+    <link href="templates/Modern/css/meus_botoes_hover.css?v=$version" rel='stylesheet' type='text/css'/>
+    <!-- Graph CSS -->
+    <link href="templates/Modern/css/lines.css?v=$version" rel='stylesheet' type='text/css'/>
+    <link href="templates/Modern/css/font-awesome.css?v=$version" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="templates/Modern/js/jquery.min.js?v=$version"></script>
+    <script src="templates/slider/bootstrap-slider.js?v=$version"></script>
+    <link href="templates/slider/css/bootstrap-slider.css?v=$version" rel='stylesheet' type='text/css'>
+
+    <!----webfonts--->
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
+    <!---//webfonts--->
+    <!-- Nav CSS -->
+    <link href="templates/Modern/css/custom.css?v=$version" rel="stylesheet">
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="templates/Modern/js/metisMenu.min.js?v=$version"></script>
+    <script src="templates/Modern/js/custom.js?v=$version"></script>
+    <!-- Graph JavaScript -->
+    <script src="templates/Modern/js/d3.v3.js?v=$version"></script>
+    <script src="templates/Modern/js/rickshaw.js?v=$version"></script>
+    <script src="templates/js/consultas.js?v=$version"></script>
+    <script src="templates/js/validacoes.js?v=$version"></script>
+    <script src="templates/js/consultas.automaticas.js?v=$version"></script>
+    <script src="templates/js/jquery.mask.js?v=$version"></script>
+    <script src="templates/js/jquery.maskMoney.js?v=$version"></script>
+
+
+    <script src="tesseract/worker.js?v=$version"></script>
+    <script src="tesseract/tesseract.js?v=$version"></script>
+    <script src="manipulador_imagens/trata_imagens.js?v=$version"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 <body>
-<div class="modal fade" id="modal_avisos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+
+<div class="modal fade" id="modal_upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+     style="display: none; ">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                    
+
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h2 class="modal-title" id="titulo_upload">Imagens</h2>
+            </div>
+            <div class="modal-body">
+                <div id="corpo_upload" class="alert alert-success" role="alert"
+                     style="display: flex;  justify-content: center; height: 400px">
+                    <strong>Arraste e solte suas imagens aqui</strong>
+                    <div id="div-original-image" style="display: none; "><img id="original-image" style="width: 250px"
+                                                                              src=""></div>
+                </div>
+                <a class="btn btn-primary" href="" id="ex20a">Configurações</a>
+                <a class="btn btn-primary" href="" id="enviarImg">Processar</a>
+                <div id="sld8" style="display: none; ">
+                    <p><b>P&B </b><input id="bw" data-slider-id='bwSlider' type="text" data-slider-min="0"
+                                         data-slider-max="300" data-slider-step="1" data-slider-value="210"
+                                         value="210"/></p>
+                    <p><b>Brilho</b><input id="brl" data-slider-id='brlSlider' type="text" data-slider-min="0"
+                                           data-slider-max="2" data-slider-step="0.1" data-slider-value="1" value="1"/>
+                    </p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<script src="manipulador_imagens/envia_dados.js?v=$version"></script>
+
+<div class="modal fade" id="modal_carregando" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true" style="display: none; z-index: +99999">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h2 class="modal-title" id="titulo_aviso">Processando...</h2>
+            </div>
+            <div class="modal-body" id="corpo_carregando" style="display: flex;  justify-content: center;">
+                <img src="images/progress_bar.gif?v=$version"/>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div id="wrapper" style="background-color: rgb(255, 109, 0)">
+    <!-- Navigation -->
+    <nav class="top1 navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="app">Gestor Lotérico - $entidadeNome</a>
+        </div>
+        <!-- /.navbar-header -->
+        <ul class="nav navbar-nav navbar-right">
+            <!--<li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
+                        class="fa fa-comments-o"></i><span class="badge">4</span></a>
+                <ul class="dropdown-menu">
+                    <li class="dropdown-menu-header">
+                        <strong>Messages</strong>
+                        <div class="progress thin">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40"
+                                 aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                <span class="sr-only">40% Complete (success)</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="avatar">
+                        <a href="#">
+                            <img src="templates/Modern/images/1.png" alt=""/>
+                            <div>New message</div>
+                            <small>1 minute ago</small>
+                            <span class="label label-info">NEW</span>
+                        </a>
+                    </li>
+                    <li class="avatar">
+                        <a href="#">
+                            <img src="templates/Modern/images/2.png" alt=""/>
+                            <div>New message</div>
+                            <small>1 minute ago</small>
+                            <span class="label label-info">NEW</span>
+                        </a>
+                    </li>
+                    <li class="avatar">
+                        <a href="#">
+                            <img src="templates/Modern/images/3.png" alt=""/>
+                            <div>New message</div>
+                            <small>1 minute ago</small>
+                        </a>
+                    </li>
+                    <li class="avatar">
+                        <a href="#">
+                            <img src="templates/Modern/images/4.png" alt=""/>
+                            <div>New message</div>
+                            <small>1 minute ago</small>
+                        </a>
+                    </li>
+                    <li class="avatar">
+                        <a href="#">
+                            <img src="templates/Modern/images/5.png" alt=""/>
+                            <div>New message</div>
+                            <small>1 minute ago</small>
+                        </a>
+                    </li>
+                    <li class="avatar">
+                        <a href="#">
+                            <img src="templates/Modern/images/pic1.png" alt=""/>
+                            <div>New message</div>
+                            <small>1 minute ago</small>
+                        </a>
+                    </li>
+                    <li class="dropdown-menu-footer text-center">
+                        <a href="#">View all messages</a>
+                    </li>
+                </ul>
+            </li> -->
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle avatar" data-toggle="dropdown"><img
+                        src="templates/Modern/images/generic.png?v=$version" style="background: white"><span class="badge">0</span></a>
+                <ul class="dropdown-menu">
+                    <!--<li class="dropdown-menu-header text-center">-->
+                        <!--<strong>Account</strong>-->
+                    <!--</li>-->
+                    <!--<li class="m_2"><a href="#"><i class="fa fa-bell-o"></i> Updates <span-->
+                            <!--class="label label-info">42</span></a></li>-->
+                    <!--<li class="m_2"><a href="#"><i class="fa fa-envelope-o"></i> Messages <span-->
+                            <!--class="label label-success">42</span></a></li>-->
+                    <!--<li class="m_2"><a href="#"><i class="fa fa-tasks"></i> Tasks <span-->
+                            <!--class="label label-danger">42</span></a></li>-->
+                    <!--<li><a href="#"><i class="fa fa-comments"></i> Comments <span class="label label-warning">42</span></a>-->
+                    <!--</li>-->
+                    <li class="dropdown-menu-header text-center">
+                        <strong>Configurações </strong>
+                    </li>
+
+                    <li class="dropdown-menu-header text-center">
+                        <strong>Acesso </strong>
+                    </li>
+                    <!--<li class="m_2"><a href="#"><i class="fa fa-user"></i> Perfil</a></li>-->
+                    <!--<li class="m_2"><a href="#"><i class="fa fa-wrench"></i> Preferências</a></li>-->
+                    <!--<li class="m_2"><a href="#"><i class="fa fa-usd"></i> Payments <span-->
+                            <!--class="label label-default">42</span></a></li>-->
+                    <!--<li class="m_2"><a href="#"><i class="fa fa-file"></i> Projects <span-->
+                            <!--class="label label-primary">42</span></a></li>-->
+                    <!--<li class="divider"></li>-->
+                    <!--<li class="m_2"><a href="#"><i class="fa fa-shield"></i> Lock Profile</a></li>-->
+                    <li class="m_2"><a href="javascript:void(0)" onclick="sair('terminais')"><i class="fa fa-lock"></i> Sair</a></li>
+                </ul>
+            </li>
+        </ul>
+        <!--<form class="navbar-form navbar-right">-->
+            <!--<input type="text" class="form-control" value="Search..." onfocus="this.value = '';"-->
+                   <!--onblur="if (this.value == '') {this.value = 'Search...';}">-->
+        <!--</form>-->
+        <div class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav navbar-collapse">
+                <ul class="nav" id="side-menu">
+                    <li>
+                        <a href="app" style="color: white"><i class="fa fa-dashboard fa-fw nav_icon"></i>Estatísticas</a>
+                    </li>
+                    <li>
+                        <a href="app" style="color: white"><i class="fa fa-indent nav_icon"></i>Cadastros<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level" >
+                            <li>
+                                <a href="javascript:void(0)" onclick="buscaConteudoTela('cofres')" style="color: white">Cofres</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" onclick="buscaConteudoTela('contas')" style="color: white">Contas</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)"
+                                   onclick="buscaConteudoTela('funcionarios')" style="color: white">Funcionários</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" onclick="buscaConteudoTela('lotericas')" style="color: white">Lotéricas</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" onclick="buscaConteudoTela('operacoes')" style="color: white">Operações</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" onclick="buscaConteudoTela('tarifas_operacoes')" style="color: white">Tarifas
+                                    das Operações</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" onclick="buscaConteudoTela('terminais')" style="color: white">Terminais</a>
+                            </li>
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
+                    <li>
+                        <a href="app" style="color: white"><i class="fa fa-pencil-square-o nav_icon"></i>Processos Terminais<span
+                                class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="javascript:void(0)"
+                                   onclick="buscaConteudoTela('abertura_terminais')" style="color: white">Abertura</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" onclick="buscaConteudoTela('movimentos_caixas')" style="color: white">Movimentação
+                                    de Caixa</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" onclick="buscaConteudoTela('outros_movimentos')" style="color: white">Outras
+                                    Movimentações de Caixa</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" onclick="buscaConteudoTela('operacoes_diarias')" style="color: white">Operações
+                                    Diárias</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" onclick="buscaConteudoTela('fechamento_terminais')" style="color: white">Fechamento</a>
+                            </li>
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
+
+                    <li>
+                        <a href="app" style="color: white"><i class="fa fa-pencil-square-o nav_icon"></i>Processos Administrativos<span
+                                class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="javascript:void(0)" onclick="buscaConteudoTela('movimentos_cofres')" style="color: white">Movimentação
+                                    de Cofre</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" onclick="buscaConteudoTela('movimentos_contas')" style="color: white">Movimentação
+                                    de Conta</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="app" style="color: white" ><i class="fa fa-archive nav_icon"></i>Estoque<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="javascript:void(0)" onclick="buscaConteudoTela('itens_estoque')" style="color: white">Cadastro de Itens</a>
+                            </li>
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
+
+                    <li>
+                        <a href="app" style="color: white" ><i class="fa fa-cogs nav_icon"></i>Configurações<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="javascript:void(0)" onclick="buscaConteudoTela('config_estatisticas')" style="color: white">Estatísticas</a>
+                            </li>
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
+                </ul>
+            </div>
+            <!-- /.sidebar-collapse -->
+        </div>
+        <!-- /.navbar-static-side -->
+    </nav>
+    <div id="page-wrapper" style="background: #f2f4f8">
+        <div class="graphs">
+                <!--<div class="well">-->
+                <!--<div class="but_list">-->
+            <!--<div id="aviso_caixas_abertos" class="alert alert-warning" role="alert" style="display: none">-->
+            <div class="breadcrumb" style="display: none" id="caixas_abertos">
+            </div>
+                <!--</div>-->
+            <!--</div>-->
+            <div id="conteudo_telas">
+                $conteudo
+            </div>
+            <div class="copy">
+                <p>Gestor Lotérico Copyright© All Rights Reserved </p>
+                <p>Contato: krlsedu@gmail.com </p>
+                <p>Versão <i>$version</i></p>
+            </div>
+        </div>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+<!-- /#wrapper -->
+<!-- Bootstrap Core JavaScript -->
+<script src="templates/Modern/js/bootstrap.min.js"></script>
+$popup
+
+<div class="modal fade" id="modal_avisos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+     style="display: none; "
+    >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h2 class="modal-title" id="titulo_aviso">Aviso</h2>
             </div>
             <div class="modal-body" id="corpo_aviso" style="align-content: center">
             </div>
-            
+
             <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
-<div class="modal fade" id="modal_carregando" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+<div class="modal fade" id="modal_relatorio" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+     style="display: none; "
+>
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                    
+
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h2 class="modal-title" id="titulo_aviso">Carregando...</h2>
+                <h2 class="modal-title" id="titulo_relatorio">Detalhamento</h2>
             </div>
-            <div class="modal-body" id="corpo_carregando" style="display: flex;  justify-content: center;">
-                <img src="images/progress_bar.gif" />
+            <div class="modal-body" id="corpo_relatorio" style="align-content: center">
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
-    $popup  
-<div id="wrapper">
-     <!-- Navigation -->
-        <nav class="top1 navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="app">Gestor Lotérico</a>
-            </div>
-            <!-- /.navbar-header -->
-            <ul class="nav navbar-nav navbar-right">
-				<li class="dropdown">
-	        		<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-comments-o"></i><span class="badge">4</span></a>
-	        		<ul class="dropdown-menu">
-						<li class="dropdown-menu-header">
-							<strong>Messages</strong>
-							<div class="progress thin">
-							  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-							    <span class="sr-only">40% Complete (success)</span>
-							  </div>
-							</div>
-						</li>
-						<li class="avatar">
-							<a href="#">
-								<img src="templates/Modern/images/1.png" alt=""/>
-								<div>New message</div>
-								<small>1 minute ago</small>
-								<span class="label label-info">NEW</span>
-							</a>
-						</li>
-						<li class="avatar">
-							<a href="#">
-								<img src="templates/Modern/images/2.png" alt=""/>
-								<div>New message</div>
-								<small>1 minute ago</small>
-								<span class="label label-info">NEW</span>
-							</a>
-						</li>
-						<li class="avatar">
-							<a href="#">
-								<img src="templates/Modern/images/3.png" alt=""/>
-								<div>New message</div>
-								<small>1 minute ago</small>
-							</a>
-						</li>
-						<li class="avatar">
-							<a href="#">
-								<img src="templates/Modern/images/4.png" alt=""/>
-								<div>New message</div>
-								<small>1 minute ago</small>
-							</a>
-						</li>
-						<li class="avatar">
-							<a href="#">
-								<img src="templates/Modern/images/5.png" alt=""/>
-								<div>New message</div>
-								<small>1 minute ago</small>
-							</a>
-						</li>
-						<li class="avatar">
-							<a href="#">
-								<img src="templates/Modern/images/pic1.png" alt=""/>
-								<div>New message</div>
-								<small>1 minute ago</small>
-							</a>
-						</li>
-						<li class="dropdown-menu-footer text-center">
-							<a href="#">View all messages</a>
-						</li>	
-	        		</ul>
-	      		</li>
-			    <li class="dropdown">
-	        		<a href="#" class="dropdown-toggle avatar" data-toggle="dropdown"><img src="templates/Modern/images/1.png"><span class="badge">9</span></a>
-	        		<ul class="dropdown-menu">
-						<li class="dropdown-menu-header text-center">
-							<strong>Account</strong>
-						</li>
-						<li class="m_2"><a href="#"><i class="fa fa-bell-o"></i> Updates <span class="label label-info">42</span></a></li>
-						<li class="m_2"><a href="#"><i class="fa fa-envelope-o"></i> Messages <span class="label label-success">42</span></a></li>
-						<li class="m_2"><a href="#"><i class="fa fa-tasks"></i> Tasks <span class="label label-danger">42</span></a></li>
-						<li><a href="#"><i class="fa fa-comments"></i> Comments <span class="label label-warning">42</span></a></li>
-						<li class="dropdown-menu-header text-center">
-							<strong>Settings</strong>
-						</li>
-						<li class="m_2"><a href="#"><i class="fa fa-user"></i> Profile</a></li>
-						<li class="m_2"><a href="#"><i class="fa fa-wrench"></i> Settings</a></li>
-						<li class="m_2"><a href="#"><i class="fa fa-usd"></i> Payments <span class="label label-default">42</span></a></li>
-						<li class="m_2"><a href="#"><i class="fa fa-file"></i> Projects <span class="label label-primary">42</span></a></li>
-						<li class="divider"></li>
-						<li class="m_2"><a href="#"><i class="fa fa-shield"></i> Lock Profile</a></li>
-						<li class="m_2"><a href="#"><i class="fa fa-lock"></i> Logout</a></li>	
-	        		</ul>
-	      		</li>
-			</ul>
-            <form class="navbar-form navbar-right">
-                <input type="text" class="form-control" value="Search..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search...';}">
-            </form>
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
-                        <li>
-                            <a href="app"><i class="fa fa-dashboard fa-fw nav_icon"></i>Estatísticas</a>
-                        </li>
-                        <li>
-                            <a href="app"><i class="fa fa-indent nav_icon"></i>Cadastros<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="javascript:void(0)" onclick="buscaConteudoTela('cofres')">Cofres</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)" onclick="buscaConteudoTela('contas')">Contas</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)" onclick="buscaConteudoTela('funcionarios')">Funcionários</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)" onclick="buscaConteudoTela('lotericas')">Lotéricas</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)" onclick="buscaConteudoTela('operacoes')">Operações</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)" onclick="buscaConteudoTela('tarifas_operacoes')">Tarifas das Operações</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)" onclick="buscaConteudoTela('terminais')">Terminais</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>                            
-                            <a href="app"><i class="fa fa-pencil-square-o nav_icon"></i>Processos<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level" >                                
-                                <li>
-                                    <a href="javascript:void(0)" onclick="buscaConteudoTela('abertura_terminais')">Abertura</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)" onclick="buscaConteudoTela('movimentos_caixas')">Movimentação de Caixa</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)" onclick="buscaConteudoTela('movimentos_cofres')">Movimentação de Cofre</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)" onclick="buscaConteudoTela('movimentos_contas')">Movimentação de Conta</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)" onclick="buscaConteudoTela('outros_movimentos')">Outras Movimentações de Caixa</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)" onclick="buscaConteudoTela('operacoes_diarias')">Operações Diárias</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)" onclick="buscaConteudoTela('fechamento_terminais')">Fechamento</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                    </ul>
-                </div>
-                <!-- /.sidebar-collapse -->
-            </div>
-            <!-- /.navbar-static-side -->
-        </nav>
-        <div id="page-wrapper">
-            <div class="graphs">
-                
-                
-                <div id="conteudo_telas">
-                $conteudo                     
-                </div>                    
-                <div class="copy">
-                    <p>Copyright © 2015 Modern. All Rights Reserved | Design by <a href="http://w3layouts.com/" target="_blank">W3layouts</a> </p>
-                </div>
-            </div>
-        </div>
-    <!-- /#page-wrapper -->
-    </div>
-    <!-- /#wrapper -->
-    <!-- Bootstrap Core JavaScript -->
-    <script src="templates/Modern/js/bootstrap.min.js"></script>
-      
+<script>
+    $(document).ready(function() {
+        buscaTerminaisAbertos();
+    });
+</script>
 </body>
 </html>

@@ -4,13 +4,19 @@
     Author     : CarlosEduardo
 --%>
 <%@page import="com.cth.gestorlotericoweb.ConteudoTelas"%>
+<%@page import="com.cth.gestorlotericoweb.Login"%>
 <%
     request.setCharacterEncoding("UTF-8");
     response.setCharacterEncoding("UTF-8");
     HttpSession sessionAt = request.getSession(false);
     if(sessionAt != null && !sessionAt.isNew()) {
-        out.println(ConteudoTelas.getHtmlTela(request));        
+        out.println(ConteudoTelas.getHtmlTela(request));
     } else {
-        response.sendRedirect("/index.jsp");
+        ConteudoTelas conteudoTelas = new ConteudoTelas(request);
+        Login login = new Login(conteudoTelas);
+        out.println(login.output);
+//response.sendRedirect("/index.jsp");
+        response.setStatus(401);
+        sessionAt.invalidate();
     }
 %>

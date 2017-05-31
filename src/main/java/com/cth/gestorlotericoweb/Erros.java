@@ -5,15 +5,15 @@
  */
 package com.cth.gestorlotericoweb;
 
-import static com.cth.gestorlotericoweb.parametros.Parametros.conexao;
-import static com.cth.gestorlotericoweb.parametros.Parametros.idEntidade;
-import static com.cth.gestorlotericoweb.parametros.Parametros.idUsuario;
+import org.apache.commons.lang.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.lang.StringUtils;
+
+import static com.cth.gestorlotericoweb.parametros.Parametros.*;
 
 /**
  *
@@ -59,7 +59,7 @@ public class Erros {
         } catch (SQLException ex) {
             throw new RuntimeException(ex.getMessage(), ex);
         }
-        request.getSession(false).invalidate();
+        Sessao.invalidaSessao(request);
     }
     
 }

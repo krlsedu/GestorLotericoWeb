@@ -6,106 +6,114 @@
         });
 </script>
 <div class="xs">
-    <h3>Outras Movimentações de Caixa</h3>
-    <div class="tab-content">
-        <div class="tab-pane active" id="horizontal-form">
-            <form class="form-horizontal" id="form_dados"> 
-                $btns_percorrer                              
-                <div class="form-group">
-                        <label for="selector1" class="col-sm-2 control-label">Tipo</label>
-                        <div class="col-sm-4">
-                            <select name="tipo_operacao_caixa" id="tipo_operacao_caixa" class="form-control1">
-                                <option value="1" selected="selected">Bolão</option>
-                                <option value="2" >Bolão - Tarifação</option>
-                                <option value="3" >Bilhetes - vendas</option>
-                                <option value="4" >Tele Sena - Troca</option>
-                                <option value="5" >Tele Sena - vendas</option>
-                                <option value="6" >Outros - Saída</option>
-                                <option value="7" >Outros - Entrada</option>
-                            </select>
+    <form class="form-horizontal" id="form_dados">
+        <div class="panel panel-default">
+            <div class="panel-heading">Outras Movimentações de Caixa</div>
+            <div class="panel-body">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="horizontal-form">
+                        $btns_percorrer
+                        <div class="form-group">
+                            <label for="selector1" class="col-sm-2 control-label">Tipo</label>
+                            <div class="col-sm-4">
+                                <select name="tipo_operacao_caixa" id="tipo_operacao_caixa" class="form-control1">
+                                    <option value="1" selected="selected">Bolão - Saída</option>
+                                    <option value="2" >Bolão - Entrada</option>
+                                    <option value="3" >Bilhetes - Vendas</option>
+                                    <option value="4" >Tele Sena - Troca</option>
+                                    <option value="5" >Tele Sena - Vendas</option>
+                                    <option value="6" >Outros - Saída</option>
+                                    <option value="7" >Outros - Entrada</option>
+                                </select>
+                            </div>
                         </div>
-                </div>
-                <div class="form-group mb-n">
-                        <label for="smallinput" class="col-sm-2 control-label label-input-sm">Terminal</label>
-                        <div class="col-sm-2">
-                            <div class="input-group">
-                                <div class="input-group-addon" onclick="ativaPopUp('terminais','id_terminal','Consulta código Terminal')">
-                                    <i class="i_botao_buscar fa fa-search" ></i>
+                        <div class="form-group mb-n">
+                            <label for="smallinput" class="col-sm-2 control-label label-input-sm">Terminal</label>
+                            <div class="col-sm-2">
+                                <div class="input-group" id="terminais">
+                                    <div class="input-group-addon" onclick="ativaPopUp('terminais','id_terminal','Consulta código Terminal')">
+                                        <i class="i_botao_buscar fa fa-search" ></i>
+                                    </div>
+                                    <input  name="id_terminal" type="text" class="form-control1 input-lg" id="id_terminal" placeholder="Cód Terminal"
+                                            onchange="buscaNome('terminais','id_terminal')"
+                                            onkeyup="eventoOnKeyUp(this,'id_funcionario,data_hora_mov','false,true')"
+                                    >
                                 </div>
-                                <input  name="id_terminal" type="text" class="form-control1 input-lg" id="id_terminal" placeholder="Cód Terminal"  
-                                        onchange="buscaNome('terminais','id_terminal')" 
-                                        >                        
                             </div>
-                        </div> 
-                        <div class="col-sm-6">
-                            <div class="well-sm" id="label_id_terminal">
-                            </div>
-                        </div>
-                </div>
-                <div class="form-group mb-n">
-                        <label for="smallinput" class="col-sm-2 control-label label-input-sm">Funcionário</label>
-                        <div class="col-sm-2">
-                            <div class="input-group">
-                                <div class="input-group-addon" onclick="ativaPopUp('funcionarios','id_funcionario','Consulta código Funcionário')">
-                                    <i class="i_botao_buscar fa fa-search" ></i>
+                            <div class="col-sm-6">
+                                <div class="well-sm" id="label_id_terminal">
                                 </div>
-                                <input name="id_funcionario" type="text" class="form-control1 input-lg" id="id_funcionario" placeholder="Cód Funcionário"  
-                                        onchange="buscaNome('funcionarios','id_funcionario')" 
-                                        required>  
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="well-sm" id="label_id_funcionario">
-                            </div>
-                        </div>
-                </div>
-                <div class="form-group mb-n">
-                    <label for="data_hora_mov" class="col-sm-2 control-label">Data e hora</label>
-                        <div class="col-sm-3">    
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
+                        <div class="form-group mb-n">
+                            <label for="smallinput" class="col-sm-2 control-label label-input-sm">Funcionário</label>
+                            <div class="col-sm-2">
+                                <div class="input-group" id="funcionarios">
+                                    <div class="input-group-addon" onclick="ativaPopUp('funcionarios','id_funcionario','Consulta código Funcionário')">
+                                        <i class="i_botao_buscar fa fa-search" ></i>
+                                    </div>
+                                    <input name="id_funcionario" type="text" class="form-control1 input-lg" id="id_funcionario" placeholder="Cód Funcionário"
+                                           onchange="buscaNome('funcionarios','id_funcionario')"
+                                           onkeyup="eventoOnKeyUp(this,'id_terminal,data_hora_mov','false,true')"
+                                           required>
                                 </div>
-                                <input name="data_hora_mov" id="data_hora_mov" type="datetime-local" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.date">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="well-sm" id="label_id_funcionario">
+                                </div>
                             </div>
                         </div>
-                </div>
-                <div class="form-group mb-n">
-                    <label for="valor_movimentado" class="col-sm-2 control-label">Valor</label>
-                    <div class="col-sm-3"> 
-                        <div class="input-group">
-                            <span class="input-group-addon">R$</span>
-                            <input name="valor_movimentado" id="valor_movimentado" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
+                        <div class="form-group mb-n">
+                            <label for="data_hora_mov" class="col-sm-2 control-label">Data e hora</label>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input name="data_hora_mov" id="data_hora_mov" type="datetime-local" placeholder="yyyy-MM-ddTHH:mm:ss" max="9999-12-31T00:00:00" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.datetime" >
+                                </div>
+                            </div>
                         </div>
+                        <div class="form-group mb-n">
+                            <label for="valor_movimentado" class="col-sm-2 control-label">Valor</label>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">R$</span>
+                                    <input name="valor_movimentado" id="valor_movimentado" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-n">
+                            <label for="txtarea1" class="col-sm-2 control-label">Observações</label>
+                            <div class="col-sm-8">
+                                <textarea name="observacoes" id="observacoes" cols="50" rows="4" class="form-control1" placeholder="Observações da Abertura de Terminal" ></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" id="it" name="it" value="outros_movimentos" />
+                        <input type="hidden" id="id" name="id" value="0" />
                     </div>
                 </div>
-                
-                <div class="form-group mb-n">
-                    <label for="txtarea1" class="col-sm-2 control-label">Observações</label>
-                        <div class="col-sm-8">
-                            <textarea name="observacoes" id="observacoes" cols="50" rows="4" class="form-control1" placeholder="Observações da Abertura de Terminal" ></textarea>
-                        </div>
-                </div>
-                
-                <div class="panel-footer">
-                    <div class="row">
-                        <div class="col-sm-1 col-sm-offset-9">
+            </div>
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-sm-2 ">
+                        <div class="btn btn-info" id="botao-det-movs" onclick="buscaRel('data_hora_mov','detalhamento','movimentos_terminal')">Detalhar Movimentos</div>
+                    </div>
+                    <div class="col-sm-3 col-sm-offset-7">
+                        <div class="btn-group">
                             <button type="submit" class="btn btn-primary" id="botao-gravar">Gravar</button>
                         </div>
-                        <div class="col-sm-1">
+                        <div class="btn-group">
                             <button type="reset" class="btn botao-deletar" onclick="deletarDados()">Excluir</button>
                         </div>
-                        
-                        <div class="col-sm-1">
+                        <div class="btn-group">
                             <button type="reset" class="btn btn-default" onclick="limpa()">Limpar</button>
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="it" name="it" value="outros_movimentos" />                
-                <input type="hidden" id="id" name="id" value="0" />
-            </form>
+            </div>
         </div>
-    </div>	
 </div>
 
 

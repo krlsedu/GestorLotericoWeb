@@ -117,10 +117,10 @@ public class MovimentoConta extends Processos{
             PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.movimentos_contas(\n" +
 "             id_conta, data_hora_mov, valor_movimentado, \n" +
 "            tipo_movimento_conta, forma_deposito, observacoes, id_cofre, numero_volumes, \n" +
-"            id_entidade)\n" +
+"            id_entidade, id_loterica)\n" +
 "    VALUES ( ?, ?, ?, \n" +
 "            ?, ?, ?, ?, ?, \n" +
-"            ?);");
+"            ?, ?);");
             ps.setInt(1, Integer.valueOf(idConta));
             ps.setTimestamp(2, Parser.toDbTimeStamp(dataHoraMov));
             ps.setBigDecimal(3, Parser.toBigDecimalFromHtml(valorMovimentado));
@@ -130,6 +130,7 @@ public class MovimentoConta extends Processos{
             ps = Seter.set(ps, 7, Integer.valueOf(idCofre));
             ps = Seter.set(ps, 8, Integer.valueOf(numeroVolumes));
             ps.setInt(9, Parametros.idEntidade);
+            ps.setInt(10, Parametros.getIdLoterica());
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()){
@@ -196,5 +197,22 @@ public class MovimentoConta extends Processos{
         contextPrinc.put("conteudo", writerConteudo.toString());
         contextPrinc.put("popup", getSWPopup(ve,"movimentos_contas").toString());
         return contextPrinc;
+    }
+    
+    @Override
+    public String getDataHoraMov() {
+        String sql = "SELECT data_hora_mov from movimentos_contas where id_conta = ? and id_entidade = ? ORDER BY  data_hora_mov desc LIMIT 1";
+        try {
+            PreparedStatement ps = Parametros.getConexao().getPst(sql,false);
+            ps.setInt(1,Integer.valueOf(request.getParameter("id_conta")));
+            ps.setInt(2,Parametros.idEntidade);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return  rs.getString(1).trim().replace(" ", "T");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataHoraMov;
     }
 }

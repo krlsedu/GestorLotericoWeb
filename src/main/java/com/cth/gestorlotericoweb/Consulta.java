@@ -7,16 +7,18 @@ package com.cth.gestorlotericoweb;
 
 import com.cth.gestorlotericoweb.dados.ColunasTabelas;
 import com.cth.gestorlotericoweb.parametros.Parametros;
-import com.cth.gestorlotericoweb.processos.FechamentoTerminal;
+import com.cth.gestorlotericoweb.processos.*;
 import com.cth.gestorlotericoweb.utils.Parser;
+import com.cth.gestorlotericoweb.validacoes.Terminais;
+import org.apache.commons.lang.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -34,24 +36,34 @@ public class Consulta {
 
     public Consulta(HttpServletRequest request) {
         this.request = request;
+        setConsulta();
+    }
+    
+    public void setConsulta(){
         switch(request.getParameter("tipo").trim()){
             case "busca":
                 geraTabelaPopUp(request.getParameter("coluna_buscar"));
                 break;
             case "dado":
                 buscaDado();
-                break;  
+                break;
             case "dados":
                 geraTabelaDados();
-                break;                
+                break;
             case "id":
                 getId();
-                break;               
+                break;
             case "nome":
                 getNome();
                 break;
             case "opt":
                 getOpt();
+                break;
+            case "item_componente":
+                getItemComponente();
+                break;
+            case "validacao":
+                getValidacoes();
                 break;
             default:
                 output ="definir o tipo de busca";
@@ -59,22 +71,14 @@ public class Consulta {
         }
     }
     
-    private void getNome(){
-        ColunasTabelas colunasTabelas = new ColunasTabelas(request);
-        String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
-        if(tabela !=null){         
-            String id = request.getParameter("id");
-            String col = colunasTabelas.getColNome(tabela);
-            if(col==null){
-                col = "*";
-            }
-            String sql = "select "+col+" from "+tabela+" where id_entidade = ? and id = ? ";
+    private void getItemComponente(){
+            String sql = "select nome_componente_sistema||';'||nome_coluna_id_componente from componentes where id = ? ";
             try {
+                String id = request.getParameter("id");
                 PreparedStatement ps = Parametros.getConexao(request).getPst(sql, false);
-                ps.setInt(1, Parametros.idEntidade);
-                ps.setInt(2, Integer.valueOf(id));
+                ps.setInt(1, Integer.valueOf(id));
                 ResultSet rs = ps.executeQuery();
-                if (rs.next()) {                    
+                if (rs.next()) {
                     output = rs.getString(1);
                 }else{
                     output = "";
@@ -82,9 +86,47 @@ public class Consulta {
             } catch (SQLException ex) {
                 output = ex.getMessage();
                 new LogError(ex.getMessage(), ex,request);
+            } catch (Exception ex) {
+                new LogError(ex.getMessage(), ex,request);
             }
+    }
+    
+    private void getNome(){
+        try {
+            ColunasTabelas colunasTabelas = new ColunasTabelas(request);
+            String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
+            if (tabela != null) {
+                String id = request.getParameter("id");
+                String col = colunasTabelas.getColNome(tabela);
+                if (col == null) {
+                    col = "*";
+                }
+                String sql;
+                if (colunasTabelas.getPossuiIEntidades(tabela)) {
+                    sql = "select " + col + " from " + tabela + " where id = ? and id_entidade = ? ";
+                } else {
+                    sql = "select " + col + " from " + tabela + " where id = ? ";
+                }
+                try {
+                    PreparedStatement ps = Parametros.getConexao(request).getPst(sql, false);
+                    ps.setInt(1, Integer.valueOf(id));
+                    if (colunasTabelas.getPossuiIEntidades(tabela)) ps.setInt(2, Parametros.idEntidade);
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next()) {
+                        output = rs.getString(1);
+                    } else {
+                        output = "";
+                    }
+                } catch (SQLException ex) {
+                    output = ex.getMessage();
+                    new LogError(ex.getMessage(), ex, request);
+                }
+            }
+        } catch (Exception ex) {
+            new LogError(ex.getMessage(), ex,request);
         }
     }
+    
     private void getOpt(){        
         ColunasTabelas colunasTabelas = new ColunasTabelas(request);
         String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
@@ -97,7 +139,7 @@ public class Consulta {
         ColunasTabelas colunasTabelas = new ColunasTabelas(request);
         String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
         if(tabela !=null){
-            String btn = request.getParameter("btn");            
+            String btn = request.getParameter("btn");
             String id = request.getParameter("id");
             String col;
             String order;
@@ -109,11 +151,11 @@ public class Consulta {
                 case "a":
                     col = " and id < "+id;
                     order = "desc";
-                    break;                
+                    break;
                 case "p":
                     col = " and id > "+id;
                     order = "asc";
-                    break;                  
+                    break;
                 case "f":
                     col = "";
                     order = "desc";
@@ -140,7 +182,7 @@ public class Consulta {
         }
     }
     
-    private void geraTabelaDados(){        
+    private void geraTabelaDados(){
         ColunasTabelas colunasTabelas = new ColunasTabelas(request);
         String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
         Integer colCount = 0;
@@ -149,12 +191,12 @@ public class Consulta {
             try {
                 PreparedStatement ps = Parametros.getConexao(request).getPst(sql, false);
                 ps.setInt(1, Parametros.idEntidade);
-                ps.setInt(2, Integer.valueOf(request.getParameter("id")));
+                ps.setInt(2, Integer.valueOf(request.getParameter("id").trim()));
                 ResultSet rs = ps.executeQuery();
                 List<String> lInputs = new ArrayList<>();
                 if (rs.next()) {
                     colCount = rs.getMetaData().getColumnCount();
-                    for(int i = 1; i<=rs.getMetaData().getColumnCount();i++){  
+                    for(int i = 1; i<=rs.getMetaData().getColumnCount();i++){
                         lInputs.add("<input type=\"text\" id=\"nome_coluna_"+i+"\" value=\""+rs.getMetaData().getColumnName(i)+"\" readonly>");
                         if(rs.getString(i)!=null){
                             switch(rs.getMetaData().getColumnType(i)){
@@ -179,9 +221,9 @@ public class Consulta {
                             psDet.setInt(1, Integer.valueOf(request.getParameter("id")));
                             ResultSet rsDet = psDet.executeQuery();
                             Integer nLinhas = 0;
-                            while (rsDet.next()) {                                
+                            while (rsDet.next()) {
                                 nLinhas++;
-                                for(int i = 1; i<=rsDet.getMetaData().getColumnCount();i++){  
+                                for(int i = 1; i<=rsDet.getMetaData().getColumnCount();i++){
                                     Integer nCol = i+colCount;
                                     lInputs.add("<input type=\"text\" id=\"nome_coluna_"+nCol+"\" value=\""+rsDet.getMetaData().getColumnName(i)+"_"+nLinhas+"\" readonly>");
                                     if(rsDet.getString(i)!=null){
@@ -220,11 +262,18 @@ public class Consulta {
         String coluna = colunasTabelas.getColuna(request.getParameter("coluna"));
         String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
         if(coluna!=null && tabela !=null){
-            String sql = "select "+colunasTabelas.getTabColsBusca(tabela)+" from "+tabela+" where id_entidade = ? and lower(CAST( "+coluna+" AS text )) like lower(?) order by "+coluna;
+            coluna = coluna.replace("nome_tabela",tabela);
+            String sql;
+            if(colunasTabelas.getPossuiIEntidades(tabela)){
+                sql = "select "+colunasTabelas.getTabColsBusca(tabela)+" from "+tabela+" where lower(CAST( "+coluna+" AS text )) like lower(?) and id_entidade = ? order by "+coluna;
+                
+            }else{
+                sql = "select "+colunasTabelas.getTabColsBusca(tabela)+" from "+tabela+" where lower(CAST( "+coluna+" AS text )) like lower(?) order by "+coluna;
+            }
             try {
                 PreparedStatement ps = Parametros.getConexao(request).getPst(sql, false);
-                ps.setInt(1, Parametros.idEntidade);
-                ps.setString(2, "%"+request.getParameter("id")+"%");
+                ps.setString(1, "%"+request.getParameter("id")+"%");
+                if (colunasTabelas.getPossuiIEntidades(tabela)) ps.setInt(2, Parametros.idEntidade);
                 ResultSet rs = ps.executeQuery();
                 List lCols = new ArrayList();
                 List lLinhas = new ArrayList();
@@ -262,6 +311,7 @@ public class Consulta {
     
     private void buscaDado(){
         String tabela = request.getParameter("tabela");
+        Parametros.gravaLogSessao(request);
         String valorBuscar = request.getParameter("valor_buscar");
         List<String> lInputs = new ArrayList<>();
         if(valorBuscar!=null){
@@ -269,6 +319,16 @@ public class Consulta {
                 case "fechamento_terminais":
                     FechamentoTerminal fechamentoTerminal = new FechamentoTerminal(request);
                     switch(valorBuscar){
+                        case "id_terminal":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+fechamentoTerminal.getIdTerminal()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "id_funcionario":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+fechamentoTerminal.getIdFuncionario()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
                         case "total_movimentos_dia":
                             lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
                             lInputs.add("<input type=\"text\" id=\"valor\" value=\""+fechamentoTerminal.getTotalMovimentosDia()+"\" readonly>");
@@ -291,8 +351,121 @@ public class Consulta {
                             break;
                     }
                     break;
+                case "abertura_terminais":
+                    AberturaTerminal aberturaTerminal = new AberturaTerminal(request);
+                    switch (valorBuscar){
+                        case "troco_dia_anterior":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+aberturaTerminal.getTrocoDiaAnteriorAbertura()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "id_cofre":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+aberturaTerminal.getIdCofre()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "id_terminal":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+aberturaTerminal.getIdTerminal()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "id_funcionario":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+aberturaTerminal.getIdFuncionario()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                    }
+                    break;
+                case "movimentos_caixas":
+                    MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request);
+                    switch (valorBuscar){
+                        case "id_terminal":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoCaixa.getIdTerminal()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "id_funcionario":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoCaixa.getIdFuncionario()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "data_hora_mov":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoCaixa.getDataHoraMov()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "id_cofre":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoCaixa.getIdCofre()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                    }
+                    break;
+    
+                case "outros_movimentos":
+                    OutrosMovimentos outrosMovimentos = new OutrosMovimentos(request);
+                    switch (valorBuscar){
+                        case "id_terminal":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+outrosMovimentos.getIdTerminal()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "id_funcionario":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+outrosMovimentos.getIdFuncionario()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "data_hora_mov":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+outrosMovimentos.getDataHoraMov()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                    }
+                    break;
+                case "movimentos_cofres":
+                    MovimentoCofre movimentoCofre = new MovimentoCofre(request);
+                    switch (valorBuscar){
+                        case "id_cofre":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoCofre.getIdCofre()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                    }
+    
+                case "movimentos_contas":
+                    MovimentoConta movimentoConta = new MovimentoConta(request);
+                    switch (valorBuscar){
+                        case "id_cofre":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoConta.getIdCofre()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                        case "data_hora_mov":
+                            lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoConta.getDataHoraMov()+"\" readonly>");
+                            output = StringUtils.join(lInputs,'\n');
+                            break;
+                    }
             }
         }
     }
     
+    private void getValidacoes(){
+        String item = request.getParameter("item");
+        Parametros.gravaLogSessao(request);
+        switch (item){
+            case "terminais_abertos":
+                Terminais terminais = new Terminais(request);
+                output = terminais.getTerminaisAbertos();
+                break;
+            case "existe_term_aberto":
+                Terminais terminais1 = new Terminais(request);
+                output = terminais1.existeTerminalAberto().toString();
+                break;
+            case "verifica_se_fechado":
+                Terminais terminais2 = new Terminais(request);
+                output = terminais2.verificaSeFechado().toString();
+                break;
+        }
+    }
 }

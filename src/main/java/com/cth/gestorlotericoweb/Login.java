@@ -5,8 +5,7 @@
  */
 package com.cth.gestorlotericoweb;
 import com.cth.gestorlotericoweb.parametros.Parametros;
-import java.io.StringWriter;
-import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -14,38 +13,176 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author CarlosEduardo
  */
 public class Login{
     public String output;
-    public void setLogin(HttpServletRequest request){
-        
-        Parametros.initDb(request);
-        
+    HttpServletRequest request;
+    public void setLogin(){
         try{
             VelocityEngine ve = new VelocityEngine();
             ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
             ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
             ve.init();
-            /*  next, get the Template  */
-            Template t = ve.getTemplate( "templates/web/login.html" , "UTF-8");
-            /*  create a context and add data */
+            Template t;
             VelocityContext context = new VelocityContext();
+            t = ve.getTemplate("templates/web/login.html", "UTF-8");
             context.put("var", "Bem Vindo ao Gestor Lotérico Web");
-            //context.put("path",ve.getProperty(output));
-            /* now render the template into a StringWriter */
-            StringWriter writer = new StringWriter();
+            Writer writer = new StringWriter();
             t.merge( context, writer );
-            /* show the World */
             output = writer.toString();
         
         }catch(ResourceNotFoundException e){
             new LogError(e.getMessage(), e,request);
+        } catch (Exception ex) {
+            new LogError(ex.getMessage(), ex,request);
         }
-        //JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/web/index.html");
-        //JtwigModel model = JtwigModel.newModel().with("var", "World");
-                
+    }
+    
+    private void setLogin(Relatorios c){
+        try{
+            VelocityEngine ve = new VelocityEngine();
+            ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+            ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+            ve.init();
+            Template t;
+            VelocityContext context = new VelocityContext();
+            t = ve.getTemplate("templates/web/login_interno.html", "UTF-8");
+            context.put("it_r", "app");
+            context.put("it_sub", request.getParameter("it"));
+            context.put("it_par", "");
+            Writer writer = new StringWriter();
+            t.merge( context, writer );
+            output = writer.toString();
+            
+        }catch(ResourceNotFoundException e){
+            new LogError(e.getMessage(), e,request);
+        } catch (Exception ex) {
+            new LogError(ex.getMessage(), ex,request);
+        }
+    }
+    
+    private void setLogin(ConteudoTelas c){
+        try{
+            VelocityEngine ve = new VelocityEngine();
+            ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+            ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+            ve.init();
+            Template t;
+            VelocityContext context = new VelocityContext();
+            t = ve.getTemplate("templates/web/login_interno.html", "UTF-8");
+            context.put("it_r", "app");
+            context.put("it_sub", request.getParameter("it"));
+            context.put("it_par", "");
+            Writer writer = new StringWriter();
+            t.merge( context, writer );
+            output = writer.toString();
+            
+        }catch(ResourceNotFoundException e){
+            new LogError(e.getMessage(), e,request);
+        } catch (Exception ex) {
+            new LogError(ex.getMessage(), ex,request);
+        }
+    }
+    
+    private void setLogin(Consulta consulta){
+        try{
+            VelocityEngine ve = new VelocityEngine();
+            ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+            ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+            ve.init();
+            Template t;
+            VelocityContext context = new VelocityContext();
+            t = ve.getTemplate("templates/web/login_interno.html", "UTF-8");
+            context.put("it_r", "consulta");
+            context.put("it_sub", request.getParameter("tipo").trim());
+            String params="";
+            if (request.getParameterMap().keySet().size() > 0) {
+                List l = new ArrayList();
+                for (Object ob : request.getParameterMap().keySet()) {
+                    l.add(ob.toString() + "=" + StringUtils.join(request.getParameterValues(ob.toString()), ','));
+                }
+    
+                params += StringUtils.join(l, "&");
+            }
+            context.put("it_par",params);
+            Writer writer = new StringWriter();
+            t.merge( context, writer );
+            output = writer.toString();
+            
+        }catch(ResourceNotFoundException e){
+            new LogError(e.getMessage(), e,request);
+        } catch (Exception ex) {
+            new LogError(ex.getMessage(), ex,request);
+        }
+    }
+    
+    private void setLogin(Grava grava){
+        try{
+            VelocityEngine ve = new VelocityEngine();
+            ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+            ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+            ve.init();
+            Template t;
+            VelocityContext context = new VelocityContext();
+            t = ve.getTemplate("templates/web/login_interno.html", "UTF-8");
+            context.put("it_r", "grava");
+            if (request.getParameter("tipo")!=null) {
+                context.put("it_sub", request.getParameter("tipo").trim());
+            }else{
+                context.put("it_sub",null);
+            }
+            String params="";
+            if (request.getParameterMap().keySet().size() > 0) {
+                List l = new ArrayList();
+                for (Object ob : request.getParameterMap().keySet()) {
+                    l.add(ob.toString() + "=" + StringUtils.join(request.getParameterValues(ob.toString()), ','));
+                }
+                params += StringUtils.join(l, "&");
+            }
+            context.put("it_par",params);
+            Writer writer = new StringWriter();
+            t.merge( context, writer );
+            output = writer.toString();
+            
+        }catch(ResourceNotFoundException e){
+            new LogError(e.getMessage(), e,request);
+        } catch (Exception ex) {
+            new LogError(ex.getMessage(), ex,request);
+        }
+    }
+    
+    public Login(HttpServletRequest request) {
+        this.request = request;
+        Parametros.initDb(request);
+    }
+    
+    public Login(ConteudoTelas conteudoTelas){
+        this.request = conteudoTelas.request;
+        Parametros.initDb(request);
+        setLogin(conteudoTelas);
+    }
+    
+    public Login(Consulta consulta){
+        this.request = consulta.request;
+        setLogin(consulta);
+    }
+    
+    public Login(Relatorios relatorios){
+        this.request = relatorios.request;
+        setLogin(relatorios);
+    }
+    
+    public Login(Grava grava){
+        this.request = grava.request;
+        setLogin(grava);
     }
 }

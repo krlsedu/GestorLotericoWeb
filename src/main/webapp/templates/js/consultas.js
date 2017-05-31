@@ -41,12 +41,19 @@ function buscaOpcoesCBPopUp(tabela){
                 document.getElementById("selector1").innerHTML = data;
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
-                $('#modal_avisos').modal('show');   
+                avisoErros(jXHR,textStatus,errorThrown);
             }             
         }
     );
 }
+
+function enterBucar(event) {
+    if (event.keyCode == 13
+    ) {
+        consultaDadosBusca();
+    }
+}
+
 function consultaDadosBusca(){
     var tipo = document.getElementById("tipo_busca").value;
     var colunaBuscar = document.getElementById("col_buscar").value;
@@ -71,30 +78,51 @@ function consultaDadosBuscaId(tabela){
                 document.getElementById("tab_dados").innerHTML = data;
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
-                $('#modal_avisos').modal('show');   
+                avisoErros(jXHR,textStatus,errorThrown);
             }             
         }
     );
 }
 
-function buscaConteudoTela(tela){     
+function buscaConteudoTela(tela){
+    var r = $.Deferred();
+    buscaConteudoTelasDef(tela).done(function () {
+        buscaTerminaisAbertos().done(function () {
+            existeTerminalAbertoConsTela(tela).done(function () {
+                r.resolve();
+            });
+        })
+    })
+    return r;
+}
+
+function buscaConteudoTelasDef(tela) {
+    var r = $.Deferred();
     $('#modal_carregando').modal('show');
     $.ajax(
         {
             type: "POST",
             url:  "conteudo_telas",
             data:{"it":tela},
-            success: function (data) {   
+            success: function (data) {
                 $("#conteudo_telas").html(data);
                 $('#modal_carregando').modal('hide');
-            }, 
+                try{
+                    $('#id_conta').focus();
+                    $('#id_terminal').focus();
+                }catch (e){
+                }
+                setTimeout(function() {
+                    r.resolve();
+                },500);
+            },
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
-                $('#modal_avisos').modal('show');   
-            }             
+                avisoErros(jXHR,textStatus,errorThrown);
+                r.reject();
+            }
         }
     );
+    return r;
 }
 
 function addItem(tela){    
@@ -110,8 +138,7 @@ function addItem(tela){
                 $("#btns-add-rm-linhas").before(data);
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
-                $('#modal_avisos').modal('show');   
+                avisoErros(jXHR,textStatus,errorThrown);
             }             
         }
     );
@@ -163,8 +190,7 @@ function consultaDadosFk(tabela,colunaBuscar){
                 document.getElementById("tab_dados").innerHTML = data;
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
-                $('#modal_avisos').modal('show');   
+                avisoErros(jXHR,textStatus,errorThrown);
             }             
         }
     );
@@ -207,8 +233,7 @@ function buscaDadosN(tabela){
                 }
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
-                $('#modal_avisos').modal('show');   
+                avisoErros(jXHR,textStatus,errorThrown);
             }             
         }
     );
@@ -216,8 +241,14 @@ function buscaDadosN(tabela){
 }
 
 function insereDados(htmlDoc){
+    insereDadosSinc(htmlDoc).done(function () {
+        verificaSeFechado();
+    })
+}
+
+function insereDadosSinc(htmlDoc) {
+    var r = $.Deferred();
     var ncols = htmlDoc.getElementById("num_cols").value;
-    
     for (i=1;i<=ncols;i++){
         try{
             var nomeCol = htmlDoc.getElementById("nome_coluna_"+i).value;
@@ -226,52 +257,67 @@ function insereDados(htmlDoc){
                 var tipo = document.getElementById(nomeCol).type;
                 if(!(valr===null||valr==='null')){
                     if(tipo==="select-one"||tipo==="textarea"){
-                            document.getElementById(nomeCol).value = valr;
+                        document.getElementById(nomeCol).value = valr;
                     }else{
-                            $('input#'+nomeCol).val(valr).trigger('mask.maskMoney');
-                    }                        
+                        $('input#'+nomeCol).val(valr).trigger('mask.maskMoney');
+                    }
                     try{
                         document.getElementById(nomeCol).onchange();
                     }catch (e){
                     }
                 }
             }catch (ex){
-                setTimeout(function() {insereDados(htmlDoc);}, 1000);                
+                setTimeout(function() {insereDados(htmlDoc);}, 1000);
             }
         }catch (e){
 
         }
+        if(i>=ncols){
+            r.resolve();
+        }
     }
-    $('#modal_carregando').modal('hide');   
+    $('#modal_carregando').modal('hide');
+    return r;
 }
 
-function consultaCampoAuto(valorBuscar){
-    var tabela = document.getElementById("it").value;
+function buscaNomeComponente(tabela,campo) {
+    var id = document.getElementById(campo).value;
+    if(id.length===0){
+        id = 0;
+    }
     $.ajax(
-            {                
-                type: "POST",
-                url:  "consulta",
-                data: $("#form_dados").serialize()+'&'+$.param({"valor_buscar":valorBuscar,"tabela":tabela,"tipo":"dado"}),
-                success: function (data) {     
-                    var parser = new DOMParser();
-                    var htmlDoc = parser.parseFromString(data, "text/html");
-                    var nomeCol = htmlDoc.getElementById("nome_coluna").value;
-                    var valr = htmlDoc.getElementById("valor").value;
-                    if(!(valr===null||valr==='null')){
-                        $('input#'+nomeCol).val(valr ).trigger('mask.maskMoney');
-                        try{
-                            document.getElementById(nomeCol).onkeyup();
-                        }catch (e){
-
-                        }
-                    }  
-                }, 
-                error: function (jXHR, textStatus, errorThrown) {
-                    document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
-                    $('#modal_avisos').modal('show');   
-                }
+        {
+            type: "POST",
+            url:  "consulta",
+            data:{"id":id,"tabela":tabela,"tipo":"nome"},
+            success: function (data) {
+                document.getElementById('label_'+campo).innerHTML = data;
+                setaOnclickIdComponente(id,data);
+            },
+            error: function (jXHR, textStatus, errorThrown) {
+                avisoErros(jXHR,textStatus,errorThrown);
             }
-    )    
+        }
+    );
+}
+
+function setaOnclickIdComponente(id,nome) {
+    $.ajax(
+        {
+            type: "POST",
+            url:  "consulta",
+            data:{"id":id,"tipo":"item_componente"},
+            success: function (data) {
+                var dadoSplit = data.split(';');
+                document.getElementById('label_item_componente').innerHTML = nome;
+                document.getElementById('item_buscar_componente').setAttribute('onclick',"ativaPopUp('"+dadoSplit[0].trim()+"','id_item_componente' , 'Busca Id "+nome.trim()+"')");
+            },
+            error: function (jXHR, textStatus, errorThrown) {
+                avisoErros(jXHR,textStatus,errorThrown);
+            }
+        }
+    );
+
 }
 
 function buscaNome(tabela,campo){
@@ -288,8 +334,7 @@ function buscaNome(tabela,campo){
                 document.getElementById('label_'+campo).innerHTML = data;
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
-                $('#modal_avisos').modal('show');   
+                avisoErros(jXHR,textStatus,errorThrown);
             }             
         }
     );
@@ -307,8 +352,7 @@ function btnsPercorrer(btn){
                 setaIdEBusca(data.trim());
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
-                $('#modal_avisos').modal('show');   
+                avisoErros(jXHR,textStatus,errorThrown);
             }            
         }
     );
@@ -328,16 +372,39 @@ function deletarDados(){
                 limpa();
             }, 
             error: function (jXHR, textStatus, errorThrown) {
-                document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
-                $('#modal_avisos').modal('show');       
+                avisoErros(jXHR,textStatus,errorThrown);
             } 
+        }
+    );
+}
+
+function sair(tela){
+    $('#modal_carregando').modal('show');
+    $.ajax(
+        {
+            type: "POST",
+            url:  "logout",
+            success: function (data) {
+                $(location).attr('href',"index.jsp");
+            },
+            error: function (jXHR, textStatus, errorThrown) {
+                avisoErros(jXHR,textStatus,errorThrown);
+            }
         }
     );
 }
 
 function setaIdFk(id,campo,nome){
     document.getElementById(campo).value = id;
+    try {
+        document.getElementById(campo).onkeyup();
+    } catch (e) {
+
+    }
     document.getElementById('label_'+campo).innerHTML = nome;
+    if(campo==='id_componente'){
+        setaOnclickIdComponente(id,nome);
+    }
     fechaPopUp();
 }
 
@@ -354,23 +421,195 @@ function limpa(){
     buscaConteudoTela(document.getElementById("it").value);
 }
 
-$(document).on("submit", '#form_dados', function(event) { 
+function enviaImagens(){
+    $('#modal_upload').modal('show');    
+}
+
+function avisoErros(jXHR, textStatus, errorThrown) {
+    $('#modal_carregando').modal('hide');
+    if(jXHR.status===401){
+        document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-success\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
+    }else{
+        document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
+    }
+    $('#modal_avisos').modal('show');
+}
+
+function avisoErrosCTimeOut(jXHR, textStatus, errorThrown) {
+    $('#modal_carregando').modal('hide');
+    if(jXHR.status===401){
+        document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-success\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
+    }else{
+        document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+jXHR.responseText+"</div>";
+    }
+    setTimeout(function() {$('#modal_avisos').modal('show');}, 100);
+}
+
+function acoesConsulta(it_sub,it_par) {
+    $.ajax(
+        {
+            type: "POST",
+            url: "consulta",
+            data: it_par,
+            success: function (data) {
+                switch (it_sub){
+                    case "id":
+                        setaIdEBusca(data);
+                        break;
+                    case "busca":
+                        consultaDadosBusca();
+                        break;
+                    case "opt":
+                        var tipo = document.getElementById("tipo_busca").value;
+                        if(tipo === 'id'){
+                            var tabela = document.getElementById("it").value;
+                            buscaOpcoesCBPopUp(tabela);
+                        }else{
+                            buscaOpcoesCBPopUp(tipo);
+                        }
+                        break;
+                    default:
+                        alert(it_sub + " não implementado");
+                        break;
+                }
+            },
+            error: function (jXHR, textStatus, errorThrown) {
+                avisoErros(jXHR,textStatus,errorThrown);
+            }
+        }
+    )
+}
+
+function avisaOk() {
+    document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-success\" role=\"alert\" style=\"text-align: center\"> O registro foi gravado com sucesso! </div>";
+    setTimeout(function() {$('#modal_avisos').modal('show');}, 300);
+    limpa();
+}
+
+function gravaRelogin(it_par) {
+    $.ajax({
+        type: "POST",
+        url:  "grava",
+        data: it_par,
+        success: function (data) {
+            avisaOk();
+        },
+        error: function (jXHR, textStatus, errorThrown) {
+            avisoErrosCTimeOut(jXHR,textStatus,errorThrown);
+        }
+    });
+}
+
+$(document).on("submit", '#form_dados', function(event) {
     $('#modal_carregando').modal('show');
-    event.preventDefault();  
+    event.preventDefault();
     $.ajax({
         type: "POST",
         url:  "grava",
         data: $("#form_dados").serialize(),
-        success: function (data) {    
-            //setaIdEBusca(data.trim());
-            document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-success\" role=\"alert\" style=\"text-align: center\"> O registro foi gravado com sucesso! </div>";
-            setTimeout(function() {$('#modal_avisos').modal('show');}, 100);             
-            limpa();
-        }, 
+        success: function (data) {
+            avisaOk();
+        },
         error: function (jXHR, textStatus, errorThrown) {
-            document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\"> Desculpe ocorreu um erro! :(<br> "+jXHR+textStatus+errorThrown+"</div>";
-            setTimeout(function() {$('#modal_avisos').modal('show');}, 100);   
+            avisoErrosCTimeOut(jXHR,textStatus,errorThrown);
         }
-    });     
+    });
     $("#botao-gravar").off("click");
 });
+
+$(document).on("click", '#grava_config_estatisticas', function(event) {
+    $('#modal_carregando').modal('show');
+    event.preventDefault();
+    $.ajax({
+        type: "POST",
+        url:  "grava",
+        data: $("#form_estatisticas").serialize()+'&'+$.param({"estilo_widget":document.getElementById("estilo_widget").innerHTML}),
+        success: function (data) {
+            //setaIdEBusca(data.trim());
+            $('#modal_edit_configs').modal('hide');
+            $('#modal_carregando').modal('hide');
+            avisaOk();
+        },
+        error: function (jXHR, textStatus, errorThrown) {
+            $('#modal_edit_configs').modal('hide');
+            avisoErrosCTimeOut(jXHR,textStatus,errorThrown);
+        }
+    });
+    $("#grava_config_estatisticas").off("click");
+});
+
+$(document).on("click", '#login_interno_btn', function(event) {
+    var user=$('#userId').val();
+    var pwd=$('#pswId').val();
+    var it=$('#it_sub').val();
+    var it_redirect=$('#it_redirect').val();
+    var it_par=$('#it_par').val();
+    $.ajax(
+        {
+            type: "POST",
+            url:  "auth",
+            data:$("#form_login").serialize(),
+            success: function (data) {
+                if(data.trim()!='False'){
+                    $('#modal_avisos').modal('hide');
+                    switch (it_redirect){
+                        case "app":
+                            buscaConteudoTela(it);
+                            break;
+                        case "consulta":
+                            acoesConsulta(it,it_par);
+                            break;
+                        case "grava":
+                            gravaRelogin(it_par);
+                            break;
+                    }
+                }else{
+                    alert('Fail....');
+                }
+            },
+            error: function (jXHR, textStatus, errorThrown) {
+                avisoErros(jXHR,textStatus,errorThrown);
+            }
+        });
+    $("#login_interno_btn").off("click");
+});
+
+$(document).on('hidden.bs.modal', '#modal_avisos', function() {
+    $("#id_conta").focus();
+    $("#id_terminal").focus();
+});
+
+$(document).on('hidden.bs.modal', '#modal_carregando', function() {
+    $("#id_conta").focus();
+    $("#id_terminal").focus();
+});
+
+function buscaRel(campoData,tipo,modelo) {
+    event.preventDefault();
+    var dataBase = $('#'+campoData).val();
+    if(dataBase!=="") {
+        $('#modal_carregando').modal('show');
+        $.ajax({
+            type: "POST",
+            url: "relatorio",
+            data: $("#form_dados").serialize() + '&' + $.param({"tipo": tipo, "modelo": modelo, "data_movs":dataBase}),
+            success: function (data) {
+                //setaIdEBusca(data.trim());
+                document.getElementById('corpo_relatorio').innerHTML = data;
+                $('#modal_carregando').modal('hide');
+                $('#modal_relatorio').modal('show');
+            },
+            error: function (jXHR, textStatus, errorThrown) {
+                $('#modal_carregandos').modal('hide');
+                avisoErrosCTimeOut(jXHR, textStatus, errorThrown);
+            }
+        });
+    }else{
+        avisosErrosDiversos("Favor informar os campos, 'Terminal', 'Funcion&aacute;rio' e 'Data e hora'!")
+    }
+}
+
+function avisosErrosDiversos(texto) {
+    document.getElementById("corpo_aviso").innerHTML= "<div class=\"alert alert-danger\" role=\"alert\" style=\"text-align: center\">"+texto+"</div>";
+    $('#modal_avisos').modal('show');
+}

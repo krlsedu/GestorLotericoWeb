@@ -220,11 +220,11 @@ body a{
   min-width: 0;
 }
 .navbar-default.sidebar {
-  background-color: rgb(0, 57, 186);
+  background-color:rgb(255, 109, 0);
   font-family: 'Roboto', sans-serif;
 }
 nav.top1.navbar.navbar-default.navbar-static-top {
-  background-color:rgb(255, 109, 0);
+  background-color: rgb(0, 57, 186);
   font-family: 'Roboto', sans-serif;
 }
 .navbar-default .navbar-brand {
@@ -544,10 +544,10 @@ a.tiles_info, a.shortcut-tiles {
   background: #9358ac;
 }
 .fb1{
-   background: #3b5998;
+   background: 	#0039ba;
 }
 .fb2{
-	background: #3b5998;
+	background: #ff6d00;
 }
 .tw1{
   background: #00aced;
@@ -2704,4 +2704,7 @@ span.btn_6{
 span.btn_7{
   font-size: 64%;
 }
+}
+.menu-text-color{
+  color:white
 }
