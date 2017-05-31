@@ -1,4 +1,9 @@
 package com.cth.gestorlotericoweb.Estoque;
 
-public class Movimentacao {
+import javax.servlet.http.HttpServletRequest;
+
+public class Movimentacao extends Estoque {
+	public Movimentacao(HttpServletRequest request) {
+		super(request);
+	}
 }
