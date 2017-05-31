@@ -80,6 +80,7 @@ public class ColunasTabelas {
         putMs("dt_base","Data Base");
         putMs("nome_func","Nome Funcionário");
         putMs("nome_lot","Nome Lotérica");
+        putMs("nome_item","Nome do Item");
     }
     
     private void putMs(String coluna,String descri){
@@ -111,6 +112,7 @@ public class ColunasTabelas {
         mTabelas.put("movimentos_contas", "movimentos_contas");
         mTabelas.put("operacoes_diarias", "operacoes_diarias");
         mTabelas.put("componentes", "componentes");
+        mTabelas.put("itens_estoque", "itens_estoque");
     }
     
     private void carregaColNome(){
@@ -144,6 +146,7 @@ public class ColunasTabelas {
         mTabColsSelBusca.put("movimentos_contas", "id, id_conta, to_char(data_hora_mov, 'DD/MM/YYYY HH24:MI') as dt_h");
         mTabColsSelBusca.put("operacoes_diarias", "id, id_terminal, (select nome from funcionarios WHERE funcionarios.id = operacoes_diarias.id_funcionario and operacoes_diarias.id_entidade = funcionarios.id_entidade) as nome_func, to_char(data_operacoes, 'DD/MM/YYYY') as dt_oper");
         mTabColsSelBusca.put("componentes", "id, nome_componente");
+        mTabColsSelBusca.put("itens_estoque", "id,nome_item,(SELECT nome from lotericas where lotericas.id = terminais.id_loterica and lotericas.id_entidade = terminais.id_entidade) as nome_lot");
     }
     private void carregaTabColsDados(){
         mTabColsSelDados.put("lotericas", "codigo_caixa, nome");
@@ -162,6 +165,7 @@ public class ColunasTabelas {
         mTabColsSelDados.put("operacoes_diarias", "id_terminal, id_funcionario, data_operacoes, observacoes");
         mTabColsSelDados.put("operacoes_diarias_det", "id , id_operacao, quantidade");
         mTabColsSelDados.put("componentes", "nome_componente");
+        mTabColsSelDados.put("itens_estoque","id, tipo_item, unidade, nome_item, valor_padrao, observacoes, id_loterica");
     }
     private void carregaTabOpts(){
         List<String> lOpts = new ArrayList<>();
@@ -249,6 +253,11 @@ public class ColunasTabelas {
         lOpts = new ArrayList<>();
         lOpts.add("<option>Nome do Componente</option>");
         mTabOpts.put("componentes", lOpts);
+    
+    
+        lOpts = new ArrayList<>();
+        lOpts.add("<option>Nome do Item</option>");
+        mTabOpts.put("itens_estoque", lOpts);
     }
     
     public String getOpts(String tabela){

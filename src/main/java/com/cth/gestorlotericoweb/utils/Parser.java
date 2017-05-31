@@ -109,6 +109,18 @@ public class Parser {
             return BigDecimal.ZERO;
         }
     }
+    
+    public static BigDecimal toBigDecimalFromHtmlNull(String valor){
+        String st = valor;
+        st = st.replace(".", "");
+        st = st.replace(",", ".");
+        try{
+            return new BigDecimal(st);
+        }catch(Exception e){
+            return BigDecimal.ZERO;
+        }
+    }
+    
     public static String toBigDecimalSt(String valor){
         String st = valor;
         st = st.replace(".", "x");
@@ -118,6 +130,14 @@ public class Parser {
     }
     
     public static Integer toInteger(String valor){
+        try{
+            return Integer.valueOf(valor);
+        }catch(Exception e){
+            return 0;
+        }
+    }
+    
+    public static Integer toIntegerNull(String valor){
         try{
             return Integer.valueOf(valor);
         }catch(Exception e){

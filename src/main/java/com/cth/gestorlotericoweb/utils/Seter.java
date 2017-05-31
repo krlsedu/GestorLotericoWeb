@@ -5,8 +5,10 @@
  */
 package com.cth.gestorlotericoweb.utils;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 
 /**
  *
@@ -27,6 +29,15 @@ public class Seter {
             ps.setNull(index, java.sql.Types.LONGVARCHAR);
         }else{
             ps.setString(index, valor);
+        }
+        return ps;
+    }
+    
+    public static PreparedStatement set(PreparedStatement ps,Integer index,BigDecimal valor) throws SQLException{
+        if(valor==null){
+            ps.setNull(index, Types.NUMERIC);
+        }else{
+            ps.setBigDecimal(index, valor);
         }
         return ps;
     }

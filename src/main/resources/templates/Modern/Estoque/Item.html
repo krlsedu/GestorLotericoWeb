@@ -1,0 +1,98 @@
+
+<script type="text/javascript">
+    $(function () {
+        $("#id_loterica").mask("99999999");
+        $("#valor_padrao").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+        });
+</script>
+<div class="xs">
+    <!--<div class="breadcrumb">-->
+    <!--<h3></h3>-->
+    <!--</div>-->
+    <form class="form-horizontal" id="form_dados">
+        <div class="panel panel-default">
+            <div class="panel-heading">Cadastro de Itens</div>
+            <div class="panel-body">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="horizontal-form">
+                        $btns_percorrer
+                        <div class="form-group mb-n">
+                            <label for="smallinput" class="col-sm-2 control-label label-input-sm">Nome Item</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control1 input-lg" id="nome_item" placeholder="Nome do Item" name="nome_item" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="selector1" class="col-sm-2 control-label">Tipo De Item</label>
+                            <div class="col-sm-3"><select name="tipo_item" id="tipo_item" class="form-control1">
+                                <option value="1" selected="selected">Notas</option>
+                                <option value="2" >Moedas</option>
+                                <option value="3" >Produtos</option>
+                                <option value="4" >Outros</option>
+                            </select></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="selector1" class="col-sm-2 control-label">Unidade</label>
+                            <div class="col-sm-3"><select name="unidade" id="unidade" class="form-control1">
+                                <option value="1" selected="selected">Inteira</option>
+                                <option value="2" >Fracionária</option>
+                            </select></div>
+                        </div>
+                        <div class="form-group mb-n">
+                            <label for="valor_movimentado" class="col-sm-2 control-label">Valor</label>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">R$</span>
+                                    <input name="valor_padrao" id="valor_padrao" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb">
+                            <label for="smallinput" class="col-sm-2 control-label label-input-sm">Lotérica</label>
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <div class="input-group-addon" onclick="ativaPopUp('lotericas','id_loterica','Consulta código Lotérica')">
+                                        <i class="i_botao_buscar fa fa-search" ></i>
+                                    </div>
+                                    <input  name="id_loterica" type="text" class="form-control1 input-lg" id="id_loterica" placeholder="Cód Lotérica"
+                                            onchange="buscaNome('lotericas','id_loterica')"
+                                            >
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="well-sm" id="label_id_loterica">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-n">
+                            <label for="txtarea1" class="col-sm-2 control-label">Observações</label>
+                            <div class="col-sm-8">
+                                <textarea name="observacoes" id="observacoes" cols="50" rows="4" class="form-control1" placeholder="Observações" ></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" id="it" name="it" value="itens_estoque" />
+                        <input type="hidden" id="id" name="id" value="0" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-sm-3 col-sm-offset-9">
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-primary" id="botao-gravar">Gravar</button>
+                        </div>
+                        <div class="btn-group">
+                            <button type="reset" class="btn botao-deletar" onclick="deletarDados()">Excluir</button>
+                        </div>
+                        <div class="btn-group">
+                            <button type="reset" class="btn btn-default" onclick="limpa()">Limpar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+

@@ -5,6 +5,7 @@
  */
 package com.cth.gestorlotericoweb;
 
+import com.cth.gestorlotericoweb.Estoque.Itens;
 import com.cth.gestorlotericoweb.configuracoes.EstatisticasLinhas;
 import com.cth.gestorlotericoweb.dados.*;
 import com.cth.gestorlotericoweb.parametros.Parametros;
@@ -211,6 +212,12 @@ public class Grava {
                     estatisticasLinhas.grava();
                     break;
                 //fim gravação configs
+                //Início Gravação Estoque
+                case "itens_estoque":
+                    Itens itens = new Itens(request);
+                    itens.setItens();
+                    itens.grava();
+                //fim Gravação Estoque
                 default:
                     break;
             }
