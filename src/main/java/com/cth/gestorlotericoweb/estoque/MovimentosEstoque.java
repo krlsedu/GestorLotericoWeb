@@ -119,6 +119,22 @@ public class MovimentosEstoque extends Estoque {
 		}
 	}
 	
+	public void deleta(){
+		try{
+			if(tipoOperacao.equals("1")){
+				//TODO ajustar os saldos posteriores e remover o atual, criar em métodos os no saldo
+			}else{
+				//TODO ajustar os saldos posteriores e remover o atual, criar em métodos os no saldo
+			}
+			PreparedStatement ps = Parametros.getConexao(request).getPst("delete from movimentos_cofres where id = ? and id_entidade = ?", Boolean.FALSE);
+			ps.setInt(1, id);
+			ps.setInt(2, Parametros.idEntidade);
+			ps.execute();
+		}catch (SQLException ex) {
+			new LogError(ex.getMessage(), ex,request);
+		}
+	}
+	
 	public VelocityContext getHtml(VelocityContext contextPrinc, VelocityEngine ve, String idS){
 		Template templateConteudo;
 		VelocityContext contextConteudo;
