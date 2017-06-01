@@ -1,4 +1,4 @@
-package com.cth.gestorlotericoweb.Estoque;
+package com.cth.gestorlotericoweb.estoque;
 
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
@@ -102,7 +102,7 @@ public class Itens extends Estoque{
 		Template templateConteudo;
 		VelocityContext contextConteudo;
 		StringWriter writerConteudo;
-		templateConteudo = ve.getTemplate( "templates/Modern/Estoque/Item.html" , "UTF-8");
+		templateConteudo = ve.getTemplate("templates/Modern/estoque/Item.html", "UTF-8");
 		contextConteudo = new VelocityContext();
 		writerConteudo = new StringWriter();
 		contextConteudo.put("btns_percorrer",getSWBotoesPercorrer(ve).toString());

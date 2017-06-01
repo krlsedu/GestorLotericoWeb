@@ -1,4 +1,4 @@
-package com.cth.gestorlotericoweb.Estoque;
+package com.cth.gestorlotericoweb.estoque;
 
 import com.cth.gestorlotericoweb.dados.ColunasTabelas;
 import org.apache.commons.lang3.StringUtils;

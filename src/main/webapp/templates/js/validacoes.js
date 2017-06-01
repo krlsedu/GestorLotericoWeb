@@ -142,3 +142,35 @@ function verificaSeFechado() {
     }
     return r;
 }
+
+function alteraMascara(campoFormatar,tabela,item) {
+    timeout = setTimeout(function() {
+        var r = $.Deferred();
+        var campo = $("#"+campoFormatar);
+        $.ajax(
+            {
+                type: "POST",
+                url:  "consulta",
+                data:{"tipo":"unidade","id":$('#'+item).val(),"tabela":tabela},
+                success: function (data) {
+                    var tipo = data.trim();
+                    if(tipo === "2"){
+                        campo.unmask();
+                        campo.maskMoney('destroy');
+                        campo.maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+                    }else{
+                        campo.unmask();
+                        campo.maskMoney('destroy');
+                        campo.mask("99999999");
+                    }
+                    r.resolve();
+                },
+                error: function (jXHR, textStatus, errorThrown) {
+                    avisoErros(jXHR,textStatus,errorThrown);
+                    r.reject();
+                }
+            }
+        );
+        return r;
+    },500);
+}
