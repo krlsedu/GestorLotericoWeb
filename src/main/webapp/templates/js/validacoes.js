@@ -104,8 +104,9 @@ function existeTerminalAberto(tela) {
                     }
                 }
             );
+        }else {
+            r.resolve();
         }
-        r.resolve();
     }
     return r;
 }
@@ -133,6 +134,56 @@ function verificaSeFechado() {
                 },
                 error: function (jXHR, textStatus, errorThrown) {
                     avisoErros(jXHR,textStatus,errorThrown);
+                    r.reject();
+                }
+            }
+        );
+    }else {
+        r.resolve();
+    }
+    return r;
+}
+
+function ajustaValorMascaraDinamica() {
+    var r = $.Deferred();
+    var tela = $('#it').val();
+    if(tela === 'movimentos_estoque') {
+        var tabela;
+        var campoFormatar;
+        var item;
+        switch (tela) {
+            case "movimentos_estoque":
+                item = 'id_itens_estoque';
+                campoFormatar = 'quantidade_movimentada';
+                tabela = 'itens_estoque';
+                break;
+        }
+        var campo = $("#" + campoFormatar);
+        $.ajax(
+            {
+                type: "POST",
+                url: "consulta",
+                data: {"tipo": "unidade", "id": $('#' + item).val(), "tabela": tabela},
+                success: function (data) {
+                    var tipo = data.trim();
+                    var valor = campo.val();
+                    if (tipo === "1") {
+                        valor = valor.substring(0, valor.length - 2);
+                        campo.val(valor);
+
+                        campo.unmask();
+                        campo.maskMoney('destroy');
+                        campo.mask("99999999");
+                    }else{
+                        campo.unmask();
+                        campo.maskMoney('destroy');
+                        campo.maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+                        campo.val(valor).trigger('mask.maskMoney');
+                    }
+                    r.resolve();
+                },
+                error: function (jXHR, textStatus, errorThrown) {
+                    avisoErros(jXHR, textStatus, errorThrown);
                     r.reject();
                 }
             }

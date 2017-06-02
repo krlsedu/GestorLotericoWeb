@@ -58,6 +58,10 @@ public class Grava {
                     MovimentoConta movimentoConta = new MovimentoConta(Integer.valueOf(request.getParameter("id")), request);
                     movimentoConta.deleta();
                     break;
+                case "movimentos_estoque":
+                    MovimentosEstoque movimentosEstoque = new MovimentosEstoque( request);
+                    movimentosEstoque.deleta();
+                    break;
                 default:                    
                     tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
                     if(tabela !=null){

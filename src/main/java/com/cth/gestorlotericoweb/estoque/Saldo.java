@@ -122,6 +122,44 @@ public class Saldo extends Estoque {
 		}
 	}
 	
+	
+	public void ajustaSaldoAntesDeletarMovimento(MovimentosEstoque movimentosEstoque){
+		//language=PostgresPLSQL
+		this.id =getIdSaldo(movimentosEstoque);
+		String sql = "UPDATE " +
+				"           saldos_estoque " +
+				"       set " +
+				"           saldo = saldo - ?" +
+				"       where " +
+				"           id > ? AND " +
+				"           id_itens_estoque = ? AND " +
+				"           id_loterica = ? AND" +
+				"           id_entidade = ?";
+		try {
+			PreparedStatement ps = Parametros.getConexao().getPst(sql);
+			ps.setBigDecimal(1,movimentosEstoque.qtdTotalMovimentada);
+			ps.setInt(2,id);
+			ps.setInt(3,movimentosEstoque.idItensEstoque);
+			ps = Seter.set(ps,4,movimentosEstoque.idLoterica);
+			ps.setInt(5,Parametros.idEntidade);
+			ps.execute();
+			
+			sql = "DELETE FROM " +
+					"   saldos_estoque " +
+					"WHERE " +
+					"   id_movimento = ? AND " +
+					"   id_loterica = ? AND " +
+					"   id_entidade = ?";
+			ps = Parametros.getConexao().getPst(sql);
+			ps.setInt(1,movimentosEstoque.id);
+			ps = Seter.set(ps,2,movimentosEstoque.idLoterica);
+			ps.setInt(3,Parametros.idEntidade);
+			ps.execute();
+		} catch (SQLException e) {
+			new LogError(e.getMessage(),e,request);
+		}
+	}
+	
 	private Integer getIdSaldo(MovimentosEstoque movimentosEstoque){
 		try{
 			PreparedStatement ps = Parametros.getConexao().getPst("select id from saldos_estoque where id_movimento = ? and id_entidade = ? ORDER by id",false);
