@@ -36,7 +36,7 @@
                                     </div>
                                     <input  name="id_itens_estoque" type="text" class="form-control1 input-lg" id="id_itens_estoque" placeholder="Cód Item Estoque"
                                             onchange="buscaNome('itens_estoque','id_itens_estoque');"
-                                            onkeyup="alteraMascara('quantidade_movimentada','itens_estoque','id_itens_estoque')";
+                                            onkeyup="buscaNome('itens_estoque','id_itens_estoque');alteraMascara('quantidade_movimentada','itens_estoque','id_itens_estoque')";
                                             onkeypress="eventoOnKeyPress()"
                                     >
                                 </div>
@@ -63,6 +63,25 @@
                                         <i class="fa fa-calendar"></i>
                                     </div>
                                     <input name="data_hora_mov" id="data_hora_mov" type="datetime-local" placeholder="yyyy-MM-ddTHH:mm:ss" max="9999-12-31T00:00:00" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.datetime" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-n">
+                            <label for="smallinput" class="col-sm-2 control-label label-input-sm">Funcionário</label>
+                            <div class="col-sm-2">
+                                <div class="input-group" id="funcionarios">
+                                    <div class="input-group-addon" onclick="ativaPopUp('funcionarios','id_funcionario','Consulta código Funcionário')">
+                                        <i class="i_botao_buscar fa fa-search" ></i>
+                                    </div>
+                                    <input name="id_funcionario" type="text" class="form-control1 input-lg" id="id_funcionario" placeholder="Cód Funcionário"
+                                           onchange="buscaNome('funcionarios','id_funcionario')"
+                                           onkeyup="buscaNome('funcionarios','id_funcionario')"
+                                           onkeypress="eventoOnKeyPress()"
+                                           >
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="well-sm" id="label_id_funcionario">
                                 </div>
                             </div>
                         </div>

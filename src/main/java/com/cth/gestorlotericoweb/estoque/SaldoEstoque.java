@@ -10,8 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Saldo extends Estoque {
-	public Saldo(HttpServletRequest request) {
+public class SaldoEstoque extends Estoque {
+	public SaldoEstoque(HttpServletRequest request) {
 		super(request);
 	}
 	

@@ -20,6 +20,7 @@ public class MovimentosEstoque extends Estoque {
 	
 	Integer idItensEstoque;
 	Integer idLoterica;
+	Integer idFuncionario;
 	Integer numeroVolumes;
 	
 	String tipoOperacao;
@@ -39,6 +40,7 @@ public class MovimentosEstoque extends Estoque {
 	public void setMovimentacao(){
 		idItensEstoque = Parser.toInteger(request.getParameter("id_itens_estoque"));
 		idLoterica = Parser.toIntegerNull(request.getParameter("id_loterica"));
+		idFuncionario = Parser.toIntegerNull(request.getParameter("id_funcionario"));
 		numeroVolumes = 1;
 		
 		tipoOperacao = request.getParameter("tipo_movimento");
@@ -58,7 +60,7 @@ public class MovimentosEstoque extends Estoque {
 	public void getDadosBd(){
 		String sql = "SELECT  tipo_movimento, id_itens_estoque, quantidade_movimentada, \n" +
 				"       id_loterica, numero_volumes, observacoes, \n" +
-				"       data_hora_mov\n" +
+				"       data_hora_mov, id_funcionario\n" +
 				"  FROM movimentos_estoque" +
 				"  where " +
 				"   id = ? AND " +
@@ -77,6 +79,8 @@ public class MovimentosEstoque extends Estoque {
 				numeroVolumes = rs.getInt(5);
 				observacoes = rs.getString(6);
 				dataHoraReferencia = rs.getTimestamp(7);
+				idFuncionario =rs.getInt(8);
+				
 				qtdTotalMovimentada = quantidadeMovimentada.multiply(numeroVolumesBd);
 				
 				if (!(tipoOperacao.equals("1")||tipoOperacao.equals("3"))) {
@@ -94,8 +98,12 @@ public class MovimentosEstoque extends Estoque {
 		}else{
 			altera();
 		}
-		Saldo saldo = new Saldo(request);
-		saldo.grava(this);
+		SaldoEstoque saldoEstoque = new SaldoEstoque(request);
+		saldoEstoque.grava(this);
+		if (this.idFuncionario != null) {
+			SaldoEstoqueFuncionario saldoEstoqueFuncionario = new SaldoEstoqueFuncionario(request);
+			saldoEstoqueFuncionario.grava(this);
+		}
 	}
 	
 	private void insere(){
@@ -103,10 +111,10 @@ public class MovimentosEstoque extends Estoque {
 			PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.movimentos_estoque(\n" +
 					"            tipo_movimento, id_itens_estoque, quantidade_movimentada, \n" +
 					"             numero_volumes, data_hora_mov, observacoes,\n" +
-					"             id_loterica, id_entidade)\n" +
-					"    VALUES ( ?, ?, ?, \n" +
-					"            ?, ?, ?, \n" +
-					"              ?, ? )");
+					"             id_funcionario,id_loterica, id_entidade)\n" +
+					"    VALUES ( ?, ?, ?, " +
+					"            ?, ?, ?, " +
+					"             ?, ?, ? )");
 			ps.setInt(1, Integer.valueOf(tipoOperacao));
 			ps.setInt(2,idItensEstoque);
 			ps.setBigDecimal(3,quantidadeMovimentada);
@@ -114,8 +122,9 @@ public class MovimentosEstoque extends Estoque {
 			ps.setTimestamp(5,dataHoraReferencia);
 			
 			ps = Seter.set(ps,6,observacoes);
-			ps = Seter.set(ps,7,idLoterica);
-			ps.setInt(8, Parametros.idEntidade);
+			ps = Seter.set(ps,7,idFuncionario);
+			ps = Seter.set(ps,8,idLoterica);
+			ps.setInt(9, Parametros.idEntidade);
 			ps.execute();
 			ResultSet rs = ps.getGeneratedKeys();
 			if(rs.next()){
@@ -138,7 +147,7 @@ public class MovimentosEstoque extends Estoque {
 			PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.movimentos_estoque\n" +
 					"   SET  tipo_movimento=?, id_itens_estoque=?, quantidade_movimentada=?, \n" +
 					"       numero_volumes=?,data_hora_mov=?, observacoes=?, \n" +
-					"        id_loterica=? \n" +
+					"        id_funcionario = ?, id_loterica=? \n" +
 					" where id = ? and id_entidade = ? ", false);
 			ps.setInt(1, Integer.valueOf(tipoOperacao));
 			ps.setInt(2,idItensEstoque);
@@ -147,11 +156,12 @@ public class MovimentosEstoque extends Estoque {
 			ps.setTimestamp(5,dataHoraReferencia);
 			
 			ps = Seter.set(ps,6,observacoes);
-			ps = Seter.set(ps,7,idLoterica);
+			ps = Seter.set(ps,7,idFuncionario);
+			ps = Seter.set(ps,8,idLoterica);
 			
 			id = Integer.valueOf(idL);
-			ps.setInt(8, id);
-			ps.setInt(9, Parametros.idEntidade);
+			ps.setInt(9, id);
+			ps.setInt(10, Parametros.idEntidade);
 			
 			ps.execute();
 		} catch (SQLException ex) {
@@ -165,8 +175,12 @@ public class MovimentosEstoque extends Estoque {
 		movimentosEstoque.id = this.id;
 		movimentosEstoque.getDadosBd();
 		try{
-			Saldo saldos = new Saldo(request);
+			SaldoEstoque saldos = new SaldoEstoque(request);
 			saldos.ajustaSaldoAntesDeletarMovimento(movimentosEstoque);
+			if (movimentosEstoque.idFuncionario!=null) {
+				SaldoEstoqueFuncionario saldoEstoqueFuncionario = new SaldoEstoqueFuncionario(request);
+				saldoEstoqueFuncionario.ajustaSaldoAntesDeletarMovimento(movimentosEstoque);
+			}
 			PreparedStatement ps = Parametros.getConexao(request).getPst("delete from movimentos_estoque where id = ? and id_entidade = ?", Boolean.FALSE);
 			ps.setInt(1, id);
 			ps.setInt(2, Parametros.idEntidade);
