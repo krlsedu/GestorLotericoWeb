@@ -1,0 +1,117 @@
+
+<script type="text/javascript">
+    $(function () {
+        $("#id_loterica").mask("99999999");
+        $("#id_itens_estoque").mask("99999999");
+//        $("#quantidade_movimentada").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+    });
+</script>
+<div class="xs">
+    <!--<div class="breadcrumb">-->
+    <!--<h3></h3>-->
+    <!--</div>-->
+    <form class="form-horizontal" id="form_dados">
+        <div class="panel panel-default">
+            <div class="panel-heading">Movimentação de Estoque</div>
+            <div class="panel-body">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="horizontal-form">
+                        $btns_percorrer
+                        <div class="form-group">
+                            <label for="tipo_movimento" class="col-sm-2 control-label">Tipo Movimento</label>
+                            <div class="col-sm-3"><select name="tipo_movimento" id="tipo_movimento" class="form-control1">
+                                <option value="1" selected="selected">Entrada</option>
+                                <option value="2" >Saída</option>
+                                <option value="3" >Entrada Ajuste</option>
+                                <option value="4" >Saída Ajuste</option>
+                            </select></div>
+                        </div>
+
+                        <div class="form-group mb">
+                            <label for="id_itens_estoque" class="col-sm-2 control-label label-input-sm">Item</label>
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <div class="input-group-addon" onclick="ativaPopUp('itens_estoque','id_itens_estoque','Consulta código Item Estoque')">
+                                        <i class="i_botao_buscar fa fa-search" ></i>
+                                    </div>
+                                    <input  name="id_itens_estoque" type="text" class="form-control1 input-lg" id="id_itens_estoque" placeholder="Cód Item Estoque"
+                                            onchange="buscaNome('itens_estoque','id_itens_estoque');"
+                                            onkeyup="alteraMascara('quantidade_movimentada','itens_estoque','id_itens_estoque')";
+                                            onkeypress="eventoOnKeyPress()"
+                                    >
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="well-sm" id="label_id_itens_estoque">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-n">
+                            <label for="quantidade_movimentada" class="col-sm-2 control-label">Quantidade</label>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">R$</span>
+                                    <input name="quantidade_movimentada" id="quantidade_movimentada" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-n">
+                            <label for="data_hora_mov" class="col-sm-2 control-label">Data e hora</label>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input name="data_hora_mov" id="data_hora_mov" type="datetime-local" placeholder="yyyy-MM-ddTHH:mm:ss" max="9999-12-31T00:00:00" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.datetime" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb">
+                            <label for="id_loterica" class="col-sm-2 control-label label-input-sm">Lotérica</label>
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <div class="input-group-addon" onclick="ativaPopUp('lotericas','id_loterica','Consulta código Lotérica')">
+                                        <i class="i_botao_buscar fa fa-search" ></i>
+                                    </div>
+                                    <input  name="id_loterica" type="text" class="form-control1 input-lg" id="id_loterica" placeholder="Cód Lotérica"
+                                            onchange="buscaNome('lotericas','id_loterica')"
+                                    >
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="well-sm" id="label_id_loterica">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-n">
+                            <label for="observacoes" class="col-sm-2 control-label">Observações</label>
+                            <div class="col-sm-8">
+                                <textarea name="observacoes" id="observacoes" cols="50" rows="4" class="form-control1" placeholder="Observações" ></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" id="it" name="it" value="movimentos_estoque" />
+                        <input type="hidden" id="id" name="id" value="0" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-sm-3 col-sm-offset-9">
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-primary" id="botao-gravar">Gravar</button>
+                        </div>
+                        <div class="btn-group">
+                            <button type="reset" class="btn botao-deletar" onclick="deletarDados()">Excluir</button>
+                        </div>
+                        <div class="btn-group">
+                            <button type="reset" class="btn btn-default" onclick="limpa()">Limpar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+

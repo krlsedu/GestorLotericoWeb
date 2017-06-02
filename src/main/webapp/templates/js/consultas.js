@@ -242,7 +242,9 @@ function buscaDadosN(tabela){
 
 function insereDados(htmlDoc){
     insereDadosSinc(htmlDoc).done(function () {
-        verificaSeFechado();
+        verificaSeFechado().done(function () {
+            ajustaValorMascaraDinamica();
+        });
     })
 }
 

@@ -65,9 +65,40 @@ public class Consulta {
             case "validacao":
                 getValidacoes();
                 break;
+            case "unidade":
+                getUnidade();
+                break;
             default:
                 output ="definir o tipo de busca";
                 break;
+        }
+    }
+    
+    private void getUnidade(){
+        ColunasTabelas colunasTabelas = new ColunasTabelas(request);
+        String tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
+        if (tabela != null) {
+            String id = request.getParameter("id");
+            String sql;
+            if (colunasTabelas.getPossuiIEntidades(tabela)) {
+                sql = "select unidade from " + tabela + " where id = ? and id_entidade = ? ";
+            } else {
+                sql = "select unidade from " + tabela + " where id = ? ";
+            }
+            try {
+                PreparedStatement ps = Parametros.getConexao(request).getPst(sql, false);
+                ps.setInt(1, Integer.valueOf(id));
+                if (colunasTabelas.getPossuiIEntidades(tabela)) ps.setInt(2, Parametros.idEntidade);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    output = rs.getString(1);
+                } else {
+                    output = "2";
+                }
+            } catch (SQLException ex) {
+                output = ex.getMessage();
+                new LogError(ex.getMessage(), ex, request);
+            }
         }
     }
     
@@ -83,6 +114,7 @@ public class Consulta {
                 }else{
                     output = "";
                 }
+                
             } catch (SQLException ex) {
                 output = ex.getMessage();
                 new LogError(ex.getMessage(), ex,request);
