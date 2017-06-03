@@ -52,6 +52,7 @@ public class SaldoEstoqueFuncionario extends Estoque {
 					"    VALUES ( ?, ?, ?, ?, \n" +
 					"            ?, ?, ?, ?, ?);",false);
 			//teste
+			//tes te 2
 			ps.setInt(1, movimentosEstoqueFuncionario.idItensEstoque);
 			ps.setBigDecimal(2, qtdMov);
 			ps.setBigDecimal(3, saldo);
