@@ -79,7 +79,7 @@ public class SaldoEstoque extends Estoque {
 				valorMovAtu  = rs.getBigDecimal(1);
 			}
 			BigDecimal novoValor = movimentosEstoque.quantidadeMovimentada.multiply(movimentosEstoque.numeroVolumesBd);
-			if(valorMovAtu.compareTo(novoValor)!=0) {
+			if(valorMovAtu.compareTo(novoValor)!=0 || !(movimentosEstoque.tipoOperacao.equals(movimentosEstoque.tipoOperacaoAnt))) {
 				PreparedStatement psAlt = Parametros.getConexao().getPst("UPDATE saldos_estoque set quantidade_movimentada = ? where id_itens_estoque = ? and id = ?  and id_entidade = ? ",false);
 				psAlt.setBigDecimal(1,novoValor);
 				psAlt.setInt(2, movimentosEstoque.idItensEstoque);
@@ -87,6 +87,10 @@ public class SaldoEstoque extends Estoque {
 				psAlt.setInt(4, Parametros.idEntidade);
 				psAlt.execute();
 				BigDecimal difMov = novoValor.subtract(valorMovAtu);
+				if (!(movimentosEstoque.tipoOperacao.equals(movimentosEstoque.tipoOperacaoAnt))) {
+					difMov = difMov.add(movimentosEstoque.quantidadeMovimentada.multiply(movimentosEstoque.numeroVolumesBd));
+					difMov = difMov.multiply(BigDecimal.valueOf(2L));
+				}
 				PreparedStatement ps = Parametros.getConexao().getPst("INSERT INTO public.saldos_estoque(\n" +
 						"            id_itens_estoque, quantidade_movimentada, saldo, data_hora_saldo, \n" +
 						"             id_movimento, observacoes, id_loterica, id_entidade)\n" +

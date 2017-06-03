@@ -30,11 +30,12 @@ import org.apache.velocity.app.VelocityEngine;
  */
 public class MovimentoCaixa extends Processos{
     String idTerminal;
-    String idFuncionario;
+    public String idFuncionario;
     String idCofre;
     String dataHoraMov;
     String valorMovimentado;
     String tipoOperacao;
+    String tipoOperacaoAnt;
     String observacoes;
     
     BigDecimal valorMoeda;
@@ -72,7 +73,7 @@ public class MovimentoCaixa extends Processos{
         getDadosPorId();
     }
     
-    private void getDadosPorId(){
+    public void getDadosPorId(){
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT  tipo_operacao_caixa,id_terminal, id_funcionario, data_hora_mov, \n" +
                     "       valor_movimentado, observacoes, id_cofre, valor_moeda \n" +
@@ -158,7 +159,7 @@ public class MovimentoCaixa extends Processos{
             ps.setBigDecimal(5, Parser.toBigDecimalFromHtml(valorMovimentado));
             ps = Seter.set(ps, 6, observacoes);
             ps.setInt(7, Parametros.idEntidade);
-            ps = Seter.set(ps,8,Integer.valueOf(idCofre));
+            ps = Seter.set(ps,8,Parser.toIntegerNull(idCofre));
             ps = Seter.set(ps,9,valorMoeda);
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
@@ -193,6 +194,10 @@ public class MovimentoCaixa extends Processos{
             ps = Seter.set(ps,7,Integer.valueOf(idCofre));
             
             id = Integer.valueOf(idL);
+            MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request);
+            movimentoCaixa.id = id;
+            movimentoCaixa.getDadosPorId();
+            tipoOperacaoAnt = movimentoCaixa.tipoOperacao;
             ps.setInt(8, id);
             ps.setInt(9, Parametros.idEntidade);
             
@@ -249,23 +254,7 @@ public class MovimentoCaixa extends Processos{
         return valorMoeda;
     }
     
-    @Override
-    public String getIdTerminal() {
-        return idTerminal;
-    }
-    
-    @Override
-    public String getIdFuncionario() {
-        return idFuncionario;
-    }
-    
-    @Override
-    public String getIdCofre() {
-        return idCofre;
-    }
-    
-    @Override
-    public String getDataHoraMov() {
-        return dataHoraMov;
+    public String getTipoOperacaoAnt() {
+        return tipoOperacaoAnt;
     }
 }

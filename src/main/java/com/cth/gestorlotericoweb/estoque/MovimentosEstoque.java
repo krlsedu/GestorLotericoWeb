@@ -23,16 +23,18 @@ public class MovimentosEstoque extends Estoque {
 	Integer idLoterica;
 	Integer idFuncionario;
 	Integer numeroVolumes;
+	Integer idMovimentoCaixa;
 	
 	String tipoOperacao;
+	String tipoOperacaoAnt;
 	String observacoes;
 	
 	BigDecimal quantidadeMovimentada;
 	BigDecimal numeroVolumesBd;
 	BigDecimal qtdTotalMovimentada;
 	
-	
 	Timestamp dataHoraReferencia;
+	
 	
 	public MovimentosEstoque(HttpServletRequest request) {
 		super(request);
@@ -40,11 +42,14 @@ public class MovimentosEstoque extends Estoque {
 	
 	public MovimentosEstoque(MovimentoCaixa movimentoCaixa){
 		super(movimentoCaixa.getRequest());
-		Itens itens = new Itens(this.request);
 		this.id = getIdMovimentoEstoque(movimentoCaixa);
+		
+		this.idMovimentoCaixa = movimentoCaixa.getId();
+		this.idLoterica = Parametros.getIdLoterica();
+		Itens itens = new Itens(this.request);
+		itens.idLoterica = this.idLoterica;
 		this.idItensEstoque = itens.getIdItensEstoque(movimentoCaixa.getValorMoeda(),2);
-		this.idLoterica = null;
-		this.idFuncionario = Parser.toIntegerNull(movimentoCaixa.getIdFuncionario());
+		this.idFuncionario = Parser.toIntegerNull(movimentoCaixa.idFuncionario);
 		this.numeroVolumes = 1;
 		
 		if (movimentoCaixa.getTipoOperacao().equals("2")) {
@@ -54,10 +59,10 @@ public class MovimentosEstoque extends Estoque {
 		}
 		this.observacoes = "Movimento gerado automaticamente pela rotina de movimento de caixa";
 		
-		this.quantidadeMovimentada = Parser.toBigDecimalFromHtml(movimentoCaixa.getValorMovimentado());
+		this.quantidadeMovimentada = Parser.toBigDecimalFromSt(movimentoCaixa.getValorMovimentado());
 		this.numeroVolumesBd = Parser.toBigDecimalFromSt("1");
+		this.tipoOperacaoAnt = movimentoCaixa.getTipoOperacaoAnt();
 		this.qtdTotalMovimentada = this.quantidadeMovimentada.multiply(this.numeroVolumesBd);
-		
 		if (!(this.tipoOperacao.equals("1")||this.tipoOperacao.equals("3"))) {
 			this.qtdTotalMovimentada = this.qtdTotalMovimentada.multiply(BigDecimal.valueOf(-1L));
 		}
@@ -87,7 +92,7 @@ public class MovimentosEstoque extends Estoque {
 	public void getDadosBd(){
 		String sql = "SELECT  tipo_movimento, id_itens_estoque, quantidade_movimentada, \n" +
 				"       id_loterica, numero_volumes, observacoes, \n" +
-				"       data_hora_mov, id_funcionario\n" +
+				"       data_hora_mov, id_funcionario, id_movimento_caixa\n" +
 				"  FROM movimentos_estoque" +
 				"  where " +
 				"   id = ? AND " +
@@ -107,6 +112,7 @@ public class MovimentosEstoque extends Estoque {
 				observacoes = rs.getString(6);
 				dataHoraReferencia = rs.getTimestamp(7);
 				idFuncionario =rs.getInt(8);
+				idMovimentoCaixa =rs.getInt(9);
 				
 				qtdTotalMovimentada = quantidadeMovimentada.multiply(numeroVolumesBd);
 				
@@ -127,21 +133,39 @@ public class MovimentosEstoque extends Estoque {
 		}
 		SaldoEstoque saldoEstoque = new SaldoEstoque(request);
 		saldoEstoque.grava(this);
-		if (this.idFuncionario != null) {
-			SaldoEstoqueFuncionario saldoEstoqueFuncionario = new SaldoEstoqueFuncionario(request);
-			saldoEstoqueFuncionario.grava(this);
-		}
+		gravaSaldoEstoqueFuncionario();
 	}
 	
 	public void gravaAutoMov(){
-		if("0".equals(this.id)){
+		if(this.id==0){
 			insere();
 		}else{
 			altera();
 		}
 		SaldoEstoque saldoEstoque = new SaldoEstoque(request);
 		saldoEstoque.grava(this);
+		gravaSaldoEstoqueFuncionario();
+	}
+	
+	private void gravaSaldoEstoqueFuncionario(){
 		if (this.idFuncionario != null) {
+			if (request.getParameter("it").equals("movimentos_caixas")){
+				if(this.tipoOperacao.equals("1")){
+					if (this.tipoOperacaoAnt.equals(tipoOperacao)) {
+						this.tipoOperacaoAnt = "2";
+					}else {
+						this.tipoOperacaoAnt = "1";
+					}
+					this.tipoOperacao = "2";
+				}else {
+					if (this.tipoOperacaoAnt.equals(tipoOperacao)) {
+						this.tipoOperacaoAnt = "1";
+					}else {
+						this.tipoOperacaoAnt = "2";
+					}
+					this.tipoOperacao = "1";
+				}
+			}
 			SaldoEstoqueFuncionario saldoEstoqueFuncionario = new SaldoEstoqueFuncionario(request);
 			saldoEstoqueFuncionario.grava(this);
 		}
@@ -152,10 +176,10 @@ public class MovimentosEstoque extends Estoque {
 			PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.movimentos_estoque(\n" +
 					"            tipo_movimento, id_itens_estoque, quantidade_movimentada, \n" +
 					"             numero_volumes, data_hora_mov, observacoes,\n" +
-					"             id_funcionario,id_loterica, id_entidade)\n" +
+					"             id_funcionario,id_loterica, id_movimento_caixa, id_entidade)\n" +
 					"    VALUES ( ?, ?, ?, " +
 					"            ?, ?, ?, " +
-					"             ?, ?, ? )");
+					"             ?, ?, ?, ? )");
 			ps.setInt(1, Integer.valueOf(tipoOperacao));
 			ps.setInt(2,idItensEstoque);
 			ps.setBigDecimal(3,quantidadeMovimentada);
@@ -165,7 +189,8 @@ public class MovimentosEstoque extends Estoque {
 			ps = Seter.set(ps,6,observacoes);
 			ps = Seter.set(ps,7,idFuncionario);
 			ps = Seter.set(ps,8,idLoterica);
-			ps.setInt(9, Parametros.idEntidade);
+			ps = Seter.set(ps,9,idMovimentoCaixa);
+			ps.setInt(10, Parametros.idEntidade);
 			ps.execute();
 			ResultSet rs = ps.getGeneratedKeys();
 			if(rs.next()){

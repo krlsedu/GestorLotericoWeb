@@ -73,7 +73,7 @@ public class SaldoEstoqueFuncionario extends Estoque {
 			psRs.setInt(1, movimentosEstoqueFuncionario.idItensEstoque);
 			psRs.setInt(2, id);
 			psRs.setInt(3, Parametros.idEntidade);
-			psRs.setInt(4,movimentosEstoqueFuncionario.idFuncionario);
+			psRs.setInt(4, movimentosEstoqueFuncionario.idFuncionario);
 			ResultSet rs = psRs.executeQuery();
 			BigDecimal saldoAtual = BigDecimal.ZERO;
 			BigDecimal valorMovAtu = BigDecimal.ZERO;
@@ -81,7 +81,7 @@ public class SaldoEstoqueFuncionario extends Estoque {
 				valorMovAtu  = rs.getBigDecimal(1);
 			}
 			BigDecimal novoValor = movimentosEstoqueFuncionario.quantidadeMovimentada.multiply(movimentosEstoqueFuncionario.numeroVolumesBd);
-			if(valorMovAtu.compareTo(novoValor)!=0) {
+			if(valorMovAtu.compareTo(novoValor)!=0 || !(movimentosEstoqueFuncionario.tipoOperacao.equals(movimentosEstoqueFuncionario.tipoOperacaoAnt))) {
 				PreparedStatement psAlt = Parametros.getConexao().getPst("UPDATE saldos_estoque_funcionario set quantidade_movimentada = ? where id_itens_estoque = ? and id = ?  and id_entidade = ? and id_funcionario = ?",false);
 				psAlt.setBigDecimal(1,novoValor);
 				psAlt.setInt(2, movimentosEstoqueFuncionario.idItensEstoque);
@@ -90,10 +90,14 @@ public class SaldoEstoqueFuncionario extends Estoque {
 				psAlt.setInt(5,movimentosEstoqueFuncionario.idFuncionario);
 				psAlt.execute();
 				BigDecimal difMov = novoValor.subtract(valorMovAtu);
-				
-				psRs = Parametros.getConexao().getPst("select saldo from saldos_estoque where id_itens_estoque = ? and id_entidade = ? order by data_hora_movimento desc limit 1",false);
+				if (!(movimentosEstoqueFuncionario.tipoOperacao.equals(movimentosEstoqueFuncionario.tipoOperacaoAnt))) {
+					difMov = difMov.add(movimentosEstoqueFuncionario.quantidadeMovimentada.multiply(movimentosEstoqueFuncionario.numeroVolumesBd));
+					difMov = difMov.multiply(BigDecimal.valueOf(2L));
+				}
+				psRs = Parametros.getConexao().getPst("select saldo from saldos_estoque_funcionario where id_itens_estoque = ? and id_entidade = ?  and id_funcionario = ? order by data_hora_movimento desc limit 1",false);
 				psRs.setInt(1, movimentosEstoqueFuncionario.idItensEstoque);
 				psRs.setInt(2, Parametros.idEntidade);
+				psRs.setInt(3,movimentosEstoqueFuncionario.idFuncionario);
 				rs = psRs.executeQuery();
 				if (rs.next()) {
 					saldoAtual = rs.getBigDecimal(1);

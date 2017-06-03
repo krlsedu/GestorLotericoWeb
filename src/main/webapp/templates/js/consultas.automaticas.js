@@ -23,12 +23,12 @@ function eventoOnKeyUp(element, camposCons, parsCampos, buscarNome) {
             switch (dones) {
                 case 2:
                     consultaCampoAutoLoopCheck(campos[0], (pars[0].toLowerCase() === 'true'), element).done(function () {
-                        consultaCampoAutoLoopCheck(campos[1], (pars[1].toLowerCase() === 'true'), element);
-                    }).done(function () {
-                        for (i = dones; i < campos.length; i++) {
-                            consultaCampoAutoLoopCheck(campos[i], (pars[i].toLowerCase() === 'true'), element);
-                        }
-                        return $.Deferred().resolve();
+                        consultaCampoAutoLoopCheck(campos[1], (pars[1].toLowerCase() === 'true'), element).done(function () {
+                            for (i = dones; i < campos.length; i++) {
+                                consultaCampoAutoLoopCheck(campos[i], (pars[i].toLowerCase() === 'true'), element);
+                            }
+                            return $.Deferred().resolve();
+                        });
                     }).done(function () {
                         existeTerminalAberto(tabela);
                     });
@@ -53,6 +53,7 @@ function consultaCampoAutoLoopCheck(valorBuscar,loop,element){
     var r = $.Deferred();
     var tabela = document.getElementById("it").value;
     var vlb = $('#'+valorBuscar);
+
     if(element.value !== "") {
         if (loop || vlb.val() === "" || vlb.val() === "0") {
             $.ajax(
@@ -69,6 +70,8 @@ function consultaCampoAutoLoopCheck(valorBuscar,loop,element){
                         var htmlDoc = parser.parseFromString(data, "text/html");
                         var nomeCol = htmlDoc.getElementById("nome_coluna").value;
                         var valr = htmlDoc.getElementById("valor").value;
+                        console.log('consultaCampoAutoLoopCheck',valorBuscar);
+                        console.log('consultaCampoAutoLoopCheck val',valr);
                         if (!(valr === null || valr === 'null')) {
                             $('input#' + nomeCol).val(valr).trigger('mask.maskMoney');
                             try {

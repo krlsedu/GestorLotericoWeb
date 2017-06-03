@@ -139,9 +139,12 @@ public class Parser {
     
     public static Integer toIntegerNull(String valor){
         try{
+            if(valor.trim().equals("0")){
+                return null;
+            }
             return Integer.valueOf(valor);
         }catch(Exception e){
-            return 0;
+            return null;
         }
     }
 }
