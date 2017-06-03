@@ -2,6 +2,7 @@ package com.cth.gestorlotericoweb.estoque;
 
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
+import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
 import com.cth.gestorlotericoweb.utils.Parser;
 import com.cth.gestorlotericoweb.utils.Seter;
 import org.apache.velocity.Template;
@@ -35,6 +36,32 @@ public class MovimentosEstoque extends Estoque {
 	
 	public MovimentosEstoque(HttpServletRequest request) {
 		super(request);
+	}
+	
+	public MovimentosEstoque(MovimentoCaixa movimentoCaixa){
+		super(movimentoCaixa.getRequest());
+		Itens itens = new Itens(this.request);
+		this.id = getIdMovimentoEstoque(movimentoCaixa);
+		this.idItensEstoque = itens.getIdItensEstoque(movimentoCaixa.getValorMoeda(),2);
+		this.idLoterica = null;
+		this.idFuncionario = Parser.toIntegerNull(movimentoCaixa.getIdFuncionario());
+		this.numeroVolumes = 1;
+		
+		if (movimentoCaixa.getTipoOperacao().equals("2")) {
+			this.tipoOperacao = "2";
+		}else {
+			this.tipoOperacao = "1";
+		}
+		this.observacoes = "Movimento gerado automaticamente pela rotina de movimento de caixa";
+		
+		this.quantidadeMovimentada = Parser.toBigDecimalFromHtml(movimentoCaixa.getValorMovimentado());
+		this.numeroVolumesBd = Parser.toBigDecimalFromSt("1");
+		this.qtdTotalMovimentada = this.quantidadeMovimentada.multiply(this.numeroVolumesBd);
+		
+		if (!(this.tipoOperacao.equals("1")||this.tipoOperacao.equals("3"))) {
+			this.qtdTotalMovimentada = this.qtdTotalMovimentada.multiply(BigDecimal.valueOf(-1L));
+		}
+		this.dataHoraReferencia = Parser.toDbTimeStamp(movimentoCaixa.getDataHoraMov());
 	}
 	
 	public void setMovimentacao(){
@@ -94,6 +121,20 @@ public class MovimentosEstoque extends Estoque {
 	
 	public void grava(){
 		if("0".equals(request.getParameter("id"))){
+			insere();
+		}else{
+			altera();
+		}
+		SaldoEstoque saldoEstoque = new SaldoEstoque(request);
+		saldoEstoque.grava(this);
+		if (this.idFuncionario != null) {
+			SaldoEstoqueFuncionario saldoEstoqueFuncionario = new SaldoEstoqueFuncionario(request);
+			saldoEstoqueFuncionario.grava(this);
+		}
+	}
+	
+	public void gravaAutoMov(){
+		if("0".equals(this.id)){
 			insere();
 		}else{
 			altera();
@@ -204,4 +245,20 @@ public class MovimentosEstoque extends Estoque {
 		contextPrinc.put("popup", getSWPopup(ve,"movimentos_estoque").toString());
 		return contextPrinc;
 	}
+	
+	private Integer getIdMovimentoEstoque(MovimentoCaixa movimentoCaixa){
+		try{
+			PreparedStatement ps = Parametros.getConexao().getPst("select id from movimentos_estoque where id_movimento_caixa = ? and id_entidade = ?",false);
+			ps.setInt(1, movimentoCaixa.getId());
+			ps.setInt(2, Parametros.idEntidade);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		}catch(SQLException ex){
+			new LogError(ex.getMessage(), ex,request);
+		}
+		return 0;
+	}
+	
 }

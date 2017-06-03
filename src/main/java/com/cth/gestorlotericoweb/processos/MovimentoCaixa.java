@@ -6,16 +6,20 @@
 package com.cth.gestorlotericoweb.processos;
 
 import com.cth.gestorlotericoweb.LogError;
+import com.cth.gestorlotericoweb.estoque.MovimentosEstoque;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.utils.Parser;
 import com.cth.gestorlotericoweb.utils.Seter;
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+
+import jdk.nashorn.internal.objects.annotations.Setter;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -33,6 +37,8 @@ public class MovimentoCaixa extends Processos{
     String tipoOperacao;
     String observacoes;
     
+    BigDecimal valorMoeda;
+    
     public MovimentoCaixa(HttpServletRequest request) {
         super(request);
         setMovimentosCaixas();
@@ -47,6 +53,7 @@ public class MovimentoCaixa extends Processos{
         valorMovimentado = Parser.toBigDecimalSt(rs.getString(5));
         observacoes = rs.getString(6);
         idCofre = rs.getString(7);
+        valorMoeda = rs.getBigDecimal(8);
     }
     
     private void setMovimentosCaixas() {
@@ -57,6 +64,7 @@ public class MovimentoCaixa extends Processos{
         this.valorMovimentado = request.getParameter("valor_movimentado");
         this.tipoOperacao = request.getParameter("tipo_operacao_caixa");
         this.observacoes = request.getParameter("observacoes");
+        this.valorMoeda = Parser.toBigDecimalFromHtmlNull(request.getParameter("valor_moeda"));
     }
     
     public MovimentoCaixa(Integer id,HttpServletRequest request) {
@@ -67,7 +75,7 @@ public class MovimentoCaixa extends Processos{
     private void getDadosPorId(){
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT  tipo_operacao_caixa,id_terminal, id_funcionario, data_hora_mov, \n" +
-                    "       valor_movimentado, observacoes, id_cofre \n" +
+                    "       valor_movimentado, observacoes, id_cofre, valor_moeda \n" +
                     "  FROM public.movimentos_caixas where id = ? and id_entidade = ? ",false);
             ps.setInt(1, id);
             ps.setInt(2, Parametros.idEntidade);
@@ -80,6 +88,7 @@ public class MovimentoCaixa extends Processos{
                 valorMovimentado = Parser.toBigDecimalSt(rs.getString(5));
                 observacoes = rs.getString(6);
                 idCofre = rs.getString(7);
+                valorMoeda = rs.getBigDecimal(8);
             }else{
                 tipoOperacao = "";
                 idTerminal = "";
@@ -117,7 +126,7 @@ public class MovimentoCaixa extends Processos{
         try {
             List<MovimentoCaixa> movimentoCaixaList = new ArrayList<>();
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT  tipo_operacao_caixa,id_terminal, id_funcionario, data_hora_mov, \n" +
-                    "       valor_movimentado, observacoes, id_cofre \n" +
+                    "       valor_movimentado, observacoes, id_cofre, valor_moeda \n" +
                     "  FROM public.movimentos_caixas where id_terminal = ? and id_funcionario = ? and date( data_hora_mov) = ?  and id_entidade = ? ",false);
             ps.setInt(1, Integer.valueOf(request.getParameter("id_terminal")));
             ps.setInt(2, Integer.valueOf(request.getParameter("id_funcionario")));
@@ -139,33 +148,24 @@ public class MovimentoCaixa extends Processos{
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.movimentos_caixas(\n" +
 "            tipo_operacao_caixa, id_terminal, id_funcionario, data_hora_mov, \n" +
-"            valor_movimentado, observacoes, id_entidade,id_cofre)\n" +
+"            valor_movimentado, observacoes, id_entidade,id_cofre, valor_moeda)\n" +
 "    VALUES (?, ?, ?, ?, \n" +
-"            ?, ?, ?, ?);");
+"            ?, ?, ?, ?, ?);");
             ps.setInt(1, Integer.valueOf(tipoOperacao));
-            if(idTerminal == null||idTerminal.trim().equals("")){
-                ps.setNull(2, java.sql.Types.BIGINT);
-            }else{
-                ps.setInt(2, Integer.valueOf(idTerminal));
-            }
+            ps = Seter.set(ps,2,Parser.toIntegerNull(idTerminal));
             ps.setInt(3, Integer.valueOf(idFuncionario));
             ps.setTimestamp(4, Parser.toDbTimeStamp(dataHoraMov));
             ps.setBigDecimal(5, Parser.toBigDecimalFromHtml(valorMovimentado));
             ps = Seter.set(ps, 6, observacoes);
             ps.setInt(7, Parametros.idEntidade);
             ps = Seter.set(ps,8,Integer.valueOf(idCofre));
+            ps = Seter.set(ps,9,valorMoeda);
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()){
                 id = rs.getInt(1);
-                if(this.idCofre!=null){
-                    try{
-                        MovimentoCofre movimentoCofre = new MovimentoCofre(request, this);         
-                        movimentoCofre.gravaAutoMov();
-                    }catch(Exception e){
-
-                    }
-                }
+    
+                gravaOutrosMovimentos();
             }
             
         } catch (SQLException ex) {
@@ -197,16 +197,24 @@ public class MovimentoCaixa extends Processos{
             ps.setInt(9, Parametros.idEntidade);
             
             ps.execute();
-            if(this.idCofre!=null){
-                try{
-                    MovimentoCofre movimentoCofre = new MovimentoCofre(request, this);         
-                    movimentoCofre.gravaAutoMov();
-                }catch(Exception e){
-
-                }
-            }
+            gravaOutrosMovimentos();
         } catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);
+        }
+    }
+    
+    private void gravaOutrosMovimentos(){
+        if(this.idCofre!=null){
+            try{
+                MovimentoCofre movimentoCofre = new MovimentoCofre(request, this);
+                movimentoCofre.gravaAutoMov();
+                if (valorMoeda != null) {
+                    MovimentosEstoque movimentosEstoque = new MovimentosEstoque(this);
+                    movimentosEstoque.gravaAutoMov();
+                }
+            }catch(Exception e){
+            
+            }
         }
     }
     
@@ -235,5 +243,29 @@ public class MovimentoCaixa extends Processos{
     
     public String getObservacoes() {
         return observacoes;
+    }
+    
+    public BigDecimal getValorMoeda() {
+        return valorMoeda;
+    }
+    
+    @Override
+    public String getIdTerminal() {
+        return idTerminal;
+    }
+    
+    @Override
+    public String getIdFuncionario() {
+        return idFuncionario;
+    }
+    
+    @Override
+    public String getIdCofre() {
+        return idCofre;
+    }
+    
+    @Override
+    public String getDataHoraMov() {
+        return dataHoraMov;
     }
 }

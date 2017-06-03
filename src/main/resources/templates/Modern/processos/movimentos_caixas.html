@@ -1,9 +1,10 @@
 <script type="text/javascript">
         $(function () {
-              $("#id_terminal").mask("99999999");
-              $("#id_funcionario").mask("99999999");
-              $("#id_cofre").mask("99999999");              
-              $("#valor_movimentado").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+            $("#id_terminal").mask("99999999");
+            $("#id_funcionario").mask("99999999");
+            $("#id_cofre").mask("99999999");
+            $("#valor_moeda").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+            $("#valor_movimentado").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
 
         });
 </script>
@@ -99,6 +100,15 @@
                                 <div class="input-group">
                                     <span class="input-group-addon">R$</span>
                                     <input name="valor_movimentado" id="valor_movimentado" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-n">
+                            <label for="valor_moeda" class="col-sm-2 control-label">Valor Moeda</label>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">R$</span>
+                                    <input name="valor_moeda" id="valor_moeda" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" >
                                 </div>
                             </div>
                         </div>

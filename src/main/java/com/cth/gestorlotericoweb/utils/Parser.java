@@ -111,13 +111,13 @@ public class Parser {
     }
     
     public static BigDecimal toBigDecimalFromHtmlNull(String valor){
-        String st = valor;
-        st = st.replace(".", "");
-        st = st.replace(",", ".");
         try{
+            String st = valor;
+            st = st.replace(".", "");
+            st = st.replace(",", ".");
             return new BigDecimal(st);
         }catch(Exception e){
-            return BigDecimal.ZERO;
+            return null;
         }
     }
     

@@ -112,4 +112,23 @@ public class Itens extends Estoque{
 		contextPrinc.put("popup", getSWPopup(ve,"itens_estoque").toString());
 		return contextPrinc;
 	}
+	
+	public Integer getIdItensEstoque(BigDecimal valorPadrao, Integer tipoItem){
+		//language=PostgresPLSQL
+		String sql = "SELECT id FROM itens_estoque where valor_padrao = ? and tipo_item = ? and id_loterica = ? AND id_entidade = ?";
+		try {
+			PreparedStatement ps = Parametros.getConexao().getPst(sql,false);
+			ps.setBigDecimal(1,valorPadrao);
+			ps.setInt(2,tipoItem);
+			ps =Seter.set(ps,3,idLoterica);
+			ps.setInt(4,Parametros.idEntidade);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			new LogError(e.getMessage(),e,request);
+		}
+		return null;
+	}
 }

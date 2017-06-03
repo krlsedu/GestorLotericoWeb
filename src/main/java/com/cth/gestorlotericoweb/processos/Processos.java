@@ -44,9 +44,11 @@ public class Processos {
         return id;
     }
     
+    public HttpServletRequest getRequest() {
+        return request;
+    }
     
-    
-    public StringWriter getSWPopup(VelocityEngine ve,String tipo){
+    public StringWriter getSWPopup(VelocityEngine ve, String tipo){
         Template templatePopup;
         VelocityContext contextPopup;
         StringWriter writerPopup;
