@@ -70,6 +70,7 @@ public class MovimentosEstoque extends Estoque {
 	}
 	
 	public void setMovimentacao(){
+		this.id = Parser.toInteger(request.getParameter("id"));
 		idItensEstoque = Parser.toInteger(request.getParameter("id_itens_estoque"));
 		idLoterica = Parser.toIntegerNull(request.getParameter("id_loterica"));
 		idFuncionario = Parser.toIntegerNull(request.getParameter("id_funcionario"));
@@ -236,7 +237,6 @@ public class MovimentosEstoque extends Estoque {
 	}
 	
 	public void deleta(){
-		this.id = Parser.toInteger(request.getParameter("id"));
 		MovimentosEstoque movimentosEstoque = new MovimentosEstoque(request);
 		movimentosEstoque.id = this.id;
 		movimentosEstoque.getDadosBd();

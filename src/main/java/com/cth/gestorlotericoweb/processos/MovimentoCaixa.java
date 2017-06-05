@@ -114,6 +114,8 @@ public class MovimentoCaixa extends Processos{
                 MovimentoCofre movimentoCofre = new  MovimentoCofre(rs.getInt(1), request);
                 movimentoCofre.deleta();          
             }
+            MovimentosEstoque movimentosEstoque = new MovimentosEstoque(this);
+            movimentosEstoque.deleta();
             PreparedStatement ps = Parametros.getConexao(request).getPst("delete from movimentos_caixas where id = ? and id_entidade = ?", Boolean.FALSE);     
             ps.setInt(1, Integer.valueOf(request.getParameter("id")));
             ps.setInt(2, Parametros.idEntidade);
