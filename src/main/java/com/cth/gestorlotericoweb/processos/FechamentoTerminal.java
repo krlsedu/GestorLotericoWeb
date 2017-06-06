@@ -294,7 +294,7 @@ public class FechamentoTerminal extends Processos{
                 "FROM \n" +
                 "	outros_movimentos \n" +
                                 "where" +
-                "   tipo_operacao_caixa NOT IN (8,9) AND" +//TODO ver essa situação
+                "   tipo_operacao_caixa NOT IN (8,9) AND" +
                 "   date(data_hora_mov) = ? and " +
                 "	id_terminal = ? and " +
                 "	id_funcionario = ?";

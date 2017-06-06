@@ -115,6 +115,7 @@ public class ColunasTabelas {
         mTabelas.put("componentes", "componentes");
         mTabelas.put("itens_estoque", "itens_estoque");
         mTabelas.put("movimentos_estoque", "movimentos_estoque");
+        mTabelas.put("operacoes_funcionario", "operacoes_funcionario");
     }
     
     private void carregaColNome(){
@@ -266,6 +267,11 @@ public class ColunasTabelas {
         lOpts = new ArrayList<>();
         lOpts.add("<option>Nome do Item</option>");
         mTabOpts.put("movimentos_estoque", lOpts);
+    
+    
+        lOpts = new ArrayList<>();
+        lOpts.add("<option>Nome do Item</option>");
+        mTabOpts.put("operacoes_funcionario", lOpts);
     }
     
     public String getOpts(String tabela){
