@@ -65,7 +65,7 @@ public class OutrosMovimentos extends Processos{
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT  tipo_operacao_caixa,id_terminal, id_funcionario, data_hora_mov, \n" +
                     "       valor_movimentado, observacoes\n" +
-                    "  FROM public.outros_movimentos where id_terminal = ? and id_funcionario = ? and date( data_hora_mov) = ?  and  id_entidade = ? ",false);
+                    "  FROM public.outros_movimentos where id_terminal = ? and id_funcionario = ? and date( data_hora_mov) = ?  and  id_entidade = ? ORDER BY id",false);
             ps.setInt(1, Integer.valueOf(request.getParameter("id_terminal")));
             ps.setInt(2, Integer.valueOf(request.getParameter("id_funcionario")));
             ps.setDate(3, Parser.toDbDate(request.getParameter("data_movs")));

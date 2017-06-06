@@ -42,6 +42,8 @@ public class MovimentosTerminal extends Detalhamentos {
 			String entradaSaida;
 //			 <option value="1" selected="selected">Bolão - Saída</option>
 //            <option value="2" >Bolão - Entrada</option>
+//            <option value="8" >Bolão - Geração</option>
+//            <option value="9" >Bolão - Venda</option>
 //            <option value="3" >Bilhetes - Vendas</option>
 //            <option value="4" >Tele Sena - Troca</option>
 //            <option value="5" >Tele Sena - Vendas</option>
@@ -49,12 +51,20 @@ public class MovimentosTerminal extends Detalhamentos {
 //            <option value="7" >Outros - Entrada</option>
 			switch (om.getTipoOperacao()){
 				case "1":
-					tipoOperacao = "Bolao";
+					tipoOperacao = "Bolão";
 					entradaSaida = "Saída";
 					break;
 				case "2":
-					tipoOperacao = "Bolao";
+					tipoOperacao = "Bolão";
 					entradaSaida = "Entrada";
+					break;
+				case "8":
+					tipoOperacao = "Bolão";
+					entradaSaida = "Geração";
+					break;
+				case "9":
+					tipoOperacao = "Bolão";
+					entradaSaida = "Venda";
 					break;
 				case "3":
 					tipoOperacao = "Bilhetes";
