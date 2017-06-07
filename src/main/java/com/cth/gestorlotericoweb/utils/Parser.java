@@ -12,7 +12,6 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 /**
@@ -27,7 +26,7 @@ public class Parser {
             java.util.Date parsed = format.parse(dataString);
             dateAbertura = new java.sql.Date(parsed.getTime());
             return dateAbertura;
-        } catch (ParseException ex) {
+        } catch (Exception ex) {
         }
         return null;
     }
@@ -38,13 +37,13 @@ public class Parser {
                 java.util.Date parsedDate = dateFormat.parse(dataString.replace("T", ""));
                 Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
                 return timestamp;
-            } catch (ParseException ex) {
+            } catch (Exception ex) {
                 try {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     java.util.Date parsedDate = dateFormat.parse(dataString.replace("T", ""));
                     Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
                     return timestamp;
-                }catch (ParseException e){
+                }catch (Exception e){
                 
                 }
             }
@@ -100,13 +99,17 @@ public class Parser {
     }
     
     public static BigDecimal toBigDecimalFromHtml(String valor){
-        String st = valor;
-        st = st.replace(".", "");
-        st = st.replace(",", ".");
-        try{
-            return new BigDecimal(st);
-        }catch(Exception e){
-            return BigDecimal.ZERO;
+        try {
+            String st = valor;
+            st = st.replace(".", "");
+            st = st.replace(",", ".");
+            try {
+                return new BigDecimal(st);
+            } catch (Exception e) {
+                return BigDecimal.ZERO;
+            }
+        }catch (Exception e){
+            return null;
         }
     }
     

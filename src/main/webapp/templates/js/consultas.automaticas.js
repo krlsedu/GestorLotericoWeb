@@ -119,3 +119,28 @@ function calculaSaldo(campo1, campo2, destino) {
     console.log("saldo",saldo);
     $("#"+destino).val(saldo).trigger('mask.maskMoney');
 }
+
+function consultaOpcoesCb(val,idCb) {
+    var r = $.Deferred();
+    var tela = $('#it').val();
+    $.ajax(
+        {
+            type: "POST",
+            url: "consulta",
+            data: {
+                "tipo": "opcoes",
+                "tela": tela,
+                "item": val
+            },
+            success: function (data) {
+                $('#' + idCb).html(data);
+                r.resolve();
+            },
+            error: function (jXHR, textStatus, errorThrown) {
+                r.reject();
+                avisoErros(jXHR, textStatus, errorThrown);
+            }
+        }
+    );
+    return r;
+}

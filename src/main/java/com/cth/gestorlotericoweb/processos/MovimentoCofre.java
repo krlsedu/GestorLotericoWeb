@@ -11,9 +11,11 @@ import com.cth.gestorlotericoweb.saldos.SaldoCofre;
 import com.cth.gestorlotericoweb.utils.Parser;
 import com.cth.gestorlotericoweb.utils.Seter;
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -28,11 +30,11 @@ public class MovimentoCofre extends Processos{
     Integer idMovimentoConta;
     Integer idAberturaTerminal;
     String idCofre;
-    String dataHoraMov;
-    public String valorMovimentado;
+    Timestamp dataHoraMov;
+    public BigDecimal valorMovimentado;
     public String tipoOperacao;
     String observacoes;
-    public String numeroVolumes;
+    public Integer numeroVolumes;
     
     public MovimentoCofre(HttpServletRequest request) {
         super(request);
@@ -46,11 +48,11 @@ public class MovimentoCofre extends Processos{
             this.idMovimentoCaixa = null;
         }
         this.idCofre = request.getParameter("id_cofre");
-        this.dataHoraMov = request.getParameter("data_hora_mov");
-        this.valorMovimentado = request.getParameter("valor_movimentado");
+        this.dataHoraMov = Parser.toDbTimeStamp(request.getParameter("data_hora_mov"));
+        this.valorMovimentado = Parser.toBigDecimalFromHtml(request.getParameter("valor_movimentado"));
         this.tipoOperacao = request.getParameter("tipo_movimento_cofre");
         this.observacoes = request.getParameter("observacoes");
-        numeroVolumes = "1";
+        numeroVolumes = 1;
     }
     
     public MovimentoCofre(Integer id,HttpServletRequest request) {
@@ -61,12 +63,12 @@ public class MovimentoCofre extends Processos{
     public MovimentoCofre(HttpServletRequest request,MovimentoCaixa movimentoCaixa) {
         super(request);
         this.id = getIdMovimentoCofre(movimentoCaixa);
-        this.idCofre = movimentoCaixa.idCofre;
+        this.idCofre = movimentoCaixa.idCofre.toString();
         this.idMovimentoCaixa = movimentoCaixa.id;
         this.dataHoraMov = movimentoCaixa.dataHoraMov;
         this.valorMovimentado = movimentoCaixa.valorMovimentado;
-        this.tipoOperacao = movimentoCaixa.tipoOperacao.trim().equals("1")?"2":"1";     
-        this.numeroVolumes = "1";
+        this.tipoOperacao = movimentoCaixa.tipoOperacao==1?"2":"1";
+        this.numeroVolumes = 1;
     }
     
     public MovimentoCofre(HttpServletRequest request,AberturaTerminal aberturaTerminal) {
@@ -74,10 +76,10 @@ public class MovimentoCofre extends Processos{
         this.id = getIdMovimentoCofre(aberturaTerminal);
         this.idCofre = aberturaTerminal.idCofre;
         this.idAberturaTerminal = aberturaTerminal.id;
-        this.dataHoraMov = aberturaTerminal.dataAbertura;
+        this.dataHoraMov = new Timestamp(aberturaTerminal.dataAbertura.getTime());
         this.valorMovimentado = aberturaTerminal.trocoDia;
         this.tipoOperacao = "1";
-        this.numeroVolumes = "1";
+        this.numeroVolumes = 1;
     }
     
     public MovimentoCofre(HttpServletRequest request,MovimentoConta movimentoConta) {
@@ -147,21 +149,19 @@ public class MovimentoCofre extends Processos{
             if(rs.next()){
                 idCofre = rs.getString(1);
                 idMovimentoCaixa = rs.getInt(2);
-                dataHoraMov = rs.getString(3);
-                valorMovimentado = Parser.toBigDecimalSt(rs.getString(4));
+                dataHoraMov = rs.getTimestamp(3);
+                valorMovimentado = rs.getBigDecimal(4);
                 tipoOperacao = rs.getString(5);
                 observacoes = rs.getString(6);
                 idMovimentoConta = rs.getInt(7);
-                numeroVolumes = "1";
+                numeroVolumes = 1;
             }else{
                 tipoOperacao = "";
-                dataHoraMov = "";
-                valorMovimentado = "";
                 observacoes = "";
                 idCofre = "";
                 idMovimentoCaixa = null;
                 idMovimentoConta = null;
-                numeroVolumes = "1";
+                numeroVolumes =1;
             }
         } catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);
@@ -200,7 +200,7 @@ public class MovimentoCofre extends Processos{
                                                                 + "     id_cofre = ? and"
                                                                 + "     data_saldo >= (SELECT data_saldo FROM saldos_cofres sc1 where id_movimento_cofre = ? limit 1) and"
                                                                 + "     id_entidade = ? ", false);
-                psUpSaldos.setBigDecimal(1,Parser.toBigDecimalFromHtml(valorMovimentado).multiply(Parser.toBigDecimalFromHtml(numeroVolumes)));
+                psUpSaldos.setBigDecimal(1,valorMovimentado.multiply(new BigDecimal(numeroVolumes)));
                 psUpSaldos.setInt(2, id);
                 psUpSaldos.setInt(3, Integer.valueOf(idCofre));
                 psUpSaldos.setInt(4, id);
@@ -216,7 +216,7 @@ public class MovimentoCofre extends Processos{
                                                                 + "     id_cofre = ? and"
                                                                 + "     data_saldo >= (SELECT data_saldo FROM saldos_cofres sc1 where id_movimento_cofre = ? limit 1) and"
                                                                 + "     id_entidade = ? ", false);
-                psUpSaldos.setBigDecimal(1,Parser.toBigDecimalFromHtml(valorMovimentado).multiply(Parser.toBigDecimalFromHtml(numeroVolumes)));
+                psUpSaldos.setBigDecimal(1,valorMovimentado.multiply(new BigDecimal(numeroVolumes)));
                 psUpSaldos.setInt(2, id);
                 psUpSaldos.setInt(3, Integer.valueOf(idCofre));
                 psUpSaldos.setInt(4, id);
@@ -243,8 +243,8 @@ public class MovimentoCofre extends Processos{
 "            ?);");
             ps.setInt(1, Integer.valueOf(idCofre));
             ps = Seter.set(ps, 2, idMovimentoCaixa);
-            ps.setTimestamp(3, Parser.toDbTimeStamp(dataHoraMov));
-            ps.setBigDecimal(4, Parser.toBigDecimalFromHtml(valorMovimentado).multiply(Parser.toBigDecimalFromHtml(numeroVolumes)));
+            ps.setTimestamp(3, dataHoraMov);
+            ps.setBigDecimal(4, valorMovimentado.multiply(new BigDecimal(numeroVolumes)));
             ps.setInt(5, Integer.valueOf(tipoOperacao));
             ps = Seter.set(ps, 6, observacoes);
             ps = Seter.set(ps, 7, idMovimentoConta);
@@ -275,8 +275,8 @@ public class MovimentoCofre extends Processos{
                         " where id = ? and id_entidade = ? ", false);
             ps.setInt(1, Integer.valueOf(idCofre));
             ps = Seter.set(ps, 2, idMovimentoCaixa);
-            ps.setTimestamp(3, Parser.toDbTimeStamp(dataHoraMov));
-            ps.setBigDecimal(4,  Parser.toBigDecimalFromHtml(valorMovimentado).multiply(Parser.toBigDecimalFromHtml(numeroVolumes)));
+            ps.setTimestamp(3, dataHoraMov);
+            ps.setBigDecimal(4, valorMovimentado.multiply(new BigDecimal(numeroVolumes)));
             ps.setInt(5, Integer.valueOf(tipoOperacao));
             ps = Seter.set(ps, 6, observacoes);
             ps = Seter.set(ps, 7, idMovimentoConta);
@@ -306,11 +306,11 @@ public class MovimentoCofre extends Processos{
         return contextPrinc;
     }
 
-    public String getIdTerminal() {
+    public String getIdTerminalMet() {
         return idCofre;
     }
 
-    public String getDataHoraMov() {
+    public Timestamp getDataHoraMovMC() {
         return dataHoraMov;
     }
     

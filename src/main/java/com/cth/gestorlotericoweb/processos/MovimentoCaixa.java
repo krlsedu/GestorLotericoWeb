@@ -6,66 +6,91 @@
 package com.cth.gestorlotericoweb.processos;
 
 import com.cth.gestorlotericoweb.LogError;
+import com.cth.gestorlotericoweb.estoque.Itens;
 import com.cth.gestorlotericoweb.estoque.MovimentosEstoque;
+import com.cth.gestorlotericoweb.operador.Operacoes;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.utils.Parser;
 import com.cth.gestorlotericoweb.utils.Seter;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-
-import jdk.nashorn.internal.objects.annotations.Setter;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
 
 /**
  *
  * @author CarlosEduardo
  */
 public class MovimentoCaixa extends Processos{
-    String idTerminal;
-    public String idFuncionario;
-    String idCofre;
-    String dataHoraMov;
-    String valorMovimentado;
-    String tipoOperacao;
-    String tipoOperacaoAnt;
+    Integer idTerminal;
+    public Integer idFuncionario;
+    Integer idCofre;
+    Timestamp dataHoraMov;
+    BigDecimal valorMovimentado;
+    Integer tipoOperacao;
+    Integer tipoOperacaoAnt;
     String observacoes;
     
-    BigDecimal valorMoeda;
+    Integer tipoMoeda;
+    Integer idOperacaoFuncionario;
     
     public MovimentoCaixa(HttpServletRequest request) {
         super(request);
         setMovimentosCaixas();
     }
     
+    public MovimentoCaixa(HttpServletRequest request, Operacoes operacoes){
+        super(request);
+        if (operacoes.getTipoOperacaoCaixa()==1) {
+            this.tipoOperacao = 2;
+        }else {
+            this.tipoOperacao = 1;
+        }
+        this.idTerminal = operacoes.getIdTerminal();
+        this.idFuncionario = operacoes.getIdFuncionario();
+        AberturaTerminal aberturaTerminal = new AberturaTerminal(request);
+        this.idCofre = Parser.toIntegerNull(aberturaTerminal.getIdCofre());
+        this.dataHoraMov = new Timestamp(new java.util.Date().getTime());
+        this.valorMovimentado = operacoes.getValorMovimentado();
+    
+        Itens itens = new Itens(request);
+        
+        this.tipoMoeda = itens.getIdItensEstoque(operacoes.getTipoItem());
+        this.observacoes = "Movimento de caixa gerado automaticamente pela rotina de Operações do funcionário";
+        this.idOperacaoFuncionario = operacoes.getId();
+        this.id = getIdMovimentoCaixa(operacoes);
+    }
+    
     public MovimentoCaixa(HttpServletRequest request, ResultSet rs) throws SQLException {
         super(request);
-        tipoOperacao = rs.getString(1);
-        idTerminal = rs.getString(2);
-        idFuncionario = rs.getString(3);
-        dataHoraMov = rs.getString(4);
-        valorMovimentado = Parser.toBigDecimalSt(rs.getString(5));
+        tipoOperacao = rs.getInt(1);
+        idTerminal = rs.getInt(2);
+        idFuncionario = rs.getInt(3);
+        dataHoraMov = rs.getTimestamp(4);
+        valorMovimentado = rs.getBigDecimal(5);
         observacoes = rs.getString(6);
-        idCofre = rs.getString(7);
-        valorMoeda = rs.getBigDecimal(8);
+        idCofre = rs.getInt(7);
+        tipoMoeda = rs.getInt(8);
     }
     
     private void setMovimentosCaixas() {
-        this.idTerminal = request.getParameter("id_terminal");
-        this.idFuncionario = request.getParameter("id_funcionario");
-        this.idCofre = request.getParameter("id_cofre");
-        this.dataHoraMov = request.getParameter("data_hora_mov");
-        this.valorMovimentado = request.getParameter("valor_movimentado");
-        this.tipoOperacao = request.getParameter("tipo_operacao_caixa");
+        this.idTerminal = Parser.toIntegerNull(request.getParameter("id_terminal"));
+        this.idFuncionario = Parser.toIntegerNull(request.getParameter("id_funcionario"));
+        this.idCofre = Parser.toIntegerNull(request.getParameter("id_cofre"));
+        this.dataHoraMov = Parser.toDbTimeStamp(request.getParameter("data_hora_mov"));
+        this.valorMovimentado = Parser.toBigDecimalFromHtml(request.getParameter("valor_movimentado"));
+        this.tipoOperacao = Parser.toIntegerNull(request.getParameter("tipo_operacao_caixa"));
         this.observacoes = request.getParameter("observacoes");
-        this.valorMoeda = Parser.toBigDecimalFromHtmlNull(request.getParameter("valor_moeda"));
+        this.tipoMoeda = Parser.toIntegerNull(request.getParameter("tipo_moeda"));
     }
     
     public MovimentoCaixa(Integer id,HttpServletRequest request) {
@@ -76,28 +101,22 @@ public class MovimentoCaixa extends Processos{
     public void getDadosPorId(){
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT  tipo_operacao_caixa,id_terminal, id_funcionario, data_hora_mov, \n" +
-                    "       valor_movimentado, observacoes, id_cofre, valor_moeda \n" +
+                    "       valor_movimentado, observacoes, id_cofre, tipo_moeda \n" +
                     "  FROM public.movimentos_caixas where id = ? and id_entidade = ? ",false);
             ps.setInt(1, id);
             ps.setInt(2, Parametros.idEntidade);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                tipoOperacao = rs.getString(1);
-                idTerminal = rs.getString(2);
-                idFuncionario = rs.getString(3);
-                dataHoraMov = rs.getString(4);
-                valorMovimentado = Parser.toBigDecimalSt(rs.getString(5));
+                tipoOperacao = rs.getInt(1);
+                idTerminal = rs.getInt(2);
+                idFuncionario = rs.getInt(3);
+                dataHoraMov = rs.getTimestamp(4);
+                valorMovimentado = rs.getBigDecimal(5);
                 observacoes = rs.getString(6);
-                idCofre = rs.getString(7);
-                valorMoeda = rs.getBigDecimal(8);
+                idCofre = rs.getInt(7);
+                tipoMoeda = rs.getInt(8);
             }else{
-                tipoOperacao = "";
-                idTerminal = "";
-                idFuncionario = "";
-                dataHoraMov = "";
-                valorMovimentado = "";
                 observacoes = "";
-                idCofre = "";
             }
         } catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);
@@ -129,7 +148,7 @@ public class MovimentoCaixa extends Processos{
         try {
             List<MovimentoCaixa> movimentoCaixaList = new ArrayList<>();
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT  tipo_operacao_caixa,id_terminal, id_funcionario, data_hora_mov, \n" +
-                    "       valor_movimentado, observacoes, id_cofre, valor_moeda \n" +
+                    "       valor_movimentado, observacoes, id_cofre, tipo_moeda \n" +
                     "  FROM public.movimentos_caixas where id_terminal = ? and id_funcionario = ? and date( data_hora_mov) = ?  and id_entidade = ? ",false);
             ps.setInt(1, Integer.valueOf(request.getParameter("id_terminal")));
             ps.setInt(2, Integer.valueOf(request.getParameter("id_funcionario")));
@@ -147,24 +166,39 @@ public class MovimentoCaixa extends Processos{
         return new ArrayList<>();
     }
     
+    public void gravaAutoMov(){
+        if (this.id == null) {
+            this.id = 0;
+        }
+        if (this.id>0) {
+            altera();
+        }else {
+            insere();
+        }
+    }
+    
     public void insere(){
         try {
-            PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.movimentos_caixas(\n" +
+            //language=PostgresPLSQL
+            String sql ="INSERT INTO public.movimentos_caixas(\n" +
 "            tipo_operacao_caixa, id_terminal, id_funcionario, data_hora_mov, \n" +
-"            valor_movimentado, observacoes, id_entidade,id_cofre, valor_moeda)\n" +
+"            valor_movimentado, observacoes,id_cofre, tipo_moeda,id_operacao_funcionario, id_entidade)\n" +
 "    VALUES (?, ?, ?, ?, \n" +
-"            ?, ?, ?, ?, ?);");
-            ps.setInt(1, Integer.valueOf(tipoOperacao));
-            ps = Seter.set(ps,2,Parser.toIntegerNull(idTerminal));
-            ps.setInt(3, Integer.valueOf(idFuncionario));
-            ps.setTimestamp(4, Parser.toDbTimeStamp(dataHoraMov));
-            ps.setBigDecimal(5, Parser.toBigDecimalFromHtml(valorMovimentado));
-            ps = Seter.set(ps, 6, observacoes);
-            ps.setInt(7, Parametros.idEntidade);
-            ps = Seter.set(ps,8,Parser.toIntegerNull(idCofre));
-            ps = Seter.set(ps,9,valorMoeda);
-            ps.execute();
-            ResultSet rs = ps.getGeneratedKeys();
+"            ?, ?, ?, ?, ?, ?);";
+            Seter ps = new Seter(sql,request);
+            ps.set( Integer.valueOf(tipoOperacao));
+            ps.set(idTerminal);
+            ps.set(Integer.valueOf(idFuncionario));
+            ps.set( dataHoraMov);
+            ps.set( valorMovimentado);
+            ps.set(observacoes);
+            ps.set(Integer.valueOf(idCofre));
+            ps.set(tipoMoeda);
+            ps.set(idOperacaoFuncionario);
+            ps.set(Parametros.idEntidade);
+            
+            ps.getPst().execute();
+            ResultSet rs = ps.getPst().getGeneratedKeys();
             if(rs.next()){
                 id = rs.getInt(1);
     
@@ -179,31 +213,32 @@ public class MovimentoCaixa extends Processos{
     public void altera(){
         String idL = request.getParameter("id");
         try {
-            PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.movimentos_caixas\n" +
+            //language=PostgresPLSQL
+            String sql = ("UPDATE public.movimentos_caixas\n" +
             "   SET tipo_operacao_caixa=?, id_terminal=?, id_funcionario=?, data_hora_mov=?,\n" +
-            "    valor_movimentado=?, observacoes=?, id_cofre=? \n" 
-                    + " where id = ? and id_entidade = ? ", false);
-            ps.setInt(1, Integer.valueOf(tipoOperacao));
-            if(idTerminal == null||idTerminal.trim().equals("")){
-                ps.setNull(2, java.sql.Types.BIGINT);
-            }else{
-                ps.setInt(2, Integer.valueOf(idTerminal));
-            }
-            ps.setInt(3, Integer.valueOf(idFuncionario));
-            ps.setTimestamp(4, Parser.toDbTimeStamp(dataHoraMov));
-            ps.setBigDecimal(5, Parser.toBigDecimalFromHtml(valorMovimentado));
-            ps = Seter.set(ps, 6, observacoes);
-            ps = Seter.set(ps,7,Integer.valueOf(idCofre));
+            "    valor_movimentado=?, observacoes=?, id_cofre=?, tipo_moeda = ?, id_operacao_funcionario = ? \n"
+                    + " where id = ? and id_entidade = ? ");
+            Seter ps = new Seter(sql,request);
+            
+            ps.set( Integer.valueOf(tipoOperacao));
+            ps.set(idTerminal);
+            ps.set(Integer.valueOf(idFuncionario));
+            ps.set( dataHoraMov);
+            ps.set( valorMovimentado);
+            ps.set(observacoes);
+            ps.set(Integer.valueOf(idCofre));
+            ps.set(tipoMoeda);
+            ps.set(idOperacaoFuncionario);
             
             id = Integer.valueOf(idL);
             MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request);
             movimentoCaixa.id = id;
             movimentoCaixa.getDadosPorId();
             tipoOperacaoAnt = movimentoCaixa.tipoOperacao;
-            ps.setInt(8, id);
-            ps.setInt(9, Parametros.idEntidade);
+            ps.set( id);
+            ps.set(Parametros.idEntidade);
             
-            ps.execute();
+            ps.getPst().execute();
             gravaOutrosMovimentos();
         } catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);
@@ -215,9 +250,11 @@ public class MovimentoCaixa extends Processos{
             try{
                 MovimentoCofre movimentoCofre = new MovimentoCofre(request, this);
                 movimentoCofre.gravaAutoMov();
-                if (valorMoeda != null) {
-                    MovimentosEstoque movimentosEstoque = new MovimentosEstoque(this);
-                    movimentosEstoque.gravaAutoMov();
+                if (tipoMoeda!= null) {
+                    if (tipoMoeda>0) {
+                        MovimentosEstoque movimentosEstoque = new MovimentosEstoque(this);
+                        movimentosEstoque.gravaAutoMov();
+                    }
                 }
             }catch(Exception e){
             
@@ -232,7 +269,10 @@ public class MovimentoCaixa extends Processos{
         templateConteudo = ve.getTemplate( "templates/Modern/processos/movimentos_caixas.html" , "UTF-8");
         contextConteudo = new VelocityContext();
         writerConteudo = new StringWriter();
-        contextConteudo.put("btns_percorrer",getSWBotoesPercorrer(ve).toString());       
+        contextConteudo.put("btns_percorrer",getSWBotoesPercorrer(ve).toString());
+        Operacoes operacoes = new Operacoes(request);
+        operacoes.setTipoItem(5);
+        contextConteudo.put("opts_padrao", operacoes.getOptsEdicaoItem());
         setOpcoesFiltro("movimentos_caixas");
         templateConteudo.merge( contextConteudo, writerConteudo );
         contextPrinc.put("conteudo", writerConteudo.toString());
@@ -240,23 +280,39 @@ public class MovimentoCaixa extends Processos{
         return contextPrinc;
     }
     
-    public String getTipoOperacao() {
+    public Integer getTipoOperacao() {
         return tipoOperacao;
     }
     
-    public String getValorMovimentado() {
-        return Parser.toBigDecimalSt(valorMovimentado);
+    public BigDecimal getValorMovimentado() {
+        return valorMovimentado;
     }
     
     public String getObservacoes() {
         return observacoes;
     }
     
-    public BigDecimal getValorMoeda() {
-        return valorMoeda;
+    public Integer getTipoMoeda() {
+        return tipoMoeda;
     }
     
-    public String getTipoOperacaoAnt() {
+    public Integer getTipoOperacaoAnt() {
         return tipoOperacaoAnt;
+    }
+    
+    private Integer getIdMovimentoCaixa(Operacoes operacoes){
+        String sql = "SELECT id FROM movimentos_caixas where id_operacao_funcionario = ? AND id_entidade = ?";
+        try {
+            Seter ps = new Seter(sql,request,false);
+            ps.set(operacoes.getId());
+            ps.set(Parametros.idEntidade);
+            ResultSet rs = ps.getPst().executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            new LogError(e.getMessage(),e,request);
+        }
+        return null;
     }
 }

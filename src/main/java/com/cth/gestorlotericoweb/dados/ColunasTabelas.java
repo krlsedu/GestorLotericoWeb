@@ -53,6 +53,7 @@ public class ColunasTabelas {
     
     private void setmTabIEntidade(){
         mTabIEntidade.put("componentes",false);
+        mTabIEntidade.put("usuarios",false);
     }
     
     private void setColTab(){
@@ -81,6 +82,7 @@ public class ColunasTabelas {
         putMs("nome_func","Nome Funcionário");
         putMs("nome_lot","Nome Lotérica");
         putMs("nome_item","Nome Item");
+        putMs("nome","Nome do usuário");
         putMs("(select nome_item from itens_estoque WHERE itens_estoque.id = nome_tabela.id_itens_estoque)","Nome do Item");
     }
     
@@ -99,6 +101,7 @@ public class ColunasTabelas {
     
     private void carregaTabelas(){
         mTabelas.put("lotericas", "lotericas");
+        mTabelas.put("usuarios", "usuarios");
         mTabelas.put("terminais", "terminais");
         mTabelas.put("funcionarios", "funcionarios");
         mTabelas.put("contas", "contas");
@@ -127,6 +130,7 @@ public class ColunasTabelas {
         mColNome.put("cofres", "nome_cofre");
         mColNome.put("componentes", "nome_componente");
         mColNome.put("itens_estoque", "nome_item");
+        mColNome.put("usuarios", "nome");
     }
     
     public String getColNome(String tabela){
@@ -152,16 +156,17 @@ public class ColunasTabelas {
         mTabColsSelBusca.put("componentes", "id, nome_componente");
         mTabColsSelBusca.put("itens_estoque", "id, nome_item,(SELECT nome from lotericas where lotericas.id = itens_estoque.id_loterica and lotericas.id_entidade = itens_estoque.id_entidade) as nome_lot");
         mTabColsSelBusca.put("movimentos_estoque", "id, (SELECT nome_item FROM itens_estoque where itens_estoque.id = movimentos_estoque.id_itens_estoque and itens_estoque.id_entidade = movimentos_estoque.id_entidade) as nome_item,  (select nome from funcionarios WHERE funcionarios.id = movimentos_estoque.id_funcionario and movimentos_estoque.id_entidade = funcionarios.id_entidade) as nome_func,to_char(data_hora_mov, 'DD/MM/YYYY HH24:MI') as dt_h");
+        mTabColsSelBusca.put("usuarios","id,usuario,nome,email");
     }
     private void carregaTabColsDados(){
         mTabColsSelDados.put("lotericas", "codigo_caixa, nome");
         mTabColsSelDados.put("terminais", "codigo_caixa, nome, marca, modelo, observacoes, id_loterica");
-        mTabColsSelDados.put("funcionarios", "codigo_caixa, nome, cpf, tipo_func, observacoes");
+        mTabColsSelDados.put("funcionarios", "codigo_caixa, nome, cpf, tipo_func, observacoes, id_usuario");
         mTabColsSelDados.put("contas", "conta_corrente, dv, nome_conta, operacao, agencia, telefone, gerente, id_loterica, observacoes");
         mTabColsSelDados.put("operacoes", "nome_oper_caixa, nome_oper, tipo_oper, observacoes");
         mTabColsSelDados.put("cofres", "nome_cofre, tipo_cofre, observacoes, id_loterica");
         mTabColsSelDados.put("abertura_terminais", " id_terminal, id_funcionario, data_abertura, troco_dia_anterior, troco_dia, observacoes, id_cofre");
-        mTabColsSelDados.put("movimentos_caixas", "tipo_operacao_caixa, id_terminal, id_funcionario, data_hora_mov, valor_movimentado, observacoes, id_cofre, valor_moeda");
+        mTabColsSelDados.put("movimentos_caixas", "tipo_operacao_caixa, id_terminal, id_funcionario, data_hora_mov, valor_movimentado, observacoes, id_cofre, tipo_moeda");
         mTabColsSelDados.put("outros_movimentos", "tipo_operacao_caixa, id_terminal, id_funcionario, data_hora_mov, valor_movimentado, observacoes");
         mTabColsSelDados.put("fechamento_terminais", "id_terminal, id_funcionario, data_encerramento,resto_caixa, total_movimentos_dia, total_creditos_terminal, total_debitos_terminal,saldo_terminal, diferenca_caixa, observacoes");
         mTabColsSelDados.put("tarifas_operacoes", "id_operacao, data_base, valor_tarifa, observacoes");
@@ -170,7 +175,7 @@ public class ColunasTabelas {
         mTabColsSelDados.put("operacoes_diarias", "id_terminal, id_funcionario, data_operacoes, observacoes");
         mTabColsSelDados.put("operacoes_diarias_det", "id , id_operacao, quantidade");
         mTabColsSelDados.put("componentes", "nome_componente");
-        mTabColsSelDados.put("itens_estoque"," tipo_item, unidade, nome_item, valor_padrao, observacoes, id_loterica");
+        mTabColsSelDados.put("itens_estoque"," tipo_item, unidade, nome_item, valor_padrao, observacoes, id_loterica, data_sorteio");
         mTabColsSelDados.put("movimentos_estoque"," tipo_movimento, id_itens_estoque, quantidade_movimentada, id_funcionario, id_loterica, observacoes, data_hora_mov");
     }
     private void carregaTabOpts(){
@@ -272,6 +277,10 @@ public class ColunasTabelas {
         lOpts = new ArrayList<>();
         lOpts.add("<option>Nome do Item</option>");
         mTabOpts.put("operacoes_funcionario", lOpts);
+        
+        lOpts = new ArrayList<>();
+        lOpts.add("<option>Nome do usuário</option>");
+        mTabOpts.put("usuarios", lOpts);
     }
     
     public String getOpts(String tabela){

@@ -10,9 +10,11 @@ import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.utils.Parser;
 import com.cth.gestorlotericoweb.utils.Seter;
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -26,11 +28,11 @@ public class MovimentoConta extends Processos{
     Integer idMovimentoConta;
     String idConta;
     String idCofre;
-    String dataHoraMov;
+    Timestamp dataHoraMov;
     String formaDeposito;
     String tipoMovimentoConta;
-    String valorMovimentado;
-    String numeroVolumes;
+    BigDecimal valorMovimentado;
+    Integer numeroVolumes;
     String observacoes;
     
     
@@ -46,12 +48,12 @@ public class MovimentoConta extends Processos{
         }
         this.idConta = request.getParameter("id_conta");
         this.idCofre = request.getParameter("id_cofre");
-        this.dataHoraMov = request.getParameter("data_hora_mov");
+        this.dataHoraMov = Parser.toDbTimeStamp(request.getParameter("data_hora_mov"));
         this.formaDeposito = request.getParameter("forma_deposito");
-        this.valorMovimentado = request.getParameter("valor_movimentado");
+        this.valorMovimentado = Parser.toBigDecimalFromHtml(request.getParameter("valor_movimentado"));
         this.tipoMovimentoConta = request.getParameter("tipo_movimento_conta");
-        this.numeroVolumes = request.getParameter("numero_volumes");
-        if(this.numeroVolumes == null) this.numeroVolumes = "1";
+        this.numeroVolumes = Parser.toIntegerNull(request.getParameter("numero_volumes"));
+        if(this.numeroVolumes == null) this.numeroVolumes = 1;
         this.observacoes = request.getParameter("observacoes");
     }
     
@@ -70,23 +72,21 @@ public class MovimentoConta extends Processos{
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 idConta = rs.getString(1);
-                dataHoraMov = rs.getString(2);
-                valorMovimentado = Parser.toBigDecimalSt(rs.getString(3));
+                dataHoraMov = rs.getTimestamp(2);
+                valorMovimentado = rs.getBigDecimal(3);
                 tipoMovimentoConta = rs.getString(4);
                 formaDeposito = rs.getString(5);
                 observacoes = rs.getString(6);
                 idCofre = rs.getString(7);
-                numeroVolumes = rs.getString(8);
+                numeroVolumes = rs.getInt(8);
             }else{
                 tipoMovimentoConta = "";
                 formaDeposito = "";
-                dataHoraMov = "";
-                valorMovimentado = "";
                 observacoes = "";
                 idConta = "";
                 idCofre = null;
                 idMovimentoConta = null;
-                numeroVolumes = "1";
+                numeroVolumes = 1;
             }
         } catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);
@@ -122,8 +122,8 @@ public class MovimentoConta extends Processos{
 "            ?, ?, ?, ?, ?, \n" +
 "            ?, ?);");
             ps.setInt(1, Integer.valueOf(idConta));
-            ps.setTimestamp(2, Parser.toDbTimeStamp(dataHoraMov));
-            ps.setBigDecimal(3, Parser.toBigDecimalFromHtml(valorMovimentado));
+            ps.setTimestamp(2, dataHoraMov);
+            ps.setBigDecimal(3, valorMovimentado);
             ps.setInt(4, Integer.valueOf(tipoMovimentoConta));
             ps.setInt(5,Integer.valueOf(formaDeposito));
             ps = Seter.set(ps, 6, observacoes);
@@ -158,8 +158,8 @@ public class MovimentoConta extends Processos{
                         "       tipo_movimento_conta=?, forma_deposito=?, observacoes=? , id_cofre = ?, numero_volumes = ?  \n" +
                         " where id = ? and id_entidade = ? ", false);
             ps.setInt(1, Integer.valueOf(idConta));
-            ps.setTimestamp(2, Parser.toDbTimeStamp(dataHoraMov));
-            ps.setBigDecimal(3, Parser.toBigDecimalFromHtml(valorMovimentado));
+            ps.setTimestamp(2, dataHoraMov);
+            ps.setBigDecimal(3, valorMovimentado);
             ps.setInt(4, Integer.valueOf(tipoMovimentoConta));
             ps.setInt(5,Integer.valueOf(formaDeposito));
             ps = Seter.set(ps, 6, observacoes);
@@ -213,6 +213,6 @@ public class MovimentoConta extends Processos{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return dataHoraMov;
+        return dataHoraMov.toString();
     }
 }

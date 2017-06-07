@@ -27,13 +27,13 @@ public class MovimentosTerminal extends Detalhamentos {
 		String linha;
 		AberturaTerminal aberturaTerminal = new AberturaTerminal(request);
 		aberturaTerminal.getDadosPorTerminalFuncionarioEData();
-		linha = getCel("Abertura - Entrada")+getCel("Troco dia Anterior")+getCel(Parser.formataComMascara(Parser.toBigDecimalFromSt(aberturaTerminal.getTrocoDiaAnterior()),""))+getCel(aberturaTerminal.getObservacoes());
+		linha = getCel("Abertura - Entrada")+getCel("Troco dia Anterior")+getCel(Parser.formataComMascara(aberturaTerminal.getTrocoDiaAnterior(),""))+getCel(aberturaTerminal.getObservacoes());
 		lLinhas = getLinha(lLinhas,linha);
-		linha = getCel("Abertura - Entrada")+getCel("Troco do dia")+getCel(Parser.formataComMascara(Parser.toBigDecimalFromSt(aberturaTerminal.getTrocoDia()),""))+getCel(aberturaTerminal.getObservacoes());
+		linha = getCel("Abertura - Entrada")+getCel("Troco do dia")+getCel(Parser.formataComMascara(aberturaTerminal.getTrocoDia(),""))+getCel(aberturaTerminal.getObservacoes());
 		lLinhas = getLinha(lLinhas,linha);
 		MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request);
 		for (MovimentoCaixa mc:movimentoCaixa.getDadosPorTerminalFuncionarioData()){
-			linha =  getCel("Movimento de caixa")+getCel(mc.getTipoOperacao().equals("1")?"Sangria":"Depósito")+getCel(Parser.formataComMascara(Parser.toBigDecimalFromSt(mc.getValorMovimentado()),""))+getCel(mc.getObservacoes());
+			linha =  getCel("Movimento de caixa")+getCel(mc.getTipoOperacao().equals("1")?"Sangria":"Depósito")+getCel(Parser.formataComMascara(mc.getValorMovimentado(),""))+getCel(mc.getObservacoes());
 			lLinhas = getLinha(lLinhas,linha);
 		}
 		OutrosMovimentos outrosMovimentos = new OutrosMovimentos(request);

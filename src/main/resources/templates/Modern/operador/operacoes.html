@@ -1,58 +1,80 @@
 <script type="text/javascript">
     $(function () {
         $("#valor_movimentado").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+        $('#quantidade').mask("99999999");
     });
 
 
     $('#tipo_item').on('change', function() {
-        switch ($(this).val()){
-            case "3":
+        var its = $(this);
+        switch (its.val()){
+            case "1"://Bolão
                 $('#div_cb_tipo').show();
+                $('#div_data_sorteio').show();
+                $('#div_nome_concurso').show();
+                $('#div_quantidade').show();
+                $('#opt_gera').show();
+                $('#opt_vend').show();
+                $('#opt_troc').hide();
+                $('#lb_cb_tipo').html("Tipo");
+                break;
+            case "2"://Bilhete
+                $('#div_cb_tipo').show();
+                $('#div_data_sorteio').show();
+                $('#div_nome_concurso').show();
+                $('#div_quantidade').show();
+                $('#opt_gera').hide();
+                $('#opt_vend').show();
+                $('#opt_troc').hide();
+                $('#lb_cb_tipo').html("Edição");
+                break;
+            case "3": // Dinheiro
+                $('#div_cb_tipo').hide();
                 $('#div_data_sorteio').hide();
                 $('#div_nome_concurso').hide();
+                $('#div_quantidade').hide();
                 $('#opt_gera').hide();
                 $('#opt_vend').hide();
                 $('#opt_troc').hide();
                 break;
-            case "2":
-                $('#div_cb_tipo').hide();
+            case "4"://Tele Sena
+                $('#div_cb_tipo').show();
                 $('#div_data_sorteio').show();
                 $('#div_nome_concurso').show();
-                $('#opt_gera').hide();
-                $('#opt_vend').show();
-                $('#opt_troc').hide();
-                break;
-            case "1":
-                $('#div_cb_tipo').hide();
-                $('#div_data_sorteio').show();
-                $('#div_nome_concurso').show();
-                $('#opt_gera').show();
-                $('#opt_vend').show();
-                $('#opt_troc').hide();
-                break;
-            case "4":
-                $('#div_cb_tipo').hide();
-                $('#div_data_sorteio').show();
-                $('#div_nome_concurso').show();
+                $('#div_quantidade').show();
                 $('#opt_gera').hide();
                 $('#opt_vend').show();
                 $('#opt_troc').show();
+                $('#lb_cb_tipo').html("Edição");
                 break;
-            default:
-                $('#div_cb_tipo').hide();
+            case "5": //MOedas
+                $('#div_cb_tipo').show();
+                $('#div_data_sorteio').hide();
+                $('#div_nome_concurso').hide();
+                $('#div_quantidade').hide();
+                $('#opt_gera').hide();
+                $('#opt_vend').hide();
+                $('#opt_troc').hide();
+                $('#lb_cb_tipo').html("Valor");
+                break;
+            default://Outros
+                $('#div_cb_tipo').show();
                 $('#div_data_sorteio').show();
                 $('#div_nome_concurso').show();
+                $('#div_quantidade').show();
                 $('#opt_gera').show();
                 $('#opt_vend').show();
                 $('#opt_troc').hide();
+                $('#lb_cb_tipo').html("Tipo");
                 break;
         }
+        consultaOpcoesCb(its.val(),'edicao_item');
     });
 </script>
 <div class="xs">
     <form class="form-horizontal" id="form_dados">
         <div class="panel panel-default">
-            <div class="panel-heading">Outras Movimentações de Caixa</div>
+            <div class="panel-heading">Operações </div>
             <div class="panel-body">
                 <div class="tab-content">
                     <div class="tab-pane active" id="horizontal-form">
@@ -65,12 +87,13 @@
                                     <option value="2" >Bilhete</option>
                                     <option value="3" >Dinheiro</option>
                                     <option value="4" >Tele Sena</option>
-                                    <option value="5" >Outros</option>
+                                    <option value="5" >Moedas</option>
+                                    <option value="6" >Outros</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="tipo_operacao_caixa" class="col-sm-2 control-label">Tipo Operação</label>
+                            <label for="tipo_operacao_caixa" class="col-sm-2 control-label" >Tipo Operação</label>
                             <div class="col-sm-4">
                                 <select name="tipo_operacao_caixa" id="tipo_operacao_caixa" class="form-control1">
                                     <option value="1" id="opt_entr">Entrada</option>
@@ -82,19 +105,10 @@
                             </div>
                         </div>
                         <div class="form-group" id="div_cb_tipo">
-                            <label for="edicao_item" class="col-sm-2 control-label">Tipo </label>
+                            <label for="edicao_item" class="col-sm-2 control-label" id="lb_cb_tipo">Tipo </label>
                             <div class="col-sm-4">
                                 <select name="edicao_item" id="edicao_item" class="form-control1">
-                                    <option value="0" >Selecione</option>
-                                    <option value="1" >MEGA-SENA</option>
-                                    <option value="3" >QUINA</option>
-                                    <option value="5" >LOTOFÁCIL</option>
-                                    <option value="6" >LOTOMANIA</option>
-                                    <option value="7" >TIMEMANIA</option>
-                                    <option value="8" >DUPLA SENA</option>
-                                    <option value="9" >LOTECA</option>
-                                    <option value="10" >LOTOGOL</option>
-                                    <option value="11" >Outros</option>
+                                    $opts_padrao
                                 </select>
                             </div>
                         </div>
@@ -112,7 +126,17 @@
                                         <i class="fa fa-calendar"></i>
                                     </div>
                                     <input name="data_sorteio" id="data_sorteio" type="date" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.date"
-                                           required>
+                                           >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-n" id="div_quantidade">
+                            <label for="quantidade" class="col-sm-2 control-label">Quantidade</label>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Un</span>
+                                    <input name="quantidade" id="quantidade" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/"
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -134,8 +158,9 @@
                         </div>
                         <input type="hidden" id="it" name="it" value="operacoes_funcionario" />
                         <input type="hidden" id="id" name="id" value="0" />
-                        <input name="id_funcionario" type="hidden" id="id_funcionario" value="">
-                        <input type="hidden" name="id_terminal" id="id_terminal" >
+                        <input name="id_funcionario" type="hidden" id="id_funcionario" value="$id_fun">
+                        <input name="id_abertura_terminal" type="hidden" id="id_abertura_terminal" value="$id_abr">
+                        <input type="hidden" name="id_terminal" id="id_terminal" value="$id_ter">
                     </div>
                 </div>
             </div>

@@ -25,8 +25,9 @@ public class MovimentosEstoque extends Estoque {
 	Integer numeroVolumes;
 	Integer idMovimentoCaixa;
 	
-	String tipoOperacao;
-	String tipoOperacaoAnt;
+	Integer tipoOperacao;
+	Integer tipoOperacaoAnt;
+	
 	String observacoes;
 	
 	BigDecimal quantidadeMovimentada;
@@ -48,18 +49,18 @@ public class MovimentosEstoque extends Estoque {
 		this.idLoterica = Parametros.getIdLoterica();
 		Itens itens = new Itens(this.request);
 		itens.idLoterica = this.idLoterica;
-		this.idItensEstoque = itens.getIdItensEstoque(movimentoCaixa.getValorMoeda(),2);
-		this.idFuncionario = Parser.toIntegerNull(movimentoCaixa.idFuncionario);
+		this.idItensEstoque = itens.getIdItensEstoque(movimentoCaixa.getTipoMoeda());
+		this.idFuncionario = movimentoCaixa.idFuncionario;
 		this.numeroVolumes = 1;
 		
-		if (movimentoCaixa.getTipoOperacao().equals("2")) {
-			this.tipoOperacao = "2";
+		if (movimentoCaixa.getTipoOperacao()==2) {
+			this.tipoOperacao = 2;
 		}else {
-			this.tipoOperacao = "1";
+			this.tipoOperacao = 1;
 		}
 		this.observacoes = "Movimento gerado automaticamente pela rotina de movimento de caixa";
 		
-		this.quantidadeMovimentada = Parser.toBigDecimalFromSt(movimentoCaixa.getValorMovimentado());
+		this.quantidadeMovimentada = movimentoCaixa.getValorMovimentado();
 		this.numeroVolumesBd = Parser.toBigDecimalFromSt("1");
 		this.tipoOperacaoAnt = movimentoCaixa.getTipoOperacaoAnt();
 		this.qtdTotalMovimentada = this.quantidadeMovimentada.multiply(this.numeroVolumesBd);
@@ -76,7 +77,7 @@ public class MovimentosEstoque extends Estoque {
 		idFuncionario = Parser.toIntegerNull(request.getParameter("id_funcionario"));
 		numeroVolumes = 1;
 		
-		tipoOperacao = request.getParameter("tipo_movimento");
+		tipoOperacao = Parser.toIntegerNull(request.getParameter("tipo_movimento"));
 		observacoes = request.getParameter("observacoes");
 		
 		quantidadeMovimentada = Parser.toBigDecimalFromHtml(request.getParameter("quantidade_movimentada"));
@@ -104,7 +105,7 @@ public class MovimentosEstoque extends Estoque {
 			ps.setInt(2,Parametros.idEntidade);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()){
-				tipoOperacao = rs.getString(1);
+				tipoOperacao = rs.getInt(1);
 				idItensEstoque = rs.getInt(2);
 				quantidadeMovimentada = rs.getBigDecimal(3);
 				idLoterica = rs.getInt(4);
@@ -151,20 +152,18 @@ public class MovimentosEstoque extends Estoque {
 	private void gravaSaldoEstoqueFuncionario(){
 		if (this.idFuncionario != null) {
 			if (request.getParameter("it").equals("movimentos_caixas")){
-				if(this.tipoOperacao.equals("1")){
-					if (this.tipoOperacaoAnt.equals(tipoOperacao)) {
-						this.tipoOperacaoAnt = "2";
+				if(this.tipoOperacao == 1 ){
+					if (this.tipoOperacaoAnt.equals(tipoOperacao )) {
+						this.tipoOperacaoAnt = 2;
 					}else {
-						this.tipoOperacaoAnt = "1";
+						this.tipoOperacaoAnt = 1;
 					}
-					this.tipoOperacao = "2";
 				}else {
 					if (this.tipoOperacaoAnt.equals(tipoOperacao)) {
-						this.tipoOperacaoAnt = "1";
+						this.tipoOperacaoAnt = 1;
 					}else {
-						this.tipoOperacaoAnt = "2";
+						this.tipoOperacaoAnt = 2;
 					}
-					this.tipoOperacao = "1";
 				}
 			}
 			SaldoEstoqueFuncionario saldoEstoqueFuncionario = new SaldoEstoqueFuncionario(request);

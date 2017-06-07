@@ -7,6 +7,8 @@ package com.cth.gestorlotericoweb.parametros;
 
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.banco.Conexao;
+import com.cth.gestorlotericoweb.processos.AberturaTerminal;
+import com.cth.gestorlotericoweb.utils.Parser;
 import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,12 +25,31 @@ import java.util.List;
 public class Parametros {
 	public static Conexao conexao;
 	public static Integer idUsuario;
+	private static Integer idFuncionario;
 	public static Integer idEntidade;
 	private static Integer idLoterica;
+	private static Integer idTerminal;
+	private static Integer idAberturaTerminal;
 	public static String entidadeNome;
 	public static String version;
 	public static String codificacao;
 	public static String patern;
+	
+	public static Integer getIdTerminal() {
+		return idTerminal;
+	}
+	
+	public static void setIdTerminal(Integer idTerminal) {
+		Parametros.idTerminal = idTerminal;
+	}
+	
+	public static Integer getIdAberturaTerminal() {
+		return idAberturaTerminal;
+	}
+	
+	public static void setIdAberturaTerminal(Integer idAberturaTerminal) {
+		Parametros.idAberturaTerminal = idAberturaTerminal;
+	}
 	
 	public static void initDb(HttpServletRequest request) {
 		conexao = new Conexao(request);
@@ -95,6 +116,32 @@ public class Parametros {
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 		}
+	}
+	
+	private static void setIdFuncionario(Integer idFuncionario, HttpServletRequest request) {
+		Parametros.idFuncionario = idFuncionario;
+		AberturaTerminal aberturaTerminal = new AberturaTerminal(request);
+		aberturaTerminal.getTerminalAberto(idFuncionario);
+		setIdTerminal(Parser.toIntegerNull(aberturaTerminal.getIdTerminal()));
+		setIdAberturaTerminal(aberturaTerminal.getId());
+	}
+	
+	public static void setDadosFuncXterm(HttpServletRequest request){
+		try {
+			PreparedStatement ps = getConexao(request).getPst("SELECT id FROM funcionarios WHERE id_usuario = ? AND id_entidade = ?",false);
+			ps.setInt(1, idUsuario);
+			ps.setInt(2, idEntidade);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				setIdFuncionario(rs.getInt(1),request);
+			}
+		} catch (SQLException e) {
+			new LogError(e.getMessage(), e, request);
+		}
+	}
+	
+	public static Integer getIdFuncionario() {
+		return idFuncionario;
 	}
 	
 	public static Integer getIdLoterica() {

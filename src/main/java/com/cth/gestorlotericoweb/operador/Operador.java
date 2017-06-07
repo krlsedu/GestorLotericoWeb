@@ -14,6 +14,7 @@ import java.util.List;
 public class Operador {
 	List<String> lOpts = new ArrayList<>();
 	final HttpServletRequest request;
+	Integer id;
 	
 	public Operador(HttpServletRequest request) {
 		this.request = request;
@@ -47,5 +48,13 @@ public class Operador {
 		ColunasTabelas colunasTabelas = new ColunasTabelas(request);
 		lOpts = colunasTabelas.getlOpts(tipo);
 		return lOpts;
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+	
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }
