@@ -63,6 +63,10 @@ public class Grava {
                     MovimentosEstoque movimentosEstoque = new MovimentosEstoque( request);
                     movimentosEstoque.deleta();
                     break;
+                case "operacoes_funcionario":
+                    Operacoes operacoes = new Operacoes( request);
+                    operacoes.deleta();
+                    break;
                 default:                    
                     tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
                     if(tabela !=null){

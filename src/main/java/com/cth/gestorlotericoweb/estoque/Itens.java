@@ -119,6 +119,9 @@ public class Itens extends Estoque{
 	}
 	
 	public Integer getIdItensEstoque(Integer idItemEst){
+		if (idItemEst==null){
+			return null;
+		}
 		if (idItemEst>100) {
 			idItemEst -=100;
 			return idItemEst;

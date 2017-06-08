@@ -260,6 +260,11 @@ function insereDadosSinc(htmlDoc) {
                 if(!(valr===null||valr==='null')){
                     if(tipo==="select-one"||tipo==="textarea"){
                         document.getElementById(nomeCol).value = valr;
+                        try{
+                            $('#'+nomeCol).trigger("change");
+                        }catch (e){
+
+                        }
                     }else{
                         $('input#'+nomeCol).val(valr).trigger('mask.maskMoney');
                     }
@@ -269,7 +274,8 @@ function insereDadosSinc(htmlDoc) {
                     }
                 }
             }catch (ex){
-                setTimeout(function() {insereDados(htmlDoc);}, 1000);
+                console.log(ex.toString());
+                //setTimeout(function() {insereDados(htmlDoc);}, 1000);
             }
         }catch (e){
 

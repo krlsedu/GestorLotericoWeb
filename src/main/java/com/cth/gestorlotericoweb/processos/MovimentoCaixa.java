@@ -83,6 +83,7 @@ public class MovimentoCaixa extends Processos{
     }
     
     private void setMovimentosCaixas() {
+        this.id = Parser.toInteger(request.getParameter("id"));
         this.idTerminal = Parser.toIntegerNull(request.getParameter("id_terminal"));
         this.idFuncionario = Parser.toIntegerNull(request.getParameter("id_funcionario"));
         this.idCofre = Parser.toIntegerNull(request.getParameter("id_cofre"));
@@ -136,7 +137,7 @@ public class MovimentoCaixa extends Processos{
             MovimentosEstoque movimentosEstoque = new MovimentosEstoque(this);
             movimentosEstoque.deleta();
             PreparedStatement ps = Parametros.getConexao(request).getPst("delete from movimentos_caixas where id = ? and id_entidade = ?", Boolean.FALSE);     
-            ps.setInt(1, Integer.valueOf(request.getParameter("id")));
+            ps.setInt(1, this.id);
             ps.setInt(2, Parametros.idEntidade);
             ps.execute();
         }catch (SQLException ex) {
@@ -211,7 +212,7 @@ public class MovimentoCaixa extends Processos{
     }
     
     public void altera(){
-        String idL = request.getParameter("id");
+        //String idL = request.getParameter("id");
         try {
             //language=PostgresPLSQL
             String sql = ("UPDATE public.movimentos_caixas\n" +
@@ -229,8 +230,6 @@ public class MovimentoCaixa extends Processos{
             ps.set(Integer.valueOf(idCofre));
             ps.set(tipoMoeda);
             ps.set(idOperacaoFuncionario);
-            
-            id = Integer.valueOf(idL);
             MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request);
             movimentoCaixa.id = id;
             movimentoCaixa.getDadosPorId();

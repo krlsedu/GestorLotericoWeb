@@ -44,7 +44,7 @@ public class Operacoes extends Operador {
 	private void setOperacoe(){
 		this.id = Parser.toInteger(request.getParameter("id"));
 		this.tipoItem = Parser.toIntegerNull(request.getParameter("tipo_item"));
-		this.tipoOperacaoCaixa = Parser.toIntegerNull(request.getParameter("tipo_operacao_caixa"));
+		this.tipoOperacaoCaixa = Parser.toInteger(request.getParameter("tipo_operacao_caixa"));
 		this.edicaoItem = Parser.toIntegerNull(request.getParameter("edicao_item"));
 		this.idFuncionario = Parser.toIntegerNull(request.getParameter("id_funcionario"));
 		this.idTerminal = Parser.toIntegerNull(request.getParameter("id_terminal"));
@@ -76,6 +76,22 @@ public class Operacoes extends Operador {
 		contextPrinc.put("conteudo", writerConteudo.toString());
 		contextPrinc.put("popup", getSWPopup(ve,"operacoes_funcionario").toString());
 		return contextPrinc;
+	}
+	
+	public void deleta(){
+		MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request,this);
+		movimentoCaixa.getDadosPorId();
+		movimentoCaixa.deleta();
+		//language=PostgresPLSQL
+		String sql = "DELETE FROM operacoes_funcionario where id = ? and id_entidade = ?";
+		try {
+			Seter ps = new Seter(sql,request);
+			ps.set(this.id);
+			ps.set(Parametros.idEntidade);
+			ps.getPst().execute();
+		} catch (SQLException e) {
+			new LogError(e.getMessage(),e,request);
+		}
 	}
 	
 	public void grava(){
