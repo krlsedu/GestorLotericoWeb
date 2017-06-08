@@ -30,6 +30,7 @@ public class Auth {
 				if (usuario.getQtdEntidades() == 1) {
 					output = "app";
 					Parametros.setIdEntidade(usuario.getlEntidadesUsuario().get(0));
+					Parametros.setDadosFuncXterm(request);
 				} else {
 					if (usuario.getQtdEntidades() != 0) {
 						output = "entidades";

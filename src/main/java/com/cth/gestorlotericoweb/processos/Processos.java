@@ -44,9 +44,11 @@ public class Processos {
         return id;
     }
     
+    public HttpServletRequest getRequest() {
+        return request;
+    }
     
-    
-    public StringWriter getSWPopup(VelocityEngine ve,String tipo){
+    public StringWriter getSWPopup(VelocityEngine ve, String tipo){
         Template templatePopup;
         VelocityContext contextPopup;
         StringWriter writerPopup;
@@ -76,7 +78,7 @@ public class Processos {
         return lOpts;
     }
     
-    public String getIdTerminal(){
+    public String getIdTerminalMet(){
         String sql = "SELECT id_terminal from abertura_terminais where id_funcionario = ? and id_entidade = ? ORDER BY data_abertura DESC LIMIT 1";
         try{
             PreparedStatement ps = Parametros.getConexao().getPst(sql,false);
@@ -187,5 +189,6 @@ public class Processos {
         }
         return "";
     }
-
+    
+    
 }

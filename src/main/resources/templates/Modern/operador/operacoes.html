@@ -1,0 +1,189 @@
+<script type="text/javascript">
+    $(function () {
+        $("#valor_movimentado").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+        $('#quantidade').mask("99999999");
+    });
+
+
+    $('#tipo_item').on('change', function() {
+        var its = $(this);
+        switch (its.val()){
+            case "1"://Bolão
+                $('#div_cb_tipo').show();
+                $('#div_data_sorteio').show();
+                $('#div_nome_concurso').show();
+                $('#div_quantidade').show();
+                $('#opt_gera').show();
+                $('#opt_vend').show();
+                $('#opt_troc').hide();
+                $('#lb_cb_tipo').html("Tipo");
+                break;
+            case "2"://Bilhete
+                $('#div_cb_tipo').show();
+                $('#div_data_sorteio').show();
+                $('#div_nome_concurso').show();
+                $('#div_quantidade').show();
+                $('#opt_gera').hide();
+                $('#opt_vend').show();
+                $('#opt_troc').hide();
+                $('#lb_cb_tipo').html("Edição");
+                break;
+            case "3": // Dinheiro
+                $('#div_cb_tipo').hide();
+                $('#div_data_sorteio').hide();
+                $('#div_nome_concurso').hide();
+                $('#div_quantidade').hide();
+                $('#opt_gera').hide();
+                $('#opt_vend').hide();
+                $('#opt_troc').hide();
+                break;
+            case "4"://Tele Sena
+                $('#div_cb_tipo').show();
+                $('#div_data_sorteio').show();
+                $('#div_nome_concurso').show();
+                $('#div_quantidade').show();
+                $('#opt_gera').hide();
+                $('#opt_vend').show();
+                $('#opt_troc').show();
+                $('#lb_cb_tipo').html("Edição");
+                break;
+            case "5": //MOedas
+                $('#div_cb_tipo').show();
+                $('#div_data_sorteio').hide();
+                $('#div_nome_concurso').hide();
+                $('#div_quantidade').hide();
+                $('#opt_gera').hide();
+                $('#opt_vend').hide();
+                $('#opt_troc').hide();
+                $('#lb_cb_tipo').html("Valor");
+                break;
+            default://Outros
+                $('#div_cb_tipo').show();
+                $('#div_data_sorteio').show();
+                $('#div_nome_concurso').show();
+                $('#div_quantidade').show();
+                $('#opt_gera').show();
+                $('#opt_vend').show();
+                $('#opt_troc').hide();
+                $('#lb_cb_tipo').html("Tipo");
+                break;
+        }
+        consultaOpcoesCb(its.val(),'edicao_item');
+    });
+</script>
+<div class="xs">
+    <form class="form-horizontal" id="form_dados">
+        <div class="panel panel-default">
+            <div class="panel-heading">Operações </div>
+            <div class="panel-body">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="horizontal-form">
+                        $btns_percorrer
+                        <div class="form-group">
+                            <label for="tipo_item" class="col-sm-2 control-label">Produto </label>
+                            <div class="col-sm-4">
+                                <select name="tipo_item" id="tipo_item" class="form-control1">
+                                    <option value="1" >Bolão</option>
+                                    <option value="2" >Bilhete</option>
+                                    <option value="3" >Dinheiro</option>
+                                    <option value="4" >Tele Sena</option>
+                                    <option value="5" >Moedas</option>
+                                    <option value="6" >Outros</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo_operacao_caixa" class="col-sm-2 control-label" >Tipo Operação</label>
+                            <div class="col-sm-4">
+                                <select name="tipo_operacao_caixa" id="tipo_operacao_caixa" class="form-control1">
+                                    <option value="1" id="opt_entr">Entrada</option>
+                                    <option value="2" id="opt_gera">Geração</option>
+                                    <option value="3" id="opt_said">Saída</option>
+                                    <option value="4" id="opt_vend">Venda</option>
+                                    <option value="5" id="opt_troc">Troca</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" id="div_cb_tipo">
+                            <label for="edicao_item" class="col-sm-2 control-label" id="lb_cb_tipo">Tipo </label>
+                            <div class="col-sm-4">
+                                <select name="edicao_item" id="edicao_item" class="form-control1">
+                                    $opts_padrao
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group mb-n" id="div_nome_concurso">
+                            <label for="nome_concurso" class="col-sm-2 control-label label-input-sm">Concurso/Sorteio</label>
+                            <div class="col-sm-4">
+                                <input name="nome_concurso" id="nome_concurso" type="text" class="form-control1 input-lg" placeholder="Concurso/edição"  >
+                            </div>
+                        </div>
+                        <div class="form-group mb-n" id="div_data_sorteio">
+                            <label for="data_sorteio" class="col-sm-2 control-label">Data Sorteio</label>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input name="data_sorteio" id="data_sorteio" type="date" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.date"
+                                           >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-n" id="div_quantidade">
+                            <label for="quantidade" class="col-sm-2 control-label">Quantidade</label>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Un</span>
+                                    <input name="quantidade" id="quantidade" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-n">
+                            <label for="valor_movimentado" class="col-sm-2 control-label">Valor</label>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">R$</span>
+                                    <input name="valor_movimentado" id="valor_movimentado" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-n">
+                            <label for="txtarea1" class="col-sm-2 control-label">Observações</label>
+                            <div class="col-sm-8">
+                                <textarea name="observacoes" id="observacoes" cols="50" rows="4" class="form-control1" placeholder="Observações da Operação " ></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" id="it" name="it" value="operacoes_funcionario" />
+                        <input type="hidden" id="id" name="id" value="0" />
+                        <input name="id_funcionario" type="hidden" id="id_funcionario" value="$id_fun">
+                        <input name="id_abertura_terminal" type="hidden" id="id_abertura_terminal" value="$id_abr">
+                        <input type="hidden" name="id_terminal" id="id_terminal" value="$id_ter">
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-sm-2 ">
+                        <div class="btn btn-info" id="botao-det-movs" onclick="buscaRel('data_hora_mov','detalhamento','movimentos_terminal')">Detalhar Movimentos</div>
+                    </div>
+                    <div class="col-sm-3 col-sm-offset-7">
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-primary" id="botao-gravar">Gravar</button>
+                        </div>
+                        <div class="btn-group">
+                            <button type="reset" class="btn botao-deletar" onclick="deletarDados()">Excluir</button>
+                        </div>
+                        <div class="btn-group">
+                            <button type="reset" class="btn btn-default" onclick="limpa()">Limpar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+

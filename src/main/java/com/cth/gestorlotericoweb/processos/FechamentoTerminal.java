@@ -290,12 +290,13 @@ public class FechamentoTerminal extends Processos{
     public BigDecimal getSaldoOutrosMovimentos(){
         BigDecimal valor = BigDecimal.ZERO;
         String sql = "SELECT \n" +
-                "	sum(case when tipo_operacao_caixa in (1,4,6) then valor_movimentado else valor_movimentado * (-1) end)\n" +
+                "	sum(case when tipo_operacao_caixa in (1,9,10,12,4,14,16,6,18) then valor_movimentado else valor_movimentado * (-1) end)\n" +
                 "FROM \n" +
                 "	outros_movimentos \n" +
-                                "where\n" +
-                "	date(data_hora_mov) = ? and\n" +
-                "	id_terminal = ? and\n" +
+                                "where" +
+                "   tipo_operacao_caixa NOT IN (8,9) AND" +
+                "   date(data_hora_mov) = ? and " +
+                "	id_terminal = ? and " +
                 "	id_funcionario = ?";
         try {
             PreparedStatement ps = Parametros.getConexao().getPst(sql,false);

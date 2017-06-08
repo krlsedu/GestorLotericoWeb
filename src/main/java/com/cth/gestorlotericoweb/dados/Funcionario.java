@@ -7,15 +7,18 @@ package com.cth.gestorlotericoweb.dados;
 
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
+import com.cth.gestorlotericoweb.utils.Parser;
+import com.cth.gestorlotericoweb.utils.Seter;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.StringWriter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
 
 /**
  *
@@ -28,6 +31,7 @@ public class Funcionario extends Cadastros{
     Integer tipo;
     String observacoes;
     Integer id;
+    Integer idUsuario;
     final HttpServletRequest request;
 
     public Funcionario(String codigoCaixa, String nome, String cpf, Integer tipo, String observacoes,HttpServletRequest request) {
@@ -37,6 +41,7 @@ public class Funcionario extends Cadastros{
         this.tipo = tipo;
         this.observacoes = observacoes;
         this.request = request;
+        this.idUsuario = Parser.toIntegerNull(request.getParameter("id_usuario"));
     } 
 
     public Funcionario(HttpServletRequest request) {
@@ -50,7 +55,7 @@ public class Funcionario extends Cadastros{
     }
     private void getDados(){
         try {
-            PreparedStatement ps = Parametros.getConexao().getPst("SELECT codigo_caixa, nome, cpf, tipo,observacoes \n" +
+            PreparedStatement ps = Parametros.getConexao().getPst("SELECT codigo_caixa, nome, cpf, tipo,observacoes,id_usuario \n" +
                     "  FROM funcionarios where id = ? and id_entidade = ? ",false);
             ps.setInt(1, id);
             ps.setInt(2, Parametros.idEntidade);
@@ -61,6 +66,7 @@ public class Funcionario extends Cadastros{
                 cpf = rs.getString(3);
                 tipo = rs.getInt(4);
                 observacoes = rs.getString(5);
+                idUsuario = rs.getInt(6);
             }else{
                 codigoCaixa = "";
                 nome = "";
@@ -77,8 +83,8 @@ public class Funcionario extends Cadastros{
     public void insere(){
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO funcionarios(\n" +
-            "            codigo_caixa, nome, cpf, tipo_func, id_entidade, observacoes)\n" +
-            "    VALUES ( ?, ?, ?, ?, ?, ?);");
+            "            codigo_caixa, nome, cpf, tipo_func, id_entidade, observacoes, id_usuario)\n" +
+            "    VALUES ( ?, ?, ?, ?, ?, ?,?);");
             ps.setString(1, codigoCaixa);
             ps.setString(2, nome);
             ps.setString(3, cpf);
@@ -89,6 +95,7 @@ public class Funcionario extends Cadastros{
             }else{
                 ps.setString(6, observacoes);
             }
+            ps = Seter.set(ps,6,idUsuario);
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()){
@@ -103,7 +110,7 @@ public class Funcionario extends Cadastros{
     public void altera(String idL){
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE funcionarios \n" +
-                    "set codigo_caixa = ?, nome = ?, cpf = ?, tipo_func = ?, observacoes = ? "
+                    "set codigo_caixa = ?, nome = ?, cpf = ?, tipo_func = ?, observacoes = ?, id_usuario = ? "
                     + " where id = ? and id_entidade = ? ", false);
             ps.setString(1, codigoCaixa);
             ps.setString(2, nome);
@@ -114,9 +121,10 @@ public class Funcionario extends Cadastros{
             }else{
                 ps.setString(5, observacoes);
             }
+            ps = Seter.set(ps,6,idUsuario);
             id = Integer.valueOf(idL);
-            ps.setInt(6, id);
-            ps.setInt(7, Parametros.idEntidade);
+            ps.setInt(7, id);
+            ps.setInt(8, Parametros.idEntidade);
             ps.execute();
         } catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);

@@ -23,12 +23,12 @@ function eventoOnKeyUp(element, camposCons, parsCampos, buscarNome) {
             switch (dones) {
                 case 2:
                     consultaCampoAutoLoopCheck(campos[0], (pars[0].toLowerCase() === 'true'), element).done(function () {
-                        consultaCampoAutoLoopCheck(campos[1], (pars[1].toLowerCase() === 'true'), element);
-                    }).done(function () {
-                        for (i = dones; i < campos.length; i++) {
-                            consultaCampoAutoLoopCheck(campos[i], (pars[i].toLowerCase() === 'true'), element);
-                        }
-                        return $.Deferred().resolve();
+                        consultaCampoAutoLoopCheck(campos[1], (pars[1].toLowerCase() === 'true'), element).done(function () {
+                            for (i = dones; i < campos.length; i++) {
+                                consultaCampoAutoLoopCheck(campos[i], (pars[i].toLowerCase() === 'true'), element);
+                            }
+                            return $.Deferred().resolve();
+                        });
                     }).done(function () {
                         existeTerminalAberto(tabela);
                     });
@@ -53,6 +53,7 @@ function consultaCampoAutoLoopCheck(valorBuscar,loop,element){
     var r = $.Deferred();
     var tabela = document.getElementById("it").value;
     var vlb = $('#'+valorBuscar);
+
     if(element.value !== "") {
         if (loop || vlb.val() === "" || vlb.val() === "0") {
             $.ajax(
@@ -69,6 +70,8 @@ function consultaCampoAutoLoopCheck(valorBuscar,loop,element){
                         var htmlDoc = parser.parseFromString(data, "text/html");
                         var nomeCol = htmlDoc.getElementById("nome_coluna").value;
                         var valr = htmlDoc.getElementById("valor").value;
+                        console.log('consultaCampoAutoLoopCheck',valorBuscar);
+                        console.log('consultaCampoAutoLoopCheck val',valr);
                         if (!(valr === null || valr === 'null')) {
                             $('input#' + nomeCol).val(valr).trigger('mask.maskMoney');
                             try {
@@ -115,4 +118,29 @@ function calculaSaldo(campo1, campo2, destino) {
     console.log("valor2",valor2);
     console.log("saldo",saldo);
     $("#"+destino).val(saldo).trigger('mask.maskMoney');
+}
+
+function consultaOpcoesCb(val,idCb) {
+    var r = $.Deferred();
+    var tela = $('#it').val();
+    $.ajax(
+        {
+            type: "POST",
+            url: "consulta",
+            data: {
+                "tipo": "opcoes",
+                "tela": tela,
+                "item": val
+            },
+            success: function (data) {
+                $('#' + idCb).html(data);
+                r.resolve();
+            },
+            error: function (jXHR, textStatus, errorThrown) {
+                r.reject();
+                avisoErros(jXHR, textStatus, errorThrown);
+            }
+        }
+    );
+    return r;
 }

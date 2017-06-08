@@ -6,6 +6,7 @@
 package com.cth.gestorlotericoweb;
 
 import com.cth.gestorlotericoweb.dados.ColunasTabelas;
+import com.cth.gestorlotericoweb.operador.Operacoes;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.*;
 import com.cth.gestorlotericoweb.utils.Parser;
@@ -59,6 +60,9 @@ public class Consulta {
             case "opt":
                 getOpt();
                 break;
+            case "opcoes":
+                getOpcoesCBs();
+                break;
             case "item_componente":
                 getItemComponente();
                 break;
@@ -70,6 +74,17 @@ public class Consulta {
                 break;
             default:
                 output ="definir o tipo de busca";
+                break;
+        }
+    }
+    
+    private void getOpcoesCBs(){
+        String tela = request.getParameter("tela");
+        switch (tela){
+            case "operacoes_funcionario":
+                Operacoes operacoes = new Operacoes(request);
+                operacoes.setTipoItem(Parser.toIntegerNull(request.getParameter("item")));
+                output = operacoes.getOptsEdicaoItem();
                 break;
         }
     }
@@ -353,7 +368,7 @@ public class Consulta {
                     switch(valorBuscar){
                         case "id_terminal":
                             lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
-                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+fechamentoTerminal.getIdTerminal()+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+fechamentoTerminal.getIdTerminalMet()+"\" readonly>");
                             output = StringUtils.join(lInputs,'\n');
                             break;
                         case "id_funcionario":
@@ -398,7 +413,7 @@ public class Consulta {
                             break;
                         case "id_terminal":
                             lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
-                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+aberturaTerminal.getIdTerminal()+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+aberturaTerminal.getIdTerminalMet()+"\" readonly>");
                             output = StringUtils.join(lInputs,'\n');
                             break;
                         case "id_funcionario":
@@ -413,7 +428,7 @@ public class Consulta {
                     switch (valorBuscar){
                         case "id_terminal":
                             lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
-                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoCaixa.getIdTerminal()+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoCaixa.getIdTerminalMet()+"\" readonly>");
                             output = StringUtils.join(lInputs,'\n');
                             break;
                         case "id_funcionario":
@@ -439,7 +454,7 @@ public class Consulta {
                     switch (valorBuscar){
                         case "id_terminal":
                             lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
-                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+outrosMovimentos.getIdTerminal()+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+outrosMovimentos.getIdTerminalMet()+"\" readonly>");
                             output = StringUtils.join(lInputs,'\n');
                             break;
                         case "id_funcionario":

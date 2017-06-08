@@ -17,29 +17,32 @@
                     <div class="tab-pane active" id="horizontal-form">
                         $btns_percorrer
                         <div class="form-group mb-n">
-                            <label for="smallinput" class="col-sm-2 control-label label-input-sm">Nome Item</label>
+                            <label for="nome_item" class="col-sm-2 control-label label-input-sm">Nome Item</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control1 input-lg" id="nome_item" placeholder="Nome do Item" name="nome_item" required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="selector1" class="col-sm-2 control-label">Tipo De Item</label>
+                            <label for="tipo_item" class="col-sm-2 control-label">Tipo De Item</label>
                             <div class="col-sm-3"><select name="tipo_item" id="tipo_item" class="form-control1">
                                 <option value="1" selected="selected">Notas</option>
                                 <option value="2" >Moedas</option>
-                                <option value="3" >Produtos</option>
-                                <option value="4" >Outros</option>
+                                <option value="3" >Bolão</option>
+                                <option value="4" >Tele Sena</option>
+                                <option value="5" >Bilhete</option>
+                                <option value="6" >Produtos</option>
+                                <option value="7" >Outros</option>
                             </select></div>
                         </div>
                         <div class="form-group">
-                            <label for="selector1" class="col-sm-2 control-label">Unidade</label>
+                            <label for="unidade" class="col-sm-2 control-label">Unidade</label>
                             <div class="col-sm-3"><select name="unidade" id="unidade" class="form-control1">
                                 <option value="1" selected="selected">Inteira</option>
                                 <option value="2" >Fracionária</option>
                             </select></div>
                         </div>
                         <div class="form-group mb-n">
-                            <label for="valor_movimentado" class="col-sm-2 control-label">Valor</label>
+                            <label for="valor_padrao" class="col-sm-2 control-label">Valor</label>
                             <div class="col-sm-3">
                                 <div class="input-group">
                                     <span class="input-group-addon">R$</span>
@@ -61,6 +64,18 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="well-sm" id="label_id_loterica">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-n">
+                            <label for="data_sorteio" class="col-sm-2 control-label">Data Sorteio</label>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input name="data_sorteio" id="data_sorteio" type="date" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.date"
+                                           >
                                 </div>
                             </div>
                         </div>

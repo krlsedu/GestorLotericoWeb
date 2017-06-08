@@ -11,6 +11,7 @@ import org.apache.velocity.app.VelocityEngine;
 import javax.servlet.http.HttpServletRequest;
 import java.io.StringWriter;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,7 +26,7 @@ public class Itens extends Estoque{
 	
 	BigDecimal valorPadrao;
 	
-	
+	Date dataSorteio;
 	public Itens(HttpServletRequest request) {
 		super(request);
 	}
@@ -39,6 +40,8 @@ public class Itens extends Estoque{
 		idLoterica = Parser.toIntegerNull(request.getParameter("id_loterica"));
 		
 		valorPadrao = Parser.toBigDecimalFromHtmlNull(request.getParameter("valor_padrao"));
+		
+		dataSorteio = Parser.toDbDate(request.getParameter("data_sorteio"));
 	}
 	
 	public void grava(){
@@ -53,9 +56,9 @@ public class Itens extends Estoque{
 		//language=PostgresPLSQL
 		String sql = "INSERT INTO public.itens_estoque(\n" +
 				"            tipo_item, unidade, nome_item, valor_padrao, observacoes, \n" +
-				"            id_loterica, id_entidade)\n" +
+				"            id_loterica, id_entidade, data_sorteio)\n" +
 				"    VALUES ( ?, ?, ?, ?, ?, \n" +
-				"            ?, ?)";
+				"            ?, ?, ?)";
 		try {
 			PreparedStatement ps = Parametros.getConexao().getPst(sql);
 			ps.setInt(1,tipoItem);
@@ -65,6 +68,7 @@ public class Itens extends Estoque{
 			ps = Seter.set(ps,5,observacoes);
 			ps = Seter.set(ps,6,idLoterica);
 			ps.setInt(7,Parametros.idEntidade);
+			ps = Seter.set(ps,8,dataSorteio);
 			ps.execute();
 			ResultSet rs = ps.getGeneratedKeys();
 			if(rs.next()){
@@ -80,7 +84,7 @@ public class Itens extends Estoque{
 		//language=PostgresPLSQL
 		String sql = "UPDATE public.itens_estoque\n" +
 				"   SET  tipo_item=?, unidade=?, nome_item=?, valor_padrao=?, observacoes=?, \n" +
-				"       id_loterica=?\n" +
+				"       id_loterica=?, data_sorteio = ? \n" +
 				" WHERE id = ? and id_entidade = ?";
 		try {
 			PreparedStatement ps = Parametros.getConexao().getPst(sql);
@@ -90,8 +94,9 @@ public class Itens extends Estoque{
 			ps = Seter.set(ps,4,valorPadrao);
 			ps = Seter.set(ps,5,observacoes);
 			ps = Seter.set(ps,6,idLoterica);
-			ps.setInt(7,id);
-			ps.setInt(8,Parametros.idEntidade);
+			ps = Seter.set(ps,7,dataSorteio);
+			ps.setInt(8,id);
+			ps.setInt(9,Parametros.idEntidade);
 			ps.execute();
 		} catch (SQLException e) {
 			new LogError(e.getMessage(),e,request);
@@ -111,5 +116,13 @@ public class Itens extends Estoque{
 		contextPrinc.put("conteudo", writerConteudo.toString());
 		contextPrinc.put("popup", getSWPopup(ve,"itens_estoque").toString());
 		return contextPrinc;
+	}
+	
+	public Integer getIdItensEstoque(Integer idItemEst){
+		if (idItemEst>100) {
+			idItemEst -=100;
+			return idItemEst;
+		}
+		return null;
 	}
 }

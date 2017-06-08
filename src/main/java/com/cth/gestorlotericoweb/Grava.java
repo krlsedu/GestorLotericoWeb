@@ -9,6 +9,7 @@ import com.cth.gestorlotericoweb.estoque.Itens;
 import com.cth.gestorlotericoweb.configuracoes.EstatisticasLinhas;
 import com.cth.gestorlotericoweb.dados.*;
 import com.cth.gestorlotericoweb.estoque.MovimentosEstoque;
+import com.cth.gestorlotericoweb.operador.Operacoes;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.*;
 
@@ -228,6 +229,12 @@ public class Grava {
                 movimentosEstoque.grava();
                 break;
             //fim Gravação Estoque
+            //Incio Gavação operador
+            case "operacoes_funcionario":
+                Operacoes operacoes = new Operacoes(request);
+                operacoes.grava();
+                break;
+            //fim gravação Operador
             default:
                 break;
         }
