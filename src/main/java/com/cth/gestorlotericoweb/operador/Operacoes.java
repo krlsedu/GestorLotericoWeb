@@ -213,7 +213,7 @@ public class Operacoes extends Operador {
 	}
 	
 	private String getOpts(Integer tipo){
-		String sql = "SELECT id+100,nome_item FROM itens_estoque where  tipo_item = ? and id_entidade = ? ";
+		String sql = "SELECT id,nome_item FROM itens_estoque where  tipo_item = ? and id_entidade = ? ";
 		try {
 			Seter ps = new Seter(sql,request,false);
 			ps.set(tipo);

@@ -22,8 +22,8 @@ public class MovimentosEstoque extends Estoque {
 	Integer idItensEstoque;
 	Integer idLoterica;
 	Integer idFuncionario;
-	Integer numeroVolumes;
-	Integer idMovimentoCaixa;
+	private Integer numeroVolumes;
+	private Integer idMovimentoCaixa;
 	
 	Integer tipoOperacao;
 	Integer tipoOperacaoAnt;
@@ -49,7 +49,7 @@ public class MovimentosEstoque extends Estoque {
 		this.idLoterica = Parametros.getIdLoterica();
 		Itens itens = new Itens(this.request);
 		itens.idLoterica = this.idLoterica;
-		this.idItensEstoque = itens.getIdItensEstoque(movimentoCaixa.getTipoMoeda());
+		this.idItensEstoque = itens.getIdItensEstoque(movimentoCaixa.getTipoMoeda(),false);
 		this.idFuncionario = movimentoCaixa.idFuncionario;
 		this.numeroVolumes = 1;
 		
@@ -63,8 +63,9 @@ public class MovimentosEstoque extends Estoque {
 		this.quantidadeMovimentada = movimentoCaixa.getValorMovimentado();
 		this.numeroVolumesBd = Parser.toBigDecimalFromSt("1");
 		this.tipoOperacaoAnt = movimentoCaixa.getTipoOperacaoAnt();
+		
 		this.qtdTotalMovimentada = this.quantidadeMovimentada.multiply(this.numeroVolumesBd);
-		if (!(this.tipoOperacao.equals("1")||this.tipoOperacao.equals("3"))) {
+		if (!(this.tipoOperacao==1||this.tipoOperacao==3)) {
 			this.qtdTotalMovimentada = this.qtdTotalMovimentada.multiply(BigDecimal.valueOf(-1L));
 		}
 		this.dataHoraReferencia = Parser.toDbTimeStamp(movimentoCaixa.getDataHoraMov());
@@ -84,14 +85,14 @@ public class MovimentosEstoque extends Estoque {
 		numeroVolumesBd = Parser.toBigDecimalFromSt("1");
 		qtdTotalMovimentada = quantidadeMovimentada.multiply(numeroVolumesBd);
 		
-		if (!(tipoOperacao.equals("1")||tipoOperacao.equals("3"))) {
+		if (!(tipoOperacao == 1||tipoOperacao == 3 )) {
 			qtdTotalMovimentada = qtdTotalMovimentada.multiply(BigDecimal.valueOf(-1L));
 		}
 		
 		dataHoraReferencia = Parser.toDbTimeStamp(request.getParameter("data_hora_mov"));
 	}
 	
-	public void getDadosBd(){
+	private void getDadosBd(){
 		String sql = "SELECT  tipo_movimento, id_itens_estoque, quantidade_movimentada, \n" +
 				"       id_loterica, numero_volumes, observacoes, \n" +
 				"       data_hora_mov, id_funcionario, id_movimento_caixa\n" +
@@ -118,7 +119,7 @@ public class MovimentosEstoque extends Estoque {
 				
 				qtdTotalMovimentada = quantidadeMovimentada.multiply(numeroVolumesBd);
 				
-				if (!(tipoOperacao.equals("1")||tipoOperacao.equals("3"))) {
+				if (!(tipoOperacao==1 ||tipoOperacao == 3 )) {
 					qtdTotalMovimentada = qtdTotalMovimentada.multiply(BigDecimal.valueOf(-1L));
 				}
 			}
@@ -150,19 +151,34 @@ public class MovimentosEstoque extends Estoque {
 	}
 	
 	private void gravaSaldoEstoqueFuncionario(){
+		boolean entra;
+		switch (request.getParameter("it")){
+			case "movimentos_caixas":
+				entra = true;
+				break;
+			case "operacoes_funcionario":
+				entra = true;
+				break;
+			default:
+				entra = false;
+				break;
+		}
 		if (this.idFuncionario != null) {
-			if (request.getParameter("it").equals("movimentos_caixas")){
+			if (entra){
+				if(this.tipoOperacaoAnt==null){
+					this.tipoOperacaoAnt = this.tipoOperacao;
+				}
 				if(this.tipoOperacao == 1 ){
 					if (this.tipoOperacaoAnt.equals(tipoOperacao )) {
-						this.tipoOperacaoAnt = 2;
+						this.tipoOperacao = 2;
 					}else {
-						this.tipoOperacaoAnt = 1;
+						this.tipoOperacao = 1;
 					}
 				}else {
 					if (this.tipoOperacaoAnt.equals(tipoOperacao)) {
-						this.tipoOperacaoAnt = 1;
+						this.tipoOperacao = 1;
 					}else {
-						this.tipoOperacaoAnt = 2;
+						this.tipoOperacao = 2;
 					}
 				}
 			}
@@ -180,7 +196,7 @@ public class MovimentosEstoque extends Estoque {
 					"    VALUES ( ?, ?, ?, " +
 					"            ?, ?, ?, " +
 					"             ?, ?, ?, ? )");
-			ps.setInt(1, Integer.valueOf(tipoOperacao));
+			ps.setInt(1, tipoOperacao);
 			ps.setInt(2,idItensEstoque);
 			ps.setBigDecimal(3,quantidadeMovimentada);
 			ps.setInt(4,numeroVolumes);
@@ -215,7 +231,7 @@ public class MovimentosEstoque extends Estoque {
 					"       numero_volumes=?,data_hora_mov=?, observacoes=?, \n" +
 					"        id_funcionario = ?, id_loterica=? \n" +
 					" where id = ? and id_entidade = ? ", false);
-			ps.setInt(1, Integer.valueOf(tipoOperacao));
+			ps.setInt(1, tipoOperacao);
 			ps.setInt(2,idItensEstoque);
 			ps.setBigDecimal(3,quantidadeMovimentada);
 			ps.setInt(4,numeroVolumes);

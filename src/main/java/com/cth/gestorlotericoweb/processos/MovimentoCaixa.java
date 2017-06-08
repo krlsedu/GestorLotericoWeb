@@ -64,7 +64,7 @@ public class MovimentoCaixa extends Processos{
     
         Itens itens = new Itens(request);
         
-        this.tipoMoeda = itens.getIdItensEstoque(operacoes.getTipoItem());
+        this.tipoMoeda = itens.getIdItensEstoque(operacoes.getEdicaoItem(),false);
         this.observacoes = "Movimento de caixa gerado automaticamente pela rotina de Operações do funcionário";
         this.idOperacaoFuncionario = operacoes.getId();
         this.id = getIdMovimentoCaixa(operacoes);

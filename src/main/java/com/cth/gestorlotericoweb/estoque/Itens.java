@@ -118,14 +118,18 @@ public class Itens extends Estoque{
 		return contextPrinc;
 	}
 	
-	public Integer getIdItensEstoque(Integer idItemEst){
+	public Integer getIdItensEstoque(Integer idItemEst,Boolean bolao){
 		if (idItemEst==null){
 			return null;
 		}
-		if (idItemEst>100) {
+		if (idItemEst>100 && bolao) {
 			idItemEst -=100;
 			return idItemEst;
 		}
-		return null;
+		if(bolao) {
+			return null;
+		}else {
+			return idItemEst;
+		}
 	}
 }
