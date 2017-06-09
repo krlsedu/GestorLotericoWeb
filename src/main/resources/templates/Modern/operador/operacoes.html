@@ -7,68 +7,7 @@
 
     $('#tipo_item').on('change', function() {
         var its = $(this);
-        switch (its.val()){
-            case "1"://Bolão
-                $('#div_cb_tipo').show();
-                $('#div_data_sorteio').show();
-                $('#div_nome_concurso').show();
-                $('#div_quantidade').show();
-                $('#opt_gera').show();
-                $('#opt_vend').show();
-                $('#opt_troc').hide();
-                $('#lb_cb_tipo').html("Tipo");
-                break;
-            case "2"://Bilhete
-                $('#div_cb_tipo').show();
-                $('#div_data_sorteio').show();
-                $('#div_nome_concurso').show();
-                $('#div_quantidade').show();
-                $('#opt_gera').hide();
-                $('#opt_vend').show();
-                $('#opt_troc').hide();
-                $('#lb_cb_tipo').html("Edição");
-                break;
-            case "3": // Dinheiro
-                $('#div_cb_tipo').hide();
-                $('#div_data_sorteio').hide();
-                $('#div_nome_concurso').hide();
-                $('#div_quantidade').hide();
-                $('#opt_gera').hide();
-                $('#opt_vend').hide();
-                $('#opt_troc').hide();
-                break;
-            case "4"://Tele Sena
-                $('#div_cb_tipo').show();
-                $('#div_data_sorteio').show();
-                $('#div_nome_concurso').show();
-                $('#div_quantidade').show();
-                $('#opt_gera').hide();
-                $('#opt_vend').show();
-                $('#opt_troc').show();
-                $('#lb_cb_tipo').html("Edição");
-                break;
-            case "5": //MOedas
-                $('#div_cb_tipo').show();
-                $('#div_data_sorteio').hide();
-                $('#div_nome_concurso').hide();
-                $('#div_quantidade').hide();
-                $('#opt_gera').hide();
-                $('#opt_vend').hide();
-                $('#opt_troc').hide();
-                $('#lb_cb_tipo').html("Valor");
-                break;
-            default://Outros
-                $('#div_cb_tipo').show();
-                $('#div_data_sorteio').show();
-                $('#div_nome_concurso').show();
-                $('#div_quantidade').show();
-                $('#opt_gera').show();
-                $('#opt_vend').show();
-                $('#opt_troc').hide();
-                $('#lb_cb_tipo').html("Tipo");
-                break;
-        }
-        consultaOpcoesCb(its.val(),'edicao_item');
+        consultaOpcoesCb(its);
     });
 </script>
 <div class="xs">

@@ -209,6 +209,7 @@ function alteraMascara(campoFormatar,tabela,item) {
                         campo.unmask();
                         campo.maskMoney('destroy');
                         campo.maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+                        campo.trigger('mask.maskMoney');
                     }else{
                         campo.unmask();
                         campo.maskMoney('destroy');

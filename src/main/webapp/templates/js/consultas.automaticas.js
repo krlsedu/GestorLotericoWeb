@@ -120,27 +120,100 @@ function calculaSaldo(campo1, campo2, destino) {
     $("#"+destino).val(saldo).trigger('mask.maskMoney');
 }
 
-function consultaOpcoesCb(val,idCb) {
+function consultaOpcoesCb(cb) {
     var r = $.Deferred();
     var tela = $('#it').val();
-    $.ajax(
-        {
-            type: "POST",
-            url: "consulta",
-            data: {
-                "tipo": "opcoes",
-                "tela": tela,
-                "item": val
-            },
-            success: function (data) {
-                $('#' + idCb).html(data);
-                r.resolve();
-            },
-            error: function (jXHR, textStatus, errorThrown) {
-                r.reject();
-                avisoErros(jXHR, textStatus, errorThrown);
+    var val = cb.val();
+    var idCb = cb.attr('id');
+
+    if(idCb==='tipo_item' && tela==='operacoes_funcionario') {
+        var its = $('#edicao_item');
+        ajustaCamposOpFu(cb);
+        $.ajax(
+            {
+                type: "POST",
+                url: "consulta",
+                data: {
+                    "tipo": "opcoes",
+                    "tela": tela,
+                    "item": val
+                },
+                success: function (data) {
+                    its.html(data);
+                    r.resolve();
+                },
+                error: function (jXHR, textStatus, errorThrown) {
+                    r.reject();
+                    avisoErros(jXHR, textStatus, errorThrown);
+                }
             }
-        }
-    );
+        );
+    }else {
+        r.resolve();
+    }
     return r;
+}
+
+function ajustaCamposOpFu(its) {
+    switch (its.val()){
+        case "1"://Bolão
+            $('#div_cb_tipo').show();
+            $('#div_data_sorteio').show();
+            $('#div_nome_concurso').show();
+            $('#div_quantidade').show();
+            $('#opt_gera').show();
+            $('#opt_vend').show();
+            $('#opt_troc').hide();
+            $('#lb_cb_tipo').html("Tipo");
+            break;
+        case "2"://Bilhete
+            $('#div_cb_tipo').show();
+            $('#div_data_sorteio').show();
+            $('#div_nome_concurso').show();
+            $('#div_quantidade').show();
+            $('#opt_gera').hide();
+            $('#opt_vend').show();
+            $('#opt_troc').hide();
+            $('#lb_cb_tipo').html("Edição");
+            break;
+        case "3": // Dinheiro
+            $('#div_cb_tipo').hide();
+            $('#div_data_sorteio').hide();
+            $('#div_nome_concurso').hide();
+            $('#div_quantidade').hide();
+            $('#opt_gera').hide();
+            $('#opt_vend').hide();
+            $('#opt_troc').hide();
+            break;
+        case "4"://Tele Sena
+            $('#div_cb_tipo').show();
+            $('#div_data_sorteio').show();
+            $('#div_nome_concurso').show();
+            $('#div_quantidade').show();
+            $('#opt_gera').hide();
+            $('#opt_vend').show();
+            $('#opt_troc').show();
+            $('#lb_cb_tipo').html("Edição");
+            break;
+        case "5": //MOedas
+            $('#div_cb_tipo').show();
+            $('#div_data_sorteio').hide();
+            $('#div_nome_concurso').hide();
+            $('#div_quantidade').hide();
+            $('#opt_gera').hide();
+            $('#opt_vend').hide();
+            $('#opt_troc').hide();
+            $('#lb_cb_tipo').html("Valor");
+            break;
+        default://Outros
+            $('#div_cb_tipo').show();
+            $('#div_data_sorteio').show();
+            $('#div_nome_concurso').show();
+            $('#div_quantidade').show();
+            $('#opt_gera').show();
+            $('#opt_vend').show();
+            $('#opt_troc').hide();
+            $('#lb_cb_tipo').html("Tipo");
+            break;
+    }
 }

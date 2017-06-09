@@ -256,7 +256,7 @@ public class MovimentoCaixa extends Processos{
                     }
                 }
             }catch(Exception e){
-            
+                System.out.println(e.getMessage());
             }
         }
     }

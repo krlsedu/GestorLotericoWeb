@@ -241,52 +241,65 @@ function buscaDadosN(tabela){
 }
 
 function insereDados(htmlDoc){
-    insereDadosSinc(htmlDoc).done(function () {
-        verificaSeFechado().done(function () {
-            ajustaValorMascaraDinamica();
+    insereDadosTelaSinc(0,htmlDoc).done(function () {
+        ajustaValorMascaraDinamica().done(function () {
+            verificaSeFechado();
         });
     })
 }
-
-function insereDadosSinc(htmlDoc) {
+function insereDadosTelaSinc(col,htmlDoc) {
     var r = $.Deferred();
+    col = col+1;
+    var i = col;
+
     var ncols = htmlDoc.getElementById("num_cols").value;
-    for (i=1;i<=ncols;i++){
-        try{
-            var nomeCol = htmlDoc.getElementById("nome_coluna_"+i).value;
-            var valr = htmlDoc.getElementById("busca_col_"+nomeCol).value;
-            try{
+    if(ncols>=i) {
+        try {
+            var nomeCol = htmlDoc.getElementById("nome_coluna_" + i).value;
+            var valr = htmlDoc.getElementById("busca_col_" + nomeCol).value;
+            try {
                 var tipo = document.getElementById(nomeCol).type;
-                if(!(valr===null||valr==='null')){
-                    if(tipo==="select-one"||tipo==="textarea"){
+                if (!(valr === null || valr === 'null')) {
+                    if (tipo === "select-one" || tipo === "textarea") {
                         document.getElementById(nomeCol).value = valr;
-                        try{
-                            $('#'+nomeCol).trigger("change");
-                        }catch (e){
-
+                        var cb = $('#'+nomeCol);
+                        try {
+                            consultaOpcoesCb(cb).done(function () {
+                                insereDadosTelaSinc(col, htmlDoc);
+                            });
+                        } catch (e) {
                         }
-                    }else{
-                        $('input#'+nomeCol).val(valr).trigger('mask.maskMoney');
-                    }
-                    try{
-                        document.getElementById(nomeCol).onchange();
-                    }catch (e){
-                    }
-                }
-            }catch (ex){
-                console.log(ex.toString());
-                //setTimeout(function() {insereDados(htmlDoc);}, 1000);
-            }
-        }catch (e){
+                    } else {
+                        $('input#' + nomeCol).val(valr).trigger('mask.maskMoney');
 
+                        try {
+                            document.getElementById(nomeCol).onchange();
+                        } catch (e) {
+                        }
+                        insereDadosTelaSinc(col, htmlDoc);
+                    }
+                }else {
+                    insereDadosTelaSinc(col, htmlDoc);
+                }
+            } catch (ex) {
+                try {
+                    $('input#' + nomeCol).val(valr).trigger('mask.maskMoney');
+                    document.getElementById(nomeCol).onchange();
+                } catch (e) {
+                }
+                //setTimeout(function() {insereDados(htmlDoc);}, 1000);
+                insereDadosTelaSinc(col, htmlDoc);
+            }
+        } catch (e) {
+            insereDadosTelaSinc(col, htmlDoc);
         }
-        if(i>=ncols){
-            r.resolve();
-        }
+    }else{
+        $('#modal_carregando').modal('hide');
+        r.resolve();
     }
-    $('#modal_carregando').modal('hide');
     return r;
 }
+
 
 function buscaNomeComponente(tabela,campo) {
     var id = document.getElementById(campo).value;
