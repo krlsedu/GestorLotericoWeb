@@ -9,6 +9,33 @@
         var its = $(this);
         consultaOpcoesCb(its);
     });
+
+    $('#tipo_operacao_caixa').on('change', function() {
+        var toc = $(this);
+        var its = $('#tipo_item');
+        var val = toc.val();
+        switch (val){
+            case "2": // Geração
+                $('#div_data_sorteio').show();
+                $('#div_nome_concurso').show();
+                $("#div_valor").show();
+                break;
+            default:
+                $('#div_data_sorteio').hide();
+                $('#div_nome_concurso').hide();
+                switch (its.val()){
+                    case "1"://bolão
+                        $("#div_valor").hide();
+                        $("#div_data_sorteio").hide();
+                        break;
+                    default:
+                        $("#div_valor").show();
+                        $("#div_data_sorteio").show();
+                        break;
+                }
+                break;
+        }
+    });
 </script>
 <div class="xs">
     <form class="form-horizontal" id="form_dados">
@@ -79,7 +106,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group mb-n">
+                        <div class="form-group mb-n" id="div_valor">
                             <label for="valor_movimentado" class="col-sm-2 control-label">Valor</label>
                             <div class="col-sm-3">
                                 <div class="input-group">

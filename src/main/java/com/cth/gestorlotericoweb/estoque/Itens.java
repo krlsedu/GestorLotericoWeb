@@ -34,8 +34,8 @@ public class Itens extends Estoque{
 	
 	public Itens(MovimentosEstoque movimentosEstoque) {
 		super(movimentosEstoque.request);
+		this.idLoterica = Parametros.getIdLoterica();
 		Operacoes operacoes =movimentosEstoque.getOutrosMovimentos().getOperacoes();
-		this.nomeItem = movimentosEstoque.getOutrosMovimentos().getOperacoes().getNomeConcurso();
 		switch (operacoes.getTipoItem()){
 //           1 >> <option value="3" >Bolão</option>
 			case 1:
@@ -63,6 +63,26 @@ public class Itens extends Estoque{
 							case 5:
 								this.nomeItem = "LOTOFÁCIL";
 								break;
+							case 6:
+								this.nomeItem = "LOTOMAINIA";
+								break;
+							case 7:
+								this.nomeItem = "TIMEMANIA";
+								break;
+							case 8:
+								this.nomeItem = "DUPLA SENA";
+								break;
+							case 9:
+								this.nomeItem = "LOTECA";
+								break;
+							case 10:
+								this.nomeItem = "LOTOGOL";
+								break;
+							case 11:
+								this.nomeItem = "Outros";
+								break;
+							default:
+								this.nomeItem = "Não iformado";
 						}
 						break;
 					default:
@@ -71,6 +91,36 @@ public class Itens extends Estoque{
 				break;
 			default:
 				break;
+		}
+		this.dataSorteio = operacoes.getDataSorteio();
+		this.valorPadrao = operacoes.getValorMovimentado();
+		this.observacoes = "Cadatrado automaticamente pela rotina de Operações do funcionário";
+	}
+	
+	private void buscaBanco(){
+		//language=PostgresPLSQL
+		String sql = "SELECT tipo_item, unidade, nome_item, valor_padrao, observacoes, " +
+				"       id_loterica, data_sorteio " +
+				"   FROM public.itens_estoque" +
+				"   WHERE " +
+				"       id = ? AND " +
+				"       id_entidade = ?";
+		try {
+			Seter ps = new Seter(sql,request,false);
+			ps.set(this.id);
+			ps.set(Parametros.idEntidade);
+			ResultSet rs = ps.getPst().executeQuery();
+			if (rs.next()) {
+				this.tipoItem = rs.getInt(1);
+				this.unidade  = rs.getInt(2);
+				this.nomeItem = rs.getString(3);
+				this.valorPadrao = rs.getBigDecimal(4);
+				this.observacoes = rs.getString(5);
+				this.idLoterica  = rs.getInt(6);
+				this.dataSorteio = rs.getDate(7);
+			}
+		} catch (SQLException e) {
+			new LogError(e.getMessage(),e,request);
 		}
 	}
 	
@@ -95,7 +145,7 @@ public class Itens extends Estoque{
 		}
 	}
 	
-	private void insere(){
+	public void insere(){
 		//language=PostgresPLSQL
 		String sql = "INSERT INTO public.itens_estoque(\n" +
 				"            tipo_item, unidade, nome_item, valor_padrao, observacoes, \n" +
@@ -167,12 +217,20 @@ public class Itens extends Estoque{
 		}
 		if (idItemEst>100 && bolao) {
 			idItemEst -=100;
+			this.id = idItemEst;
+			buscaBanco();
 			return idItemEst;
 		}
 		if(bolao) {
 			return null;
 		}else {
+			this.id = idItemEst;
+			buscaBanco();
 			return idItemEst;
 		}
+	}
+	
+	public BigDecimal getValorPadrao() {
+		return valorPadrao;
 	}
 }

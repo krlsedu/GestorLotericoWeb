@@ -6,6 +6,7 @@
 package com.cth.gestorlotericoweb.processos;
 
 import com.cth.gestorlotericoweb.LogError;
+import com.cth.gestorlotericoweb.estoque.Itens;
 import com.cth.gestorlotericoweb.estoque.MovimentosEstoque;
 import com.cth.gestorlotericoweb.operador.Operacoes;
 import com.cth.gestorlotericoweb.parametros.Parametros;
@@ -96,6 +97,27 @@ public class OutrosMovimentos extends Processos{
                         break;
                 }
                 break;
+            case 2:
+                switch (operacoes.getTipoOperacaoCaixa()){
+                    //1 Entrada >> 12
+                    //3 Saída >> 11
+                    //4 Venda >> 3
+                    case 1:
+                        this.tipoOperacao = 12;
+                        this.entrada = true;
+                        break;
+                    case 3:
+                        this.tipoOperacao = 11;
+                        this.entrada = false;
+                        break;
+                    case 4:
+                        this.tipoOperacao = 3;
+                        this.entrada = false;
+                        break;
+                    default:
+                        break;
+                }
+                break;
             default:
                 break;
         }
@@ -105,9 +127,17 @@ public class OutrosMovimentos extends Processos{
         this.valorMovimentado = operacoes.getValorMovimentado();
         this.idEdicaoItem = operacoes.getEdicaoItem();
         this.quantidade = operacoes.getQuantidade();
+        Itens itens = new Itens(request);
+        itens.getIdItensEstoque(idEdicaoItem,operacoes.getTipoItem() == 1);
+        
         if (this.quantidade!=null){
             if(this.quantidade>1){
                 this.valorMovimentado = this.valorMovimentado.multiply(new BigDecimal(quantidade.toString()));
+                if (itens.getValorPadrao()!=null) {
+                    if (valorMovimentado.compareTo(BigDecimal.ZERO)==0) {
+                        this.valorMovimentado = itens.getValorPadrao().multiply(new BigDecimal(quantidade.toString()));
+                    }
+                }
             }
         }
         this.idOperacaoFuncionario = operacoes.getId();
@@ -294,11 +324,22 @@ public class OutrosMovimentos extends Processos{
         return idEdicaoItem;
     }
     
+    public void setIdEdicaoItem(Integer idEdicaoItem) {
+        this.idEdicaoItem = idEdicaoItem;
+        if (operacoes != null) {
+            operacoes.setEdicaoItem(idEdicaoItem);
+        }
+    }
+    
     public Integer getTipoOperacaoAnt() {
         return tipoOperacaoAnt;
     }
     
     public Operacoes getOperacoes() {
         return operacoes;
+    }
+    
+    public void setOperacoes(Operacoes operacoes) {
+        this.operacoes = operacoes;
     }
 }

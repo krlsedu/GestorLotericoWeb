@@ -43,7 +43,7 @@ public class SaldoEstoque extends Estoque {
 			}
 			BigDecimal saldo;
 			BigDecimal qtdMov;
-			if(movimentosEstoque.tipoOperacao.equals("1")|| movimentosEstoque.tipoOperacao.equals("3")){
+			if(movimentosEstoque.tipoOperacao==1|| movimentosEstoque.tipoOperacao == 3){
 				qtdMov = movimentosEstoque.quantidadeMovimentada.multiply(movimentosEstoque.numeroVolumesBd);
 				saldo = saldoAtual.add(qtdMov);
 			}else{
@@ -104,7 +104,7 @@ public class SaldoEstoque extends Estoque {
 					saldoAtual = rs.getBigDecimal(1);
 				}
 				BigDecimal saldo;
-				if (movimentosEstoque.tipoOperacao.equals("1") || movimentosEstoque.tipoOperacao.equals("3")) {
+				if (movimentosEstoque.tipoOperacao==1 || movimentosEstoque.tipoOperacao == 3) {
 					saldo = saldoAtual.add(difMov);
 				} else {
 					saldo = saldoAtual.subtract(difMov);

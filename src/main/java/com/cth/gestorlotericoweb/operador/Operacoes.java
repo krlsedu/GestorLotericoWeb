@@ -138,6 +138,20 @@ public class Operacoes extends Operador {
 		}
 	}
 	
+	public void alteraIdItem(){
+		//language=PostgresPLSQL
+		String sql = "UPDATE operacoes_funcionario set edicao_item = ? where id = ? AND id_entidade = ?";
+		try {
+			Seter ps = new Seter(sql,request);
+			ps.set(tipoItem == 1 ?(edicaoItem+100):edicaoItem);
+			ps.set(id);
+			ps.set(Parametros.idEntidade);
+			ps.getPst().execute();
+		} catch (SQLException e) {
+			new LogError(e.getMessage(),e,request);
+		}
+	}
+	
 	private void altera(){
 		String sql = "UPDATE public.operacoes_funcionario\n" +
 				"   SET tipo_item=?, tipo_operacao_caixa=?, edicao_item=?, nome_concurso=?, \n" +
@@ -274,6 +288,10 @@ public class Operacoes extends Operador {
 		return tipoOperacaoCaixa;
 	}
 	
+	public void setTipoOperacaoCaixa(Integer tipoOperacaoCaixa) {
+		this.tipoOperacaoCaixa = tipoOperacaoCaixa;
+	}
+	
 	public Integer getTipoItem() {
 		return tipoItem;
 	}
@@ -312,5 +330,9 @@ public class Operacoes extends Operador {
 	
 	public BigDecimal getValorMovimentado() {
 		return valorMovimentado;
+	}
+	
+	public void setEdicaoItem(Integer edicaoItem) {
+		this.edicaoItem = edicaoItem;
 	}
 }

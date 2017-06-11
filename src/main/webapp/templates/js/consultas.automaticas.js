@@ -158,8 +158,6 @@ function ajustaCamposOpFu(its) {
     switch (its.val()){
         case "1"://Bolão
             $('#div_cb_tipo').show();
-            $('#div_data_sorteio').show();
-            $('#div_nome_concurso').show();
             $('#div_quantidade').show();
             $('#opt_gera').show();
             $('#opt_vend').show();
@@ -168,8 +166,6 @@ function ajustaCamposOpFu(its) {
             break;
         case "2"://Bilhete
             $('#div_cb_tipo').show();
-            $('#div_data_sorteio').show();
-            $('#div_nome_concurso').show();
             $('#div_quantidade').show();
             $('#opt_gera').hide();
             $('#opt_vend').show();
@@ -187,8 +183,6 @@ function ajustaCamposOpFu(its) {
             break;
         case "4"://Tele Sena
             $('#div_cb_tipo').show();
-            $('#div_data_sorteio').show();
-            $('#div_nome_concurso').show();
             $('#div_quantidade').show();
             $('#opt_gera').hide();
             $('#opt_vend').show();
@@ -197,8 +191,6 @@ function ajustaCamposOpFu(its) {
             break;
         case "5": //MOedas
             $('#div_cb_tipo').show();
-            $('#div_data_sorteio').hide();
-            $('#div_nome_concurso').hide();
             $('#div_quantidade').hide();
             $('#opt_gera').hide();
             $('#opt_vend').hide();
@@ -207,8 +199,6 @@ function ajustaCamposOpFu(its) {
             break;
         default://Outros
             $('#div_cb_tipo').show();
-            $('#div_data_sorteio').show();
-            $('#div_nome_concurso').show();
             $('#div_quantidade').show();
             $('#opt_gera').show();
             $('#opt_vend').show();
