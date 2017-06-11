@@ -3,6 +3,7 @@ package com.cth.gestorlotericoweb.operador;
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
+import com.cth.gestorlotericoweb.processos.OutrosMovimentos;
 import com.cth.gestorlotericoweb.utils.Parser;
 import com.cth.gestorlotericoweb.utils.Seter;
 import org.apache.commons.lang3.StringUtils;
@@ -58,6 +59,7 @@ public class Operacoes extends Operador {
 		
 		this.valorMovimentado = Parser.toBigDecimalFromHtml(request.getParameter("valor_movimentado"));
 	}
+
 	public VelocityContext getHtml(VelocityContext contextPrinc, VelocityEngine ve, String idS){
 		Template templateConteudo;
 		VelocityContext contextConteudo;
@@ -168,8 +170,17 @@ public class Operacoes extends Operador {
 	}
 	
 	private void acoesAutomaticas(){
-		MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request,this);
-		movimentoCaixa.gravaAutoMov();
+		switch (tipoItem) {
+			case 3:
+			case 5:
+				MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request, this);
+				movimentoCaixa.gravaAutoMov();
+				break;
+			default:
+				OutrosMovimentos outrosMovimentos = new OutrosMovimentos(request,this);
+				outrosMovimentos.gravaAutoMov();
+				break;
+		}
 	}
 	
 	public String getOptsEdicaoItem(){

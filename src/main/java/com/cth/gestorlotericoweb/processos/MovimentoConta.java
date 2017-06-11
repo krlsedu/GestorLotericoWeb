@@ -200,7 +200,7 @@ public class MovimentoConta extends Processos{
     }
     
     @Override
-    public String getDataHoraMov() {
+    public String getDataHoraMovProc() {
         String sql = "SELECT data_hora_mov from movimentos_contas where id_conta = ? and id_entidade = ? ORDER BY  data_hora_mov desc LIMIT 1";
         try {
             PreparedStatement ps = Parametros.getConexao().getPst(sql,false);

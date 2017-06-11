@@ -373,7 +373,7 @@ public class Consulta {
                             break;
                         case "id_funcionario":
                             lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
-                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+fechamentoTerminal.getIdFuncionario()+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+fechamentoTerminal.getIdFuncionarioProc()+"\" readonly>");
                             output = StringUtils.join(lInputs,'\n');
                             break;
                         case "total_movimentos_dia":
@@ -418,7 +418,7 @@ public class Consulta {
                             break;
                         case "id_funcionario":
                             lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
-                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+aberturaTerminal.getIdFuncionario()+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+aberturaTerminal.getIdFuncionarioProc()+"\" readonly>");
                             output = StringUtils.join(lInputs,'\n');
                             break;
                     }
@@ -433,12 +433,12 @@ public class Consulta {
                             break;
                         case "id_funcionario":
                             lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
-                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoCaixa.getIdFuncionario()+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoCaixa.getIdFuncionarioProc()+"\" readonly>");
                             output = StringUtils.join(lInputs,'\n');
                             break;
                         case "data_hora_mov":
                             lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
-                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoCaixa.getDataHoraMov()+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoCaixa.getDataHoraMovProc()+"\" readonly>");
                             output = StringUtils.join(lInputs,'\n');
                             break;
                         case "id_cofre":
@@ -459,12 +459,12 @@ public class Consulta {
                             break;
                         case "id_funcionario":
                             lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
-                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+outrosMovimentos.getIdFuncionario()+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+outrosMovimentos.getIdFuncionarioProc()+"\" readonly>");
                             output = StringUtils.join(lInputs,'\n');
                             break;
                         case "data_hora_mov":
                             lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
-                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+outrosMovimentos.getDataHoraMov()+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+outrosMovimentos.getDataHoraMovProc()+"\" readonly>");
                             output = StringUtils.join(lInputs,'\n');
                             break;
                     }
@@ -489,7 +489,7 @@ public class Consulta {
                             break;
                         case "data_hora_mov":
                             lInputs.add("<input type=\"text\" id=\"nome_coluna\" value=\""+valorBuscar+"\" readonly>");
-                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoConta.getDataHoraMov()+"\" readonly>");
+                            lInputs.add("<input type=\"text\" id=\"valor\" value=\""+movimentoConta.getDataHoraMovProc()+"\" readonly>");
                             output = StringUtils.join(lInputs,'\n');
                             break;
                     }

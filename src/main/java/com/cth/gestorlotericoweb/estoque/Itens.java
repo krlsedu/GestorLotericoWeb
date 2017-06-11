@@ -1,6 +1,7 @@
 package com.cth.gestorlotericoweb.estoque;
 
 import com.cth.gestorlotericoweb.LogError;
+import com.cth.gestorlotericoweb.operador.Operacoes;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.utils.Parser;
 import com.cth.gestorlotericoweb.utils.Seter;
@@ -29,6 +30,48 @@ public class Itens extends Estoque{
 	Date dataSorteio;
 	public Itens(HttpServletRequest request) {
 		super(request);
+	}
+	
+	public Itens(MovimentosEstoque movimentosEstoque) {
+		super(movimentosEstoque.request);
+		Operacoes operacoes =movimentosEstoque.getOutrosMovimentos().getOperacoes();
+		this.nomeItem = movimentosEstoque.getOutrosMovimentos().getOperacoes().getNomeConcurso();
+		switch (operacoes.getTipoItem()){
+//           1 >> <option value="3" >Bolão</option>
+			case 1:
+				switch (operacoes.getTipoOperacaoCaixa()){
+					//2 Geração >> 3
+					case 2:
+						this.tipoItem = 3;
+						this.unidade = 1;
+						switch (operacoes.getEdicaoItem()){
+//							"        <option value=\"1\" >MEGA-SENA</option>\n" +
+//									"        <option value=\"3\" >QUINA</option>\n" +
+//									"        <option value=\"5\" >LOTOFÁCIL</option>\n" +
+//									"        <option value=\"6\" >LOTOMANIA</option>\n" +
+//									"        <option value=\"7\" >TIMEMANIA</option>\n" +
+//									"        <option value=\"8\" >DUPLA SENA</option>\n" +
+//									"        <option value=\"9\" >LOTECA</option>\n" +
+//									"        <option value=\"10\" >LOTOGOL</option>\n" +
+//									"        <option value=\"11\" >Outros</option>";
+							case 1:
+								this.nomeItem = "MEGA-SENA";
+								break;
+							case 3:
+								this.nomeItem = "QUINA";
+								break;
+							case 5:
+								this.nomeItem = "LOTOFÁCIL";
+								break;
+						}
+						break;
+					default:
+						break;
+				}
+				break;
+			default:
+				break;
+		}
 	}
 	
 	public void setItens(){

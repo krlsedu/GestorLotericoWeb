@@ -94,7 +94,7 @@ public class Processos {
         return "0";
     }
     
-    public String getIdFuncionario(){
+    public String getIdFuncionarioProc(){
         String sql = "SELECT id_funcionario from abertura_terminais where id_terminal = ? and id_entidade = ? ORDER BY data_abertura DESC LIMIT 1";
         try{
             PreparedStatement ps = Parametros.getConexao().getPst(sql,false);
@@ -138,7 +138,7 @@ public class Processos {
         return request.getParameter("data_hora_mov");
     }
     
-    public String getDataHoraMov(){
+    public String getDataHoraMovProc(){
         if(request.getParameter("data_hora_mov")==null) {
             return getDataFechar() + "T00:00";
         }else{

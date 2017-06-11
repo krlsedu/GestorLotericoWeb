@@ -1,8 +1,10 @@
 package com.cth.gestorlotericoweb.estoque;
 
 import com.cth.gestorlotericoweb.LogError;
+import com.cth.gestorlotericoweb.operador.Operacoes;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
+import com.cth.gestorlotericoweb.processos.OutrosMovimentos;
 import com.cth.gestorlotericoweb.utils.Parser;
 import com.cth.gestorlotericoweb.utils.Seter;
 import org.apache.velocity.Template;
@@ -22,8 +24,10 @@ public class MovimentosEstoque extends Estoque {
 	Integer idItensEstoque;
 	Integer idLoterica;
 	Integer idFuncionario;
+	
 	private Integer numeroVolumes;
 	private Integer idMovimentoCaixa;
+	Integer idOutrosMovimentos;
 	
 	Integer tipoOperacao;
 	Integer tipoOperacaoAnt;
@@ -36,6 +40,7 @@ public class MovimentosEstoque extends Estoque {
 	
 	Timestamp dataHoraReferencia;
 	
+	OutrosMovimentos  outrosMovimentos;
 	
 	public MovimentosEstoque(HttpServletRequest request) {
 		super(request);
@@ -68,7 +73,41 @@ public class MovimentosEstoque extends Estoque {
 		if (!(this.tipoOperacao==1||this.tipoOperacao==3)) {
 			this.qtdTotalMovimentada = this.qtdTotalMovimentada.multiply(BigDecimal.valueOf(-1L));
 		}
-		this.dataHoraReferencia = Parser.toDbTimeStamp(movimentoCaixa.getDataHoraMov());
+		this.dataHoraReferencia = Parser.toDbTimeStamp(movimentoCaixa.getDataHoraMovProc());
+	}
+	
+	public MovimentosEstoque(HttpServletRequest request, OutrosMovimentos outrosMovimentos){
+		super(request);
+		this.outrosMovimentos = outrosMovimentos;
+		this.id = getIdMovimentoEstoque(outrosMovimentos);
+		
+		this.idOutrosMovimentos = outrosMovimentos.getId();
+		this.idLoterica = Parametros.getIdLoterica();
+		Itens itens = new Itens(this.request);
+		itens.idLoterica = this.idLoterica;
+		this.idItensEstoque = itens.getIdItensEstoque(outrosMovimentos.getIdEdicaoItem(),true);
+		if (this.idItensEstoque == null) {
+		
+		}
+		this.idFuncionario = outrosMovimentos.getIdFuncionario();
+		this.numeroVolumes = outrosMovimentos.getQuantidade();
+		
+		if (outrosMovimentos.getEntrada()) {
+			this.tipoOperacao = 1;
+		}else {
+			this.tipoOperacao = 2;
+		}
+		this.observacoes = "Movimento gerado automaticamente pela rotina de operações do funcionário";
+		
+		this.quantidadeMovimentada = outrosMovimentos.getValorMovimentado();
+		this.numeroVolumesBd = Parser.toBigDecimalFromSt(numeroVolumes.toString());
+		this.tipoOperacaoAnt = outrosMovimentos.getTipoOperacaoAnt();
+		
+		this.qtdTotalMovimentada = this.quantidadeMovimentada.multiply(this.numeroVolumesBd);
+		if (!(this.tipoOperacao==1||this.tipoOperacao==3)) {
+			this.qtdTotalMovimentada = this.qtdTotalMovimentada.multiply(BigDecimal.valueOf(-1L));
+		}
+		this.dataHoraReferencia = outrosMovimentos.getDataHoraMov();
 	}
 	
 	public void setMovimentacao(){
@@ -301,4 +340,22 @@ public class MovimentosEstoque extends Estoque {
 		return 0;
 	}
 	
+	private Integer getIdMovimentoEstoque(OutrosMovimentos outrosMovimentos){
+		try{
+			PreparedStatement ps = Parametros.getConexao().getPst("select id from movimentos_estoque where id_outros_movimentos = ? and id_entidade = ?",false);
+			ps.setInt(1, outrosMovimentos.getId());
+			ps.setInt(2, Parametros.idEntidade);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		}catch(SQLException ex){
+			new LogError(ex.getMessage(), ex,request);
+		}
+		return 0;
+	}
+	
+	public OutrosMovimentos getOutrosMovimentos() {
+		return outrosMovimentos;
+	}
 }
