@@ -90,11 +90,10 @@ public class MovimentosEstoque extends Estoque {
 		}else {
 			this.tipoOperacao = 2;
 		}
-		this.idItensEstoque = itens.getIdItensEstoque(this.outrosMovimentos.getIdEdicaoItem(),true);
+		this.idItensEstoque = itens.getIdItensEstoque(this.outrosMovimentos.getOperacoes(),this.outrosMovimentos.getOperacoes().getTipoItem()==1);
 		this.id = getIdMovimentoEstoque(outrosMovimentos);
 		
-		
-		if (this.idItensEstoque == null && this.outrosMovimentos.getOperacoes().getTipoOperacaoCaixa()==2) {
+		if (this.idItensEstoque == null && (this.outrosMovimentos.getOperacoes().getTipoOperacaoCaixa()==2||(this.outrosMovimentos.getOperacoes().getTipoItem()==4 && this.outrosMovimentos.getOperacoes().getTipoOperacaoCaixa()==5))) {
 			itens = new Itens(this);
 			itens.insere();
 			this.idItensEstoque = itens.id;
@@ -104,6 +103,9 @@ public class MovimentosEstoque extends Estoque {
 		
 		this.idFuncionario = this.outrosMovimentos.getIdFuncionario();
 		this.numeroVolumes = this.outrosMovimentos.getQuantidade();
+		if (this.numeroVolumes == null) {
+			this.numeroVolumes = 1;
+		}
 		
 		this.observacoes = "Movimento gerado automaticamente pela rotina de operações do funcionário";
 		
@@ -261,8 +263,9 @@ public class MovimentosEstoque extends Estoque {
 				if (this.outrosMovimentos.getOperacoes().getTipoOperacaoCaixa()==2) {
 					Operacoes opr = this.outrosMovimentos.getOperacoes();
 					opr.setTipoOperacaoCaixa(1);
-					this.outrosMovimentos.setOperacoes(opr);
 					this.outrosMovimentos.setIdEdicaoItem(this.outrosMovimentos.getIdEdicaoItem()+100);
+					opr.setEdicaoItem(this.outrosMovimentos.getIdEdicaoItem());
+					this.outrosMovimentos.setOperacoes(opr);
 					MovimentosEstoque movimentosEstoque = new MovimentosEstoque(request,this.outrosMovimentos);
 					movimentosEstoque.gravaAutoMov();
 				}else {

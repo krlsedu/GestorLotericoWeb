@@ -207,3 +207,44 @@ function ajustaCamposOpFu(its) {
             break;
     }
 }
+
+function attCbs(its, toc) {
+    switch (its.val()){
+        case "1"://bolão
+        case "6"://Outros
+            $("#div_valor").hide();
+            $("#div_data_sorteio").hide();
+            $('#div_nome_concurso').hide();
+            $('#div_cb_tipo').show();
+            $('#div_quantidade').show();
+            switch (toc.val()) {
+                case "2": // Geração
+                    $('#div_cb_tipo').show();
+                    $('#div_data_sorteio').show();
+                    $('#div_nome_concurso').show();
+                    $("#div_valor").show();
+                    break;
+            }
+            break;
+        case "4": //tele sena
+            $('#div_cb_tipo').show();
+            $("#div_quantidade").show();
+            $('#div_nome_concurso').hide();
+            $("#div_valor").hide();
+            switch (toc.val()) {
+                case "5": // Geração
+                    $('#div_nome_concurso').hide();
+                    $('#div_cb_tipo').hide();
+                    $('#edicao_item').html("");
+                    $("#div_quantidade").show();
+                    $("#div_valor").show();
+                    break;
+            }
+            break;
+        default:
+            $('#div_cb_tipo').show();
+            $('#div_data_sorteio').hide();
+            $('#div_nome_concurso').hide();
+            break;
+    }
+}

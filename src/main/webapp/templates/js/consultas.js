@@ -268,6 +268,7 @@ function insereDadosTelaSinc(col,htmlDoc) {
                                 insereDadosTelaSinc(col, htmlDoc);
                             });
                         } catch (e) {
+                            r.resolve();
                         }
                     } else {
                         $('input#' + nomeCol).val(valr).trigger('mask.maskMoney');
@@ -286,6 +287,7 @@ function insereDadosTelaSinc(col,htmlDoc) {
                     $('input#' + nomeCol).val(valr).trigger('mask.maskMoney');
                     document.getElementById(nomeCol).onchange();
                 } catch (e) {
+                    r.resolve();
                 }
                 //setTimeout(function() {insereDados(htmlDoc);}, 1000);
                 insereDadosTelaSinc(col, htmlDoc);
@@ -294,6 +296,14 @@ function insereDadosTelaSinc(col,htmlDoc) {
             insereDadosTelaSinc(col, htmlDoc);
         }
     }else{
+        try{
+            ajustaValorMascaraDinamica().done(function () {
+                verificaSeFechado();
+            });
+            attCbs(its,toc);
+        }catch (e){
+
+        }
         $('#modal_carregando').modal('hide');
         r.resolve();
     }

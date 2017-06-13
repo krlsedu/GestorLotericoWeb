@@ -147,7 +147,7 @@ function verificaSeFechado() {
 function ajustaValorMascaraDinamica() {
     var r = $.Deferred();
     var tela = $('#it').val();
-    if(tela === 'movimentos_estoque') {
+    if(tela === 'movimentos_estoque'||tela=== 'itens_estoque') {
         var tabela;
         var campoFormatar;
         var item;
@@ -155,6 +155,11 @@ function ajustaValorMascaraDinamica() {
             case "movimentos_estoque":
                 item = 'id_itens_estoque';
                 campoFormatar = 'quantidade_movimentada';
+                tabela = 'itens_estoque';
+                break;
+            case "itens_estoque":
+                item = 'id';
+                campoFormatar = 'valor_padrao';
                 tabela = 'itens_estoque';
                 break;
         }

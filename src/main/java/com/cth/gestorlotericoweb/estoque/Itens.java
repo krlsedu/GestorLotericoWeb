@@ -89,6 +89,15 @@ public class Itens extends Estoque{
 						break;
 				}
 				break;
+			case 4:
+				switch (operacoes.getTipoOperacaoCaixa()){
+					case 5:
+						this.tipoItem = 4;
+						this.unidade = 2;
+						this.nomeItem = "Tele Sena (Trocas)";
+						break;
+				}
+				break;
 			default:
 				break;
 		}
@@ -118,6 +127,40 @@ public class Itens extends Estoque{
 				this.observacoes = rs.getString(5);
 				this.idLoterica  = rs.getInt(6);
 				this.dataSorteio = rs.getDate(7);
+			}else {
+				this.id = null;
+			}
+		} catch (SQLException e) {
+			new LogError(e.getMessage(),e,request);
+		}
+	}
+	
+	private void buscaBancoPorTipoItem(){
+		//language=PostgresPLSQL
+		String sql = "SELECT tipo_item, unidade, nome_item, valor_padrao, observacoes, " +
+				"       id_loterica, data_sorteio, id " +
+				"   FROM public.itens_estoque" +
+				"   WHERE " +
+				"       tipo_item = ? AND " +
+				"       id_loterica = ? AND" +
+				"       id_entidade = ?";
+		try {
+			Seter ps = new Seter(sql,request,false);
+			ps.set(this.tipoItem);
+			ps.set(this.idLoterica);
+			ps.set(Parametros.idEntidade);
+			ResultSet rs = ps.getPst().executeQuery();
+			if (rs.next()) {
+				this.tipoItem = rs.getInt(1);
+				this.unidade  = rs.getInt(2);
+				this.nomeItem = rs.getString(3);
+				this.valorPadrao = rs.getBigDecimal(4);
+				this.observacoes = rs.getString(5);
+				this.idLoterica  = rs.getInt(6);
+				this.dataSorteio = rs.getDate(7);
+				this.id = rs.getInt(8);
+			}else {
+				this.id = null;
 			}
 		} catch (SQLException e) {
 			new LogError(e.getMessage(),e,request);
@@ -211,7 +254,26 @@ public class Itens extends Estoque{
 		return contextPrinc;
 	}
 	
-	public Integer getIdItensEstoque(Integer idItemEst,Boolean bolao){
+	public Integer getIdItensEstoque(Operacoes operacoes, Boolean bolao){
+		Integer idItemEst = operacoes.getEdicaoItem();
+		if (idItemEst == null){
+			this.idLoterica = Parametros.getIdLoterica();
+			this.tipoItem = operacoes.getTipoItem();
+			if (this.tipoItem !=null) {
+				if (this.tipoItem == 4) {
+					buscaBancoPorTipoItem();
+					if (this.id != null) {
+						return this.id;
+					}
+				}
+			}
+			return getIdItensEstoque(idItemEst,bolao);
+		}else{
+			return getIdItensEstoque(idItemEst,bolao);
+		}
+	}
+	
+	public Integer getIdItensEstoque(Integer idItemEst, Boolean bolao){
 		if (idItemEst==null){
 			return null;
 		}
@@ -219,14 +281,14 @@ public class Itens extends Estoque{
 			idItemEst -=100;
 			this.id = idItemEst;
 			buscaBanco();
-			return idItemEst;
+			return this.id;
 		}
 		if(bolao) {
 			return null;
 		}else {
 			this.id = idItemEst;
 			buscaBanco();
-			return idItemEst;
+			return this.id;
 		}
 	}
 	

@@ -71,7 +71,7 @@ public class OutrosMovimentos extends Processos{
             //2 Bilhete
             //4 Tele Sena
             //6 Outros
-            case 1:
+            case 1://bolão
                 switch (operacoes.getTipoOperacaoCaixa()){
                     //1 Entrada >> 2
                     //2 Geração >> 8
@@ -97,7 +97,7 @@ public class OutrosMovimentos extends Processos{
                         break;
                 }
                 break;
-            case 2:
+            case 2://Bilhete
                 switch (operacoes.getTipoOperacaoCaixa()){
                     //1 Entrada >> 12
                     //3 Saída >> 11
@@ -112,6 +112,53 @@ public class OutrosMovimentos extends Processos{
                         break;
                     case 4:
                         this.tipoOperacao = 3;
+                        this.entrada = false;
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case 4://Tele sena
+                switch (operacoes.getTipoOperacaoCaixa()){
+                    //1 Entrada >> 14
+                    //3 Saída >> 15
+                    //4 Venda >> 5
+                    //5 Troca >> 4
+                    case 1:
+                        this.tipoOperacao = 14;
+                        this.entrada = true;
+                        break;
+                    case 3:
+                        this.tipoOperacao = 15;
+                        this.entrada = false;
+                        break;
+                    case 4:
+                        this.tipoOperacao = 5;
+                        this.entrada = false;
+                        break;
+                    case 5:
+                        this.tipoOperacao = 4;
+                        this.entrada = false;
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case 6:
+                switch (operacoes.getTipoOperacaoCaixa()){
+                    //1 Entrada >> 7
+                    //3 Saída >> 6
+                    //4 Venda >> 13
+                    case 1:
+                        this.tipoOperacao = 7;
+                        this.entrada = true;
+                        break;
+                    case 3:
+                        this.tipoOperacao = 6;
+                        this.entrada = false;
+                        break;
+                    case 4:
+                        this.tipoOperacao = 13;
                         this.entrada = false;
                         break;
                     default:
