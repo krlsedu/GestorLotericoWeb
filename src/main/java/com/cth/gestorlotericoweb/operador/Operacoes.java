@@ -56,8 +56,20 @@ public class Operacoes extends Operador {
 		this.observacoes = request.getParameter("observacoes");
 		
 		this.dataSorteio = Parser.toDbDate(request.getParameter("data_sorteio"));
-		
-		this.valorMovimentado = Parser.toBigDecimalFromHtml(request.getParameter("valor_movimentado"));
+		if(this.tipoItem != null && this.tipoOperacaoCaixa != null) {
+			if (this.tipoItem == 1 && this.tipoOperacaoCaixa == 2) {
+				if (this.quantidade != null) {
+					this.valorMovimentado = Parser.toBigDecimalFromHtml(request.getParameter("valor_movimentado"));
+					this.valorMovimentado = this.valorMovimentado.divide(new BigDecimal(this.quantidade));
+				} else {
+					this.quantidade = 1;
+				}
+			} else {
+				this.valorMovimentado = Parser.toBigDecimalFromHtml(request.getParameter("valor_movimentado"));
+			}
+		}else{
+			this.valorMovimentado = Parser.toBigDecimalFromHtml(request.getParameter("valor_movimentado"));
+		}
 	}
 
 	public VelocityContext getHtml(VelocityContext contextPrinc, VelocityEngine ve, String idS){

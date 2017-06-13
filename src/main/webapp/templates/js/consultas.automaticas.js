@@ -211,6 +211,7 @@ function ajustaCamposOpFu(its) {
 function attCbs(its, toc) {
     switch (its.val()){
         case "1"://bolão
+            $('#lb_qtd').html("Num. Cotas");
         case "6"://Outros
             $("#div_valor").hide();
             $("#div_data_sorteio").hide();
@@ -219,6 +220,7 @@ function attCbs(its, toc) {
             $('#div_quantidade').show();
             switch (toc.val()) {
                 case "2": // Geração
+                    $('#lb_val').html("Total");
                     $('#div_cb_tipo').show();
                     $('#div_data_sorteio').show();
                     $('#div_nome_concurso').show();
@@ -227,6 +229,8 @@ function attCbs(its, toc) {
             }
             break;
         case "4": //tele sena
+            $('#lb_qtd').html("Quantidade");
+            $('#lb_val').html("Valor");
             $('#div_cb_tipo').show();
             $("#div_quantidade").show();
             $('#div_nome_concurso').hide();
@@ -242,6 +246,8 @@ function attCbs(its, toc) {
             }
             break;
         default:
+            $('#lb_qtd').html("Quantidade");
+            $('#lb_val').html("Valor");
             $('#div_cb_tipo').show();
             $('#div_data_sorteio').hide();
             $('#div_nome_concurso').hide();

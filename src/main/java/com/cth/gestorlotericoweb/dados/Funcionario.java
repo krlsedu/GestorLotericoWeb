@@ -55,7 +55,7 @@ public class Funcionario extends Cadastros{
     }
     private void getDados(){
         try {
-            PreparedStatement ps = Parametros.getConexao().getPst("SELECT codigo_caixa, nome, cpf, tipo,observacoes,id_usuario \n" +
+            PreparedStatement ps = Parametros.getConexao().getPst("SELECT codigo_caixa, nome, cpf, tipo_func,observacoes,id_usuario \n" +
                     "  FROM funcionarios where id = ? and id_entidade = ? ",false);
             ps.setInt(1, id);
             ps.setInt(2, Parametros.idEntidade);
@@ -95,7 +95,7 @@ public class Funcionario extends Cadastros{
             }else{
                 ps.setString(6, observacoes);
             }
-            ps = Seter.set(ps,6,idUsuario);
+            ps = Seter.set(ps,7,idUsuario);
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()){

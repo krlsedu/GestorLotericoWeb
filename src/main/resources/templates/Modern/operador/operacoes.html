@@ -7,7 +7,7 @@
     var its = $('#tipo_item');
     consultaOpcoesCb(its).done(attCbs(its,toc));
     its.on('change', function() {
-        consultaOpcoesCb(its);
+        consultaOpcoesCb(its).done(attCbs(its,toc));
     });
 
     toc.on('change', function() {
@@ -74,7 +74,7 @@
                             </div>
                         </div>
                         <div class="form-group mb-n" id="div_quantidade">
-                            <label for="quantidade" class="col-sm-2 control-label">Quantidade</label>
+                            <label for="quantidade" class="col-sm-2 control-label" id="lb_qtd">Quantidade</label>
                             <div class="col-sm-3">
                                 <div class="input-group">
                                     <span class="input-group-addon">Un</span>
@@ -84,7 +84,7 @@
                             </div>
                         </div>
                         <div class="form-group mb-n" id="div_valor">
-                            <label for="valor_movimentado" class="col-sm-2 control-label">Valor</label>
+                            <label for="valor_movimentado" class="col-sm-2 control-label" id="lb_val">Valor</label>
                             <div class="col-sm-3">
                                 <div class="input-group">
                                     <span class="input-group-addon">R$</span>
