@@ -267,7 +267,8 @@ public class Operacoes extends Operador {
 		return "";
 	}
 	private String getOptsSorteio(Integer tipo){
-		String sql = "SELECT id+100,nome_item ||' - '|| to_char(data_sorteio, 'DD/MM/YYYY') FROM itens_estoque where data_sorteio >= ? and tipo_item = ? and id_entidade = ? ";
+		//language=PostgresPLSQL
+		String sql = "SELECT case when tipo_item = 3 then id+100 else id END , nome_item ||' - '|| to_char(data_sorteio, 'DD/MM/YYYY') FROM itens_estoque where data_sorteio >= ? and tipo_item = ? and id_entidade = ? ";
 		try {
 			Seter ps = new Seter(sql,request,false);
 			ps.set(new Date(new java.util.Date().getTime()));

@@ -254,4 +254,8 @@ public class AberturaTerminal extends Processos{
     public String getIdTerminal() {
         return idTerminal;
     }
+    
+    public Date getDataAbertura() {
+        return dataAbertura;
+    }
 }

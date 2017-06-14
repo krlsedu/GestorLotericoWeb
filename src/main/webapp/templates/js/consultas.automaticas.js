@@ -173,6 +173,7 @@ function ajustaCamposOpFu(its) {
             $('#lb_cb_tipo').html("Edição");
             break;
         case "3": // Dinheiro
+            $("#div_valor").show();
             $('#div_cb_tipo').hide();
             $('#div_data_sorteio').hide();
             $('#div_nome_concurso').hide();
@@ -190,6 +191,7 @@ function ajustaCamposOpFu(its) {
             $('#lb_cb_tipo').html("Edição");
             break;
         case "5": //MOedas
+            $("#div_valor").show();
             $('#div_cb_tipo').show();
             $('#div_quantidade').hide();
             $('#opt_gera').hide();
@@ -244,6 +246,13 @@ function attCbs(its, toc) {
                     $("#div_valor").show();
                     break;
             }
+            break;
+        case "3":
+            $('#lb_qtd').html("Quantidade");
+            $('#lb_val').html("Valor");
+            $('#div_cb_tipo').hide();
+            $('#div_data_sorteio').hide();
+            $('#div_nome_concurso').hide();
             break;
         default:
             $('#lb_qtd').html("Quantidade");
