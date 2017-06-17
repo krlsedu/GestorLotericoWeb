@@ -23,6 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +60,14 @@ public class MovimentoCaixa extends Processos{
         this.idFuncionario = operacoes.getIdFuncionario();
         AberturaTerminal aberturaTerminal = new AberturaTerminal(request);
         this.idCofre = Parser.toIntegerNull(aberturaTerminal.getIdCofre());
-        this.dataHoraMov = new Timestamp(new java.util.Date().getTime());
+    
+        aberturaTerminal = new AberturaTerminal(operacoes.getIdAberturaTerminal(),request);
+    
+        String dataAbertura = new SimpleDateFormat("yyyy-MM-dd").format(aberturaTerminal.getDataAbertura());
+        String hora = new SimpleDateFormat("hh:mm").format(new java.util.Date());
+    
+        this.dataHoraMov = Parser.toDbTimeStamp(dataAbertura+hora);
+        
         this.valorMovimentado = operacoes.getValorMovimentado();
     
         Itens itens = new Itens(request);

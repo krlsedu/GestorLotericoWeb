@@ -98,6 +98,14 @@ public class Parser {
         }
     }
     
+    public static BigDecimal toBigDecimalFromHtmlNNull(String valor){
+        BigDecimal val = toBigDecimalFromHtml(valor);
+        if (val == null) {
+            return BigDecimal.ZERO;
+        }
+        return val;
+    }
+    
     public static BigDecimal toBigDecimalFromHtml(String valor){
         try {
             String st = valor;
