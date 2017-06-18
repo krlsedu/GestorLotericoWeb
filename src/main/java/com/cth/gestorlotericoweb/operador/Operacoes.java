@@ -177,7 +177,15 @@ public class Operacoes extends Operador {
 			st.set(edicaoItem);
 			st.set(nomeConcurso);
 			st.set(dataSorteio);
-			st.set(valorMovimentado);
+			if(this.tipoItem != null && this.tipoOperacaoCaixa != null) {
+				if (this.tipoItem == 1 && this.tipoOperacaoCaixa == 2) {
+					st.set(valorMovimentado.multiply(new BigDecimal(quantidade)));
+				}else {
+					st.set(valorMovimentado);
+				}
+			}else {
+				st.set(valorMovimentado);
+			}
 			st.set(observacoes);
 			st.set(idFuncionario);
 			st.set(idTerminal);
@@ -223,7 +231,15 @@ public class Operacoes extends Operador {
 			ps.set(edicaoItem);
 			ps.set(nomeConcurso);
 			ps.set(dataSorteio);
-			ps.set(valorMovimentado);
+			if(this.tipoItem != null && this.tipoOperacaoCaixa != null) {
+				if (this.tipoItem == 1 && this.tipoOperacaoCaixa == 2) {
+					ps.set(valorMovimentado.multiply(new BigDecimal(quantidade)));
+				}else {
+					ps.set(valorMovimentado);
+				}
+			}else {
+				ps.set(valorMovimentado);
+			}
 			ps.set(observacoes);
 			ps.set(idFuncionario);
 			ps.set(idTerminal);

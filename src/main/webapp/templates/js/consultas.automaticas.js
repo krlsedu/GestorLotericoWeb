@@ -254,12 +254,20 @@ function attCbs(its, toc) {
             $('#div_data_sorteio').hide();
             $('#div_nome_concurso').hide();
             break;
+        case "5":
+            $('#lb_qtd').html("Quantidade");
+            $('#lb_val').html("Valor");
+            $('#div_cb_tipo').show();
+            $('#div_data_sorteio').hide();
+            $('#div_nome_concurso').hide();
+            break;
         default:
             $('#lb_qtd').html("Quantidade");
             $('#lb_val').html("Valor");
             $('#div_cb_tipo').show();
             $('#div_data_sorteio').hide();
             $('#div_nome_concurso').hide();
+            $('#div_valor').hide();
             break;
     }
 }
