@@ -250,9 +250,15 @@ public class FechamentoTerminal extends Processos{
                 if (totalMovimentosDiaL==null) {
                     totalMovimentosDiaL = BigDecimal.ZERO;
                 }
-                totalMovimentosDiaL = totalMovimentosDiaL.subtract(getSaldoAbertura());
+                //(saldoMovimentacoes + saldoOutrosMovimentos + valorGeracaoBoloes)-saldoVendas-trocasDeTeleSena
                 totalMovimentosDiaL = totalMovimentosDiaL.add(getSaldoOutrosMovimentos());
-                totalMovimentosDiaL = totalMovimentosDiaL.add(Parser.toBigDecimalFromHtml(restoCaixa));
+                totalMovimentosDiaL = totalMovimentosDiaL.add(getSaldoGeracoesBoloes());
+                
+                totalMovimentosDiaL = totalMovimentosDiaL.subtract(getSaldoVendas());
+                totalMovimentosDiaL = totalMovimentosDiaL.subtract(getSaldoTrocaTeleSena());
+    
+                totalMovimentosDiaL = totalMovimentosDiaL.subtract(getSaldoAbertura());
+                totalMovimentosDiaL = totalMovimentosDiaL.add(Parser.toBigDecimalFromHtmlNNull(restoCaixa));
             }
         } catch (SQLException ex) {
             new LogError(ex.getMessage()+sql, ex, request);
@@ -287,14 +293,99 @@ public class FechamentoTerminal extends Processos{
         return valor;
     }
     
+    public BigDecimal getSaldoVendas(){
+        //language=PostgresPLSQL
+        String sql = "SELECT " +
+                "       sum(valor_movimentado)" +
+                "   FROM " +
+                "       outros_movimentos" +
+                "   where" +
+                "   tipo_operacao_caixa IN (13,9,5,3) AND" +
+                "   date(data_hora_mov) = ? and " +
+                "	id_terminal = ? and " +
+                "	id_funcionario = ? AND " +
+                "   id_entidade = ? ";
+        return getSaldoOperacoes(sql);
+    }
+    
+    public BigDecimal getSaldoEntradas(){
+        //language=PostgresPLSQL
+        String sql = "SELECT " +
+                "       sum(valor_movimentado)" +
+                "   FROM " +
+                "       outros_movimentos" +
+                "   where" +
+                "   tipo_operacao_caixa IN (2,8,12,4,14,7) AND" +
+                "   date(data_hora_mov) = ? and " +
+                "	id_terminal = ? and " +
+                "	id_funcionario = ? AND " +
+                "   id_entidade = ? ";
+        return getSaldoOperacoes(sql);
+    }
+    
+    public BigDecimal getSaldoGeracoesBoloes(){
+        //language=PostgresPLSQL
+        String sql = "SELECT " +
+                "       sum(valor_movimentado)" +
+                "   FROM " +
+                "       outros_movimentos" +
+                "   where" +
+                "   tipo_operacao_caixa IN (8) AND" +
+                "   date(data_hora_mov) = ? and " +
+                "	id_terminal = ? and " +
+                "	id_funcionario = ? AND " +
+                "   id_entidade = ? ";
+        return getSaldoOperacoes(sql);
+    }
+    
+    public BigDecimal getSaldoTrocaTeleSena(){
+        //language=PostgresPLSQL
+        String sql = "SELECT " +
+                "       sum(valor_movimentado)" +
+                "   FROM " +
+                "       outros_movimentos" +
+                "   where" +
+                "   tipo_operacao_caixa IN (4) AND" +
+                "   date(data_hora_mov) = ? and " +
+                "	id_terminal = ? and " +
+                "	id_funcionario = ? AND " +
+                "   id_entidade = ? ";
+        return getSaldoOperacoes(sql);
+    }
+    
+    public BigDecimal getSaldoOperacoes(String sql){
+        BigDecimal valor = BigDecimal.ZERO;
+        try {
+            PreparedStatement ps = Parametros.getConexao().getPst(sql,false);
+            if(dataFechamentoDt!=null&&idTerminal!=null&&idFuncionario!=null){
+                ps.setDate(1, dataFechamentoDt);
+                ps = Seter.set(ps, 2, Integer.valueOf(idTerminal));
+                ps = Seter.set(ps, 3, Integer.valueOf(idFuncionario));
+                ps = Seter.set(ps,4,Parametros.idEntidade);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    valor =  rs.getBigDecimal(1);
+                }
+            }
+        } catch (SQLException ex) {
+            new LogError(sql, ex, request);
+        }
+        if (valor==null) {
+            valor = BigDecimal.ZERO;
+        }
+        return valor;
+    }
+    
     public BigDecimal getSaldoOutrosMovimentos(){
+        //((FinalDia - InicioDia)+saldoMovimentacoes + saldoOutrosMovimentos + valorGeracaoBoloes)-trocasDeTeleSena
         BigDecimal valor = BigDecimal.ZERO;
         String sql = "SELECT \n" +
-                "	sum(case when tipo_operacao_caixa in (1,9,10,12,4,14,16,6,18) then valor_movimentado else valor_movimentado * (-1) end)\n" +
+                //"	sum(case when tipo_operacao_caixa in (13,9,8,5,3) then valor_movimentado * (-1) else valor_movimentado  end)\n" +
+                "	sum(case when tipo_operacao_caixa in (1,9,5,15,11,3,13,6) then valor_movimentado * (-1) else valor_movimentado end)\n" +
                 "FROM \n" +
                 "	outros_movimentos \n" +
                                 "where" +
-                "   tipo_operacao_caixa NOT IN (8,9) AND" +
+                //"   tipo_operacao_caixa NOT IN (1,2,6,7,11,12,14,15) AND" +
                 "   date(data_hora_mov) = ? and " +
                 "	id_terminal = ? and " +
                 "	id_funcionario = ?";
@@ -323,7 +414,7 @@ public class FechamentoTerminal extends Processos{
     }
     
     public BigDecimal getSaldoTerminalBigDecimal(){
-        return Parser.toBigDecimalFromHtml(totalCreditosTerminal).subtract(Parser.toBigDecimalFromHtml(totalDebitosTerminal));
+        return Parser.toBigDecimalFromHtmlNNull(totalCreditosTerminal).subtract(Parser.toBigDecimalFromHtmlNNull(totalDebitosTerminal));
     };
     
     public String getDiferencaCaixa(){
@@ -331,7 +422,8 @@ public class FechamentoTerminal extends Processos{
     }
     
     public BigDecimal getDiferencaCaixaBigDec(){
-      return Parser.toBigDecimalFromHtml(totalMovimentosDia).subtract(Parser.toBigDecimalFromHtml(saldoTerminal));
+        //((FinalDia - InicioDia)+saldoMovimentacoes + saldoOutrosMovimentos + valorGeracaoBoloes)-trocasDeTeleSena
+      return Parser.toBigDecimalFromHtmlNNull(totalMovimentosDia).subtract(Parser.toBigDecimalFromHtmlNNull(saldoTerminal));
     };
     
     public String getRestoCaixaDiaAnterior(){

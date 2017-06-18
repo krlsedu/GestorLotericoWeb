@@ -1,8 +1,10 @@
 package com.cth.gestorlotericoweb.estoque;
 
 import com.cth.gestorlotericoweb.LogError;
+import com.cth.gestorlotericoweb.operador.Operacoes;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
+import com.cth.gestorlotericoweb.processos.OutrosMovimentos;
 import com.cth.gestorlotericoweb.utils.Parser;
 import com.cth.gestorlotericoweb.utils.Seter;
 import org.apache.velocity.Template;
@@ -22,8 +24,10 @@ public class MovimentosEstoque extends Estoque {
 	Integer idItensEstoque;
 	Integer idLoterica;
 	Integer idFuncionario;
-	Integer numeroVolumes;
-	Integer idMovimentoCaixa;
+	
+	private Integer numeroVolumes;
+	private Integer idMovimentoCaixa;
+	Integer idOutrosMovimentos;
 	
 	Integer tipoOperacao;
 	Integer tipoOperacaoAnt;
@@ -36,6 +40,7 @@ public class MovimentosEstoque extends Estoque {
 	
 	Timestamp dataHoraReferencia;
 	
+	OutrosMovimentos  outrosMovimentos;
 	
 	public MovimentosEstoque(HttpServletRequest request) {
 		super(request);
@@ -49,7 +54,7 @@ public class MovimentosEstoque extends Estoque {
 		this.idLoterica = Parametros.getIdLoterica();
 		Itens itens = new Itens(this.request);
 		itens.idLoterica = this.idLoterica;
-		this.idItensEstoque = itens.getIdItensEstoque(movimentoCaixa.getTipoMoeda());
+		this.idItensEstoque = itens.getIdItensEstoque(movimentoCaixa.getTipoMoeda(),false);
 		this.idFuncionario = movimentoCaixa.idFuncionario;
 		this.numeroVolumes = 1;
 		
@@ -63,11 +68,68 @@ public class MovimentosEstoque extends Estoque {
 		this.quantidadeMovimentada = movimentoCaixa.getValorMovimentado();
 		this.numeroVolumesBd = Parser.toBigDecimalFromSt("1");
 		this.tipoOperacaoAnt = movimentoCaixa.getTipoOperacaoAnt();
+		
 		this.qtdTotalMovimentada = this.quantidadeMovimentada.multiply(this.numeroVolumesBd);
-		if (!(this.tipoOperacao.equals("1")||this.tipoOperacao.equals("3"))) {
+		if (!(this.tipoOperacao==1||this.tipoOperacao==3)) {
 			this.qtdTotalMovimentada = this.qtdTotalMovimentada.multiply(BigDecimal.valueOf(-1L));
 		}
-		this.dataHoraReferencia = Parser.toDbTimeStamp(movimentoCaixa.getDataHoraMov());
+		this.dataHoraReferencia = Parser.toDbTimeStamp(movimentoCaixa.getDataHoraMovProc());
+	}
+	
+	public MovimentosEstoque(HttpServletRequest request, OutrosMovimentos outrosMovimentos){
+		super(request);
+		this.outrosMovimentos = outrosMovimentos;
+		
+		this.idOutrosMovimentos = outrosMovimentos.getId();
+		this.idLoterica = Parametros.getIdLoterica();
+		Itens itens = new Itens(this.request);
+		itens.idLoterica = this.idLoterica;
+		
+		if ((!outrosMovimentos.getEntrada()&&this.outrosMovimentos.getOperacoes().getTipoOperacaoCaixa()<=3)||this.outrosMovimentos.getOperacoes().getTipoOperacaoCaixa()==2) {
+			this.tipoOperacao = 1;
+		}else {
+			this.tipoOperacao = 2;
+		}
+		this.idItensEstoque = itens.getIdItensEstoque(this.outrosMovimentos.getOperacoes(),this.outrosMovimentos.getOperacoes().getTipoItem()==1);
+		
+		
+		this.id = getIdMovimentoEstoque(outrosMovimentos);
+		
+		if (this.idItensEstoque == null && (this.outrosMovimentos.getOperacoes().getTipoOperacaoCaixa()==2||(this.outrosMovimentos.getOperacoes().getTipoItem()==4 && this.outrosMovimentos.getOperacoes().getTipoOperacaoCaixa()==5))) {
+			itens = new Itens(this);
+			itens.insere();
+			this.idItensEstoque = itens.id;
+		}
+		this.outrosMovimentos.setIdEdicaoItem(this.idItensEstoque);
+		this.outrosMovimentos.getOperacoes().alteraIdItem();
+		
+		this.idFuncionario = this.outrosMovimentos.getIdFuncionario();
+		this.numeroVolumes = this.outrosMovimentos.getQuantidade();
+		if (this.numeroVolumes == null) {
+			this.numeroVolumes = 1;
+		}
+		
+		this.observacoes = "Movimento gerado automaticamente pela rotina de operações do funcionário";
+		
+		if (itens.unidade == 2) {
+			this.quantidadeMovimentada = outrosMovimentos.getValorMovimentado();
+			this.numeroVolumesBd = new BigDecimal(numeroVolumes);
+		}else {
+			Integer qtd = outrosMovimentos.getOperacoes().getQuantidade();
+			if (qtd == null) {
+				qtd = 1;
+			}
+			this.quantidadeMovimentada = new BigDecimal(qtd);
+			this.numeroVolumes = 1;
+			this.numeroVolumesBd = new BigDecimal(numeroVolumes);
+		}
+		this.tipoOperacaoAnt = outrosMovimentos.getTipoOperacaoAnt();
+		
+		this.qtdTotalMovimentada = this.quantidadeMovimentada.multiply(this.numeroVolumesBd);
+		if (!(this.tipoOperacao==1||this.tipoOperacao==3)) {
+			this.qtdTotalMovimentada = this.qtdTotalMovimentada.multiply(BigDecimal.valueOf(-1L));
+		}
+		this.dataHoraReferencia = outrosMovimentos.getDataHoraMov();
 	}
 	
 	public void setMovimentacao(){
@@ -84,17 +146,17 @@ public class MovimentosEstoque extends Estoque {
 		numeroVolumesBd = Parser.toBigDecimalFromSt("1");
 		qtdTotalMovimentada = quantidadeMovimentada.multiply(numeroVolumesBd);
 		
-		if (!(tipoOperacao.equals("1")||tipoOperacao.equals("3"))) {
+		if (!(tipoOperacao == 1||tipoOperacao == 3 )) {
 			qtdTotalMovimentada = qtdTotalMovimentada.multiply(BigDecimal.valueOf(-1L));
 		}
 		
 		dataHoraReferencia = Parser.toDbTimeStamp(request.getParameter("data_hora_mov"));
 	}
 	
-	public void getDadosBd(){
+	private void getDadosBd(){
 		String sql = "SELECT  tipo_movimento, id_itens_estoque, quantidade_movimentada, \n" +
 				"       id_loterica, numero_volumes, observacoes, \n" +
-				"       data_hora_mov, id_funcionario, id_movimento_caixa\n" +
+				"       data_hora_mov, id_funcionario, id_movimento_caixa, id_outros_movimentos\n" +
 				"  FROM movimentos_estoque" +
 				"  where " +
 				"   id = ? AND " +
@@ -115,10 +177,10 @@ public class MovimentosEstoque extends Estoque {
 				dataHoraReferencia = rs.getTimestamp(7);
 				idFuncionario =rs.getInt(8);
 				idMovimentoCaixa =rs.getInt(9);
-				
+				idOutrosMovimentos = rs.getInt(10);
 				qtdTotalMovimentada = quantidadeMovimentada.multiply(numeroVolumesBd);
 				
-				if (!(tipoOperacao.equals("1")||tipoOperacao.equals("3"))) {
+				if (!(tipoOperacao==1 ||tipoOperacao == 3 )) {
 					qtdTotalMovimentada = qtdTotalMovimentada.multiply(BigDecimal.valueOf(-1L));
 				}
 			}
@@ -133,8 +195,7 @@ public class MovimentosEstoque extends Estoque {
 		}else{
 			altera();
 		}
-		SaldoEstoque saldoEstoque = new SaldoEstoque(request);
-		saldoEstoque.grava(this);
+		gravaSaldoEstoque();
 		gravaSaldoEstoqueFuncionario();
 	}
 	
@@ -144,30 +205,79 @@ public class MovimentosEstoque extends Estoque {
 		}else{
 			altera();
 		}
-		SaldoEstoque saldoEstoque = new SaldoEstoque(request);
-		saldoEstoque.grava(this);
+		gravaSaldoEstoque();
 		gravaSaldoEstoqueFuncionario();
 	}
 	
+	private void gravaSaldoEstoque(){
+		if(outrosMovimentos == null) {
+			SaldoEstoque saldoEstoque = new SaldoEstoque(request);
+			saldoEstoque.grava(this);
+		}else {
+			if (outrosMovimentos.getOperacoes().getTipoOperacaoCaixa() <=3) {
+				SaldoEstoque saldoEstoque = new SaldoEstoque(request);
+				saldoEstoque.grava(this);
+			}
+		}
+	}
+	
 	private void gravaSaldoEstoqueFuncionario(){
-		if (this.idFuncionario != null) {
-			if (request.getParameter("it").equals("movimentos_caixas")){
-				if(this.tipoOperacao == 1 ){
-					if (this.tipoOperacaoAnt.equals(tipoOperacao )) {
-						this.tipoOperacaoAnt = 2;
+		boolean entra;
+		switch (request.getParameter("it")){
+			case "movimentos_caixas":
+				entra = true;
+				break;
+			case "operacoes_funcionario":
+				if(outrosMovimentos == null){
+					entra = true;
+				}else {
+					if (outrosMovimentos.getOperacoes().getTipoOperacaoCaixa()==2 || outrosMovimentos.getOperacoes().getTipoOperacaoCaixa()>3) {
+						entra = false;
 					}else {
-						this.tipoOperacaoAnt = 1;
+						entra = true;
+					}
+				}
+				break;
+			default:
+				entra = false;
+				break;
+		}
+		if (this.idFuncionario != null) {
+			if (entra){
+				if(this.tipoOperacaoAnt==null){
+					this.tipoOperacaoAnt = this.tipoOperacao;
+				}
+				if(this.tipoOperacao == 1 ){
+					if (this.tipoOperacaoAnt.equals(tipoOperacao)) {
+						this.tipoOperacao = 2;
+					}else {
+						this.tipoOperacao = 1;
 					}
 				}else {
 					if (this.tipoOperacaoAnt.equals(tipoOperacao)) {
-						this.tipoOperacaoAnt = 1;
+						this.tipoOperacao = 1;
 					}else {
-						this.tipoOperacaoAnt = 2;
+						this.tipoOperacao = 2;
 					}
 				}
 			}
-			SaldoEstoqueFuncionario saldoEstoqueFuncionario = new SaldoEstoqueFuncionario(request);
-			saldoEstoqueFuncionario.grava(this);
+			if(this.outrosMovimentos != null){
+				if (this.outrosMovimentos.getOperacoes().getTipoOperacaoCaixa()==2) {
+					Operacoes opr = this.outrosMovimentos.getOperacoes();
+					opr.setTipoOperacaoCaixa(1);
+					this.outrosMovimentos.setIdEdicaoItem(this.outrosMovimentos.getIdEdicaoItem()+100);
+					opr.setEdicaoItem(this.outrosMovimentos.getIdEdicaoItem());
+					this.outrosMovimentos.setOperacoes(opr);
+					MovimentosEstoque movimentosEstoque = new MovimentosEstoque(request,this.outrosMovimentos);
+					movimentosEstoque.gravaAutoMov();
+				}else {
+					SaldoEstoqueFuncionario saldoEstoqueFuncionario = new SaldoEstoqueFuncionario(request);
+					saldoEstoqueFuncionario.grava(this);
+				}
+			}else {
+				SaldoEstoqueFuncionario saldoEstoqueFuncionario = new SaldoEstoqueFuncionario(request);
+				saldoEstoqueFuncionario.grava(this);
+			}
 		}
 	}
 	
@@ -176,11 +286,11 @@ public class MovimentosEstoque extends Estoque {
 			PreparedStatement ps = Parametros.getConexao(request).getPst("INSERT INTO public.movimentos_estoque(\n" +
 					"            tipo_movimento, id_itens_estoque, quantidade_movimentada, \n" +
 					"             numero_volumes, data_hora_mov, observacoes,\n" +
-					"             id_funcionario,id_loterica, id_movimento_caixa, id_entidade)\n" +
+					"             id_funcionario,id_loterica, id_movimento_caixa, id_entidade, id_outros_movimentos)\n" +
 					"    VALUES ( ?, ?, ?, " +
 					"            ?, ?, ?, " +
-					"             ?, ?, ?, ? )");
-			ps.setInt(1, Integer.valueOf(tipoOperacao));
+					"             ?, ?, ?, ?, ? )");
+			ps.setInt(1, tipoOperacao);
 			ps.setInt(2,idItensEstoque);
 			ps.setBigDecimal(3,quantidadeMovimentada);
 			ps.setInt(4,numeroVolumes);
@@ -191,6 +301,7 @@ public class MovimentosEstoque extends Estoque {
 			ps = Seter.set(ps,8,idLoterica);
 			ps = Seter.set(ps,9,idMovimentoCaixa);
 			ps.setInt(10, Parametros.idEntidade);
+			ps = Seter.set(ps,11,idOutrosMovimentos);
 			ps.execute();
 			ResultSet rs = ps.getGeneratedKeys();
 			if(rs.next()){
@@ -213,9 +324,9 @@ public class MovimentosEstoque extends Estoque {
 			PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.movimentos_estoque\n" +
 					"   SET  tipo_movimento=?, id_itens_estoque=?, quantidade_movimentada=?, \n" +
 					"       numero_volumes=?,data_hora_mov=?, observacoes=?, \n" +
-					"        id_funcionario = ?, id_loterica=? \n" +
+					"        id_funcionario = ?, id_loterica=?, id_outros_movimentos = ? \n" +
 					" where id = ? and id_entidade = ? ", false);
-			ps.setInt(1, Integer.valueOf(tipoOperacao));
+			ps.setInt(1, tipoOperacao);
 			ps.setInt(2,idItensEstoque);
 			ps.setBigDecimal(3,quantidadeMovimentada);
 			ps.setInt(4,numeroVolumes);
@@ -224,10 +335,11 @@ public class MovimentosEstoque extends Estoque {
 			ps = Seter.set(ps,6,observacoes);
 			ps = Seter.set(ps,7,idFuncionario);
 			ps = Seter.set(ps,8,idLoterica);
+			ps = Seter.set(ps,9,idOutrosMovimentos);
 			
 			id = Integer.valueOf(idL);
-			ps.setInt(9, id);
-			ps.setInt(10, Parametros.idEntidade);
+			ps.setInt(10, id);
+			ps.setInt(11, Parametros.idEntidade);
 			
 			ps.execute();
 		} catch (SQLException ex) {
@@ -285,4 +397,23 @@ public class MovimentosEstoque extends Estoque {
 		return 0;
 	}
 	
+	public Integer getIdMovimentoEstoque(OutrosMovimentos outrosMovimentos){
+		try{
+			PreparedStatement ps = Parametros.getConexao().getPst("select id from movimentos_estoque where id_outros_movimentos = ? and id_entidade = ?",false);
+			ps.setInt(1, outrosMovimentos.getId());
+			ps.setInt(2, Parametros.idEntidade);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				this.id = rs.getInt(1);
+				return this.id;
+			}
+		}catch(SQLException ex){
+			new LogError(ex.getMessage(), ex,request);
+		}
+		return 0;
+	}
+	
+	public OutrosMovimentos getOutrosMovimentos() {
+		return outrosMovimentos;
+	}
 }

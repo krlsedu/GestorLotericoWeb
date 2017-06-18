@@ -3,6 +3,7 @@ package com.cth.gestorlotericoweb.operador;
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
+import com.cth.gestorlotericoweb.processos.OutrosMovimentos;
 import com.cth.gestorlotericoweb.utils.Parser;
 import com.cth.gestorlotericoweb.utils.Seter;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +35,11 @@ public class Operacoes extends Operador {
 	String observacoes;
 	
 	Date dataSorteio;
+	Timestamp dataHoraMov;
 	
 	BigDecimal valorMovimentado;
+	
+	
 	
 	public Operacoes(HttpServletRequest request) {
 		super(request);
@@ -44,7 +49,7 @@ public class Operacoes extends Operador {
 	private void setOperacoe(){
 		this.id = Parser.toInteger(request.getParameter("id"));
 		this.tipoItem = Parser.toIntegerNull(request.getParameter("tipo_item"));
-		this.tipoOperacaoCaixa = Parser.toIntegerNull(request.getParameter("tipo_operacao_caixa"));
+		this.tipoOperacaoCaixa = Parser.toInteger(request.getParameter("tipo_operacao_caixa"));
 		this.edicaoItem = Parser.toIntegerNull(request.getParameter("edicao_item"));
 		this.idFuncionario = Parser.toIntegerNull(request.getParameter("id_funcionario"));
 		this.idTerminal = Parser.toIntegerNull(request.getParameter("id_terminal"));
@@ -55,9 +60,55 @@ public class Operacoes extends Operador {
 		this.observacoes = request.getParameter("observacoes");
 		
 		this.dataSorteio = Parser.toDbDate(request.getParameter("data_sorteio"));
-		
-		this.valorMovimentado = Parser.toBigDecimalFromHtml(request.getParameter("valor_movimentado"));
+		if(this.tipoItem != null && this.tipoOperacaoCaixa != null) {
+			if (this.tipoItem == 1 && this.tipoOperacaoCaixa == 2) {
+				if (this.quantidade != null) {
+					this.valorMovimentado = Parser.toBigDecimalFromHtml(request.getParameter("valor_movimentado"));
+					this.valorMovimentado = this.valorMovimentado.divide(new BigDecimal(this.quantidade));
+				} else {
+					this.quantidade = 1;
+				}
+			} else {
+				this.valorMovimentado = Parser.toBigDecimalFromHtml(request.getParameter("valor_movimentado"));
+			}
+		}else{
+			this.valorMovimentado = Parser.toBigDecimalFromHtml(request.getParameter("valor_movimentado"));
+		}
 	}
+	
+	public void getDadosPorId(){
+		//language=PostgresPLSQL
+		String sql = "SELECT tipo_item, tipo_operacao_caixa, edicao_item, nome_concurso, \n" +
+				"       data_sorteio, valor_movimentado, observacoes, id_fucionario, \n" +
+				"       id_terminal, id_abertura_terminal, quantidade, data_hora_mov\n" +
+				"    FROM public.operacoes_funcionario" +
+				"    where" +
+				"       id = ? AND " +
+				"       id_entidade = ?";
+		try {
+			Seter ps = new Seter(sql,request,false);
+			ps.set(this.id);
+			ps.set(Parametros.idEntidade);
+			ResultSet rs = ps.getPst().executeQuery();
+			if (rs.next()) {
+				tipoItem = rs.getInt(1);
+				tipoOperacaoCaixa = rs.getInt(2);
+				edicaoItem = rs.getInt(3);
+				nomeConcurso = rs.getString(4);
+				dataSorteio = rs.getDate(5);
+				valorMovimentado = rs.getBigDecimal(6);
+				observacoes = rs.getString(7);
+				idFuncionario = rs.getInt(8);
+				idTerminal = rs.getInt(9);
+				idAberturaTerminal = rs.getInt(10);
+				quantidade = rs.getInt(11);
+				dataHoraMov = rs.getTimestamp(12);
+			}
+		} catch (SQLException e) {
+			new LogError(e.getMessage(),e,request);
+		}
+	}
+
 	public VelocityContext getHtml(VelocityContext contextPrinc, VelocityEngine ve, String idS){
 		Template templateConteudo;
 		VelocityContext contextConteudo;
@@ -76,6 +127,30 @@ public class Operacoes extends Operador {
 		contextPrinc.put("conteudo", writerConteudo.toString());
 		contextPrinc.put("popup", getSWPopup(ve,"operacoes_funcionario").toString());
 		return contextPrinc;
+	}
+	
+	public void deleta(){
+		getDadosPorId();
+		MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request,this);
+		if (movimentoCaixa.getId() != null) {
+			movimentoCaixa.getDados();
+			movimentoCaixa.deleta();
+		}
+		OutrosMovimentos outrosMovimentos = new OutrosMovimentos(request,this);
+		if (outrosMovimentos.getId() != null) {
+			outrosMovimentos.getDados();
+			outrosMovimentos.deleta();
+		}
+		//language=PostgresPLSQL
+		String sql = "DELETE FROM operacoes_funcionario where id = ? and id_entidade = ?";
+		try {
+			Seter ps = new Seter(sql,request);
+			ps.set(this.id);
+			ps.set(Parametros.idEntidade);
+			ps.getPst().execute();
+		} catch (SQLException e) {
+			new LogError(e.getMessage(),e,request);
+		}
 	}
 	
 	public void grava(){
@@ -120,6 +195,20 @@ public class Operacoes extends Operador {
 		}
 	}
 	
+	public void alteraIdItem(){
+		//language=PostgresPLSQL
+		String sql = "UPDATE operacoes_funcionario set edicao_item = ? where id = ? AND id_entidade = ?";
+		try {
+			Seter ps = new Seter(sql,request);
+			ps.set(tipoItem == 1 ?(edicaoItem+100):edicaoItem);
+			ps.set(id);
+			ps.set(Parametros.idEntidade);
+			ps.getPst().execute();
+		} catch (SQLException e) {
+			new LogError(e.getMessage(),e,request);
+		}
+	}
+	
 	private void altera(){
 		String sql = "UPDATE public.operacoes_funcionario\n" +
 				"   SET tipo_item=?, tipo_operacao_caixa=?, edicao_item=?, nome_concurso=?, \n" +
@@ -152,8 +241,17 @@ public class Operacoes extends Operador {
 	}
 	
 	private void acoesAutomaticas(){
-		MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request,this);
-		movimentoCaixa.gravaAutoMov();
+		switch (tipoItem) {
+			case 3:
+			case 5:
+				MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request, this);
+				movimentoCaixa.gravaAutoMov();
+				break;
+			default:
+				OutrosMovimentos outrosMovimentos = new OutrosMovimentos(request,this);
+				outrosMovimentos.gravaAutoMov();
+				break;
+		}
 	}
 	
 	public String getOptsEdicaoItem(){
@@ -197,7 +295,7 @@ public class Operacoes extends Operador {
 	}
 	
 	private String getOpts(Integer tipo){
-		String sql = "SELECT id+100,nome_item FROM itens_estoque where  tipo_item = ? and id_entidade = ? ";
+		String sql = "SELECT id,nome_item FROM itens_estoque where  tipo_item = ? and id_entidade = ? ";
 		try {
 			Seter ps = new Seter(sql,request,false);
 			ps.set(tipo);
@@ -214,7 +312,8 @@ public class Operacoes extends Operador {
 		return "";
 	}
 	private String getOptsSorteio(Integer tipo){
-		String sql = "SELECT id+100,nome_item ||' - '|| to_char(data_sorteio, 'DD/MM/YYYY') FROM itens_estoque where data_sorteio >= ? and tipo_item = ? and id_entidade = ? ";
+		//language=PostgresPLSQL
+		String sql = "SELECT case when tipo_item = 3 then id+100 else id END , nome_item ||' - '|| to_char(data_sorteio, 'DD/MM/YYYY') FROM itens_estoque where data_sorteio >= ? and tipo_item = ? and id_entidade = ? ";
 		try {
 			Seter ps = new Seter(sql,request,false);
 			ps.set(new Date(new java.util.Date().getTime()));
@@ -232,6 +331,23 @@ public class Operacoes extends Operador {
 		return "";
 	}
 	
+	public Integer getIdOutrosMovimentos(){
+		//language=PostgresPLSQL
+		String sql = "select id from outros_movimentos where id_operacao_funcionario = ? AND  id_entidade = ?";
+		try {
+			Seter ps = new Seter(sql,request,false);
+			ps.set(this.id);
+			ps.set(Parametros.idEntidade);
+			ResultSet rs = ps.getPst().executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			new LogError(e.getMessage(),e,request);
+		}
+		return null;
+	}
+	
 	private Element getOption(Integer value, String texto){
 		Element element = new Element("option");
 		element.attr("value",value.toString());
@@ -245,6 +361,10 @@ public class Operacoes extends Operador {
 	
 	public Integer getTipoOperacaoCaixa() {
 		return tipoOperacaoCaixa;
+	}
+	
+	public void setTipoOperacaoCaixa(Integer tipoOperacaoCaixa) {
+		this.tipoOperacaoCaixa = tipoOperacaoCaixa;
 	}
 	
 	public Integer getTipoItem() {
@@ -285,5 +405,9 @@ public class Operacoes extends Operador {
 	
 	public BigDecimal getValorMovimentado() {
 		return valorMovimentado;
+	}
+	
+	public void setEdicaoItem(Integer edicaoItem) {
+		this.edicaoItem = edicaoItem;
 	}
 }

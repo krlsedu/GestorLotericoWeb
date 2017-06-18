@@ -23,6 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,12 +60,19 @@ public class MovimentoCaixa extends Processos{
         this.idFuncionario = operacoes.getIdFuncionario();
         AberturaTerminal aberturaTerminal = new AberturaTerminal(request);
         this.idCofre = Parser.toIntegerNull(aberturaTerminal.getIdCofre());
-        this.dataHoraMov = new Timestamp(new java.util.Date().getTime());
+    
+        aberturaTerminal = new AberturaTerminal(operacoes.getIdAberturaTerminal(),request);
+    
+        String dataAbertura = new SimpleDateFormat("yyyy-MM-dd").format(aberturaTerminal.getDataAbertura());
+        String hora = new SimpleDateFormat("hh:mm").format(new java.util.Date());
+    
+        this.dataHoraMov = Parser.toDbTimeStamp(dataAbertura+hora);
+        
         this.valorMovimentado = operacoes.getValorMovimentado();
     
         Itens itens = new Itens(request);
         
-        this.tipoMoeda = itens.getIdItensEstoque(operacoes.getTipoItem());
+        this.tipoMoeda = itens.getIdItensEstoque(operacoes.getEdicaoItem(),false);
         this.observacoes = "Movimento de caixa gerado automaticamente pela rotina de Operações do funcionário";
         this.idOperacaoFuncionario = operacoes.getId();
         this.id = getIdMovimentoCaixa(operacoes);
@@ -83,6 +91,7 @@ public class MovimentoCaixa extends Processos{
     }
     
     private void setMovimentosCaixas() {
+        this.id = Parser.toInteger(request.getParameter("id"));
         this.idTerminal = Parser.toIntegerNull(request.getParameter("id_terminal"));
         this.idFuncionario = Parser.toIntegerNull(request.getParameter("id_funcionario"));
         this.idCofre = Parser.toIntegerNull(request.getParameter("id_cofre"));
@@ -95,10 +104,10 @@ public class MovimentoCaixa extends Processos{
     
     public MovimentoCaixa(Integer id,HttpServletRequest request) {
         super(request, id);
-        getDadosPorId();
+        getDados();
     }
     
-    public void getDadosPorId(){
+    public void getDados(){
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT  tipo_operacao_caixa,id_terminal, id_funcionario, data_hora_mov, \n" +
                     "       valor_movimentado, observacoes, id_cofre, tipo_moeda \n" +
@@ -136,7 +145,7 @@ public class MovimentoCaixa extends Processos{
             MovimentosEstoque movimentosEstoque = new MovimentosEstoque(this);
             movimentosEstoque.deleta();
             PreparedStatement ps = Parametros.getConexao(request).getPst("delete from movimentos_caixas where id = ? and id_entidade = ?", Boolean.FALSE);     
-            ps.setInt(1, Integer.valueOf(request.getParameter("id")));
+            ps.setInt(1, this.id);
             ps.setInt(2, Parametros.idEntidade);
             ps.execute();
         }catch (SQLException ex) {
@@ -211,7 +220,7 @@ public class MovimentoCaixa extends Processos{
     }
     
     public void altera(){
-        String idL = request.getParameter("id");
+        //String idL = request.getParameter("id");
         try {
             //language=PostgresPLSQL
             String sql = ("UPDATE public.movimentos_caixas\n" +
@@ -229,11 +238,9 @@ public class MovimentoCaixa extends Processos{
             ps.set(Integer.valueOf(idCofre));
             ps.set(tipoMoeda);
             ps.set(idOperacaoFuncionario);
-            
-            id = Integer.valueOf(idL);
             MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request);
             movimentoCaixa.id = id;
-            movimentoCaixa.getDadosPorId();
+            movimentoCaixa.getDados();
             tipoOperacaoAnt = movimentoCaixa.tipoOperacao;
             ps.set( id);
             ps.set(Parametros.idEntidade);
@@ -257,7 +264,7 @@ public class MovimentoCaixa extends Processos{
                     }
                 }
             }catch(Exception e){
-            
+                System.out.println(e.getMessage());
             }
         }
     }

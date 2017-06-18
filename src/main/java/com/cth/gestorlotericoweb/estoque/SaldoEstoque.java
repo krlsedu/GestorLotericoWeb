@@ -43,7 +43,7 @@ public class SaldoEstoque extends Estoque {
 			}
 			BigDecimal saldo;
 			BigDecimal qtdMov;
-			if(movimentosEstoque.tipoOperacao.equals("1")|| movimentosEstoque.tipoOperacao.equals("3")){
+			if(movimentosEstoque.tipoOperacao==1|| movimentosEstoque.tipoOperacao == 3){
 				qtdMov = movimentosEstoque.quantidadeMovimentada.multiply(movimentosEstoque.numeroVolumesBd);
 				saldo = saldoAtual.add(qtdMov);
 			}else{
@@ -104,7 +104,7 @@ public class SaldoEstoque extends Estoque {
 					saldoAtual = rs.getBigDecimal(1);
 				}
 				BigDecimal saldo;
-				if (movimentosEstoque.tipoOperacao.equals("1") || movimentosEstoque.tipoOperacao.equals("3")) {
+				if (movimentosEstoque.tipoOperacao==1 || movimentosEstoque.tipoOperacao == 3) {
 					saldo = saldoAtual.add(difMov);
 				} else {
 					saldo = saldoAtual.subtract(difMov);
@@ -140,13 +140,13 @@ public class SaldoEstoque extends Estoque {
 				"           id_loterica = ? AND" +
 				"           id_entidade = ?";
 		try {
-			PreparedStatement ps = Parametros.getConexao().getPst(sql);
-			ps.setBigDecimal(1,movimentosEstoque.qtdTotalMovimentada);
-			ps.setInt(2,id);
-			ps.setInt(3,movimentosEstoque.idItensEstoque);
-			ps = Seter.set(ps,4,movimentosEstoque.idLoterica);
-			ps.setInt(5,Parametros.idEntidade);
-			ps.execute();
+			Seter ps = new Seter(sql,request);
+			ps.set(movimentosEstoque.qtdTotalMovimentada);
+			ps.set(id);
+			ps.set(movimentosEstoque.idItensEstoque);
+			ps.set(movimentosEstoque.idLoterica);
+			ps.set(Parametros.idEntidade);
+			ps.getPst().execute();
 			
 			sql = "DELETE FROM " +
 					"   saldos_estoque " +
@@ -154,11 +154,11 @@ public class SaldoEstoque extends Estoque {
 					"   id_movimento = ? AND " +
 					"   id_loterica = ? AND " +
 					"   id_entidade = ?";
-			ps = Parametros.getConexao().getPst(sql);
-			ps.setInt(1,movimentosEstoque.id);
-			ps = Seter.set(ps,2,movimentosEstoque.idLoterica);
-			ps.setInt(3,Parametros.idEntidade);
-			ps.execute();
+			ps = new Seter(sql,request);
+			ps.set(movimentosEstoque.id);
+			ps.set(movimentosEstoque.idLoterica);
+			ps.set(Parametros.idEntidade);
+			ps.getPst().execute();
 		} catch (SQLException e) {
 			new LogError(e.getMessage(),e,request);
 		}

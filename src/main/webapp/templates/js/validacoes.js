@@ -147,7 +147,9 @@ function verificaSeFechado() {
 function ajustaValorMascaraDinamica() {
     var r = $.Deferred();
     var tela = $('#it').val();
-    if(tela === 'movimentos_estoque') {
+    if(tela === 'movimentos_estoque'
+    //    ||tela=== 'itens_estoque'
+    ) {
         var tabela;
         var campoFormatar;
         var item;
@@ -157,6 +159,11 @@ function ajustaValorMascaraDinamica() {
                 campoFormatar = 'quantidade_movimentada';
                 tabela = 'itens_estoque';
                 break;
+            // case "itens_estoque":
+            //     item = 'id';
+            //     campoFormatar = 'valor_padrao';
+            //     tabela = 'itens_estoque';
+            //     break;
         }
         var campo = $("#" + campoFormatar);
         $.ajax(
@@ -209,6 +216,7 @@ function alteraMascara(campoFormatar,tabela,item) {
                         campo.unmask();
                         campo.maskMoney('destroy');
                         campo.maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+                        campo.trigger('mask.maskMoney');
                     }else{
                         campo.unmask();
                         campo.maskMoney('destroy');

@@ -11,9 +11,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SaldoEstoqueFuncionario extends Estoque {
-	public SaldoEstoqueFuncionario(HttpServletRequest request) {
+	SaldoEstoqueFuncionario(HttpServletRequest request) {
 		super(request);
 	}
+	
 	public void grava(MovimentosEstoque movimentosEstoqueFuncionario){
 		id = getIdSaldoFuncionario(movimentosEstoqueFuncionario);
 		if(id==0){
@@ -38,7 +39,7 @@ public class SaldoEstoqueFuncionario extends Estoque {
 			}
 			BigDecimal saldo;
 			BigDecimal qtdMov;
-			if(movimentosEstoqueFuncionario.tipoOperacao.equals("1")|| movimentosEstoqueFuncionario.tipoOperacao.equals("3")){
+			if(movimentosEstoqueFuncionario.tipoOperacao== 1|| movimentosEstoqueFuncionario.tipoOperacao==3){
 				qtdMov = movimentosEstoqueFuncionario.quantidadeMovimentada.multiply(movimentosEstoqueFuncionario.numeroVolumesBd);
 				saldo = saldoAtual.add(qtdMov);
 			}else{
@@ -103,7 +104,7 @@ public class SaldoEstoqueFuncionario extends Estoque {
 					saldoAtual = rs.getBigDecimal(1);
 				}
 				BigDecimal saldo;
-				if (movimentosEstoqueFuncionario.tipoOperacao.equals("1") || movimentosEstoqueFuncionario.tipoOperacao.equals("3")) {
+				if (movimentosEstoqueFuncionario.tipoOperacao ==1 || movimentosEstoqueFuncionario.tipoOperacao == 3) {
 					saldo = saldoAtual.add(difMov);
 				} else {
 					saldo = saldoAtual.subtract(difMov);
@@ -132,7 +133,7 @@ public class SaldoEstoqueFuncionario extends Estoque {
 	}
 	
 	
-	public void ajustaSaldoAntesDeletarMovimento(MovimentosEstoque movimentosEstoqueFuncionario){
+	void ajustaSaldoAntesDeletarMovimento(MovimentosEstoque movimentosEstoqueFuncionario){
 		//language=PostgresPLSQL
 		this.id = getIdSaldoFuncionario(movimentosEstoqueFuncionario);
 		String sql = "UPDATE " +

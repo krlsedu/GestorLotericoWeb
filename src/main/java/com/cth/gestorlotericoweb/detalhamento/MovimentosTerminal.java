@@ -33,7 +33,7 @@ public class MovimentosTerminal extends Detalhamentos {
 		lLinhas = getLinha(lLinhas,linha);
 		MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request);
 		for (MovimentoCaixa mc:movimentoCaixa.getDadosPorTerminalFuncionarioData()){
-			linha =  getCel("Movimento de caixa")+getCel(mc.getTipoOperacao().equals("1")?"Sangria":"Depósito")+getCel(Parser.formataComMascara(mc.getValorMovimentado(),""))+getCel(mc.getObservacoes());
+			linha =  getCel("Movimento de caixa")+getCel(mc.getTipoOperacao() == 1 ?"Sangria":"Depósito")+getCel(Parser.formataComMascara(mc.getValorMovimentado(),""))+getCel(mc.getObservacoes());
 			lLinhas = getLinha(lLinhas,linha);
 		}
 		OutrosMovimentos outrosMovimentos = new OutrosMovimentos(request);
@@ -50,48 +50,48 @@ public class MovimentosTerminal extends Detalhamentos {
 //            <option value="6" >Outros - Saída</option>
 //            <option value="7" >Outros - Entrada</option>
 			switch (om.getTipoOperacao()){
-				case "1":
+				case 1:
 					tipoOperacao = "Bolão";
 					entradaSaida = "Saída";
 					break;
-				case "2":
+				case 2:
 					tipoOperacao = "Bolão";
 					entradaSaida = "Entrada";
 					break;
-				case "8":
+				case 8:
 					tipoOperacao = "Bolão";
 					entradaSaida = "Geração";
 					break;
-				case "9":
+				case 9:
 					tipoOperacao = "Bolão";
 					entradaSaida = "Venda";
 					break;
-				case "3":
+				case 3:
 					tipoOperacao = "Bilhetes";
 					entradaSaida = "Venda";
 					break;
-				case "4":
+				case 4:
 					tipoOperacao = "Tele Sena";
 					entradaSaida = "Troca";
 					break;
-				case "5":
+				case 5:
 					tipoOperacao = "Tele Sena";
 					entradaSaida = "Venda";
 					break;
-				case "6":
+				case 6:
 					tipoOperacao = "Outros";
 					entradaSaida = "Saída";
 					break;
-				case "7":
+				case 7:
 					tipoOperacao = "Outros";
 					entradaSaida = "Entrada";
 					break;
 				default:
-					tipoOperacao ="";
-					entradaSaida ="";
+					tipoOperacao = null;
+					entradaSaida = null;
 					break;
 			}
-			linha =  getCel(entradaSaida)+getCel(tipoOperacao)+getCel(Parser.formataComMascara(Parser.toBigDecimalFromSt(om.getValorMovimentado()),""))+getCel(om.getObservacoes());
+			linha =  getCel(entradaSaida)+getCel(tipoOperacao)+getCel(Parser.formataComMascara(om.getValorMovimentado(),""))+getCel(om.getObservacoes());
 			lLinhas = getLinha(lLinhas,linha);
 		}
 		FechamentoTerminal fechamentoTerminal = new FechamentoTerminal(request);

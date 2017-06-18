@@ -35,7 +35,7 @@
                                         <i class="i_botao_buscar fa fa-search" ></i>
                                     </div>
                                     <input  name="id_itens_estoque" type="text" class="form-control1 input-lg" id="id_itens_estoque" placeholder="Cód Item Estoque"
-                                            onchange="buscaNome('itens_estoque','id_itens_estoque');"
+                                            onchange="buscaNome('itens_estoque','id_itens_estoque');alteraMascara('quantidade_movimentada','itens_estoque','id_itens_estoque')"
                                             onkeyup="buscaNome('itens_estoque','id_itens_estoque');alteraMascara('quantidade_movimentada','itens_estoque','id_itens_estoque')";
                                             onkeypress="eventoOnKeyPress()"
                                     >

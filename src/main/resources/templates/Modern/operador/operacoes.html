@@ -3,72 +3,15 @@
         $("#valor_movimentado").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
         $('#quantidade').mask("99999999");
     });
+    var toc = $('#tipo_operacao_caixa');
+    var its = $('#tipo_item');
+    consultaOpcoesCb(its).done(attCbs(its,toc));
+    its.on('change', function() {
+        consultaOpcoesCb(its).done(attCbs(its,toc));
+    });
 
-
-    $('#tipo_item').on('change', function() {
-        var its = $(this);
-        switch (its.val()){
-            case "1"://Bolão
-                $('#div_cb_tipo').show();
-                $('#div_data_sorteio').show();
-                $('#div_nome_concurso').show();
-                $('#div_quantidade').show();
-                $('#opt_gera').show();
-                $('#opt_vend').show();
-                $('#opt_troc').hide();
-                $('#lb_cb_tipo').html("Tipo");
-                break;
-            case "2"://Bilhete
-                $('#div_cb_tipo').show();
-                $('#div_data_sorteio').show();
-                $('#div_nome_concurso').show();
-                $('#div_quantidade').show();
-                $('#opt_gera').hide();
-                $('#opt_vend').show();
-                $('#opt_troc').hide();
-                $('#lb_cb_tipo').html("Edição");
-                break;
-            case "3": // Dinheiro
-                $('#div_cb_tipo').hide();
-                $('#div_data_sorteio').hide();
-                $('#div_nome_concurso').hide();
-                $('#div_quantidade').hide();
-                $('#opt_gera').hide();
-                $('#opt_vend').hide();
-                $('#opt_troc').hide();
-                break;
-            case "4"://Tele Sena
-                $('#div_cb_tipo').show();
-                $('#div_data_sorteio').show();
-                $('#div_nome_concurso').show();
-                $('#div_quantidade').show();
-                $('#opt_gera').hide();
-                $('#opt_vend').show();
-                $('#opt_troc').show();
-                $('#lb_cb_tipo').html("Edição");
-                break;
-            case "5": //MOedas
-                $('#div_cb_tipo').show();
-                $('#div_data_sorteio').hide();
-                $('#div_nome_concurso').hide();
-                $('#div_quantidade').hide();
-                $('#opt_gera').hide();
-                $('#opt_vend').hide();
-                $('#opt_troc').hide();
-                $('#lb_cb_tipo').html("Valor");
-                break;
-            default://Outros
-                $('#div_cb_tipo').show();
-                $('#div_data_sorteio').show();
-                $('#div_nome_concurso').show();
-                $('#div_quantidade').show();
-                $('#opt_gera').show();
-                $('#opt_vend').show();
-                $('#opt_troc').hide();
-                $('#lb_cb_tipo').html("Tipo");
-                break;
-        }
-        consultaOpcoesCb(its.val(),'edicao_item');
+    toc.on('change', function() {
+        consultaOpcoesCb(its).done(attCbs(its,toc));
     });
 </script>
 <div class="xs">
@@ -131,7 +74,7 @@
                             </div>
                         </div>
                         <div class="form-group mb-n" id="div_quantidade">
-                            <label for="quantidade" class="col-sm-2 control-label">Quantidade</label>
+                            <label for="quantidade" class="col-sm-2 control-label" id="lb_qtd">Quantidade</label>
                             <div class="col-sm-3">
                                 <div class="input-group">
                                     <span class="input-group-addon">Un</span>
@@ -140,8 +83,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group mb-n">
-                            <label for="valor_movimentado" class="col-sm-2 control-label">Valor</label>
+                        <div class="form-group mb-n" id="div_valor">
+                            <label for="valor_movimentado" class="col-sm-2 control-label" id="lb_val">Valor</label>
                             <div class="col-sm-3">
                                 <div class="input-group">
                                     <span class="input-group-addon">R$</span>
