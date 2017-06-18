@@ -49,4 +49,8 @@ public class Estoque {
 		templatePopup.merge(contextPopup, writerPopup);
 		return writerPopup;
 	}
+	
+	public Integer getId() {
+		return id;
+	}
 }

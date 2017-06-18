@@ -91,6 +91,8 @@ public class MovimentosEstoque extends Estoque {
 			this.tipoOperacao = 2;
 		}
 		this.idItensEstoque = itens.getIdItensEstoque(this.outrosMovimentos.getOperacoes(),this.outrosMovimentos.getOperacoes().getTipoItem()==1);
+		
+		
 		this.id = getIdMovimentoEstoque(outrosMovimentos);
 		
 		if (this.idItensEstoque == null && (this.outrosMovimentos.getOperacoes().getTipoOperacaoCaixa()==2||(this.outrosMovimentos.getOperacoes().getTipoItem()==4 && this.outrosMovimentos.getOperacoes().getTipoOperacaoCaixa()==5))) {
@@ -395,7 +397,7 @@ public class MovimentosEstoque extends Estoque {
 		return 0;
 	}
 	
-	private Integer getIdMovimentoEstoque(OutrosMovimentos outrosMovimentos){
+	public Integer getIdMovimentoEstoque(OutrosMovimentos outrosMovimentos){
 		try{
 			PreparedStatement ps = Parametros.getConexao().getPst("select id from movimentos_estoque where id_outros_movimentos = ? and tipo_movimento = ? and id_entidade = ?",false);
 			ps.setInt(1, outrosMovimentos.getId());
@@ -403,7 +405,8 @@ public class MovimentosEstoque extends Estoque {
 			ps.setInt(3, Parametros.idEntidade);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				return rs.getInt(1);
+				this.id = rs.getInt(1);
+				return this.id;
 			}
 		}catch(SQLException ex){
 			new LogError(ex.getMessage(), ex,request);
