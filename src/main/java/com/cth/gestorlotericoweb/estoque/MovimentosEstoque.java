@@ -11,6 +11,7 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.io.StringWriter;
 import java.math.BigDecimal;
@@ -18,6 +19,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MovimentosEstoque extends Estoque {
 	
@@ -94,6 +97,7 @@ public class MovimentosEstoque extends Estoque {
 		
 		
 		this.id = getIdMovimentoEstoque(outrosMovimentos);
+		
 		
 		if (this.idItensEstoque == null && (this.outrosMovimentos.getOperacoes().getTipoOperacaoCaixa()==2||(this.outrosMovimentos.getOperacoes().getTipoItem()==4 && this.outrosMovimentos.getOperacoes().getTipoOperacaoCaixa()==5))) {
 			itens = new Itens(this);
@@ -397,11 +401,35 @@ public class MovimentosEstoque extends Estoque {
 		return 0;
 	}
 	
-	public Integer getIdMovimentoEstoque(OutrosMovimentos outrosMovimentos){
+	public List<Integer> getListIdMovimentoEstoque(OutrosMovimentos outrosMovimentos){
+		List<Integer> lIds = new ArrayList<>();
 		try{
-			PreparedStatement ps = Parametros.getConexao().getPst("select id from movimentos_estoque where id_outros_movimentos = ? and id_entidade = ?",false);
+			PreparedStatement ps = Parametros.getConexao().getPst("select id from " +
+					" movimentos_estoque where " +
+					"    id_outros_movimentos = ? and " +
+					"    id_entidade = ?",false);
 			ps.setInt(1, outrosMovimentos.getId());
 			ps.setInt(2, Parametros.idEntidade);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				lIds.add(rs.getInt(1));
+			}
+		}catch(SQLException ex){
+			new LogError(ex.getMessage(), ex,request);
+		}
+		return lIds;
+	}
+	
+	public Integer getIdMovimentoEstoque(OutrosMovimentos outrosMovimentos){
+		try{
+			PreparedStatement ps = Parametros.getConexao().getPst("select id from " +
+					" movimentos_estoque where " +
+					"    id_outros_movimentos = ? and " +
+					"    tipo_movimento = ? and " +
+					"    id_entidade = ?",false);
+			ps.setInt(1, outrosMovimentos.getId());
+			ps.setInt(2,this.tipoOperacao);
+			ps.setInt(3, Parametros.idEntidade);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				this.id = rs.getInt(1);
@@ -412,6 +440,8 @@ public class MovimentosEstoque extends Estoque {
 		}
 		return 0;
 	}
+	
+	
 	
 	public OutrosMovimentos getOutrosMovimentos() {
 		return outrosMovimentos;
