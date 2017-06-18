@@ -322,7 +322,7 @@ public class OutrosMovimentos extends Processos{
     }
     
     public void altera(){
-        String idL = request.getParameter("id");
+        //String idL = request.getParameter("id");
         try {
             PreparedStatement ps = Parametros.getConexao(request).getPst("UPDATE public.outros_movimentos\n" +
             "   SET tipo_operacao_caixa=?, id_terminal=?, id_funcionario=?, data_hora_mov=?,\n" +
@@ -335,7 +335,7 @@ public class OutrosMovimentos extends Processos{
             ps.setBigDecimal(5,valorMovimentado);
             ps = Seter.set(ps, 6, observacoes);
             ps = Seter.set(ps, 7, idOperacaoFuncionario);
-            id = Integer.valueOf(idL);
+            //id = Integer.valueOf(idL);
             ps.setInt(8, id);
             ps.setInt(9, Parametros.idEntidade);
     

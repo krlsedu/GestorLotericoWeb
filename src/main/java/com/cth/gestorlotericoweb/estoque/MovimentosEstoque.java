@@ -399,10 +399,9 @@ public class MovimentosEstoque extends Estoque {
 	
 	public Integer getIdMovimentoEstoque(OutrosMovimentos outrosMovimentos){
 		try{
-			PreparedStatement ps = Parametros.getConexao().getPst("select id from movimentos_estoque where id_outros_movimentos = ? and tipo_movimento = ? and id_entidade = ?",false);
+			PreparedStatement ps = Parametros.getConexao().getPst("select id from movimentos_estoque where id_outros_movimentos = ? and id_entidade = ?",false);
 			ps.setInt(1, outrosMovimentos.getId());
-			ps.setInt(2, this.tipoOperacao);
-			ps.setInt(3, Parametros.idEntidade);
+			ps.setInt(2, Parametros.idEntidade);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				this.id = rs.getInt(1);
