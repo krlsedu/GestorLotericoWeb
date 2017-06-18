@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +35,11 @@ public class Operacoes extends Operador {
 	String observacoes;
 	
 	Date dataSorteio;
+	Timestamp dataHoraMov;
 	
 	BigDecimal valorMovimentado;
+	
+	
 	
 	public Operacoes(HttpServletRequest request) {
 		super(request);
@@ -71,6 +75,39 @@ public class Operacoes extends Operador {
 			this.valorMovimentado = Parser.toBigDecimalFromHtml(request.getParameter("valor_movimentado"));
 		}
 	}
+	
+	public void getDadosPorId(){
+		//language=PostgresPLSQL
+		String sql = "SELECT tipo_item, tipo_operacao_caixa, edicao_item, nome_concurso, \n" +
+				"       data_sorteio, valor_movimentado, observacoes, id_fucionario, \n" +
+				"       id_terminal, id_abertura_terminal, quantidade, data_hora_mov\n" +
+				"    FROM public.operacoes_funcionario" +
+				"    where" +
+				"       id = ? AND " +
+				"       id_entidade = ?";
+		try {
+			Seter ps = new Seter(sql,request,false);
+			ps.set(this.id);
+			ps.set(Parametros.idEntidade);
+			ResultSet rs = ps.getPst().executeQuery();
+			if (rs.next()) {
+				tipoItem = rs.getInt(1);
+				tipoOperacaoCaixa = rs.getInt(2);
+				edicaoItem = rs.getInt(3);
+				nomeConcurso = rs.getString(4);
+				dataSorteio = rs.getDate(5);
+				valorMovimentado = rs.getBigDecimal(6);
+				observacoes = rs.getString(7);
+				idFuncionario = rs.getInt(8);
+				idTerminal = rs.getInt(9);
+				idAberturaTerminal = rs.getInt(10);
+				quantidade = rs.getInt(11);
+				dataHoraMov = rs.getTimestamp(12);
+			}
+		} catch (SQLException e) {
+			new LogError(e.getMessage(),e,request);
+		}
+	}
 
 	public VelocityContext getHtml(VelocityContext contextPrinc, VelocityEngine ve, String idS){
 		Template templateConteudo;
@@ -93,9 +130,17 @@ public class Operacoes extends Operador {
 	}
 	
 	public void deleta(){
+		getDadosPorId();
 		MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request,this);
-		movimentoCaixa.getDadosPorId();
-		movimentoCaixa.deleta();
+		if (movimentoCaixa.getId() != null) {
+			movimentoCaixa.getDados();
+			movimentoCaixa.deleta();
+		}
+		OutrosMovimentos outrosMovimentos = new OutrosMovimentos(request,this);
+		if (outrosMovimentos.getId() != null) {
+			outrosMovimentos.getDados();
+			outrosMovimentos.deleta();
+		}
 		//language=PostgresPLSQL
 		String sql = "DELETE FROM operacoes_funcionario where id = ? and id_entidade = ?";
 		try {
@@ -284,6 +329,23 @@ public class Operacoes extends Operador {
 			new LogError(e.getMessage(),e,request);
 		}
 		return "";
+	}
+	
+	public Integer getIdOutrosMovimentos(){
+		//language=PostgresPLSQL
+		String sql = "select id from outros_movimentos where id_operacao_funcionario = ? AND  id_entidade = ?";
+		try {
+			Seter ps = new Seter(sql,request,false);
+			ps.set(this.id);
+			ps.set(Parametros.idEntidade);
+			ResultSet rs = ps.getPst().executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			new LogError(e.getMessage(),e,request);
+		}
+		return null;
 	}
 	
 	private Element getOption(Integer value, String texto){

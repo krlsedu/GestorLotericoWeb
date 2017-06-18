@@ -104,10 +104,10 @@ public class MovimentoCaixa extends Processos{
     
     public MovimentoCaixa(Integer id,HttpServletRequest request) {
         super(request, id);
-        getDadosPorId();
+        getDados();
     }
     
-    public void getDadosPorId(){
+    public void getDados(){
         try {
             PreparedStatement ps = Parametros.getConexao().getPst("SELECT  tipo_operacao_caixa,id_terminal, id_funcionario, data_hora_mov, \n" +
                     "       valor_movimentado, observacoes, id_cofre, tipo_moeda \n" +
@@ -240,7 +240,7 @@ public class MovimentoCaixa extends Processos{
             ps.set(idOperacaoFuncionario);
             MovimentoCaixa movimentoCaixa = new MovimentoCaixa(request);
             movimentoCaixa.id = id;
-            movimentoCaixa.getDadosPorId();
+            movimentoCaixa.getDados();
             tipoOperacaoAnt = movimentoCaixa.tipoOperacao;
             ps.set( id);
             ps.set(Parametros.idEntidade);

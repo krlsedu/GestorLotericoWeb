@@ -26,6 +26,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -66,6 +67,7 @@ public class OutrosMovimentos extends Processos{
     
     public OutrosMovimentos(HttpServletRequest request, Operacoes operacoes){
         super(request);
+        this.id = operacoes.getIdOutrosMovimentos();
         this.operacoes = operacoes;
         switch (operacoes.getTipoItem()){
             //1 BOLÃO
@@ -198,6 +200,7 @@ public class OutrosMovimentos extends Processos{
     }
     
     private void setOutrosMovimentos() {
+        this.id = Parser.toInteger(request.getParameter("id"));
         this.idTerminal = Parser.toIntegerNull(request.getParameter("id_terminal"));
         this.idFuncionario = Parser.toIntegerNull(request.getParameter("id_funcionario"));
         this.dataHoraMov = Parser.toDbTimeStamp(request.getParameter("data_hora_mov"));
@@ -253,6 +256,25 @@ public class OutrosMovimentos extends Processos{
             }
         } catch (SQLException ex) {
             new LogError(ex.getMessage(), ex,request);
+        }
+    }
+    
+    public void deleta(){
+        getDados();
+        MovimentosEstoque movimentosEstoque = new MovimentosEstoque(request);
+        movimentosEstoque.getIdMovimentoEstoque(this);
+        if (movimentosEstoque.getId() != null) {
+            movimentosEstoque.deleta();
+        }
+        //language=PostgresPLSQL
+        String sql = "delete from outros_movimentos where id = ? and id_entidade = ? ";
+        try {
+            Seter ps = new Seter(sql,request);
+            ps.set(this.id);
+            ps.set(Parametros.idEntidade);
+            ps.getPst().execute();
+        } catch (SQLException e) {
+            new LogError(e.getMessage(),e,request);
         }
     }
     

@@ -67,6 +67,10 @@ public class Grava {
                     Operacoes operacoes = new Operacoes( request);
                     operacoes.deleta();
                     break;
+                case "outros_movimentos":
+                    OutrosMovimentos outrosMovimentos = new OutrosMovimentos( request);
+                    outrosMovimentos.deleta();
+                    break;
                 default:                    
                     tabela = colunasTabelas.getTabela(request.getParameter("tabela"));
                     if(tabela !=null){
