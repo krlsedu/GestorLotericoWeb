@@ -262,9 +262,12 @@ public class OutrosMovimentos extends Processos{
     public void deleta(){
         getDados();
         MovimentosEstoque movimentosEstoque = new MovimentosEstoque(request);
-        movimentosEstoque.getIdMovimentoEstoque(this);
-        if (movimentosEstoque.getId() != null) {
-            movimentosEstoque.deleta();
+        List<Integer> lIds = movimentosEstoque.getListIdMovimentoEstoque(this);
+        if (!lIds.isEmpty()) {
+            for (Integer idMv : lIds){
+                movimentosEstoque.setId(idMv);
+                movimentosEstoque.deleta();
+            }
         }
         //language=PostgresPLSQL
         String sql = "delete from outros_movimentos where id = ? and id_entidade = ? ";
