@@ -1,0 +1,117 @@
+
+<script type="text/javascript">
+    $(function () {
+        $("#total_creditos_terminais").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+        $("#total_debitos_terminais").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+        $("#total_depositado").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+        $("#saldo_cofre").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+        $("#diferenca").maskMoney({showSymbol:false, symbol:"", decimal:",", thousands:".", allowZero:true,allowNegative:true});
+    });
+</script>
+<div class="xs">
+    <!--<div class="breadcrumb">-->
+    <!--<h3></h3>-->
+    <!--</div>-->
+    <form class="form-horizontal" id="form_dados">
+        <div class="panel panel-default">
+            <div class="panel-heading">Fechamento do Terminal</div>
+            <div class="panel-body">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="horizontal-form">
+                        $btns_percorrer
+                        <div class="form-group mb-n">
+                            <label for="data_encerramento" class="col-sm-2 control-label">Data Fechamento</label>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input name="data_encerramento" id="data_encerramento" type="date" class="form-control1 ng-invalid ng-invalid-required" ng-model="model.date"
+                                           required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-n">
+                            <label for="total_creditos_terminais" class="col-sm-2 control-label">Total de Créditos terminais</label>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">R$</span>
+                                    <input readonly name="total_creditos_terminais" id="total_creditos_terminais" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-n">
+                            <label for="total_debitos_terminais" class="col-sm-2 control-label">Total de Débitos terminais</label>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">R$</span>
+                                    <input readonly name="total_debitos_terminais" id="total_debitos_terminais" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-n">
+                            <label for="total_depositado" class="col-sm-2 control-label">Total Depositado</label>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">R$</span>
+                                    <input readonly name="total_depositado" id="total_depositado" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-n">
+                            <label for="saldo_cofre" class="col-sm-2 control-label">Saldo cofre</label>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">R$</span>
+                                    <input name="saldo_cofre" id="saldo_cofre" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-n">
+                            <label for="diferenca" class="col-sm-2 control-label">Diferença</label>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">R$</span>
+                                    <input readonly name="diferenca" id="diferenca" type="text" class="form-control1 ng-invalid ng-invalid-required ng-valid-pattern ng-touched" ng-model="model.number" ng-pattern="/[0-9]/" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-n">
+                            <label for="observacoes" class="col-sm-2 control-label">Observações</label>
+                            <div class="col-sm-8">
+                                <textarea name="observacoes" id="observacoes" cols="50" rows="4" class="form-control1" placeholder="Observações" ></textarea>
+                            </div>
+                        </div>
+                        <input name="id_funcionario" type="hidden" id="id_funcionario" value="$id_fun">
+                        <input name="id_loterica" type="hidden" id="id_loterica" value="$id_lot">
+                        <input type="hidden" id="it" name="it" value="fechamento_administrativo_diario" />
+                        <input type="hidden" id="id" name="id" value="0" />
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-sm-3 col-sm-offset-7">
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-primary" id="botao-gravar">Gravar</button>
+                        </div>
+                        <div class="btn-group">
+                            <button type="reset" class="btn botao-deletar" onclick="deletarDados()">Excluir</button>
+                        </div>
+                        <div class="btn-group">
+                            <button type="reset" class="btn btn-default" onclick="limpa()">Limpar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+

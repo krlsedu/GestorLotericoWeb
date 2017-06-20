@@ -120,6 +120,11 @@ public class ConteudoTelas {
                         FechamentoTerminal fechamentoTerminal = new FechamentoTerminal(request);
                         contextPrinc = fechamentoTerminal.getHtml(contextPrinc, ve, id);
                         break;
+                        
+                    case "fechamento_administrativo_diario":
+                        FechamentoAdministrativoDiario fechamentoAdministrativoDiario = new FechamentoAdministrativoDiario(request);
+                        contextPrinc = fechamentoAdministrativoDiario.getHtml(contextPrinc,ve,id);
+                        break;
                     // Fim Processos
                     // Início Configurações
                     case "config_estatisticas":

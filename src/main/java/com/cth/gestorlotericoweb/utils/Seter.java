@@ -32,6 +32,14 @@ public class Seter {
         return pst;
     }
     
+    public boolean execute() throws SQLException {
+        return getPst().execute();
+    }
+    
+    public ResultSet executeQuery() throws SQLException {
+        return getPst().executeQuery();
+    }
+    
     public void set(Timestamp valor) throws SQLException {
         idx++;
         pst = set(pst,idx,valor);

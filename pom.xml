@@ -198,34 +198,34 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>3.5.1</version>                
                 <executions>
-                    <!--<execution>-->
-                        <!--<id>1-estrutura</id>-->
-                        <!--<configuration>-->
-                            <!--<propertyFile>liquibase/liquibase.properties</propertyFile>-->
-                            <!--<changeLogFile>liquibase/db-changelog-master.xml</changeLogFile>-->
-                            <!--<diffChangeLogFile>db_versions/db-${buildNumber}-${current.time}-1.postgresql.sql</diffChangeLogFile>-->
-                            <!--<diffTypes> tables, views, columns, indexes, foreignkeys, primarykeys, uniqueconstraints</diffTypes>-->
-                        <!--</configuration>-->
-                        <!--<phase>initialize</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>diff</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
+                    <execution>
+                        <id>1-estrutura</id>
+                        <configuration>
+                            <propertyFile>liquibase/liquibase.properties</propertyFile>
+                            <changeLogFile>liquibase/db-changelog-master.xml</changeLogFile>
+                            <diffChangeLogFile>db_versions/db-${buildNumber}-${current.time}-1.postgresql.sql</diffChangeLogFile>
+                            <diffTypes> tables, views, columns, indexes, foreignkeys, primarykeys, uniqueconstraints</diffTypes>
+                        </configuration>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>diff</goal>
+                        </goals>
+                    </execution>
 
-                    <!--<execution>-->
-                        <!--<id>2-data_tabs_padrao</id>-->
-                        <!--<configuration>-->
-                            <!--<propertyFile>liquibase/liquibase.properties</propertyFile>-->
-                            <!--<changeLogFile>liquibase/db-changelog-master.xml</changeLogFile>-->
-                            <!--<diffChangeLogFile>db_versions/db-${buildNumber}-${current.time}-2.postgresql.sql</diffChangeLogFile>-->
-                            <!--<diffTypes>Data</diffTypes>-->
-                            <!--<diffIncludeObjects>cols_descri,usuarios,entidades,usuarios_entidades,componentes</diffIncludeObjects>-->
-                        <!--</configuration>-->
-                        <!--<phase>initialize</phase>                                                                                     -->
-                        <!--<goals>-->
-                            <!--<goal>diff</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
+                    <execution>
+                        <id>2-data_tabs_padrao</id>
+                        <configuration>
+                            <propertyFile>liquibase/liquibase.properties</propertyFile>
+                            <changeLogFile>liquibase/db-changelog-master.xml</changeLogFile>
+                            <diffChangeLogFile>db_versions/db-${buildNumber}-${current.time}-2.postgresql.sql</diffChangeLogFile>
+                            <diffTypes>Data</diffTypes>
+                            <diffIncludeObjects>cols_descri,usuarios,entidades,usuarios_entidades,componentes</diffIncludeObjects>
+                        </configuration>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>diff</goal>
+                        </goals>
+                    </execution>
                     
                     <execution>
                         <id>3-update</id>
