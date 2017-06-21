@@ -11,7 +11,7 @@ import com.cth.gestorlotericoweb.estoque.MovimentosEstoque;
 import com.cth.gestorlotericoweb.operador.Operacoes;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.utils.Parser;
-import com.cth.gestorlotericoweb.utils.Seter;
+import com.cth.gestorlotericoweb.utils.MyPreparedStatement;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -26,7 +26,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  *
@@ -272,7 +271,7 @@ public class OutrosMovimentos extends Processos{
         //language=PostgresPLSQL
         String sql = "delete from outros_movimentos where id = ? and id_entidade = ? ";
         try {
-            Seter ps = new Seter(sql,request);
+            MyPreparedStatement ps = new MyPreparedStatement(sql,request);
             ps.set(this.id);
             ps.set(Parametros.idEntidade);
             ps.getPst().execute();
@@ -289,13 +288,13 @@ public class OutrosMovimentos extends Processos{
             "    VALUES ( ?, ?, ?, ?, \n" +
             "            ?, ?, ?, ?);");
             ps.setInt(1, tipoOperacao);
-            ps = Seter.set(ps,2,idTerminal);
+            ps = MyPreparedStatement.set(ps,2,idTerminal);
             ps.setInt(3, idFuncionario);
             ps.setTimestamp(4, dataHoraMov);
             ps.setBigDecimal(5, valorMovimentado);
-            ps = Seter.set(ps, 6, observacoes);
+            ps = MyPreparedStatement.set(ps, 6, observacoes);
             ps.setInt(7, Parametros.idEntidade);
-            ps = Seter.set(ps,8,idOperacaoFuncionario);
+            ps = MyPreparedStatement.set(ps,8,idOperacaoFuncionario);
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()){
@@ -332,12 +331,12 @@ public class OutrosMovimentos extends Processos{
             "    valor_movimentado=?, observacoes=?, id_operacao_funcionario = ?\n"
                     + " where id = ? and id_entidade = ? ", false);
             ps.setInt(1, tipoOperacao);
-            ps = Seter.set(ps,2,idTerminal);
+            ps = MyPreparedStatement.set(ps,2,idTerminal);
             ps.setInt(3, idFuncionario);
             ps.setTimestamp(4, dataHoraMov);
             ps.setBigDecimal(5,valorMovimentado);
-            ps = Seter.set(ps, 6, observacoes);
-            ps = Seter.set(ps, 7, idOperacaoFuncionario);
+            ps = MyPreparedStatement.set(ps, 6, observacoes);
+            ps = MyPreparedStatement.set(ps, 7, idOperacaoFuncionario);
             //id = Integer.valueOf(idL);
             ps.setInt(8, id);
             ps.setInt(9, Parametros.idEntidade);

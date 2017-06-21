@@ -2,7 +2,7 @@ package com.cth.gestorlotericoweb.estoque;
 
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
-import com.cth.gestorlotericoweb.utils.Seter;
+import com.cth.gestorlotericoweb.utils.MyPreparedStatement;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -57,8 +57,8 @@ public class SaldoEstoqueFuncionario extends Estoque {
 			ps.setBigDecimal(3, saldo);
 			ps.setTimestamp(4, movimentosEstoqueFuncionario.dataHoraReferencia);
 			ps.setInt(5, movimentosEstoqueFuncionario.id);
-			ps = Seter.set(ps,6, movimentosEstoqueFuncionario.observacoes);
-			ps = Seter.set(ps,7, movimentosEstoqueFuncionario.idLoterica);
+			ps = MyPreparedStatement.set(ps,6, movimentosEstoqueFuncionario.observacoes);
+			ps = MyPreparedStatement.set(ps,7, movimentosEstoqueFuncionario.idLoterica);
 			ps.setInt(8, Parametros.idEntidade);
 			ps.setInt(9,movimentosEstoqueFuncionario.idFuncionario);
 			ps.execute();
@@ -119,8 +119,8 @@ public class SaldoEstoqueFuncionario extends Estoque {
 				ps.setBigDecimal(3, saldo);
 				ps.setTimestamp(4, movimentosEstoqueFuncionario.dataHoraReferencia);
 				ps.setInt(5, movimentosEstoqueFuncionario.id);
-				ps = Seter.set(ps,6, movimentosEstoqueFuncionario.observacoes);
-				ps = Seter.set(ps,7, movimentosEstoqueFuncionario.idLoterica);
+				ps = MyPreparedStatement.set(ps,6, movimentosEstoqueFuncionario.observacoes);
+				ps = MyPreparedStatement.set(ps,7, movimentosEstoqueFuncionario.idLoterica);
 				ps.setInt(8, Parametros.idEntidade);
 				ps.setInt(9,movimentosEstoqueFuncionario.idFuncionario);
 				
@@ -151,7 +151,7 @@ public class SaldoEstoqueFuncionario extends Estoque {
 			ps.setBigDecimal(1,movimentosEstoqueFuncionario.qtdTotalMovimentada);
 			ps.setInt(2,id);
 			ps.setInt(3,movimentosEstoqueFuncionario.idItensEstoque);
-			ps = Seter.set(ps,4,movimentosEstoqueFuncionario.idLoterica);
+			ps = MyPreparedStatement.set(ps,4,movimentosEstoqueFuncionario.idLoterica);
 			ps.setInt(5,Parametros.idEntidade);
 			ps.setInt(6,movimentosEstoqueFuncionario.idFuncionario);
 			ps.execute();
@@ -165,7 +165,7 @@ public class SaldoEstoqueFuncionario extends Estoque {
 					"   id_funcionario = ?";
 			ps = Parametros.getConexao().getPst(sql);
 			ps.setInt(1,movimentosEstoqueFuncionario.id);
-			ps = Seter.set(ps,2,movimentosEstoqueFuncionario.idLoterica);
+			ps = MyPreparedStatement.set(ps,2,movimentosEstoqueFuncionario.idLoterica);
 			ps.setInt(3,Parametros.idEntidade);
 			ps.setInt(4,movimentosEstoqueFuncionario.idFuncionario);
 			ps.execute();

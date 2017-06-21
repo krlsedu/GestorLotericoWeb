@@ -478,7 +478,7 @@ public class Consulta {
                             output = StringUtils.join(lInputs,'\n');
                             break;
                     }
-    
+                    break;
                 case "movimentos_contas":
                     MovimentoConta movimentoConta = new MovimentoConta(request);
                     switch (valorBuscar){
@@ -493,6 +493,11 @@ public class Consulta {
                             output = StringUtils.join(lInputs,'\n');
                             break;
                     }
+                    break;
+                case "fechamento_administrativo_diario":
+                    FechamentoAdministrativoDiario fechamentoAdministrativoDiario = new FechamentoAdministrativoDiario(request);
+                    output = fechamentoAdministrativoDiario.getJsonDados();
+                    break;
             }
         }
     }

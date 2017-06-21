@@ -8,7 +8,7 @@ package com.cth.gestorlotericoweb.dados;
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.utils.Parser;
-import com.cth.gestorlotericoweb.utils.Seter;
+import com.cth.gestorlotericoweb.utils.MyPreparedStatement;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -95,7 +95,7 @@ public class Funcionario extends Cadastros{
             }else{
                 ps.setString(6, observacoes);
             }
-            ps = Seter.set(ps,7,idUsuario);
+            ps = MyPreparedStatement.set(ps,7,idUsuario);
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()){
@@ -121,7 +121,7 @@ public class Funcionario extends Cadastros{
             }else{
                 ps.setString(5, observacoes);
             }
-            ps = Seter.set(ps,6,idUsuario);
+            ps = MyPreparedStatement.set(ps,6,idUsuario);
             id = Integer.valueOf(idL);
             ps.setInt(7, id);
             ps.setInt(8, Parametros.idEntidade);

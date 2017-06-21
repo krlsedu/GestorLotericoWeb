@@ -217,6 +217,11 @@ public class Grava {
                 operacoesDiarias.grava();
                 id = operacoesDiarias.getId();
                 break;
+            case "fechamento_administrativo_diario":
+                FechamentoAdministrativoDiario fechamentoAdministrativoDiario = new FechamentoAdministrativoDiario(request);
+                fechamentoAdministrativoDiario.grava();
+                id = fechamentoAdministrativoDiario.getId();
+                break;
             //fim gravação processos
             //inicio gravação configs
             case "itens_estatisticas":

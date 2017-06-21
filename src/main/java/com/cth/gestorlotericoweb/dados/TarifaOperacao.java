@@ -8,7 +8,7 @@ package com.cth.gestorlotericoweb.dados;
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.utils.Parser;
-import com.cth.gestorlotericoweb.utils.Seter;
+import com.cth.gestorlotericoweb.utils.MyPreparedStatement;
 import java.io.StringWriter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -76,7 +76,7 @@ public class TarifaOperacao extends Cadastros{
             ps.setInt(1, Integer.valueOf(idOperacao));
             ps.setDate(2, Parser.toDbDate(dataBase));
             ps.setBigDecimal(3, Parser.toBigDecimalFromHtml(valorTarifa));
-            ps = Seter.set(ps, 4, observacoes);
+            ps = MyPreparedStatement.set(ps, 4, observacoes);
             ps.setInt(5, Parametros.idEntidade);
             
             ps.execute();
@@ -99,7 +99,7 @@ public class TarifaOperacao extends Cadastros{
             ps.setInt(1, Integer.valueOf(idOperacao));
             ps.setDate(2, Parser.toDbDate(dataBase));
             ps.setBigDecimal(3, Parser.toBigDecimalFromHtml(valorTarifa));
-            ps = Seter.set(ps, 4, observacoes);
+            ps = MyPreparedStatement.set(ps, 4, observacoes);
             
             id = Integer.valueOf(idL);
             ps.setInt(5, id);

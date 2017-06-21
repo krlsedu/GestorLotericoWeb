@@ -8,7 +8,7 @@ package com.cth.gestorlotericoweb.processos;
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.utils.Parser;
-import com.cth.gestorlotericoweb.utils.Seter;
+import com.cth.gestorlotericoweb.utils.MyPreparedStatement;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -158,7 +158,7 @@ public class FechamentoTerminal extends Processos{
             ps.setBigDecimal(7, Parser.toBigDecimalFromHtml(totalDebitosTerminal));
             ps.setBigDecimal(8, Parser.toBigDecimalFromHtml(saldoTerminal));
             ps.setBigDecimal(9, Parser.toBigDecimalFromHtml(diferencaCaixa));
-            ps = Seter.set(ps, 10, observacoes);
+            ps = MyPreparedStatement.set(ps, 10, observacoes);
             ps.setInt(11, Parametros.idEntidade);
             ps.setInt(12, Parametros.getIdLoterica());
             ps.execute();
@@ -190,7 +190,7 @@ public class FechamentoTerminal extends Processos{
             ps.setBigDecimal(7, Parser.toBigDecimalFromHtml(totalDebitosTerminal));
             ps.setBigDecimal(8, Parser.toBigDecimalFromHtml(saldoTerminal));
             ps.setBigDecimal(9, Parser.toBigDecimalFromHtml(diferencaCaixa));
-            ps = Seter.set(ps, 10, observacoes);
+            ps = MyPreparedStatement.set(ps, 10, observacoes);
             id = Integer.valueOf(idL);
             ps.setInt(11, id);
             ps.setInt(12, Parametros.idEntidade);
@@ -238,8 +238,8 @@ public class FechamentoTerminal extends Processos{
             dataFechamentoDt = Parser.toDbDate(dataEncerramento);
             if(dataFechamentoDt!=null&&idTerminal!=null&&idFuncionario!=null){
                 ps.setDate(1, dataFechamentoDt);
-                ps = Seter.set(ps, 2, Integer.valueOf(idTerminal));
-                ps = Seter.set(ps, 3, Integer.valueOf(idFuncionario));
+                ps = MyPreparedStatement.set(ps, 2, Integer.valueOf(idTerminal));
+                ps = MyPreparedStatement.set(ps, 3, Integer.valueOf(idFuncionario));
                 ps.setInt(4, Parametros.idEntidade);
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
@@ -280,8 +280,8 @@ public class FechamentoTerminal extends Processos{
             PreparedStatement ps = Parametros.getConexao().getPst(sql,false);
             if(dataFechamentoDt!=null&&idTerminal!=null&&idFuncionario!=null){
                 ps.setDate(1, dataFechamentoDt);
-                ps = Seter.set(ps, 2, Integer.valueOf(idTerminal));
-                ps = Seter.set(ps, 3, Integer.valueOf(idFuncionario));
+                ps = MyPreparedStatement.set(ps, 2, Integer.valueOf(idTerminal));
+                ps = MyPreparedStatement.set(ps, 3, Integer.valueOf(idFuncionario));
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
                     valor = rs.getBigDecimal(1);
@@ -359,9 +359,9 @@ public class FechamentoTerminal extends Processos{
             PreparedStatement ps = Parametros.getConexao().getPst(sql,false);
             if(dataFechamentoDt!=null&&idTerminal!=null&&idFuncionario!=null){
                 ps.setDate(1, dataFechamentoDt);
-                ps = Seter.set(ps, 2, Integer.valueOf(idTerminal));
-                ps = Seter.set(ps, 3, Integer.valueOf(idFuncionario));
-                ps = Seter.set(ps,4,Parametros.idEntidade);
+                ps = MyPreparedStatement.set(ps, 2, Integer.valueOf(idTerminal));
+                ps = MyPreparedStatement.set(ps, 3, Integer.valueOf(idFuncionario));
+                ps = MyPreparedStatement.set(ps,4,Parametros.idEntidade);
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
                     valor =  rs.getBigDecimal(1);
@@ -393,8 +393,8 @@ public class FechamentoTerminal extends Processos{
             PreparedStatement ps = Parametros.getConexao().getPst(sql,false);
             if(dataFechamentoDt!=null&&idTerminal!=null&&idFuncionario!=null){
                 ps.setDate(1, dataFechamentoDt);
-                ps = Seter.set(ps, 2, Integer.valueOf(idTerminal));
-                ps = Seter.set(ps, 3, Integer.valueOf(idFuncionario));
+                ps = MyPreparedStatement.set(ps, 2, Integer.valueOf(idTerminal));
+                ps = MyPreparedStatement.set(ps, 3, Integer.valueOf(idFuncionario));
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
                     valor =  rs.getBigDecimal(1);

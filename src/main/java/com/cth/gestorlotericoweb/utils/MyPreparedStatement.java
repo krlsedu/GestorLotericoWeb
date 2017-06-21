@@ -15,15 +15,15 @@ import java.sql.*;
  *
  * @author CarlosEduardo
  */
-public class Seter {
+public class MyPreparedStatement {
     PreparedStatement pst;
     Integer idx;
     
-    public Seter(String sql, HttpServletRequest request) throws SQLException {
+    public MyPreparedStatement(String sql, HttpServletRequest request) throws SQLException {
         this.pst = Parametros.getConexao(request).getPst(sql);
         idx = 0;
     }
-    public Seter(String sql, HttpServletRequest request,Boolean b) throws SQLException {
+    public MyPreparedStatement(String sql, HttpServletRequest request, Boolean b) throws SQLException {
         this.pst = Parametros.getConexao(request).getPst(sql,b);
         idx = 0;
     }

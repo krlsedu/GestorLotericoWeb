@@ -8,7 +8,7 @@ package com.cth.gestorlotericoweb.processos;
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.utils.Parser;
-import com.cth.gestorlotericoweb.utils.Seter;
+import com.cth.gestorlotericoweb.utils.MyPreparedStatement;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
@@ -126,9 +126,9 @@ public class MovimentoConta extends Processos{
             ps.setBigDecimal(3, valorMovimentado);
             ps.setInt(4, Integer.valueOf(tipoMovimentoConta));
             ps.setInt(5,Integer.valueOf(formaDeposito));
-            ps = Seter.set(ps, 6, observacoes);
-            ps = Seter.set(ps, 7, Integer.valueOf(idCofre));
-            ps = Seter.set(ps, 8, Integer.valueOf(numeroVolumes));
+            ps = MyPreparedStatement.set(ps, 6, observacoes);
+            ps = MyPreparedStatement.set(ps, 7, Integer.valueOf(idCofre));
+            ps = MyPreparedStatement.set(ps, 8, Integer.valueOf(numeroVolumes));
             ps.setInt(9, Parametros.idEntidade);
             ps.setInt(10, Parametros.getIdLoterica());
             ps.execute();
@@ -162,9 +162,9 @@ public class MovimentoConta extends Processos{
             ps.setBigDecimal(3, valorMovimentado);
             ps.setInt(4, Integer.valueOf(tipoMovimentoConta));
             ps.setInt(5,Integer.valueOf(formaDeposito));
-            ps = Seter.set(ps, 6, observacoes);
-            ps = Seter.set(ps, 7, Integer.valueOf(idCofre));
-            ps = Seter.set(ps, 8, Integer.valueOf(numeroVolumes));
+            ps = MyPreparedStatement.set(ps, 6, observacoes);
+            ps = MyPreparedStatement.set(ps, 7, Integer.valueOf(idCofre));
+            ps = MyPreparedStatement.set(ps, 8, Integer.valueOf(numeroVolumes));
             
             id = Integer.valueOf(idL);
             ps.setInt(9, id);

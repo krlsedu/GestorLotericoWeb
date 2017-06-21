@@ -6,12 +6,11 @@ import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
 import com.cth.gestorlotericoweb.processos.OutrosMovimentos;
 import com.cth.gestorlotericoweb.utils.Parser;
-import com.cth.gestorlotericoweb.utils.Seter;
+import com.cth.gestorlotericoweb.utils.MyPreparedStatement;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.io.StringWriter;
 import java.math.BigDecimal;
@@ -300,12 +299,12 @@ public class MovimentosEstoque extends Estoque {
 			ps.setInt(4,numeroVolumes);
 			ps.setTimestamp(5,dataHoraReferencia);
 			
-			ps = Seter.set(ps,6,observacoes);
-			ps = Seter.set(ps,7,idFuncionario);
-			ps = Seter.set(ps,8,idLoterica);
-			ps = Seter.set(ps,9,idMovimentoCaixa);
+			ps = MyPreparedStatement.set(ps,6,observacoes);
+			ps = MyPreparedStatement.set(ps,7,idFuncionario);
+			ps = MyPreparedStatement.set(ps,8,idLoterica);
+			ps = MyPreparedStatement.set(ps,9,idMovimentoCaixa);
 			ps.setInt(10, Parametros.idEntidade);
-			ps = Seter.set(ps,11,idOutrosMovimentos);
+			ps = MyPreparedStatement.set(ps,11,idOutrosMovimentos);
 			ps.execute();
 			ResultSet rs = ps.getGeneratedKeys();
 			if(rs.next()){
@@ -336,10 +335,10 @@ public class MovimentosEstoque extends Estoque {
 			ps.setInt(4,numeroVolumes);
 			ps.setTimestamp(5,dataHoraReferencia);
 			
-			ps = Seter.set(ps,6,observacoes);
-			ps = Seter.set(ps,7,idFuncionario);
-			ps = Seter.set(ps,8,idLoterica);
-			ps = Seter.set(ps,9,idOutrosMovimentos);
+			ps = MyPreparedStatement.set(ps,6,observacoes);
+			ps = MyPreparedStatement.set(ps,7,idFuncionario);
+			ps = MyPreparedStatement.set(ps,8,idLoterica);
+			ps = MyPreparedStatement.set(ps,9,idOutrosMovimentos);
 			
 			id = Integer.valueOf(idL);
 			ps.setInt(10, id);

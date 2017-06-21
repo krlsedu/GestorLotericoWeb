@@ -11,7 +11,7 @@ import com.cth.gestorlotericoweb.estoque.MovimentosEstoque;
 import com.cth.gestorlotericoweb.operador.Operacoes;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.utils.Parser;
-import com.cth.gestorlotericoweb.utils.Seter;
+import com.cth.gestorlotericoweb.utils.MyPreparedStatement;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -194,7 +194,7 @@ public class MovimentoCaixa extends Processos{
 "            valor_movimentado, observacoes,id_cofre, tipo_moeda,id_operacao_funcionario, id_entidade)\n" +
 "    VALUES (?, ?, ?, ?, \n" +
 "            ?, ?, ?, ?, ?, ?);";
-            Seter ps = new Seter(sql,request);
+            MyPreparedStatement ps = new MyPreparedStatement(sql,request);
             ps.set( Integer.valueOf(tipoOperacao));
             ps.set(idTerminal);
             ps.set(Integer.valueOf(idFuncionario));
@@ -227,7 +227,7 @@ public class MovimentoCaixa extends Processos{
             "   SET tipo_operacao_caixa=?, id_terminal=?, id_funcionario=?, data_hora_mov=?,\n" +
             "    valor_movimentado=?, observacoes=?, id_cofre=?, tipo_moeda = ?, id_operacao_funcionario = ? \n"
                     + " where id = ? and id_entidade = ? ");
-            Seter ps = new Seter(sql,request);
+            MyPreparedStatement ps = new MyPreparedStatement(sql,request);
             
             ps.set( Integer.valueOf(tipoOperacao));
             ps.set(idTerminal);
@@ -310,7 +310,7 @@ public class MovimentoCaixa extends Processos{
     private Integer getIdMovimentoCaixa(Operacoes operacoes){
         String sql = "SELECT id FROM movimentos_caixas where id_operacao_funcionario = ? AND id_entidade = ?";
         try {
-            Seter ps = new Seter(sql,request,false);
+            MyPreparedStatement ps = new MyPreparedStatement(sql,request,false);
             ps.set(operacoes.getId());
             ps.set(Parametros.idEntidade);
             ResultSet rs = ps.getPst().executeQuery();

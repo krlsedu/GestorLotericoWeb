@@ -27,8 +27,8 @@ import java.util.List;
  * @author CarlosEduardo
  */
 public class Processos {
-    List<String> lOpts = new ArrayList<>();
-    final HttpServletRequest request;
+    private transient  List<String> lOpts = new ArrayList<>();
+    final transient HttpServletRequest request;
     Integer id;
 
     public Processos(HttpServletRequest request) {

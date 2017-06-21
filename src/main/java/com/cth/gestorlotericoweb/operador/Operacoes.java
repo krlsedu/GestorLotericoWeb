@@ -5,7 +5,7 @@ import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.processos.MovimentoCaixa;
 import com.cth.gestorlotericoweb.processos.OutrosMovimentos;
 import com.cth.gestorlotericoweb.utils.Parser;
-import com.cth.gestorlotericoweb.utils.Seter;
+import com.cth.gestorlotericoweb.utils.MyPreparedStatement;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -86,7 +86,7 @@ public class Operacoes extends Operador {
 				"       id = ? AND " +
 				"       id_entidade = ?";
 		try {
-			Seter ps = new Seter(sql,request,false);
+			MyPreparedStatement ps = new MyPreparedStatement(sql,request,false);
 			ps.set(this.id);
 			ps.set(Parametros.idEntidade);
 			ResultSet rs = ps.getPst().executeQuery();
@@ -144,7 +144,7 @@ public class Operacoes extends Operador {
 		//language=PostgresPLSQL
 		String sql = "DELETE FROM operacoes_funcionario where id = ? and id_entidade = ?";
 		try {
-			Seter ps = new Seter(sql,request);
+			MyPreparedStatement ps = new MyPreparedStatement(sql,request);
 			ps.set(this.id);
 			ps.set(Parametros.idEntidade);
 			ps.getPst().execute();
@@ -171,7 +171,7 @@ public class Operacoes extends Operador {
 				"            ?, ?, ?, ?, \n" +
 				"            ?, ?, ?, ?);";
 		try {
-			Seter st = new Seter(sql,request);
+			MyPreparedStatement st = new MyPreparedStatement(sql,request);
 			st.set(tipoItem);
 			st.set(tipoOperacaoCaixa);
 			st.set(edicaoItem);
@@ -207,7 +207,7 @@ public class Operacoes extends Operador {
 		//language=PostgresPLSQL
 		String sql = "UPDATE operacoes_funcionario set edicao_item = ? where id = ? AND id_entidade = ?";
 		try {
-			Seter ps = new Seter(sql,request);
+			MyPreparedStatement ps = new MyPreparedStatement(sql,request);
 			ps.set(tipoItem == 1 ?(edicaoItem+100):edicaoItem);
 			ps.set(id);
 			ps.set(Parametros.idEntidade);
@@ -225,7 +225,7 @@ public class Operacoes extends Operador {
 				"   WHERE " +
 				"       id = ? and id_entidade = ?";
 		try {
-			Seter ps = new Seter(sql,request);
+			MyPreparedStatement ps = new MyPreparedStatement(sql,request);
 			ps.set(tipoItem);
 			ps.set(tipoOperacaoCaixa);
 			ps.set(edicaoItem);
@@ -313,7 +313,7 @@ public class Operacoes extends Operador {
 	private String getOpts(Integer tipo){
 		String sql = "SELECT id,nome_item FROM itens_estoque where  tipo_item = ? and id_entidade = ? ";
 		try {
-			Seter ps = new Seter(sql,request,false);
+			MyPreparedStatement ps = new MyPreparedStatement(sql,request,false);
 			ps.set(tipo);
 			ps.set(Parametros.idEntidade);
 			ResultSet rs = ps.getPst().executeQuery();
@@ -331,7 +331,7 @@ public class Operacoes extends Operador {
 		//language=PostgresPLSQL
 		String sql = "SELECT case when tipo_item = 3 then id+100 else id END , nome_item ||' - '|| to_char(data_sorteio, 'DD/MM/YYYY') FROM itens_estoque where data_sorteio >= ? and tipo_item = ? and id_entidade = ? ";
 		try {
-			Seter ps = new Seter(sql,request,false);
+			MyPreparedStatement ps = new MyPreparedStatement(sql,request,false);
 			ps.set(new Date(new java.util.Date().getTime()));
 			ps.set(tipo);
 			ps.set(Parametros.idEntidade);
@@ -351,7 +351,7 @@ public class Operacoes extends Operador {
 		//language=PostgresPLSQL
 		String sql = "select id from outros_movimentos where id_operacao_funcionario = ? AND  id_entidade = ?";
 		try {
-			Seter ps = new Seter(sql,request,false);
+			MyPreparedStatement ps = new MyPreparedStatement(sql,request,false);
 			ps.set(this.id);
 			ps.set(Parametros.idEntidade);
 			ResultSet rs = ps.getPst().executeQuery();

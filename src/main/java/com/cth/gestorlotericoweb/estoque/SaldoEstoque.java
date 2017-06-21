@@ -2,7 +2,7 @@ package com.cth.gestorlotericoweb.estoque;
 
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
-import com.cth.gestorlotericoweb.utils.Seter;
+import com.cth.gestorlotericoweb.utils.MyPreparedStatement;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -56,8 +56,8 @@ public class SaldoEstoque extends Estoque {
 			ps.setBigDecimal(3, saldo);
 			ps.setTimestamp(4, movimentosEstoque.dataHoraReferencia);
 			ps.setInt(5, movimentosEstoque.id);
-			ps = Seter.set(ps,6, movimentosEstoque.observacoes);
-			ps = Seter.set(ps,7, movimentosEstoque.idLoterica);
+			ps = MyPreparedStatement.set(ps,6, movimentosEstoque.observacoes);
+			ps = MyPreparedStatement.set(ps,7, movimentosEstoque.idLoterica);
 			ps.setInt(8, Parametros.idEntidade);
 			ps.execute();
 		} catch (SQLException ex) {
@@ -114,8 +114,8 @@ public class SaldoEstoque extends Estoque {
 				ps.setBigDecimal(3, saldo);
 				ps.setTimestamp(4, movimentosEstoque.dataHoraReferencia);
 				ps.setInt(5, movimentosEstoque.id);
-				ps = Seter.set(ps,6, movimentosEstoque.observacoes);
-				ps = Seter.set(ps,7, movimentosEstoque.idLoterica);
+				ps = MyPreparedStatement.set(ps,6, movimentosEstoque.observacoes);
+				ps = MyPreparedStatement.set(ps,7, movimentosEstoque.idLoterica);
 				ps.setInt(8, Parametros.idEntidade);
 				
 				ps.execute();
@@ -140,7 +140,7 @@ public class SaldoEstoque extends Estoque {
 				"           id_loterica = ? AND" +
 				"           id_entidade = ?";
 		try {
-			Seter ps = new Seter(sql,request);
+			MyPreparedStatement ps = new MyPreparedStatement(sql,request);
 			ps.set(movimentosEstoque.qtdTotalMovimentada);
 			ps.set(id);
 			ps.set(movimentosEstoque.idItensEstoque);
@@ -154,7 +154,7 @@ public class SaldoEstoque extends Estoque {
 					"   id_movimento = ? AND " +
 					"   id_loterica = ? AND " +
 					"   id_entidade = ?";
-			ps = new Seter(sql,request);
+			ps = new MyPreparedStatement(sql,request);
 			ps.set(movimentosEstoque.id);
 			ps.set(movimentosEstoque.idLoterica);
 			ps.set(Parametros.idEntidade);

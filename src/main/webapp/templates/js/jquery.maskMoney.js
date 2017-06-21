@@ -258,7 +258,7 @@
                             return true;
                         } else { // any other key with keycode less than 48 and greater than 57
                             preventDefault(e);
-                            return true;
+                            return !$input.prop('readonly');
                         }
                     } else if (!canInputMoreNumbers()) {
                         return false;
@@ -322,7 +322,7 @@
                     } else if (key === 9) { // tab key
                         return true;
                     } else { // any other key
-                        return true;
+                        return !$input.prop('readonly');
                     }
                 }
 

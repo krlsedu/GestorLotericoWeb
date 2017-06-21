@@ -9,7 +9,7 @@ import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.saldos.SaldoCofre;
 import com.cth.gestorlotericoweb.utils.Parser;
-import com.cth.gestorlotericoweb.utils.Seter;
+import com.cth.gestorlotericoweb.utils.MyPreparedStatement;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
@@ -242,13 +242,13 @@ public class MovimentoCofre extends Processos{
 "            ?, ?, ?, ?, ?, \n" +
 "            ?);");
             ps.setInt(1, Integer.valueOf(idCofre));
-            ps = Seter.set(ps, 2, idMovimentoCaixa);
+            ps = MyPreparedStatement.set(ps, 2, idMovimentoCaixa);
             ps.setTimestamp(3, dataHoraMov);
             ps.setBigDecimal(4, valorMovimentado.multiply(new BigDecimal(numeroVolumes)));
             ps.setInt(5, Integer.valueOf(tipoOperacao));
-            ps = Seter.set(ps, 6, observacoes);
-            ps = Seter.set(ps, 7, idMovimentoConta);
-            ps = Seter.set(ps, 8, idAberturaTerminal);
+            ps = MyPreparedStatement.set(ps, 6, observacoes);
+            ps = MyPreparedStatement.set(ps, 7, idMovimentoConta);
+            ps = MyPreparedStatement.set(ps, 8, idAberturaTerminal);
             ps.setInt(9, Parametros.idEntidade);
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
@@ -274,12 +274,12 @@ public class MovimentoCofre extends Processos{
                         "       valor_movimentado=?, tipo_movimento_cofre=?, observacoes=?,id_movimento_conta=? \n" +
                         " where id = ? and id_entidade = ? ", false);
             ps.setInt(1, Integer.valueOf(idCofre));
-            ps = Seter.set(ps, 2, idMovimentoCaixa);
+            ps = MyPreparedStatement.set(ps, 2, idMovimentoCaixa);
             ps.setTimestamp(3, dataHoraMov);
             ps.setBigDecimal(4, valorMovimentado.multiply(new BigDecimal(numeroVolumes)));
             ps.setInt(5, Integer.valueOf(tipoOperacao));
-            ps = Seter.set(ps, 6, observacoes);
-            ps = Seter.set(ps, 7, idMovimentoConta);
+            ps = MyPreparedStatement.set(ps, 6, observacoes);
+            ps = MyPreparedStatement.set(ps, 7, idMovimentoConta);
             
             id = Integer.valueOf(idL);
             ps.setInt(8, id);

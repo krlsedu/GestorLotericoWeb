@@ -70,8 +70,6 @@ function consultaCampoAutoLoopCheck(valorBuscar,loop,element){
                         var htmlDoc = parser.parseFromString(data, "text/html");
                         var nomeCol = htmlDoc.getElementById("nome_coluna").value;
                         var valr = htmlDoc.getElementById("valor").value;
-                        console.log('consultaCampoAutoLoopCheck',valorBuscar);
-                        console.log('consultaCampoAutoLoopCheck val',valr);
                         if (!(valr === null || valr === 'null')) {
                             $('input#' + nomeCol).val(valr).trigger('mask.maskMoney');
                             try {
@@ -103,20 +101,23 @@ function consultaCampoAutoLoopCheck(valorBuscar,loop,element){
 function calculaSaldo(campo1, campo2, destino) {
     $("#"+campo1).trigger('mask.maskMoney');
     var valSt = $("#"+campo1).val();
-    valSt = valSt.replace(".","").replace(",","");
+    while (valSt.indexOf(".")>=0){
+        valSt = valSt.replace(".","");
+    }
+    valSt = valSt.replace(",","");
     if(valSt === null || valSt === "undefined"){
         valSt = "0";
     }
     var valor1 = parseInt(valSt);
     $("#"+campo2).trigger('mask.maskMoney');
     valSt = $("#"+campo2).val();
-    valSt = valSt.replace(".","").replace(",","");
+    while (valSt.indexOf(".")>=0){
+        valSt = valSt.replace(".","");
+    }
+    valSt = valSt.replace(",","");
     var valor2 = parseInt(valSt);
 
     var saldo  = valor1-valor2;
-    console.log("valor1",valor1);
-    console.log("valor2",valor2);
-    console.log("saldo",saldo);
     $("#"+destino).val(saldo).trigger('mask.maskMoney');
 }
 
@@ -270,4 +271,30 @@ function attCbs(its, toc) {
             $('#div_valor').hide();
             break;
     }
+}
+
+
+function buscaDadosFechamentoAdmDiario() {
+    var r = $.Deferred();
+    var tela = $('#it').val();
+    $.ajax(
+        {
+            type: "POST",
+            url: "consulta",
+            data: $("#form_dados").serialize() + '&' + $.param({
+                "tipo": "dado",
+                "tabela":tela,
+                "valor_buscar": tela
+            }),
+            success: function (data) {
+                alert(data);
+                r.resolve();
+            },
+            error: function (jXHR, textStatus, errorThrown) {
+                r.reject();
+                avisoErros(jXHR, textStatus, errorThrown);
+            }
+        }
+    );
+    return r;
 }

@@ -4,7 +4,7 @@ import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.operador.Operacoes;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.utils.Parser;
-import com.cth.gestorlotericoweb.utils.Seter;
+import com.cth.gestorlotericoweb.utils.MyPreparedStatement;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -115,7 +115,7 @@ public class Itens extends Estoque{
 				"       id = ? AND " +
 				"       id_entidade = ?";
 		try {
-			Seter ps = new Seter(sql,request,false);
+			MyPreparedStatement ps = new MyPreparedStatement(sql,request,false);
 			ps.set(this.id);
 			ps.set(Parametros.idEntidade);
 			ResultSet rs = ps.getPst().executeQuery();
@@ -145,7 +145,7 @@ public class Itens extends Estoque{
 				"       id_loterica = ? AND" +
 				"       id_entidade = ?";
 		try {
-			Seter ps = new Seter(sql,request,false);
+			MyPreparedStatement ps = new MyPreparedStatement(sql,request,false);
 			ps.set(this.tipoItem);
 			ps.set(this.idLoterica);
 			ps.set(Parametros.idEntidade);
@@ -200,11 +200,11 @@ public class Itens extends Estoque{
 			ps.setInt(1,tipoItem);
 			ps.setInt(2,unidade);
 			ps.setString(3,nomeItem);
-			ps = Seter.set(ps,4,valorPadrao);
-			ps = Seter.set(ps,5,observacoes);
-			ps = Seter.set(ps,6,idLoterica);
+			ps = MyPreparedStatement.set(ps,4,valorPadrao);
+			ps = MyPreparedStatement.set(ps,5,observacoes);
+			ps = MyPreparedStatement.set(ps,6,idLoterica);
 			ps.setInt(7,Parametros.idEntidade);
-			ps = Seter.set(ps,8,dataSorteio);
+			ps = MyPreparedStatement.set(ps,8,dataSorteio);
 			ps.execute();
 			ResultSet rs = ps.getGeneratedKeys();
 			if(rs.next()){
@@ -227,10 +227,10 @@ public class Itens extends Estoque{
 			ps.setInt(1,tipoItem);
 			ps.setInt(2,unidade);
 			ps.setString(3,nomeItem);
-			ps = Seter.set(ps,4,valorPadrao);
-			ps = Seter.set(ps,5,observacoes);
-			ps = Seter.set(ps,6,idLoterica);
-			ps = Seter.set(ps,7,dataSorteio);
+			ps = MyPreparedStatement.set(ps,4,valorPadrao);
+			ps = MyPreparedStatement.set(ps,5,observacoes);
+			ps = MyPreparedStatement.set(ps,6,idLoterica);
+			ps = MyPreparedStatement.set(ps,7,dataSorteio);
 			ps.setInt(8,id);
 			ps.setInt(9,Parametros.idEntidade);
 			ps.execute();

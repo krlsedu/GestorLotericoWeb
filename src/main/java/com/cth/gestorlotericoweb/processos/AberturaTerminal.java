@@ -8,7 +8,7 @@ package com.cth.gestorlotericoweb.processos;
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.utils.Parser;
-import com.cth.gestorlotericoweb.utils.Seter;
+import com.cth.gestorlotericoweb.utils.MyPreparedStatement;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -124,7 +124,7 @@ public class AberturaTerminal extends Processos{
             ps.setDate(3, dataAbertura);
             ps.setBigDecimal(4, trocoDiaAnterior);
             ps.setBigDecimal(5, trocoDia);
-            ps = Seter.set(ps,6, observacoes);
+            ps = MyPreparedStatement.set(ps,6, observacoes);
             ps.setInt(7,Integer.valueOf(idCofre));
             ps.setInt(8, Parametros.idEntidade);
             ps.execute();
@@ -161,7 +161,7 @@ public class AberturaTerminal extends Processos{
             ps.setBigDecimal(4, trocoDiaAnterior);
             ps.setBigDecimal(5, trocoDia);
             ps.setInt(7,Integer.valueOf(idCofre));
-            ps = Seter.set(ps,6, observacoes);
+            ps = MyPreparedStatement.set(ps,6, observacoes);
             
             
             id = Integer.valueOf(idL);

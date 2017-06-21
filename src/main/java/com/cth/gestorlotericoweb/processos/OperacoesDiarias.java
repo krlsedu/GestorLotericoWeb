@@ -8,7 +8,7 @@ package com.cth.gestorlotericoweb.processos;
 import com.cth.gestorlotericoweb.LogError;
 import com.cth.gestorlotericoweb.parametros.Parametros;
 import com.cth.gestorlotericoweb.utils.Parser;
-import com.cth.gestorlotericoweb.utils.Seter;
+import com.cth.gestorlotericoweb.utils.MyPreparedStatement;
 import java.io.StringWriter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -72,7 +72,7 @@ public class OperacoesDiarias extends Processos{
             ps.setInt(1, idTerminal);
             ps.setInt(2, idFuncionario);
             ps.setDate(3, Parser.toDbDate(dataOperacoes));
-            ps = Seter.set(ps, 4, observacoes);
+            ps = MyPreparedStatement.set(ps, 4, observacoes);
             ps.setInt(5, Parametros.idEntidade);
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
@@ -97,7 +97,7 @@ public class OperacoesDiarias extends Processos{
             ps.setInt(1, idTerminal);
             ps.setInt(2, idFuncionario);
             ps.setDate(3, Parser.toDbDate(dataOperacoes));
-            ps = Seter.set(ps, 4, observacoes);
+            ps = MyPreparedStatement.set(ps, 4, observacoes);
             
             id = Integer.valueOf(idL);
             ps.setInt(5, id);
