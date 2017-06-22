@@ -275,8 +275,8 @@ function attCbs(its, toc) {
 
 
 function buscaDadosFechamentoAdmDiario() {
-    var r = $.Deferred();
-    var tela = $('#it').val();
+    let r = $.Deferred();
+    let tela = $('#it').val();
     $.ajax(
         {
             type: "POST",
@@ -287,7 +287,11 @@ function buscaDadosFechamentoAdmDiario() {
                 "valor_buscar": tela
             }),
             success: function (data) {
-                alert(data);
+                let jso = JSON.parse(data);
+                // $('#total_creditos_terminais').setInput(jso);
+                // $('#total_debitos_terminais').setInput(jso);
+                // $('#total_depositado').setInput(jso);
+                $('#form_dados').setFromJson(jso);
                 r.resolve();
             },
             error: function (jXHR, textStatus, errorThrown) {
