@@ -57,13 +57,14 @@ public class Parser {
             dfs.setDecimalSeparator('.');
             df.setDecimalFormatSymbols(dfs); 
             valor = new BigDecimal(df.format((valor)));
-            valor = valor.multiply(new BigDecimal("100"));
+//            valor = valor.multiply(new BigDecimal("100"));
             String st = valor.toString();
-            if(st.contains(".")){
-                return st.substring(0,st.lastIndexOf("."));
-            }else{
-                return st;
-            }
+//            if(st.contains(".")){
+//                return st.substring(0,st.lastIndexOf("."));
+//            }else{
+//                return st;
+//            }
+            return st;
         }catch(Exception e){
             return e.getMessage();
         }

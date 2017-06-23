@@ -201,8 +201,45 @@
                 }
 
                 function mask() {
-                    var value = $input.val();
+                    var value = fixSetMaskWithoutDecimals();
                     $input.val(maskValue(value));
+                }
+
+                function fixSetMaskWithoutDecimals() {
+                    // prefix: "",
+                    // suffix: "",
+                    // affixesStay: true,
+                    // thousands: ",",
+                    // decimal: ".",
+                    // precision: 2,
+                    // allowZero: false,
+                    // allowNegative: false
+                    let value = $input.val();
+                    try {
+                        if(value.toString().indexOf(settings.decimal)<value.toString().indexOf(settings.thousands)){
+                            if(value.toString().indexOf(settings.decimal)<0){
+                                value = value.toString().replace(settings.thousands,settings.decimal);
+                            }else {
+                                while (value.toString().indexOf(settings.decimal)>=0){
+                                    value = value.toString().replace(settings.decimal,"");
+                                }
+                            }
+                        }
+
+                        if (value.toString().indexOf(settings.decimal) >= 0) {
+                            let decimalPart = value.toString().substring(value.toString().indexOf(settings.decimal) + 1, value.toString().length);
+                            let integerPart = value.toString().substring(0, value.toString().indexOf(settings.decimal));
+                            if (decimalPart.length < settings.precision) {
+                                return integerPart + decimalPart + '0'.repeat(settings.precision - decimalPart.length);
+                            } else {
+                                return value;
+                            }
+                        } else {
+                            return value + settings.decimal + '0'.repeat(settings.precision);
+                        }
+                    }catch (e){
+                        return val;
+                    }
                 }
 
                 function changeSign() {

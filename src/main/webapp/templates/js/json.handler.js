@@ -44,7 +44,6 @@
 
         setFromInputsValues: function (form) {
             $.each($('input, select ,textarea', form),function(k){
-                console.log(k+' '+$(this).attr('name'));
                 methods.setElementValue($(this));
             });
             return true;
@@ -52,7 +51,6 @@
 
         setFromJsonValues: function () {
             $.each(this.json, function(k, v) {
-                console.log(k + ' is ' + v);
                 let element = $('#'+methods.keyJsonToIdElement(k));
                 methods.setElement(element,v);
             });

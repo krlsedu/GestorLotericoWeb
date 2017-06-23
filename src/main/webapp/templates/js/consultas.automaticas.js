@@ -99,26 +99,21 @@ function consultaCampoAutoLoopCheck(valorBuscar,loop,element){
 }
 
 function calculaSaldo(campo1, campo2, destino) {
-    $("#"+campo1).trigger('mask.maskMoney');
-    var valSt = $("#"+campo1).val();
-    while (valSt.indexOf(".")>=0){
-        valSt = valSt.replace(".","");
-    }
-    valSt = valSt.replace(",","");
-    if(valSt === null || valSt === "undefined"){
-        valSt = "0";
-    }
-    var valor1 = parseInt(valSt);
-    $("#"+campo2).trigger('mask.maskMoney');
-    valSt = $("#"+campo2).val();
-    while (valSt.indexOf(".")>=0){
-        valSt = valSt.replace(".","");
-    }
-    valSt = valSt.replace(",","");
-    var valor2 = parseInt(valSt);
+    let field1=$("#"+campo1);
+    let field2=$("#"+campo2);
+    field1.trigger('mask.maskMoney');
+    let valSt = field1.val();
+    let valor1 = MathOps.inInteger(valSt);
+    field2.trigger('mask.maskMoney');
+    valSt = field2.val();
+    let valor2 = MathOps.inInteger(valSt);
+    console.log(valor2);
 
-    var saldo  = valor1-valor2;
-    $("#"+destino).val(saldo).trigger('mask.maskMoney');
+    let saldo = parseInt(valor1) - parseInt(valor2);
+    console.log( "saldo ",saldo);
+    console.log( "quanto ? ",MathOps.inFloat(saldo));
+    $("#"+destino).val(MathOps.inFloat(saldo));//
+    $('#'+destino).trigger('mask.maskMoney');
 }
 
 function consultaOpcoesCb(cb) {
